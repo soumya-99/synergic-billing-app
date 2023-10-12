@@ -1,10 +1,9 @@
 import { View, Text, StyleSheet } from "react-native"
 import React from "react"
-import { useTheme, withTheme } from "react-native-paper"
+import { withTheme } from "react-native-paper"
 import { theme } from "../theme/theme"
 
 function LoginScreen() {
-  const theme = useTheme()
   return (
     <View style={styles.loginWrapper}>
       <Text>LoginScreen</Text>
