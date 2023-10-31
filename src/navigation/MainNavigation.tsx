@@ -4,6 +4,7 @@ import LoginScreen from "../screens/LoginScreen"
 import navigationRoutes from "../routes/navigationRoutes"
 import { AppStore } from "../context/AppContext"
 import { NavigationContainer } from "@react-navigation/native"
+import BottomNavigationPaper from "./BottomNavigationPaper"
 
 export default function MainNavigation() {
   const Stack = createNativeStackNavigator()
@@ -25,7 +26,12 @@ export default function MainNavigation() {
             //     component={NotificationScreen}
             //   />
             // </>
-            <></>
+            <>
+              <Stack.Screen
+                name={navigationRoutes.homeTab}
+                component={BottomNavigationPaper}
+              />
+            </>
           ) : (
             <>
               <Stack.Screen
