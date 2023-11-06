@@ -9,6 +9,7 @@ import AnimatedFABPaper from '../components/AnimatedFABPaper';
 import { Dialog, Portal, Text, Button } from 'react-native-paper';
 import InputPaper from '../components/InputPaper';
 import { usePaperColorScheme } from '../theme/theme';
+import DialogBox from '../components/DialogBox';
 
 export default function HomeScreen() {
   const theme = usePaperColorScheme()
@@ -21,27 +22,25 @@ export default function HomeScreen() {
     setIsExtended(currentScrollPosition <= 0);
   };
 
-  const [visible, setVisible] = useState(false);
-
-  const hideDialog = () => setVisible(false);
-
-  const [text, setText] = useState("")
+  const [visible, setVisible] = useState(() => false);
+  const hideDialog = () => setVisible(() => false);
+  const [text, setText] = useState(() => "")
 
   return (
     <SafeAreaView style={styles.container}>
-      <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog} theme={theme}>
-          <Dialog.Icon icon="account-circle" size={50} />
-          <Dialog.Title style={styles.title}>Customer Details</Dialog.Title>
-          <Dialog.Content>
-            <InputPaper label='Mobile Number' onChangeText={setText} value={text} keyboardType='numeric' />
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={() => setVisible(!visible)} textColor={theme.colors.error}>CANCEL</Button>
-            <Button onPress={() => {console.log('OK NUMBER: ', text); setText("")}}>NEXT</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      <DialogBox
+        title="Customer Details"
+        icon="account-circle"
+        iconSize={50}
+        visible={visible}
+        hide={hideDialog}
+        titleStyle={styles.title}
+        onFailure={() => setVisible(!visible)}
+        onSuccess={() => { console.log('OK NUMBER: ', text); setText("") }}
+      >
+        <InputPaper label='Mobile Number' onChangeText={setText} value={text} keyboardType='numeric' />
+      </DialogBox>
+
       <ScrollView onScroll={onScroll}>
         {[...new Array(100).keys()].map((_, i) => (
           <Text key={i}>{i}</Text>
