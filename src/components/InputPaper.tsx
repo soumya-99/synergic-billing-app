@@ -1,3 +1,4 @@
+import { KeyboardTypeOptions } from "react-native"
 import { TextInput } from "react-native-paper"
 
 type InputPaperProps = {
@@ -5,6 +6,7 @@ type InputPaperProps = {
   value: string
   onChangeText: (msg: string) => void
   secureTextEntry?: boolean
+  keyboardType?: KeyboardTypeOptions
   customStyle?: {}
 }
 
@@ -13,10 +15,12 @@ const InputPaper = ({
   value,
   onChangeText,
   secureTextEntry,
+  keyboardType,
   customStyle,
 }: InputPaperProps) => {
   return (
     <TextInput
+      keyboardType={keyboardType}
       label={label}
       value={value}
       onChangeText={onChangeText}

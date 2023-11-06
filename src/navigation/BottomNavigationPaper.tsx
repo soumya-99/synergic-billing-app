@@ -1,49 +1,35 @@
-import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useState } from 'react';
+import { BottomNavigation } from 'react-native-paper';
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import TransactionScreen from '../screens/TransactionScreen';
-
-const Tab = createMaterialBottomTabNavigator();
+// import { usePaperColorScheme } from '../theme/theme';
 
 function BottomNavigationPaper() {
+    // const theme = usePaperColorScheme()
+
+    const [index, setIndex] = useState(() => 0);
+    const [routes] = useState([
+        { key: 'home', title: 'Home', focusedIcon: 'home', unfocusedIcon: 'home-outline' },
+        { key: 'transaction', title: 'Transaction', focusedIcon: 'cash-multiple', unfocusedIcon: 'cash' },
+        { key: 'settings', title: 'Settings', focusedIcon: 'cog', unfocusedIcon: 'cog-outline' },
+    ]);
+
+    const renderScene = BottomNavigation.SceneMap({
+        home: HomeScreen,
+        transaction: TransactionScreen,
+        settings: SettingsScreen,
+    });
     return (
-        <Tab.Navigator
-            initialRouteName="Home"
-            activeColor="#e91e63"
-            barStyle={{ backgroundColor: "#eee" }}
-        >
-            <Tab.Screen
-                name="Home"
-                component={HomeScreen}
-                options={{
-                    tabBarLabel: 'Home',
-                    tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="home" color={color} size={26} />
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="Transaction"
-                component={TransactionScreen}
-                options={{
-                    tabBarLabel: 'Transaction',
-                    tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="bell" color={color} size={26} />
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="Settings"
-                component={SettingsScreen}
-                options={{
-                    tabBarLabel: 'Settings',
-                    tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="account" color={color} size={26} />
-                    ),
-                }}
-            />
-        </Tab.Navigator>
+        <BottomNavigation
+            navigationState={{ index, routes }} // this is not deprecated. It's vital.
+            onIndexChange={setIndex}
+            renderScene={renderScene}
+            sceneAnimationEnabled
+            sceneAnimationType="shifting"
+            compact
+            // theme={theme}
+        />
     );
 }
 
