@@ -1,18 +1,15 @@
 import {
   StyleSheet,
   ScrollView,
-  // Text,
   SafeAreaView,
 } from 'react-native'
 import { useState } from 'react'
 import AnimatedFABPaper from '../components/AnimatedFABPaper';
-import { Dialog, Portal, Text, Button } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import InputPaper from '../components/InputPaper';
-import { usePaperColorScheme } from '../theme/theme';
 import DialogBox from '../components/DialogBox';
 
 export default function HomeScreen() {
-  const theme = usePaperColorScheme()
   const [isExtended, setIsExtended] = useState(() => true);
 
   const onScroll = ({ nativeEvent }) => {

@@ -71,7 +71,7 @@ function LoginScreen() {
             Login
           </ButtonPaper>
           <View style={{ margin: 2, padding: 2 }}>
-            <Text style={{ fontSize: 10 }}>Powered by, Synergic Softek Solutions Pvt. Ltd.</Text>
+            <Text style={{ fontFamily: "ProductSans-Regular",fontSize: 10 }}>Powered by, Synergic Softek Solutions Pvt. Ltd.</Text>
           </View>
         </View>
       </ScrollView>
@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
   },
 
   loginHeaderText: {
+    fontFamily: "ProductSans-Bold",
     fontSize: 40,
     fontWeight: "500"
   },
