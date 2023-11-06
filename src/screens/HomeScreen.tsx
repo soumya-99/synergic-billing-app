@@ -2,10 +2,12 @@ import {
   StyleSheet,
   ScrollView,
   SafeAreaView,
+  Dimensions,
+  ImageBackground,
 } from 'react-native'
 import { useState } from 'react'
 import AnimatedFABPaper from '../components/AnimatedFABPaper';
-import { Text } from 'react-native-paper';
+import { Surface, Text } from 'react-native-paper';
 import InputPaper from '../components/InputPaper';
 import DialogBox from '../components/DialogBox';
 
@@ -21,7 +23,7 @@ export default function HomeScreen() {
 
   const [visible, setVisible] = useState(() => false);
   const hideDialog = () => setVisible(() => false);
-  const [text, setText] = useState(() => "")
+  const [num, setNum] = useState(() => "")
 
   return (
     <SafeAreaView style={styles.container}>
@@ -33,12 +35,20 @@ export default function HomeScreen() {
         hide={hideDialog}
         titleStyle={styles.title}
         onFailure={() => setVisible(!visible)}
-        onSuccess={() => { console.log('OK NUMBER: ', text); setText("") }}
+        onSuccess={() => { console.log('OK NUMBER: ', num); setVisible(!visible) }}
       >
-        <InputPaper label='Mobile Number' onChangeText={setText} value={text} keyboardType='numeric' />
+        <InputPaper label='Mobile Number' onChangeText={setNum} value={num} keyboardType='numeric' />
       </DialogBox>
-
       <ScrollView onScroll={onScroll}>
+
+        <ImageBackground imageStyle={{ borderRadius: 30 }}
+          blurRadius={10} source={require("../resources/images/hills.jpg")} style={styles.surface}>
+          <Text variant="displaySmall" style={{ fontFamily: "ProductSans-Medium", textAlign: "center" }}>Welcome Back, Admin!</Text>
+        </ImageBackground>
+
+        <Surface style={styles.surface} elevation={2}>
+          <Text variant="headlineSmall" style={{ fontFamily: "ProductSans-Medium", textAlign: "center" }}>Mobile No. {num}</Text>
+        </Surface>
         {[...new Array(100).keys()].map((_, i) => (
           <Text key={i}>{i}</Text>
         ))}
@@ -62,7 +72,17 @@ const styles = StyleSheet.create({
   },
 
   title: {
+    fontFamily: "ProductSans-Medium",
     textAlign: 'center',
+  },
+
+  surface: {
+    margin: 20,
+    height: Dimensions.get("window").height - 550,
+    borderRadius: 30,
+    width: Dimensions.get("window").width - 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   fabStyle: {
