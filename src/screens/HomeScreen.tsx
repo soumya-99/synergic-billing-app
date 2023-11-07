@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   Dimensions,
   ImageBackground,
+  useColorScheme,
 } from 'react-native'
 import { useState } from 'react'
 import AnimatedFABPaper from '../components/AnimatedFABPaper';
@@ -12,6 +13,7 @@ import InputPaper from '../components/InputPaper';
 import DialogBox from '../components/DialogBox';
 
 export default function HomeScreen() {
+  const colorScheme = useColorScheme()
   const [isExtended, setIsExtended] = useState(() => true);
 
   const onScroll = ({ nativeEvent }) => {
@@ -42,7 +44,7 @@ export default function HomeScreen() {
       <ScrollView onScroll={onScroll}>
 
         <ImageBackground imageStyle={{ borderRadius: 30 }}
-          blurRadius={10} source={require("../resources/images/hills.jpg")} style={styles.surface}>
+          blurRadius={10} source={colorScheme !== "dark" ? require("../resources/images/hills.jpg") : require("../resources/images/hills-dark.jpg")} style={styles.surface}>
           <Text variant="displaySmall" style={{ fontFamily: "ProductSans-Medium", textAlign: "center" }}>Welcome Back, Admin!</Text>
         </ImageBackground>
 

@@ -1,5 +1,5 @@
 import { useContext, useState } from "react"
-import { View, Text, StyleSheet, Image, ScrollView, SafeAreaView, ToastAndroid, ImageBackground } from "react-native"
+import { View, Text, StyleSheet, Image, ScrollView, SafeAreaView, ToastAndroid, ImageBackground, useColorScheme } from "react-native"
 import { withTheme, Divider } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import InputPaper from "../components/InputPaper"
@@ -11,6 +11,7 @@ import data from "../data/login_dummy_data.json"
 function LoginScreen() {
   const { isLogin, setIsLogin } = useContext(AppStore)
   const theme = usePaperColorScheme()
+  const colorScheme = useColorScheme()
 
   const [loginText, setLoginText] = useState("")
   const [passwordText, setPasswordText] = useState("")
@@ -32,7 +33,7 @@ function LoginScreen() {
 
   return (
     <SafeAreaView>
-      <ImageBackground blurRadius={10} source={require("../resources/images/flower-2.png")} style={[
+      <ImageBackground blurRadius={10} source={colorScheme === "dark" ? require("../resources/images/flower-2_dark.png") : require("../resources/images/flower-2.png")} style={[
         styles.loginWrapper,
         { backgroundColor: theme.colors.background },
       ]}>
