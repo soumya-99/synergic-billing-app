@@ -1,35 +1,18 @@
 import { useContext, useState } from "react"
-import { View, Text, StyleSheet, Image, ScrollView, SafeAreaView, ToastAndroid, ImageBackground, useColorScheme } from "react-native"
-import { withTheme, Divider } from "react-native-paper"
+import { View, StyleSheet, Image, ScrollView, SafeAreaView, ToastAndroid, ImageBackground, useColorScheme } from "react-native"
+import { withTheme, Divider, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import InputPaper from "../components/InputPaper"
 import ButtonPaper from "../components/ButtonPaper"
 import { AppStore } from "../context/AppContext"
 
-import data from "../data/login_dummy_data.json"
-
 function LoginScreen() {
-  const { isLogin, setIsLogin } = useContext(AppStore)
+  const { login } = useContext(AppStore)
   const theme = usePaperColorScheme()
   const colorScheme = useColorScheme()
 
   const [loginText, setLoginText] = useState("")
   const [passwordText, setPasswordText] = useState("")
-
-  const login = () => {
-    if (data.username === loginText && data.password === passwordText) {
-      setIsLogin(!isLogin)
-    } else {
-      ToastAndroid.showWithGravityAndOffset(
-        "Invalid Credentials. Please try again.",
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
-        25,
-        50,
-      )
-    }
-    // setIsLogin(!isLogin)
-  }
 
   return (
     <SafeAreaView>
@@ -40,7 +23,7 @@ function LoginScreen() {
         <ScrollView keyboardShouldPersistTaps="handled">
           <View
             style={styles.loginHeader}>
-            <Text style={[styles.loginHeaderText, { color: theme.colors.primary }]}>
+            <Text variant="displayMedium" style={[styles.loginHeaderText, { color: theme.colors.primary }]}>
               Billing App
             </Text>
           </View>
@@ -69,7 +52,7 @@ function LoginScreen() {
             />
           </View>
           <View style={{ margin: 20 }}>
-            <ButtonPaper mode="contained" onPress={login}>
+            <ButtonPaper mode="contained" onPress={() => login(loginText, passwordText)}>
               LOGIN
             </ButtonPaper>
             <View style={{ margin: 2, padding: 2 }}>
@@ -96,8 +79,6 @@ const styles = StyleSheet.create({
   },
 
   loginHeaderText: {
-    fontFamily: "ProductSans-Bold",
-    fontSize: 40,
     fontWeight: "500"
   },
 
