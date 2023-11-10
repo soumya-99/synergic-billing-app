@@ -42,7 +42,7 @@ export default function HomeScreen() {
         onFailure={() => setVisible(!visible)}
         onSuccess={() => { console.log('OK NUMBER: ', num); setVisible(!visible) }}
       >
-        <InputPaper label='Mobile Number' onChangeText={setNum} value={num} keyboardType='numeric' />
+        <InputPaper leftIcon='phone-outline' label='Mobile Number' onChangeText={setNum} value={num} keyboardType='numeric' />
       </DialogBox>
       <ScrollView onScroll={onScroll}>
         <ImageBackground imageStyle={{ borderRadius: 30 }}

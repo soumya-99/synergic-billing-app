@@ -8,7 +8,9 @@ type InputPaperProps = {
   secureTextEntry?: boolean
   keyboardType?: KeyboardTypeOptions
   customStyle?: {}
+  leftIcon?: string
 }
+
 
 const InputPaper = ({
   label,
@@ -17,6 +19,7 @@ const InputPaper = ({
   secureTextEntry,
   keyboardType,
   customStyle,
+  leftIcon
 }: InputPaperProps) => {
   return (
     <TextInput
@@ -26,6 +29,8 @@ const InputPaper = ({
       onChangeText={onChangeText}
       secureTextEntry={secureTextEntry}
       style={customStyle}
+      left={leftIcon && <TextInput.Icon icon={leftIcon} />}
+      // right={<TextInput.Icon icon={secureTextEntry ? "eye-off" : "eye"} onPress={() => setSecureTextEntry(!secureTextEntry)} />}
     />
   )
 }

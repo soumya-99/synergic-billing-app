@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useMemo, useState } from "react"
+import React, { createContext, useState } from "react"
 import { ToastAndroid } from "react-native"
 
 import data from "../data/login_dummy_data.json"
@@ -8,9 +8,14 @@ export const AppStore = createContext(null)
 const AppContext = ({ children }) => {
     const [isLogin, setIsLogin] = useState(() => false)
 
-    const login = (loginText: string, passwordText: string) => {
+    const login = (
+        loginText: string,
+        passwordText: string,
+        setLoginText: (txt: string | (() => string)) => void,
+        setPasswordText: (txt: string | (() => string)) => void
+    ) => {
         if (data.username === loginText && data.password === passwordText) {
-          setIsLogin(!isLogin)
+            setIsLogin(!isLogin)
         } else {
             ToastAndroid.showWithGravityAndOffset(
                 "Invalid Credentials. Please try again.",
@@ -18,14 +23,16 @@ const AppContext = ({ children }) => {
                 ToastAndroid.CENTER,
                 25,
                 50,
-          )
+            )
+            setLoginText(() => "")
+            setPasswordText(() => "")
         }
     }
 
     const logout = () => {
         setIsLogin(() => !isLogin)
     }
-    
+
     return (
         <AppStore.Provider value={{ isLogin, login, logout }}>
             {children}

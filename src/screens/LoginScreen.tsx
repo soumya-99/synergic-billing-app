@@ -35,7 +35,7 @@ function LoginScreen() {
       </View> */}
 
           <View style={{ flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-            <Image source={require('../resources/images/billingapplogo.jpg')} style={{ height: 300, width: 300, borderRadius: 30 }} />
+            <Image source={require('../resources/images/billingapplogo.jpg')} style={{ height: 260, width: 300, borderRadius: 30 }} />
           </View>
           <View style={styles.textFields}>
             <InputPaper
@@ -43,16 +43,18 @@ function LoginScreen() {
               label={"Username"}
               onChangeText={(text: string) => setLoginText(text)}
               customStyle={{ marginBottom: 20 }}
+              leftIcon="account-circle-outline"
             />
             <InputPaper
               value={passwordText}
               label={"Password"}
               secureTextEntry={true}
               onChangeText={(text: string) => setPasswordText(text)}
+              leftIcon="shield-lock-outline"
             />
           </View>
           <View style={{ margin: 20 }}>
-            <ButtonPaper mode="contained" onPress={() => login(loginText, passwordText)}>
+            <ButtonPaper mode="contained" onPress={() => login(loginText, passwordText, setLoginText, setPasswordText)} icon="login">
               LOGIN
             </ButtonPaper>
             <View style={{ margin: 2, padding: 2 }}>
