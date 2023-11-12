@@ -11,8 +11,8 @@ function LoginScreen() {
   const theme = usePaperColorScheme()
   const colorScheme = useColorScheme()
 
-  const [loginText, setLoginText] = useState("")
-  const [passwordText, setPasswordText] = useState("")
+  const [loginText, setLoginText] = useState<string>(() => "")
+  const [passwordText, setPasswordText] = useState<string>(() => "")
 
   return (
     <SafeAreaView>
