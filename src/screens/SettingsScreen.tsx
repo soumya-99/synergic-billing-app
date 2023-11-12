@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext } from "react"
 import {
   StyleSheet,
   ScrollView,
@@ -6,24 +6,37 @@ import {
   Dimensions,
   ImageBackground,
   useColorScheme,
-  View
-} from 'react-native'
-import { Divider, Surface, Text } from 'react-native-paper';
-import ButtonPaper from '../components/ButtonPaper'
-import { AppStore } from '../context/AppContext'
+  View,
+} from "react-native"
+import { Divider, Surface, Text } from "react-native-paper"
+import ButtonPaper from "../components/ButtonPaper"
+import { AppStore } from "../context/AppContext"
 
 export default function SettingsScreen() {
   const colorScheme = useColorScheme()
   const { logout } = useContext(AppStore)
   return (
     <SafeAreaView style={styles.container}>
-        <ImageBackground imageStyle={{ borderRadius: 30 }}
-          blurRadius={10} source={colorScheme !== "dark" ? require("../resources/images/flower_settings.jpg") : require("../resources/images/flower_settings-dark.jpg")} style={styles.surface}>
-          <Text variant="displaySmall" style={{ fontFamily: "ProductSans-Medium", textAlign: "center" }}>Settings</Text>
-        </ImageBackground>
+      <ImageBackground
+        imageStyle={{ borderRadius: 30 }}
+        blurRadius={10}
+        source={
+          colorScheme !== "dark"
+            ? require("../resources/images/flower_settings.jpg")
+            : require("../resources/images/flower_settings-dark.jpg")
+        }
+        style={styles.surface}>
+        <Text
+          variant="displaySmall"
+          style={{ fontFamily: "ProductSans-Medium", textAlign: "center" }}>
+          Settings
+        </Text>
+      </ImageBackground>
 
-        <View>
-        <ButtonPaper mode='text' onPress={logout}>Log Out</ButtonPaper>
+      <View>
+        <ButtonPaper mode="text" onPress={logout}>
+          Log Out
+        </ButtonPaper>
       </View>
     </SafeAreaView>
   )
@@ -35,7 +48,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    textAlign: 'center',
+    textAlign: "center",
   },
 
   surface: {
@@ -43,7 +56,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height - 550,
     borderRadius: 30,
     width: Dimensions.get("window").width - 40,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
-});
+})

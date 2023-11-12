@@ -11,7 +11,6 @@ type InputPaperProps = {
   leftIcon?: string
 }
 
-
 const InputPaper = ({
   label,
   value,
@@ -19,7 +18,7 @@ const InputPaper = ({
   secureTextEntry,
   keyboardType,
   customStyle,
-  leftIcon
+  leftIcon,
 }: InputPaperProps) => {
   return (
     <TextInput
