@@ -54,7 +54,7 @@ export default function HomeScreen() {
           keyboardType="numeric"
         />
       </DialogBox>
-      <ScrollView onScroll={onScroll}>
+      <ScrollView onScroll={onScroll} keyboardShouldPersistTaps="handled">
         <HeaderImage
           imgLight={hills}
           imgDark={hillsDark}

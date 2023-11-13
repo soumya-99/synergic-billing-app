@@ -32,7 +32,7 @@ export default function TransactionScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
         <HeaderImage
           imgLight={blurredBlue}
           imgDark={blurredBlueDark}
