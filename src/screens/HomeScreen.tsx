@@ -14,6 +14,8 @@ import { Divider, Surface, Text } from "react-native-paper"
 import InputPaper from "../components/InputPaper"
 import DialogBox from "../components/DialogBox"
 import { usePaperColorScheme } from "../theme/theme"
+import HeaderImage from "../components/HeaderImage"
+import { hills, hillsDark } from "../resources/images"
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme()
@@ -53,21 +55,14 @@ export default function HomeScreen() {
         />
       </DialogBox>
       <ScrollView onScroll={onScroll}>
-        <ImageBackground
-          imageStyle={{ borderRadius: 30 }}
-          blurRadius={10}
-          source={
-            colorScheme !== "dark"
-              ? require("../resources/images/hills.jpg")
-              : require("../resources/images/hills-dark.jpg")
-          }
-          style={styles.surface}>
-          <Text
-            variant="displaySmall"
-            style={{ fontFamily: "ProductSans-Medium", textAlign: "center" }}>
-            Welcome Back, Soumyadeep!
-          </Text>
-        </ImageBackground>
+        <HeaderImage
+          imgLight={hills}
+          imgDark={hillsDark}
+          borderRadius={30}
+          blur={10}
+        >
+          Welcome Back, Soumyadeep!
+        </HeaderImage>
 
         <Surface style={styles.bill} elevation={2}>
           <Text
@@ -82,7 +77,7 @@ export default function HomeScreen() {
 
           <View
             style={{
-              width: Dimensions.get("window").width - 60,
+              width: PixelRatio.roundToNearestPixel(320),
               borderStyle: "dashed",
               borderWidth: 1,
               marginBottom: 5,

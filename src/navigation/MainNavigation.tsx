@@ -15,7 +15,7 @@ export default function MainNavigation() {
     <>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {isLogin ? ( // use '!' for bypassing for debugging
+          {isLogin ? (
             // <>
             //   <Stack.Screen
             //     name={navigationRoutes.tab_home}

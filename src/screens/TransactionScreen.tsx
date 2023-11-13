@@ -3,8 +3,6 @@ import {
   StyleSheet,
   ScrollView,
   SafeAreaView,
-  Dimensions,
-  ImageBackground,
   useColorScheme,
   View,
   PixelRatio,
@@ -12,31 +10,36 @@ import {
 import { Divider, List, Searchbar, Surface, Text } from "react-native-paper"
 
 import TRANS_DATA from "../data/transaction_dummy_data.json"
+import HeaderImage from "../components/HeaderImage"
+import { blurredBlue, blurredBlueDark } from "../resources/images"
+
+type TransactionDataObject = {
+  id: number
+  item: string
+  description: string
+}
 
 export default function TransactionScreen() {
-  const colorScheme = useColorScheme()
-
   const [search, setSearch] = useState<string>(() => "")
-  const onChangeSearch = (query: string) => setSearch(query)
+  const [filteredItems, setFilteredItems] = useState<TransactionDataObject[]>(() => [])
+  const onChangeSearch = (query: string) => {
+    setSearch(query)
+
+    const filtered = TRANS_DATA.filter(item => item.item.includes(query))
+    setFilteredItems(filtered)
+    if (query === "") setFilteredItems(() => [])
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <ImageBackground
-          imageStyle={{ borderRadius: 30 }}
-          blurRadius={10}
-          source={
-            colorScheme !== "dark"
-              ? require("../resources/images/blurredblue.jpg")
-              : require("../resources/images/blurredblue-dark.jpg")
-          }
-          style={styles.surface}>
-          <Text
-            variant="displaySmall"
-            style={{ fontFamily: "ProductSans-Medium", textAlign: "center" }}>
-            Your Transactions
-          </Text>
-        </ImageBackground>
+        <HeaderImage
+          imgLight={blurredBlue}
+          imgDark={blurredBlueDark}
+          borderRadius={30}
+          blur={10}>
+          Your Transactions
+        </HeaderImage>
 
         <View style={{ padding: 20 }}>
           <Searchbar
@@ -49,17 +52,16 @@ export default function TransactionScreen() {
         </View>
         <View>
           {
-            TRANS_DATA.map(item => (
-              <>
-              <List.Item
-                key={item.id}
-                title={item.item}
-                description={item.description}
-                onPress={() => console.log(item.item)}
-                left={props => <List.Icon {...props} icon="clipboard-text-clock" />}
-              />
-              <Divider />
-              </>
+            filteredItems.map(item => (
+              <View key={item.id}>
+                <List.Item
+                  title={item.item}
+                  description={item.description}
+                  onPress={() => console.log(item.item)}
+                  left={props => <List.Icon {...props} icon="clipboard-text-clock" />}
+                />
+                <Divider />
+              </View>
             ))
           }
         </View>
