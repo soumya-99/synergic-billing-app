@@ -7,6 +7,7 @@ import {
   ImageBackground,
   useColorScheme,
   View,
+  PixelRatio,
 } from "react-native"
 import { Divider, Surface, Text } from "react-native-paper"
 import ButtonPaper from "../components/ButtonPaper"
@@ -53,9 +54,9 @@ const styles = StyleSheet.create({
 
   surface: {
     margin: 20,
-    height: Dimensions.get("window").height - 550,
+    height: PixelRatio.roundToNearestPixel(200),
     borderRadius: 30,
-    width: Dimensions.get("window").width - 40,
+    width: PixelRatio.roundToNearestPixel(320),
     alignItems: "center",
     justifyContent: "center",
   },

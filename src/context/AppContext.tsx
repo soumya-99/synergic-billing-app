@@ -1,7 +1,7 @@
 import React, { createContext, useState } from "react"
 import { ToastAndroid } from "react-native"
 
-import data from "../data/login_dummy_data.json"
+import LOGIN_DATA from "../data/login_dummy_data.json"
 
 export const AppStore = createContext(null)
 
@@ -14,7 +14,7 @@ const AppContext = ({ children }) => {
     setLoginText: (txt: string | (() => string)) => void,
     setPasswordText: (txt: string | (() => string)) => void,
   ) => {
-    if (data.username === loginText && data.password === passwordText) {
+    if (LOGIN_DATA.username === loginText && LOGIN_DATA.password === passwordText) {
       setIsLogin(!isLogin)
     } else {
       ToastAndroid.showWithGravityAndOffset(
