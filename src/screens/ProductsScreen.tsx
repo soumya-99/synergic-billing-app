@@ -1,5 +1,6 @@
 import { StyleSheet, ScrollView, SafeAreaView, View } from "react-native"
 import {
+  Appbar,
   Badge,
   Divider,
   List,
@@ -12,6 +13,8 @@ import { productHeader, productHeaderDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
 import { useState } from "react"
 import PRODUCTS_DATA from "../data/products_dummy_data.json"
+import DialogBox from "../components/DialogBox"
+import { useNavigation } from "@react-navigation/native"
 
 type ProductsDataObject = {
   id: number
@@ -21,7 +24,11 @@ type ProductsDataObject = {
 }
 
 function ProductsScreen() {
+  const navigation = useNavigation()
   const theme = usePaperColorScheme()
+
+  const [visible, setVisible] = useState(() => false)
+  const hideDialog = () => setVisible(() => false)
 
   const [search, setSearch] = useState<string>(() => "")
   const [filteredItems, setFilteredItems] = useState<ProductsDataObject[]>(
@@ -34,9 +41,82 @@ function ProductsScreen() {
     setFilteredItems(filtered)
     if (query === "") setFilteredItems(() => [])
   }
+
+  const [productId, setProductId] = useState<number>()
+  const [itemName, setItemName] = useState<string>()
+  const [description, setDescription] = useState<string>()
+  const [quantity, setQuantity] = useState<number>()
+
+  const productDetails = (item: ProductsDataObject) => {
+    setProductId(item.id)
+    setItemName(item.item)
+    setDescription(item.description)
+    setQuantity(item.quantity)
+    setVisible(!visible)
+  }
+
+  const onDialogFailure = () => {
+    setVisible(!visible)
+  }
+
+  const onDialogSuccecss = () => {
+    console.log("OK PRODUCT: ", itemName)
+    setVisible(!visible)
+  }
+
+  const [value, setValue] = useState<string>(() => "")
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <Appbar.Header
+        style={{ backgroundColor: theme.colors.secondaryContainer }}>
+        <Appbar.BackAction
+          onPress={() => {
+            navigation.goBack()
+          }}
+        />
+        <Appbar.Content
+          title="Your Products"
+          color={theme.colors.onSecondaryContainer}
+        />
+      </Appbar.Header>
+      <DialogBox
+        title="Product Details"
+        icon="basket"
+        iconSize={40}
+        visible={visible}
+        hide={hideDialog}
+        titleStyle={styles.title}
+        onFailure={onDialogFailure}
+        onSuccess={onDialogSuccecss}>
+        <Text variant="labelMedium">Product ID: {productId}</Text>
+        <Text variant="labelMedium">Product Name: {itemName}</Text>
+        <Text variant="labelMedium">{description}</Text>
+        <Text>Quantity: {quantity}</Text>
+        <SegmentedButtons
+          value={value}
+          onValueChange={setValue}
+          buttons={[
+            {
+              value: "minus",
+            //   label: "-",
+              icon: "minus",
+              onPress: () => setQuantity(e => e - 1),
+            },
+            {
+              value: "",
+              label: quantity as unknown as string,
+              disabled: true,
+            },
+            {
+              value: "plus",
+            //   label: "+",
+              icon: "plus",
+              onPress: () => setQuantity(e => e + 1),
+            },
+          ]}
+        />
+      </DialogBox>
       <ScrollView keyboardShouldPersistTaps="handled">
         <HeaderImage
           imgLight={productHeader}
@@ -52,17 +132,17 @@ function ProductsScreen() {
             onChangeText={onChangeSearch}
             value={search}
             elevation={search && 2}
-            // loading={search && true}
+            // loading={filteredItems ? false : true}
           />
         </View>
 
-        <View>
+        <View style={{ paddingBottom: 80 }}>
           {filteredItems.map(item => (
             <View key={item.id}>
               <List.Item
                 title={item.item}
                 description={item.description}
-                onPress={() => console.log(item.item)}
+                onPress={() => productDetails(item)}
                 left={props => <List.Icon {...props} icon="basket" />}
                 right={props => (
                   <Badge
