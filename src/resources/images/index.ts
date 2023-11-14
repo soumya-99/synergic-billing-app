@@ -7,4 +7,13 @@ import flower2Dark from "./flower-2_dark.png"
 import hills from "./hills.jpg"
 import hillsDark from "./hills-dark.jpg"
 
-export { blurredBlue, blurredBlueDark, flowerSetting, flowerSettingDark, flower2, flower2Dark, hills, hillsDark }
+export {
+  blurredBlue,
+  blurredBlueDark,
+  flowerSetting,
+  flowerSettingDark,
+  flower2,
+  flower2Dark,
+  hills,
+  hillsDark,
+}

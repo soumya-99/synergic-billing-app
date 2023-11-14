@@ -28,7 +28,7 @@ export default function MainNavigation() {
             // </>
             <>
               <Stack.Screen
-                name={navigationRoutes.homeTab}
+                name={navigationRoutes.bottomNavigationPaper}
                 component={BottomNavigationPaper}
               />
             </>

@@ -1,6 +1,6 @@
 const navigationRoutes = {
   login: "Login",
-  homeTab: "HomeTab",
+  bottomNavigationPaper: "BottomNavigationPaper",
 }
 
 export default navigationRoutes

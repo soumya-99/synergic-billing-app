@@ -59,8 +59,7 @@ export default function HomeScreen() {
           imgLight={hills}
           imgDark={hillsDark}
           borderRadius={30}
-          blur={10}
-        >
+          blur={10}>
           Welcome Back, Soumyadeep!
         </HeaderImage>
 
@@ -117,23 +116,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
-  surface: {
-    margin: 20,
-    height: PixelRatio.roundToNearestPixel(200),
-    borderRadius: 30,
-    width: PixelRatio.roundToNearestPixel(320),
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
   bill: {
     margin: 20,
     padding: 10,
-    minHeight: Dimensions.get("window").height - 550,
+    minHeight: 200,
     height: "auto",
     maxHeight: "auto",
     borderRadius: 30,
-    width: Dimensions.get("window").width - 40,
+    width: 320,
     alignItems: "center",
   },
 

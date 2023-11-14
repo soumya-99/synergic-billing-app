@@ -20,8 +20,7 @@ export default function SettingsScreen() {
         imgLight={flowerSetting}
         imgDark={flowerSettingDark}
         borderRadius={30}
-        blur={10}
-      >
+        blur={10}>
         Settings
       </HeaderImage>
 
@@ -41,14 +40,5 @@ const styles = StyleSheet.create({
 
   title: {
     textAlign: "center",
-  },
-
-  surface: {
-    margin: 20,
-    height: PixelRatio.roundToNearestPixel(200),
-    borderRadius: 30,
-    width: PixelRatio.roundToNearestPixel(320),
-    alignItems: "center",
-    justifyContent: "center",
   },
 })

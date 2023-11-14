@@ -21,7 +21,9 @@ type TransactionDataObject = {
 
 export default function TransactionScreen() {
   const [search, setSearch] = useState<string>(() => "")
-  const [filteredItems, setFilteredItems] = useState<TransactionDataObject[]>(() => [])
+  const [filteredItems, setFilteredItems] = useState<TransactionDataObject[]>(
+    () => [],
+  )
   const onChangeSearch = (query: string) => {
     setSearch(query)
 
@@ -47,23 +49,23 @@ export default function TransactionScreen() {
             onChangeText={onChangeSearch}
             value={search}
             elevation={search && 2}
-          // loading={search && true}
+            // loading={search && true}
           />
         </View>
         <View>
-          {
-            filteredItems.map(item => (
-              <View key={item.id}>
-                <List.Item
-                  title={item.item}
-                  description={item.description}
-                  onPress={() => console.log(item.item)}
-                  left={props => <List.Icon {...props} icon="clipboard-text-clock" />}
-                />
-                <Divider />
-              </View>
-            ))
-          }
+          {filteredItems.map(item => (
+            <View key={item.id}>
+              <List.Item
+                title={item.item}
+                description={item.description}
+                onPress={() => console.log(item.item)}
+                left={props => (
+                  <List.Icon {...props} icon="clipboard-text-clock" />
+                )}
+              />
+              <Divider />
+            </View>
+          ))}
         </View>
         {[...new Array(50).keys()].map((_, i) => (
           <Text key={i}>{i + 1}</Text>
@@ -80,14 +82,5 @@ const styles = StyleSheet.create({
 
   title: {
     textAlign: "center",
-  },
-
-  surface: {
-    margin: 20,
-    height: PixelRatio.roundToNearestPixel(200),
-    borderRadius: 30,
-    width: PixelRatio.roundToNearestPixel(320),
-    alignItems: "center",
-    justifyContent: "center",
   },
 })
