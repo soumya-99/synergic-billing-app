@@ -3,6 +3,7 @@ import { BottomNavigation } from "react-native-paper"
 import HomeScreen from "../screens/HomeScreen"
 import SettingsScreen from "../screens/SettingsScreen"
 import TransactionScreen from "../screens/TransactionScreen"
+import HomeNavigation from "./HomeNavigation"
 // import { usePaperColorScheme } from '../theme/theme';
 
 function BottomNavigationPaper() {
@@ -31,7 +32,7 @@ function BottomNavigationPaper() {
   ])
 
   const renderScene = BottomNavigation.SceneMap({
-    home: HomeScreen,
+    home: HomeNavigation,
     transaction: TransactionScreen,
     settings: SettingsScreen,
   })

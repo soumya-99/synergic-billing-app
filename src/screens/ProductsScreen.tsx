@@ -1,53 +1,49 @@
-import { useState } from "react"
+import { StyleSheet, ScrollView, SafeAreaView, View } from "react-native"
 import {
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  useColorScheme,
-  View,
-  PixelRatio,
-} from "react-native"
-import {
+  Badge,
   Divider,
   List,
   Searchbar,
-  Surface,
+  SegmentedButtons,
   Text,
-  withTheme,
 } from "react-native-paper"
-
-import TRANS_DATA from "../data/transaction_dummy_data.json"
 import HeaderImage from "../components/HeaderImage"
-import { blurredBlue, blurredBlueDark } from "../resources/images"
+import { productHeader, productHeaderDark } from "../resources/images"
+import { usePaperColorScheme } from "../theme/theme"
+import { useState } from "react"
+import PRODUCTS_DATA from "../data/products_dummy_data.json"
 
-type TransactionDataObject = {
+type ProductsDataObject = {
   id: number
   item: string
   description: string
+  quantity: number
 }
 
-function TransactionScreen() {
+function ProductsScreen() {
+  const theme = usePaperColorScheme()
+
   const [search, setSearch] = useState<string>(() => "")
-  const [filteredItems, setFilteredItems] = useState<TransactionDataObject[]>(
+  const [filteredItems, setFilteredItems] = useState<ProductsDataObject[]>(
     () => [],
   )
   const onChangeSearch = (query: string) => {
     setSearch(query)
 
-    const filtered = TRANS_DATA.filter(item => item.item.includes(query))
+    const filtered = PRODUCTS_DATA.filter(item => item.item.includes(query))
     setFilteredItems(filtered)
     if (query === "") setFilteredItems(() => [])
   }
-
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView keyboardShouldPersistTaps="handled">
         <HeaderImage
-          imgLight={blurredBlue}
-          imgDark={blurredBlueDark}
+          imgLight={productHeader}
+          imgDark={productHeaderDark}
           borderRadius={30}
           blur={10}>
-          Your Transactions
+          Your Products
         </HeaderImage>
 
         <View style={{ padding: 20 }}>
@@ -59,6 +55,7 @@ function TransactionScreen() {
             // loading={search && true}
           />
         </View>
+
         <View>
           {filteredItems.map(item => (
             <View key={item.id}>
@@ -66,23 +63,28 @@ function TransactionScreen() {
                 title={item.item}
                 description={item.description}
                 onPress={() => console.log(item.item)}
-                left={props => (
-                  <List.Icon {...props} icon="clipboard-text-clock" />
+                left={props => <List.Icon {...props} icon="basket" />}
+                right={props => (
+                  <Badge
+                    {...props}
+                    style={{
+                      backgroundColor: theme.colors.tertiaryContainer,
+                      color: theme.colors.onTertiaryContainer,
+                    }}>
+                    {item.quantity}
+                  </Badge>
                 )}
               />
               <Divider />
             </View>
           ))}
         </View>
-        {[...new Array(50).keys()].map((_, i) => (
-          <Text key={i}>{i + 1}</Text>
-        ))}
       </ScrollView>
     </SafeAreaView>
   )
 }
 
-export default TransactionScreen
+export default ProductsScreen
 
 const styles = StyleSheet.create({
   container: {

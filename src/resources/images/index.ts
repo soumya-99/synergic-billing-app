@@ -6,6 +6,8 @@ import flower2 from "./flower-2.png"
 import flower2Dark from "./flower-2_dark.png"
 import hills from "./hills.jpg"
 import hillsDark from "./hills-dark.jpg"
+import productHeader from "./productheader.jpg"
+import productHeaderDark from "./productheader-dark.jpg"
 
 export {
   blurredBlue,
@@ -16,4 +18,6 @@ export {
   flower2Dark,
   hills,
   hillsDark,
+  productHeader,
+  productHeaderDark,
 }

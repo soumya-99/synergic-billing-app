@@ -2,23 +2,20 @@ import {
   StyleSheet,
   ScrollView,
   SafeAreaView,
-  Dimensions,
-  ImageBackground,
-  useColorScheme,
   View,
   PixelRatio,
 } from "react-native"
 import { useState } from "react"
 import AnimatedFABPaper from "../components/AnimatedFABPaper"
-import { Divider, Surface, Text } from "react-native-paper"
-import InputPaper from "../components/InputPaper"
-import DialogBox from "../components/DialogBox"
+import { Surface, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import HeaderImage from "../components/HeaderImage"
 import { hills, hillsDark } from "../resources/images"
+import navigationRoutes from "../routes/navigationRoutes"
+import { useNavigation } from "@react-navigation/native"
 
-export default function HomeScreen() {
-  const colorScheme = useColorScheme()
+function HomeScreen() {
+  const navigation = useNavigation()
   const theme = usePaperColorScheme()
   const [isExtended, setIsExtended] = useState(() => true)
 
@@ -28,32 +25,9 @@ export default function HomeScreen() {
     setIsExtended(currentScrollPosition <= 0)
   }
 
-  const [visible, setVisible] = useState(() => false)
-  const hideDialog = () => setVisible(() => false)
-  const [num, setNum] = useState(() => "")
-
   return (
-    <SafeAreaView style={styles.container}>
-      <DialogBox
-        title="Customer Details"
-        icon="account-circle"
-        iconSize={50}
-        visible={visible}
-        hide={hideDialog}
-        titleStyle={styles.title}
-        onFailure={() => setVisible(!visible)}
-        onSuccess={() => {
-          console.log("OK NUMBER: ", num)
-          setVisible(!visible)
-        }}>
-        <InputPaper
-          leftIcon="phone-outline"
-          label="Mobile Number"
-          onChangeText={setNum}
-          value={num}
-          keyboardType="numeric"
-        />
-      </DialogBox>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView onScroll={onScroll} keyboardShouldPersistTaps="handled">
         <HeaderImage
           imgLight={hills}
@@ -97,7 +71,8 @@ export default function HomeScreen() {
       <AnimatedFABPaper
         icon="plus"
         label="Generate Receipt"
-        onPress={() => setVisible(!visible)}
+        //@ts-ignore
+        onPress={() => navigation.navigate(navigationRoutes.productsScreen)}
         extended={isExtended}
         animateFrom="right"
         iconMode="dynamic"
@@ -106,6 +81,8 @@ export default function HomeScreen() {
     </SafeAreaView>
   )
 }
+
+export default HomeScreen
 
 const styles = StyleSheet.create({
   container: {

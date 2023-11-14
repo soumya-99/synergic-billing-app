@@ -6,13 +6,13 @@ import {
   View,
   PixelRatio,
 } from "react-native"
-import { Divider, Surface, Text } from "react-native-paper"
+import { Divider, Surface, Text, withTheme } from "react-native-paper"
 import ButtonPaper from "../components/ButtonPaper"
 import { AppStore } from "../context/AppContext"
 import HeaderImage from "../components/HeaderImage"
 import { flowerSetting, flowerSettingDark } from "../resources/images"
 
-export default function SettingsScreen() {
+function SettingsScreen() {
   const { logout } = useContext(AppStore)
   return (
     <SafeAreaView style={styles.container}>
@@ -32,6 +32,8 @@ export default function SettingsScreen() {
     </SafeAreaView>
   )
 }
+
+export default SettingsScreen
 
 const styles = StyleSheet.create({
   container: {

@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "item": "Emami Rice Bran Oil",
+    "description": "Item description",
+    "quantity": 11
+  },
+  {
+    "id": 2,
+    "item": "Lux Soap",
+    "description": "Item description",
+    "quantity": 12
+  },
+  {
+    "id": 3,
+    "item": "Mung Daal",
+    "description": "Item description",
+    "quantity": 1
+  },
+  {
+    "id": 4,
+    "item": "Cadbury Dairy Milk",
+    "description": "Item description",
+    "quantity": 51
+  },
+  {
+    "id": 5,
+    "item": "Amul Chocolate Dark",
+    "description": "Item description",
+    "quantity": 6
+  },
+  {
+    "id": 6,
+    "item": "Amul Chocolate Milk",
+    "description": "Item description",
+    "quantity": 10
+  },
+  {
+    "id": 7,
+    "item": "Sprite 700ml",
+    "description": "Item description",
+    "quantity": 19
+  },
+  {
+    "id": 8,
+    "item": "Coca Cola 700ml",
+    "description": "Item description",
+    "quantity": 24
+  }
+]
