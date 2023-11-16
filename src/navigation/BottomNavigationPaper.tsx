@@ -4,10 +4,13 @@ import HomeScreen from "../screens/HomeScreen"
 import SettingsScreen from "../screens/SettingsScreen"
 import TransactionScreen from "../screens/TransactionScreen"
 import HomeNavigation from "./HomeNavigation"
+import { CommonActions, useNavigation } from "@react-navigation/native"
+import navigationRoutes from "../routes/navigationRoutes"
 // import { usePaperColorScheme } from '../theme/theme';
 
 function BottomNavigationPaper() {
   // const theme = usePaperColorScheme()
+  const navigation = useNavigation()
 
   const [index, setIndex] = useState(() => 0)
   const [routes] = useState([
@@ -36,6 +39,7 @@ function BottomNavigationPaper() {
     transaction: TransactionScreen,
     settings: SettingsScreen,
   })
+
   return (
     <BottomNavigation
       navigationState={{ index, routes }} // this is not deprecated. It's vital.
@@ -44,6 +48,16 @@ function BottomNavigationPaper() {
       sceneAnimationEnabled
       sceneAnimationType="shifting"
       compact
+      // onTabPress={() => navigation.dispatch(
+      //   CommonActions.reset({
+      //     index: 0,
+      //     routes: [
+      //       {
+      //         name: navigationRoutes.homeScreen,
+      //       }
+      //     ],
+      //   })
+      // )}
       // theme={theme}
     />
   )

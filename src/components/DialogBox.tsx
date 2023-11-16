@@ -4,10 +4,10 @@ import { usePaperColorScheme } from "../theme/theme"
 
 type DialogBoxProps = {
   visible: boolean
-  title: string
   onFailure: () => void
   onSuccess: () => void
   hide: () => void
+  title?: string
   icon?: string
   iconSize?: number
   titleStyle?: {}
@@ -29,8 +29,8 @@ export default function DialogBox({
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={hide} theme={theme}>
-        <Dialog.Icon icon={icon} size={iconSize} />
-        <Dialog.Title style={titleStyle}>{title}</Dialog.Title>
+        {icon && (<Dialog.Icon icon={icon} size={iconSize} />)}
+        {title && (<Dialog.Title style={titleStyle}>{title}</Dialog.Title>)}
         <Dialog.Content>{children}</Dialog.Content>
         <Dialog.Actions>
           <Button onPress={onFailure} textColor={theme.colors.error}>

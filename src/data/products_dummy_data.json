@@ -3,48 +3,77 @@
     "id": 1,
     "item": "Emami Rice Bran Oil",
     "description": "Item description",
+    "unit_price": 240,
     "quantity": 11
   },
   {
     "id": 2,
     "item": "Lux Soap",
     "description": "Item description",
+    "unit_price": 65,
     "quantity": 12
   },
   {
     "id": 3,
     "item": "Mung Daal",
     "description": "Item description",
+    "unit_price": 160,
     "quantity": 1
   },
   {
     "id": 4,
     "item": "Cadbury Dairy Milk",
     "description": "Item description",
+    "unit_price": 110,
     "quantity": 51
   },
   {
     "id": 5,
     "item": "Amul Chocolate Dark",
     "description": "Item description",
+    "unit_price": 120,
     "quantity": 6
   },
   {
     "id": 6,
     "item": "Amul Chocolate Milk",
     "description": "Item description",
+    "unit_price": 140,
     "quantity": 10
   },
   {
     "id": 7,
-    "item": "Sprite 700ml",
+    "item": "Cadbury Dairy gfdfgMilk",
     "description": "Item description",
-    "quantity": 19
+    "unit_price": 110,
+    "quantity": 51
   },
   {
     "id": 8,
-    "item": "Coca Cola 700ml",
+    "item": "Amul Chocdsfsolate Dark",
     "description": "Item description",
+    "unit_price": 120,
+    "quantity": 6
+  },
+  {
+    "id": 9,
+    "item": "Amul Cate Milk",
+    "description": "Item description",
+    "unit_price": 140,
+    "quantity": 10
+  },
+  {
+    "id": 10,
+    "item": "Sprite 70gfhf0ml",
+    "description": "Item description",
+    "unit_price": 40,
+    "quantity": 19
+  },
+  {
+    "id": 11,
+    "item": "Coca Cola 7gh00ml",
+    "description": "Item description",
+    "unit_price": 50,
     "quantity": 24
   }
 ]

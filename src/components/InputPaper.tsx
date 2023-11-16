@@ -9,6 +9,7 @@ type InputPaperProps = {
   keyboardType?: KeyboardTypeOptions
   customStyle?: {}
   leftIcon?: string
+  autoFocus?: boolean
 }
 
 const InputPaper = ({
@@ -19,6 +20,7 @@ const InputPaper = ({
   keyboardType,
   customStyle,
   leftIcon,
+  autoFocus,
 }: InputPaperProps) => {
   return (
     <TextInput
@@ -30,6 +32,7 @@ const InputPaper = ({
       style={customStyle}
       left={leftIcon && <TextInput.Icon icon={leftIcon} />}
       // right={<TextInput.Icon icon={secureTextEntry ? "eye-off" : "eye"} onPress={() => setSecureTextEntry(!secureTextEntry)} />}
+      autoFocus={autoFocus}
     />
   )
 }

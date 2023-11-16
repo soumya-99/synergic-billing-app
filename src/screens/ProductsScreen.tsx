@@ -5,7 +5,6 @@ import {
   Divider,
   List,
   Searchbar,
-  SegmentedButtons,
   Text,
 } from "react-native-paper"
 import HeaderImage from "../components/HeaderImage"
@@ -15,12 +14,15 @@ import { useState } from "react"
 import PRODUCTS_DATA from "../data/products_dummy_data.json"
 import DialogBox from "../components/DialogBox"
 import { useNavigation } from "@react-navigation/native"
+import InputPaper from "../components/InputPaper"
+import ListSuggestion from "../components/ListSuggestion"
 
 type ProductsDataObject = {
   id: number
   item: string
   description: string
   quantity: number
+  unit_price: number
 }
 
 function ProductsScreen() {
@@ -44,14 +46,18 @@ function ProductsScreen() {
 
   const [productId, setProductId] = useState<number>()
   const [itemName, setItemName] = useState<string>()
-  const [description, setDescription] = useState<string>()
+  // const [description, setDescription] = useState<string>()
   const [quantity, setQuantity] = useState<number>()
 
+  const [product, setProduct] = useState<ProductsDataObject>()
+  const [addedProductsList, setAddedProductsList] = useState<ProductsDataObject[]>(() => [])
+
   const productDetails = (item: ProductsDataObject) => {
-    setProductId(item.id)
-    setItemName(item.item)
-    setDescription(item.description)
-    setQuantity(item.quantity)
+    // setProductId(item.id)
+    // setItemName(item.item)
+    // // setDescription(item.description)
+    // setQuantity(item.quantity)
+    setProduct(item)
     setVisible(!visible)
   }
 
@@ -62,9 +68,16 @@ function ProductsScreen() {
   const onDialogSuccecss = () => {
     console.log("OK PRODUCT: ", itemName)
     setVisible(!visible)
+    setSearch(() => "")
+    setFilteredItems(() => [])
   }
 
-  const [value, setValue] = useState<string>(() => "")
+  const addingProducts = (item: ProductsDataObject) => {
+
+  }
+
+  // const [value, setValue] = useState<string>(() => "")
+  const [noOfProducts, setNoOfProducts] = useState<string>(() => "")
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -81,41 +94,52 @@ function ProductsScreen() {
         />
       </Appbar.Header>
       <DialogBox
-        title="Product Details"
-        icon="basket"
         iconSize={40}
         visible={visible}
         hide={hideDialog}
         titleStyle={styles.title}
         onFailure={onDialogFailure}
         onSuccess={onDialogSuccecss}>
-        <Text variant="labelMedium">Product ID: {productId}</Text>
-        <Text variant="labelMedium">Product Name: {itemName}</Text>
-        <Text variant="labelMedium">{description}</Text>
-        <Text>Quantity: {quantity}</Text>
-        <SegmentedButtons
-          value={value}
-          onValueChange={setValue}
-          buttons={[
-            {
-              value: "minus",
-            //   label: "-",
-              icon: "minus",
-              onPress: () => setQuantity(e => e - 1),
-            },
-            {
-              value: "",
-              label: quantity as unknown as string,
-              disabled: true,
-            },
-            {
-              value: "plus",
-            //   label: "+",
-              icon: "plus",
-              onPress: () => setQuantity(e => e + 1),
-            },
-          ]}
-        />
+        <View style={{ justifyContent: "space-between", height: 130 }}>
+          <View
+            style={{
+              justifyContent: "space-evenly",
+              alignItems: "center",
+              flexDirection: "row",
+            }}>
+            <View>
+              <Text variant="labelMedium">Product ID:</Text>
+            </View>
+            <View>
+              <Text variant="labelMedium">{product.id}</Text>
+            </View>
+          </View>
+
+          <View style={{ alignItems: "center" }}>
+            <View>
+              <Text variant="titleLarge">{product.item}</Text>
+            </View>
+          </View>
+
+          <View style={{ alignItems: "center" }}>
+          <View>
+              <Text variant="labelMedium">Unit Price:</Text>
+            </View>
+            <View>
+              <Text variant="labelMedium">{product.unit_price}</Text>
+            </View>
+          </View>
+
+          <View>
+            <InputPaper
+              label="Number of Products"
+              onChangeText={(txt: string) => setNoOfProducts(txt)}
+              value={noOfProducts}
+              keyboardType="numeric"
+              autoFocus={true}
+            />
+          </View>
+        </View>
       </DialogBox>
       <ScrollView keyboardShouldPersistTaps="handled">
         <HeaderImage
@@ -136,30 +160,36 @@ function ProductsScreen() {
           />
         </View>
 
-        <View style={{ paddingBottom: 80 }}>
+        <View style={{paddingBottom: 80, zIndex: 10}}>
           {filteredItems.map(item => (
-            <View key={item.id}>
-              <List.Item
-                title={item.item}
-                description={item.description}
-                onPress={() => productDetails(item)}
-                left={props => <List.Icon {...props} icon="basket" />}
-                right={props => (
-                  <Badge
-                    {...props}
-                    style={{
-                      backgroundColor: theme.colors.tertiaryContainer,
-                      color: theme.colors.onTertiaryContainer,
-                    }}>
-                    {item.quantity}
-                  </Badge>
-                )}
-              />
-              <Divider />
-            </View>
+            // <ScrollView key={item.id}>
+            //   <List.Item
+            //     title={item.item}
+            //     description={item.description}
+            //     onPress={() => productDetails(item)}
+            //     left={props => <List.Icon {...props} icon="basket" />}
+            //     right={props => (
+            //       <Badge
+            //         {...props}
+            //         style={{
+            //           backgroundColor: theme.colors.tertiaryContainer,
+            //           color: theme.colors.onTertiaryContainer,
+            //         }}>
+            //         {`${item.unit_price}/-`}
+            //       </Badge>
+            //     )}
+            //   />
+            //   <Divider />
+            // </ScrollView>
+            
+              <ListSuggestion key={item.id} id={item.id} itemName={item.item} onPress={() => productDetails(item)} unitPrice={item.unit_price} />
           ))}
-        </View>
-      </ScrollView>
+          </View>
+          <View>
+
+          </View>
+        </ScrollView>
+      {/* </ScrollView> */}
     </SafeAreaView>
   )
 }

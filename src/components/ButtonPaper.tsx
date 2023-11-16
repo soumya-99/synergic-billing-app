@@ -6,6 +6,9 @@ type ButtonPaperProps = {
   mode: "text" | "outlined" | "contained" | "elevated" | "contained-tonal"
   onPress: (e: any) => void
   icon?: string
+  buttonColor?: string
+  textColor?: string
+  style?: {}
 }
 
 const ButtonPaper = ({
@@ -13,8 +16,17 @@ const ButtonPaper = ({
   mode,
   onPress,
   icon,
+  buttonColor,
+  textColor,
+  style,
 }: PropsWithChildren<ButtonPaperProps>) => (
-  <Button icon={icon} mode={mode} onPress={onPress}>
+  <Button
+    icon={icon}
+    mode={mode}
+    onPress={onPress}
+    buttonColor={buttonColor}
+    textColor={textColor}
+    style={style}>
     {children}
   </Button>
 )

@@ -23,8 +23,6 @@ function LoginScreen() {
   const [loginText, setLoginText] = useState<string>(() => "")
   const [passwordText, setPasswordText] = useState<string>(() => "")
 
-  const [next, setNext] = useState<boolean>(() => false)
-
   return (
     <SafeAreaView>
       <ImageBackground
@@ -86,85 +84,36 @@ function LoginScreen() {
               style={{ height: 260, width: 300, borderRadius: 30 }}
             />
           </View>
-
-          {!next && (
-            <View style={{ paddingTop: 100 }}>
-              <View style={styles.textFields}>
-                <InputPaper
-                  value={loginText}
-                  label={"Mobile Number"}
-                  onChangeText={(text: string) => setLoginText(text)}
-                  // customStyle={{ marginBottom: 20 }}
-                  leftIcon="account-circle-outline"
-                  keyboardType="phone-pad"
-                />
-              </View>
-              <View style={{ padding: 20 }}>
-                <ButtonPaper
-                  mode="contained"
-                  onPress={() => {
-                    if (loginText !== "") setNext(!next)
-                  }}
-                  icon="arrow-right">
-                  NEXT
-                </ButtonPaper>
-              </View>
+          <View style={styles.textFields}>
+            <InputPaper
+              value={loginText}
+              label={"Mobile Number"}
+              onChangeText={(text: string) => setLoginText(text)}
+              customStyle={{ marginBottom: 20 }}
+              leftIcon="account-circle-outline"
+            />
+            <InputPaper
+              value={passwordText}
+              label={"Password"}
+              secureTextEntry={true}
+              onChangeText={(text: string) => setPasswordText(text)}
+              leftIcon="shield-lock-outline"
+            />
+          </View>
+          <View style={{ margin: 20 }}>
+            <ButtonPaper
+              mode="contained"
+              onPress={() =>
+                login(loginText, passwordText, setLoginText, setPasswordText)
+              }
+              icon="login">
+              LOGIN
+            </ButtonPaper>
+            <View style={{ margin: 2, padding: 2 }}>
+              <Text style={{ fontFamily: "ProductSans-Regular", fontSize: 10 }}>
+                Powered by, Synergic Softek Solutions Pvt. Ltd.
+              </Text>
             </View>
-          )}
-
-          {next && (
-            <View style={{ paddingTop: 100 }}>
-              <View style={styles.textFields}>
-                <InputPaper
-                  value={passwordText}
-                  label={"Password"}
-                  secureTextEntry={true}
-                  onChangeText={(text: string) => setPasswordText(text)}
-                  leftIcon="shield-lock-outline"
-                />
-              </View>
-              <View
-                style={{
-                  margin: 20,
-                  justifyContent: "space-between",
-                  flexDirection: "row",
-                }}>
-                <ButtonPaper
-                  mode="contained"
-                  buttonColor={theme.colors.error}
-                  textColor={theme.colors.onError}
-                  onPress={() => {
-                    setNext(!next)
-                  }}
-                  icon="arrow-left">
-                  BACK
-                </ButtonPaper>
-                <ButtonPaper
-                  mode="contained"
-                  onPress={() => {
-                    login(
-                      loginText,
-                      passwordText,
-                      setLoginText,
-                      setPasswordText,
-                    )
-                  }}
-                  icon="login"
-                  style={{ width: 200 }}>
-                  LOGIN
-                </ButtonPaper>
-              </View>
-            </View>
-          )}
-          <View
-            style={{
-              padding: 15,
-              alignItems: "flex-start",
-              flexDirection: "column",
-            }}>
-            <Text style={{ fontFamily: "ProductSans-Regular", fontSize: 10 }}>
-              Powered by, Synergic Softek Solutions Pvt. Ltd.
-            </Text>
           </View>
         </ScrollView>
       </ImageBackground>
