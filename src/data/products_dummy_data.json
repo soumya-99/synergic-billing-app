@@ -4,76 +4,83 @@
     "item": "Emami Rice Bran Oil",
     "description": "Item description",
     "unit_price": 240,
-    "quantity": 11
+    "quantity": 0
   },
   {
     "id": 2,
     "item": "Lux Soap",
     "description": "Item description",
     "unit_price": 65,
-    "quantity": 12
+    "quantity": 0
   },
   {
     "id": 3,
     "item": "Mung Daal",
     "description": "Item description",
     "unit_price": 160,
-    "quantity": 1
+    "quantity": 0
   },
   {
     "id": 4,
     "item": "Cadbury Dairy Milk",
     "description": "Item description",
     "unit_price": 110,
-    "quantity": 51
+    "quantity": 0
   },
   {
     "id": 5,
     "item": "Amul Chocolate Dark",
     "description": "Item description",
     "unit_price": 120,
-    "quantity": 6
+    "quantity": 0
   },
   {
     "id": 6,
     "item": "Amul Chocolate Milk",
     "description": "Item description",
     "unit_price": 140,
-    "quantity": 10
+    "quantity": 0
   },
   {
     "id": 7,
-    "item": "Cadbury Dairy gfdfgMilk",
+    "item": "Cadbury Dairy Milk Gold",
     "description": "Item description",
     "unit_price": 110,
-    "quantity": 51
+    "quantity": 0
   },
   {
     "id": 8,
-    "item": "Amul Chocdsfsolate Dark",
+    "item": "Amul Chocolate Peanut",
     "description": "Item description",
     "unit_price": 120,
-    "quantity": 6
+    "quantity": 0
   },
   {
     "id": 9,
-    "item": "Amul Cate Milk",
+    "item": "Amul Milk",
     "description": "Item description",
     "unit_price": 140,
-    "quantity": 10
+    "quantity": 0
   },
   {
     "id": 10,
-    "item": "Sprite 70gfhf0ml",
+    "item": "Sprite 700ml",
     "description": "Item description",
     "unit_price": 40,
-    "quantity": 19
+    "quantity": 0
   },
   {
     "id": 11,
-    "item": "Coca Cola 7gh00ml",
+    "item": "Coca Cola 700ml",
     "description": "Item description",
     "unit_price": 50,
-    "quantity": 24
+    "quantity": 0
+  },
+  {
+    "id": 12,
+    "item": "Fortune Soya Chunks",
+    "description": "Item description",
+    "unit_price": 50,
+    "quantity": 0
   }
 ]

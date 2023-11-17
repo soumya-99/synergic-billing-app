@@ -64,9 +64,9 @@ function HomeScreen() {
           </View>
         </Surface>
 
-        {[...new Array(100).keys()].map((_, i) => (
+        {/* {[...new Array(100).keys()].map((_, i) => (
           <Text key={i}>{i}</Text>
-        ))}
+        ))} */}
       </ScrollView>
       <AnimatedFABPaper
         icon="plus"

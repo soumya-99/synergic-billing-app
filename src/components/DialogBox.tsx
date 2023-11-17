@@ -8,6 +8,8 @@ type DialogBoxProps = {
   onSuccess: () => void
   hide: () => void
   title?: string
+  btnFail?: string
+  btnSuccess?: string
   icon?: string
   iconSize?: number
   titleStyle?: {}
@@ -20,6 +22,8 @@ export default function DialogBox({
   iconSize,
   title,
   titleStyle,
+  btnFail = "CANCEL",
+  btnSuccess = "NEXT",
   onFailure,
   onSuccess,
   hide,
@@ -34,9 +38,9 @@ export default function DialogBox({
         <Dialog.Content>{children}</Dialog.Content>
         <Dialog.Actions>
           <Button onPress={onFailure} textColor={theme.colors.error}>
-            CANCEL
+            {btnFail}
           </Button>
-          <Button onPress={onSuccess}>NEXT</Button>
+          <Button onPress={onSuccess}>{btnSuccess}</Button>
         </Dialog.Actions>
       </Dialog>
     </Portal>

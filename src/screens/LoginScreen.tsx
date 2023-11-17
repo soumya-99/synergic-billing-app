@@ -88,7 +88,7 @@ function LoginScreen() {
           </View>
 
           {!next && (
-            <View style={{ paddingTop: 100 }}>
+            <View style={{ paddingTop: 80 }}>
               <View style={styles.textFields}>
                 <InputPaper
                   value={loginText}
@@ -113,7 +113,7 @@ function LoginScreen() {
           )}
 
           {next && (
-            <View style={{ paddingTop: 100 }}>
+            <View style={{ paddingTop: 80 }}>
               <View style={styles.textFields}>
                 <InputPaper
                   value={passwordText}
@@ -158,7 +158,8 @@ function LoginScreen() {
           )}
           <View
             style={{
-              padding: 15,
+              // padding: 25,
+              marginLeft: 25,
               alignItems: "flex-start",
               flexDirection: "column",
             }}>

@@ -4,19 +4,25 @@ import {
   SafeAreaView,
   View,
   PixelRatio,
+  FlatList,
+  TouchableOpacity,
+  ToastAndroid,
 } from "react-native"
 import {
   Appbar,
   Badge,
+  Button,
   Divider,
+  IconButton,
   List,
   Searchbar,
+  Snackbar,
   Text,
 } from "react-native-paper"
 import HeaderImage from "../components/HeaderImage"
 import { productHeader, productHeaderDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
-import { useState } from "react"
+import React, { useState } from "react"
 import PRODUCTS_DATA from "../data/products_dummy_data.json"
 import DialogBox from "../components/DialogBox"
 import { useNavigation } from "@react-navigation/native"
@@ -50,11 +56,6 @@ function ProductsScreen() {
     if (query === "") setFilteredItems(() => [])
   }
 
-  // const [productId, setProductId] = useState<number>()
-  // const [itemName, setItemName] = useState<string>()
-  // const [description, setDescription] = useState<string>()
-  // const [quantity, setQuantity] = useState<number>()
-
   const [product, setProduct] = useState<ProductsDataObject>({
     id: 0,
     item: "",
@@ -62,38 +63,60 @@ function ProductsScreen() {
     quantity: 0,
     unit_price: 0,
   })
+
+  const [noOfProducts, setNoOfProducts] = useState<string>(() => "")
+
   const [addedProductsList, setAddedProductsList] = useState<
     ProductsDataObject[]
   >(() => [])
 
+  // const [netTotal, setNetTotal] = useState<number>(() => 0)
+
+  let netTotal = 0
+
   const productDetails = (item: ProductsDataObject) => {
-    // setProductId(item.id)
-    // setItemName(item.item)
-    // // setDescription(item.description)
-    // setQuantity(item.quantity)
     setProduct(item)
     setVisible(!visible)
   }
 
   const onDialogFailure = () => {
+    setSearch(() => "")
     setVisible(!visible)
   }
 
   const onDialogSuccecss = () => {
-    console.log("OK PRODUCT: ", product.item)
-    setVisible(!visible)
-    setSearch(() => "")
-    setFilteredItems(() => [])
+    if (noOfProducts !== "" || noOfProducts.includes(" ")) { // check for 0 will be added
+      console.log("OK PRODUCT: ", product.item)
+      addProducts()
+      setSearch(() => "")
+      setNoOfProducts(() => "")
+      setVisible(!visible)
+      setFilteredItems(() => [])
+    } else {
+      ToastAndroid.showWithGravityAndOffset(
+        "Try adding some items.",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+        25,
+        50,
+      )
+    }
   }
 
-  const addingProducts = (item: ProductsDataObject) => {}
+  const addProducts = () => {
+    addedProductsList.push(product)
+    product.quantity = parseInt(noOfProducts)
+    setAddedProductsList([...addedProductsList])
+    console.log(
+      "==========UPDATED ADDED PRODUCTS LIST==========",
+      addedProductsList,
+    )
+  }
 
-  // const [value, setValue] = useState<string>(() => "")
-  const [noOfProducts, setNoOfProducts] = useState<string>(() => "")
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <Appbar.Header
+      {/* <Appbar.Header
         style={{ backgroundColor: theme.colors.secondaryContainer }}>
         <Appbar.BackAction
           onPress={() => {
@@ -104,18 +127,25 @@ function ProductsScreen() {
           title="Your Products"
           color={theme.colors.onSecondaryContainer}
         />
-      </Appbar.Header>
+      </Appbar.Header> */}
       <DialogBox
         iconSize={40}
         visible={visible}
         hide={hideDialog}
         titleStyle={styles.title}
+        btnSuccess="ADD"
         onFailure={onDialogFailure}
         onSuccess={onDialogSuccecss}>
-        <View style={{ justifyContent: "space-between", height: 130 }}>
+        <View style={{ justifyContent: "space-between", height: 150 }}>
+          <View style={{ alignItems: "center" }}>
+            <View>
+              <Text variant="titleLarge">{product.item}</Text>
+            </View>
+          </View>
+
           <View
             style={{
-              justifyContent: "space-evenly",
+              justifyContent: "space-around",
               alignItems: "center",
               flexDirection: "row",
             }}>
@@ -127,18 +157,17 @@ function ProductsScreen() {
             </View>
           </View>
 
-          <View style={{ alignItems: "center" }}>
-            <View>
-              <Text variant="titleLarge">{product.item}</Text>
-            </View>
-          </View>
-
-          <View style={{ alignItems: "center" }}>
+          <View
+            style={{
+              justifyContent: "space-around",
+              alignItems: "center",
+              flexDirection: "row",
+            }}>
             <View>
               <Text variant="labelMedium">Unit Price:</Text>
             </View>
             <View>
-              <Text variant="labelMedium">{product.unit_price}</Text>
+              <Text variant="labelMedium">₹{product.unit_price}</Text>
             </View>
           </View>
 
@@ -154,6 +183,15 @@ function ProductsScreen() {
         </View>
       </DialogBox>
       <ScrollView keyboardShouldPersistTaps="handled">
+        <View>
+          <IconButton
+            icon="arrow-left"
+            iconColor={theme.colors.onBackground}
+            size={20}
+            onPress={() => navigation.goBack()}
+            style={{ position: "absolute", top: 24, left: 20, zIndex: 10 }}
+          />
+        </View>
         <HeaderImage
           imgLight={productHeader}
           imgDark={productHeaderDark}
@@ -164,7 +202,7 @@ function ProductsScreen() {
 
         <View style={{ padding: 20 }}>
           <Searchbar
-            placeholder="Search Transactions"
+            placeholder="Search Products"
             onChangeText={onChangeSearch}
             value={search}
             elevation={search && 2}
@@ -172,19 +210,20 @@ function ProductsScreen() {
           />
         </View>
 
-        <View style={{ paddingBottom: PixelRatio.roundToNearestPixel(80) }}>
+        <View style={{ paddingBottom: PixelRatio.roundToNearestPixel(10) }}>
           {search && (
             <ScrollView
               style={{
                 flex: 1,
-                width: 300,
-                height: 200,
+                width: 320,
+                height: 220,
                 zIndex: 999,
                 backgroundColor: theme.colors.surfaceVariant,
                 alignSelf: "center",
                 borderRadius: 30,
               }}
-              nestedScrollEnabled={true}>
+              nestedScrollEnabled={true}
+              keyboardShouldPersistTaps="handled">
               {filteredItems.map(item => (
                 <ListSuggestion
                   key={item.id}
@@ -194,6 +233,102 @@ function ProductsScreen() {
                 />
               ))}
             </ScrollView>
+          )}
+
+          {addedProductsList.length > 0 && !search && (
+            <ScrollView
+              style={{
+                flex: 1,
+                width: 320,
+                height: 220,
+                backgroundColor: theme.colors.pinkContainer,
+                alignSelf: "center",
+                borderRadius: 30,
+              }}>
+              {addedProductsList.map(item => {
+                netTotal += item.unit_price * item.quantity
+                return (
+                  <React.Fragment key={item.id}>
+                    <View
+                      style={{
+                        flex: 0.2,
+                        justifyContent: "space-between",
+                        margin: 15,
+                      }}>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}>
+                        <View>
+                          <Text>{item.item}</Text>
+                        </View>
+                        <View>
+                          <Text>₹{item.unit_price}</Text>
+                        </View>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}>
+                        <View>
+                          <Text>QTY: {item.quantity}</Text>
+                        </View>
+                        <View>
+                          <Text>TOTAL: ₹{item.unit_price * item.quantity}</Text>
+                        </View>
+                      </View>
+                    </View>
+                    <Divider />
+                  </React.Fragment>
+                )
+              })}
+            </ScrollView>
+          )}
+
+          {netTotal > 0 && (
+            <TouchableOpacity
+              style={{
+                flex: 1,
+                width: 320,
+                height: "auto",
+                backgroundColor: theme.colors.greenContainer,
+                alignSelf: "center",
+                borderRadius: 30,
+                marginTop: 15,
+              }}
+              onPress={() => {
+                ToastAndroid.showWithGravityAndOffset(
+                  "Printing feature will be added in some days.",
+                  ToastAndroid.SHORT,
+                  ToastAndroid.CENTER,
+                  25,
+                  50,
+                )
+              }}>
+              <View
+                style={{
+                  margin: 15,
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexDirection: "row",
+                }}>
+                <View>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    CGST: 18%
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    SGST: 18%
+                  </Text>
+                </View>
+                <View>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    NET TOTAL: ₹{netTotal}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
           )}
         </View>
       </ScrollView>

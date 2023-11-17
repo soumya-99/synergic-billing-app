@@ -24,7 +24,7 @@ function SettingsScreen() {
         Settings
       </HeaderImage>
 
-      <View>
+      <View style={{padding: 20}}>
         <ButtonPaper icon="logout" mode="text" onPress={logout}>
           Log Out
         </ButtonPaper>

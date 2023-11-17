@@ -48,16 +48,18 @@ function BottomNavigationPaper() {
       sceneAnimationEnabled
       sceneAnimationType="shifting"
       compact
-      // onTabPress={() => navigation.dispatch(
-      //   CommonActions.reset({
-      //     index: 0,
-      //     routes: [
-      //       {
-      //         name: navigationRoutes.homeScreen,
-      //       }
-      //     ],
-      //   })
-      // )}
+      onTabPress={() =>
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [
+              {
+                name: navigationRoutes.homeScreen,
+              },
+            ],
+          }),
+        )
+      }
       // theme={theme}
     />
   )

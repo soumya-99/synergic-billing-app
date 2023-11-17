@@ -74,9 +74,9 @@ function TransactionScreen() {
             </View>
           ))}
         </View>
-        {[...new Array(50).keys()].map((_, i) => (
+        {/* {[...new Array(50).keys()].map((_, i) => (
           <Text key={i}>{i + 1}</Text>
-        ))}
+        ))} */}
       </ScrollView>
     </SafeAreaView>
   )
