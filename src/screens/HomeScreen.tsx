@@ -29,40 +29,44 @@ function HomeScreen() {
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView onScroll={onScroll} keyboardShouldPersistTaps="handled">
-        <HeaderImage
-          imgLight={hills}
-          imgDark={hillsDark}
-          borderRadius={30}
-          blur={10}>
-          Welcome Back, Soumyadeep!
-        </HeaderImage>
+        <View style={{ alignItems: "center" }}>
+          <HeaderImage
+            imgLight={hills}
+            imgDark={hillsDark}
+            borderRadius={30}
+            blur={10}>
+            Welcome Back, Soumyadeep!
+          </HeaderImage>
+        </View>
 
-        <Surface style={styles.bill} elevation={2}>
-          <Text
-            variant="headlineSmall"
-            style={{
-              fontFamily: "ProductSans-Medium",
-              textAlign: "center",
-              marginBottom: 5,
-            }}>
-            Summary
-          </Text>
+        <View style={{ alignItems: "center" }}>
+          <Surface style={styles.bill} elevation={2}>
+            <Text
+              variant="headlineSmall"
+              style={{
+                fontFamily: "ProductSans-Medium",
+                textAlign: "center",
+                marginBottom: 5,
+              }}>
+              Summary
+            </Text>
 
-          <View
-            style={{
-              width: PixelRatio.roundToNearestPixel(320),
-              borderStyle: "dashed",
-              borderWidth: 1,
-              marginBottom: 5,
-              borderColor: theme.colors.primary,
-            }}></View>
+            <View
+              style={{
+                width: PixelRatio.roundToNearestPixel(320),
+                borderStyle: "dashed",
+                borderWidth: 1,
+                marginBottom: 5,
+                borderColor: theme.colors.primary,
+              }}></View>
 
-          <View>
-            {[...new Array(5).keys()].map((_, i) => (
-              <Text key={i}>{i}</Text>
-            ))}
-          </View>
-        </Surface>
+            <View>
+              {[...new Array(5).keys()].map((_, i) => (
+                <Text key={i}>{i}</Text>
+              ))}
+            </View>
+          </Surface>
+        </View>
 
         {/* {[...new Array(100).keys()].map((_, i) => (
           <Text key={i}>{i}</Text>

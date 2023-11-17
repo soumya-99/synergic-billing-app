@@ -42,6 +42,7 @@ function TransactionScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView keyboardShouldPersistTaps="handled">
+        <View style={{alignItems: "center"}}>
         <HeaderImage
           imgLight={blurredBlue}
           imgDark={blurredBlueDark}
@@ -49,6 +50,7 @@ function TransactionScreen() {
           blur={10}>
           Your Transactions
         </HeaderImage>
+        </View>
 
         <View style={{ padding: 20 }}>
           <Searchbar

@@ -16,6 +16,7 @@ function SettingsScreen() {
   const { logout } = useContext(AppStore)
   return (
     <SafeAreaView style={styles.container}>
+      <View style={{alignItems: "center"}}>
       <HeaderImage
         imgLight={flowerSetting}
         imgDark={flowerSettingDark}
@@ -23,6 +24,7 @@ function SettingsScreen() {
         blur={10}>
         Settings
       </HeaderImage>
+      </View>
 
       <View style={{padding: 20}}>
         <ButtonPaper icon="logout" mode="text" onPress={logout}>

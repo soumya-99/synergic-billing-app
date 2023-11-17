@@ -189,9 +189,10 @@ function ProductsScreen() {
             iconColor={theme.colors.onBackground}
             size={20}
             onPress={() => navigation.goBack()}
-            style={{ position: "absolute", top: 24, left: 20, zIndex: 10 }}
+            style={{ position: "absolute", top: 20, left: "10%", zIndex: 10 }}
           />
         </View>
+        <View style={{alignItems: "center"}}>
         <HeaderImage
           imgLight={productHeader}
           imgDark={productHeaderDark}
@@ -199,6 +200,7 @@ function ProductsScreen() {
           blur={10}>
           Your Products
         </HeaderImage>
+        </View>
 
         <View style={{ padding: 20 }}>
           <Searchbar
