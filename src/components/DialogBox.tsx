@@ -29,8 +29,8 @@ export default function DialogBox({
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={hide} theme={theme}>
-        {icon && (<Dialog.Icon icon={icon} size={iconSize} />)}
-        {title && (<Dialog.Title style={titleStyle}>{title}</Dialog.Title>)}
+        {icon && <Dialog.Icon icon={icon} size={iconSize} />}
+        {title && <Dialog.Title style={titleStyle}>{title}</Dialog.Title>}
         <Dialog.Content>{children}</Dialog.Content>
         <Dialog.Actions>
           <Button onPress={onFailure} textColor={theme.colors.error}>
