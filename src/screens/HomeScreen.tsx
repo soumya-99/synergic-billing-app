@@ -36,26 +36,26 @@ function HomeScreen() {
             imgDark={flowerHomeDark}
             borderRadius={30}
             blur={10}>
-            Welcome Back, Shop Name!
+            Welcome Back, Kalinga Store!
           </HeaderImage>
         </View>
 
         <View style={{ alignItems: "center" }}>
           <SurfacePaper
-            heading="Summary"
+            // heading="Summary"
             elevation={2}
             backgroundColor={theme.colors.surfaceVariant}>
-            <View style={{ width: "100%", margin: 10 }}>
+            <View style={{ width: "100%", padding: 15 }}>
               <View
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
                 }}>
                 <View>
-                  <Text>No. of Bills</Text>
+                  <Text variant="titleLarge">Total Bills</Text>
                 </View>
                 <View>
-                  <Text>50</Text>
+                  <Text variant="titleLarge">50</Text>
                 </View>
               </View>
               <View
@@ -64,16 +64,17 @@ function HomeScreen() {
                   justifyContent: "space-between",
                 }}>
                 <View>
-                  <Text>Amount Collected</Text>
+                  <Text variant="titleLarge">Amount Collected</Text>
                 </View>
                 <View>
-                  <Text>₹14000</Text>
+                  <Text variant="titleLarge">₹14000</Text>
                 </View>
               </View>
             </View>
           </SurfacePaper>
 
           <SurfacePaper
+          isBorderEnabled
             heading="Recent Bills"
             elevation={2}
             backgroundColor={theme.colors.pinkContainer}>
@@ -98,7 +99,7 @@ function HomeScreen() {
                   //@ts-ignore
                   navigation.navigate(navigationRoutes.allBillsScreen)
                 }>
-                All Bills
+                ALL BILLS
               </Button>
             </View>
           </SurfacePaper>

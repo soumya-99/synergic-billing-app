@@ -5,10 +5,11 @@ import { PropsWithChildren } from "react"
 import { ElevationLevels } from "react-native-paper/lib/typescript/types"
 
 type SurfacePaperProps = {
+  backgroundColor: string
   heading?: string
   elevation?: ElevationLevels
   customTheme?: {}
-  backgroundColor: string
+  isBorderEnabled?: boolean
 }
 
 export default function SurfacePaper({
@@ -16,13 +17,14 @@ export default function SurfacePaper({
   elevation,
   backgroundColor,
   children,
+  isBorderEnabled
 }: PropsWithChildren<SurfacePaperProps>) {
   const theme = usePaperColorScheme()
   return (
     <Surface
       style={[styles.bill, { backgroundColor: backgroundColor }]}
       elevation={elevation}>
-      <Text
+      {heading && <Text
         variant="headlineSmall"
         style={{
           fontFamily: "ProductSans-Medium",
@@ -30,16 +32,16 @@ export default function SurfacePaper({
           marginBottom: 5,
         }}>
         {heading}
-      </Text>
+      </Text>}
 
-      <View
+      {isBorderEnabled && <View
         style={{
           width: PixelRatio.roundToNearestPixel(320),
           borderStyle: "dashed",
           borderWidth: 0.5,
           // marginBottom: 5,
           borderColor: theme.colors.primary,
-        }}></View>
+        }}></View>}
       {children}
     </Surface>
   )

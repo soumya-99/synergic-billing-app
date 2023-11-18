@@ -32,7 +32,7 @@ function AllBillsScreen() {
     setSearch(query)
   }
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView>
         <View>
           <IconButton

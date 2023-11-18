@@ -25,6 +25,7 @@ import {
   blurredBlue,
   blurredBlueDark,
 } from "../resources/images"
+import { usePaperColorScheme } from "../theme/theme"
 
 type TransactionDataObject = {
   id: number
@@ -33,6 +34,7 @@ type TransactionDataObject = {
 }
 
 function ReportsScreen() {
+  const theme = usePaperColorScheme()
   const [search, setSearch] = useState<string>(() => "")
   const [filteredItems, setFilteredItems] = useState<TransactionDataObject[]>(
     () => [],
@@ -85,7 +87,7 @@ function ReportsScreen() {
             style={{
               flex: 1,
               flexDirection: "row",
-              justifyContent: "space-around",
+              justifyContent: "space-between",
               padding: 20,
             }}>
             <TouchableRipple
@@ -96,7 +98,7 @@ function ReportsScreen() {
                 justifyContent: "center",
                 alignItems: "center",
                 borderRadius: 20,
-                backgroundColor: "green",
+                backgroundColor: theme.colors.greenContainer,
               }}>
               <Text>Report 1</Text>
             </TouchableRipple>
@@ -107,16 +109,21 @@ function ReportsScreen() {
                 height: 100,
                 justifyContent: "center",
                 alignItems: "center",
+                borderRadius: 20,
+                backgroundColor: theme.colors.orangeContainer,
               }}>
               <Text>Report 2</Text>
             </TouchableRipple>
             <TouchableRipple
+            rippleColor="rgba(255, 0, 0, .32)"
               onPress={() => console.log("pressed rept")}
               style={{
                 width: 100,
                 height: 100,
                 justifyContent: "center",
                 alignItems: "center",
+                borderRadius: 20,
+                backgroundColor: theme.colors.tertiaryContainer,
               }}>
               <Text>Report 3</Text>
             </TouchableRipple>
@@ -124,7 +131,7 @@ function ReportsScreen() {
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "space-around",
+              justifyContent: "space-between",
               padding: 20,
             }}>
             <TouchableRipple
@@ -134,6 +141,8 @@ function ReportsScreen() {
                 height: 100,
                 justifyContent: "center",
                 alignItems: "center",
+                borderRadius: 20,
+                backgroundColor: theme.colors.primaryContainer,
               }}>
               <Text>Report 4</Text>
             </TouchableRipple>
@@ -144,6 +153,8 @@ function ReportsScreen() {
                 height: 100,
                 justifyContent: "center",
                 alignItems: "center",
+                borderRadius: 20,
+                backgroundColor: theme.colors.pinkContainer,
               }}>
               <Text>Report 5</Text>
             </TouchableRipple>
@@ -155,7 +166,7 @@ function ReportsScreen() {
                 justifyContent: "center",
                 alignItems: "center",
                 borderRadius: 20,
-                backgroundColor: "red",
+                backgroundColor: theme.colors.secondaryContainer,
               }}>
               <Text>Report 6</Text>
             </TouchableRipple>
