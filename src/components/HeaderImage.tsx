@@ -40,9 +40,9 @@ export default function HeaderImage({
 const styles = StyleSheet.create({
   surface: {
     margin: 20,
-    height: 200,
+    height: PixelRatio.roundToNearestPixel(200),
     borderRadius: 30,
-    width: 320,
+    width: PixelRatio.roundToNearestPixel(330),
     alignItems: "center",
     justifyContent: "center",
   },

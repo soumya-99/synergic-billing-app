@@ -18,6 +18,7 @@ import {
   Searchbar,
   Snackbar,
   Text,
+  TouchableRipple,
 } from "react-native-paper"
 import HeaderImage from "../components/HeaderImage"
 import { productHeader, productHeaderDark } from "../resources/images"
@@ -85,7 +86,8 @@ function ProductsScreen() {
   }
 
   const onDialogSuccecss = () => {
-    if (noOfProducts !== "" || noOfProducts.includes(" ")) { // check for 0 will be added
+    if (noOfProducts !== "" || noOfProducts.includes(" ")) {
+      // check for 0 will be added
       console.log("OK PRODUCT: ", product.item)
       addProducts()
       setSearch(() => "")
@@ -192,14 +194,14 @@ function ProductsScreen() {
             style={{ position: "absolute", top: 20, left: "10%", zIndex: 10 }}
           />
         </View>
-        <View style={{alignItems: "center"}}>
-        <HeaderImage
-          imgLight={productHeader}
-          imgDark={productHeaderDark}
-          borderRadius={30}
-          blur={10}>
-          Your Products
-        </HeaderImage>
+        <View style={{ alignItems: "center" }}>
+          <HeaderImage
+            imgLight={productHeader}
+            imgDark={productHeaderDark}
+            borderRadius={30}
+            blur={10}>
+            Your Products
+          </HeaderImage>
         </View>
 
         <View style={{ padding: 20 }}>
@@ -290,7 +292,7 @@ function ProductsScreen() {
           )}
 
           {netTotal > 0 && (
-            <TouchableOpacity
+            <TouchableRipple
               style={{
                 flex: 1,
                 width: 320,
@@ -330,7 +332,7 @@ function ProductsScreen() {
                   </Text>
                 </View>
               </View>
-            </TouchableOpacity>
+            </TouchableRipple>
           )}
         </View>
       </ScrollView>

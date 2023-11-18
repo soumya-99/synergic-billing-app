@@ -2,7 +2,7 @@ import { createMaterialBottomTabNavigator } from "react-native-paper/react-navig
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import HomeScreen from "../screens/HomeScreen"
 import SettingsScreen from "../screens/SettingsScreen"
-import TransactionScreen from "../screens/TransactionScreen"
+import TransactionScreen from "../screens/ReportsScreen"
 import { usePaperColorScheme } from "../theme/theme"
 
 const Tab = createMaterialBottomTabNavigator()

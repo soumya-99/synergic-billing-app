@@ -7,12 +7,13 @@ import {
 } from "react-native"
 import { useState } from "react"
 import AnimatedFABPaper from "../components/AnimatedFABPaper"
-import { Surface, Text } from "react-native-paper"
+import { Button, List, Surface, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import HeaderImage from "../components/HeaderImage"
-import { hills, hillsDark } from "../resources/images"
+import { flowerHome, flowerHomeDark } from "../resources/images"
 import navigationRoutes from "../routes/navigationRoutes"
 import { useNavigation } from "@react-navigation/native"
+import SurfacePaper from "../components/SurfacePaper"
 
 function HomeScreen() {
   const navigation = useNavigation()
@@ -31,41 +32,76 @@ function HomeScreen() {
       <ScrollView onScroll={onScroll} keyboardShouldPersistTaps="handled">
         <View style={{ alignItems: "center" }}>
           <HeaderImage
-            imgLight={hills}
-            imgDark={hillsDark}
+            imgLight={flowerHome}
+            imgDark={flowerHomeDark}
             borderRadius={30}
             blur={10}>
-            Welcome Back, Soumyadeep!
+            Welcome Back, Shop Name!
           </HeaderImage>
         </View>
 
         <View style={{ alignItems: "center" }}>
-          <Surface style={styles.bill} elevation={2}>
-            <Text
-              variant="headlineSmall"
-              style={{
-                fontFamily: "ProductSans-Medium",
-                textAlign: "center",
-                marginBottom: 5,
-              }}>
-              Summary
-            </Text>
+          <SurfacePaper
+            heading="Summary"
+            elevation={2}
+            backgroundColor={theme.colors.surfaceVariant}>
+            <View style={{ width: "100%", margin: 10 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}>
+                <View>
+                  <Text>No. of Bills</Text>
+                </View>
+                <View>
+                  <Text>50</Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}>
+                <View>
+                  <Text>Amount Collected</Text>
+                </View>
+                <View>
+                  <Text>₹14000</Text>
+                </View>
+              </View>
+            </View>
+          </SurfacePaper>
 
-            <View
-              style={{
-                width: PixelRatio.roundToNearestPixel(320),
-                borderStyle: "dashed",
-                borderWidth: 1,
-                marginBottom: 5,
-                borderColor: theme.colors.primary,
-              }}></View>
-
-            <View>
-              {[...new Array(5).keys()].map((_, i) => (
-                <Text key={i}>{i}</Text>
+          <SurfacePaper
+            heading="Recent Bills"
+            elevation={2}
+            backgroundColor={theme.colors.pinkContainer}>
+            <View style={{ width: "100%" }}>
+              {[...new Array(4).keys()].map((_, i) => (
+                <List.Item
+                  key={i}
+                  title={`Bill ${i + 1}`}
+                  description={"Cadbury, Oil, Daal..."}
+                  onPress={() => console.log(`Bill ${i + 1} clicked.`)}
+                  left={props => <List.Icon {...props} icon="basket" />}
+                  // right={props => (
+                  //   <List.Icon {...props} icon="download" />
+                  // )}
+                />
               ))}
             </View>
-          </Surface>
+            <View>
+              <Button
+                textColor={theme.colors.onPinkContainer}
+                onPress={() =>
+                  //@ts-ignore
+                  navigation.navigate(navigationRoutes.allBillsScreen)
+                }>
+                All Bills
+              </Button>
+            </View>
+          </SurfacePaper>
         </View>
 
         {/* {[...new Array(100).keys()].map((_, i) => (
@@ -74,7 +110,7 @@ function HomeScreen() {
       </ScrollView>
       <AnimatedFABPaper
         icon="plus"
-        label="Generate Receipt"
+        label="Bill"
         //@ts-ignore
         onPress={() => navigation.navigate(navigationRoutes.productsScreen)}
         extended={isExtended}
@@ -100,7 +136,7 @@ const styles = StyleSheet.create({
   bill: {
     margin: 20,
     padding: 10,
-    minHeight: 200,
+    // minHeight: 200,
     height: "auto",
     maxHeight: "auto",
     borderRadius: 30,

@@ -4,6 +4,7 @@ const navigationRoutes = {
   bottomNavigationPaper: "BottomNavigationPaper",
   homeNavigation: "HomeNavigation",
   productsScreen: "ProductsScreen",
+  allBillsScreen: "AllBillsScreen",
 }
 
 export default navigationRoutes

@@ -2,7 +2,7 @@ import { useState } from "react"
 import { BottomNavigation } from "react-native-paper"
 import HomeScreen from "../screens/HomeScreen"
 import SettingsScreen from "../screens/SettingsScreen"
-import TransactionScreen from "../screens/TransactionScreen"
+import ReportsScreen from "../screens/ReportsScreen"
 import HomeNavigation from "./HomeNavigation"
 import { CommonActions, useNavigation } from "@react-navigation/native"
 import navigationRoutes from "../routes/navigationRoutes"
@@ -21,8 +21,8 @@ function BottomNavigationPaper() {
       unfocusedIcon: "home-outline",
     },
     {
-      key: "transaction",
-      title: "Transaction",
+      key: "reports",
+      title: "Reports",
       focusedIcon: "cash-multiple",
       unfocusedIcon: "cash",
     },
@@ -36,7 +36,7 @@ function BottomNavigationPaper() {
 
   const renderScene = BottomNavigation.SceneMap({
     home: HomeNavigation,
-    transaction: TransactionScreen,
+    reports: ReportsScreen,
     settings: SettingsScreen,
   })
 
