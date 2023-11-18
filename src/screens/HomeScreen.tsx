@@ -32,56 +32,57 @@ function HomeScreen() {
 
   const [addedProductsList, setAddedProductsList] = useState<
     ProductsDataObject[]
-  >(() => [{
-    id: 1,
-    item: "Emami Rice Bran Oil",
-    description: "Item description",
-    unit_price: 240,
-    quantity: 2
-  },
-  {
-    id: 2,
-    item: "Lux Soap",
-    description: "Item description",
-    unit_price: 65,
-    quantity: 9
-  },
-  {
-    id: 3,
-    item: "Mung Daal",
-    description: "Item description",
-    unit_price: 160,
-    quantity: 12
-  },
-  {
-    id: 4,
-    item: "Cadbury Dairy Milk",
-    description: "Item description",
-    unit_price: 110,
-    quantity: 7
-  },
-  {
-    id: 9,
-    item: "Cadbury Dairy Milk",
-    description: "Item description",
-    unit_price: 110,
-    quantity: 7
-  },
-  {
-    id: 78,
-    item: "Cadbury Dairy Milk",
-    description: "Item description",
-    unit_price: 110,
-    quantity: 7
-  },
-  {
-    id: 23,
-    item: "Cadbury Dairy Milk",
-    description: "Item description",
-    unit_price: 110,
-    quantity: 7
-  }
-])
+  >(() => [
+    {
+      id: 1,
+      item: "Emami Rice Bran Oil",
+      description: "Item description",
+      unit_price: 240,
+      quantity: 2,
+    },
+    {
+      id: 2,
+      item: "Lux Soap",
+      description: "Item description",
+      unit_price: 65,
+      quantity: 9,
+    },
+    {
+      id: 3,
+      item: "Mung Daal",
+      description: "Item description",
+      unit_price: 160,
+      quantity: 12,
+    },
+    {
+      id: 4,
+      item: "Cadbury Dairy Milk",
+      description: "Item description",
+      unit_price: 110,
+      quantity: 7,
+    },
+    {
+      id: 9,
+      item: "Cadbury Dairy Milk",
+      description: "Item description",
+      unit_price: 110,
+      quantity: 7,
+    },
+    {
+      id: 78,
+      item: "Cadbury Dairy Milk",
+      description: "Item description",
+      unit_price: 110,
+      quantity: 7,
+    },
+    {
+      id: 23,
+      item: "Cadbury Dairy Milk",
+      description: "Item description",
+      unit_price: 110,
+      quantity: 7,
+    },
+  ])
 
   let netTotal = 0
 
@@ -169,9 +170,9 @@ function HomeScreen() {
                   description={"Cadbury, Oil, Daal..."}
                   onPress={() => setVisible(!visible)}
                   left={props => <List.Icon {...props} icon="basket" />}
-                // right={props => (
-                //   <List.Icon {...props} icon="download" />
-                // )}
+                  // right={props => (
+                  //   <List.Icon {...props} icon="download" />
+                  // )}
                 />
               ))}
             </View>
@@ -202,13 +203,15 @@ function HomeScreen() {
         onSuccess={onDialogSuccecss}
         title="Print Bill"
         icon="printer-outline">
-        <ScrollView style={{
-          width: 320,
-          height: 200,
-          backgroundColor: theme.colors.surfaceVariant,
-          alignSelf: "center",
-          borderRadius: 30,
-        }} nestedScrollEnabled={true}>
+        <ScrollView
+          style={{
+            width: 320,
+            height: 200,
+            backgroundColor: theme.colors.surfaceVariant,
+            alignSelf: "center",
+            borderRadius: 30,
+          }}
+          nestedScrollEnabled={true}>
           {/* <View
             style={{
               justifyContent: "space-around",
@@ -259,37 +262,37 @@ function HomeScreen() {
             )
           })}
         </ScrollView>
-            <View
-              style={{
-                width: 320,
-                height: "auto",
-                backgroundColor: theme.colors.orangeContainer,
-                alignSelf: "center",
-                borderRadius: 30,
-                marginTop: 15,
-              }}>
-              <View
-                style={{
-                  margin: 15,
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  flexDirection: "row",
-                }}>
-                <View>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    CGST: 18%
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    SGST: 18%
-                  </Text>
-                </View>
-                <View>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    NET TOTAL: ₹{netTotal}
-                  </Text>
-                </View>
-              </View>
+        <View
+          style={{
+            width: 320,
+            height: "auto",
+            backgroundColor: theme.colors.orangeContainer,
+            alignSelf: "center",
+            borderRadius: 30,
+            marginTop: 15,
+          }}>
+          <View
+            style={{
+              margin: 15,
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexDirection: "row",
+            }}>
+            <View>
+              <Text style={{ color: theme.colors.onGreenContainer }}>
+                CGST: 18%
+              </Text>
+              <Text style={{ color: theme.colors.onGreenContainer }}>
+                SGST: 18%
+              </Text>
             </View>
+            <View>
+              <Text style={{ color: theme.colors.onGreenContainer }}>
+                NET TOTAL: ₹{netTotal}
+              </Text>
+            </View>
+          </View>
+        </View>
       </DialogBox>
       <AnimatedFABPaper
         icon="plus"

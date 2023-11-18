@@ -20,7 +20,7 @@ export const usePaperColorScheme = () => {
       fontSize: 15,
     },
 
-     titleLarge: {
+    titleLarge: {
       fontFamily: "ProductSans-Bold",
       fontSize: 20,
     },

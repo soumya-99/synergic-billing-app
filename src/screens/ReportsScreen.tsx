@@ -115,7 +115,7 @@ function ReportsScreen() {
               <Text>Report 2</Text>
             </TouchableRipple>
             <TouchableRipple
-            rippleColor="rgba(255, 0, 0, .32)"
+              rippleColor="rgba(255, 0, 0, .32)"
               onPress={() => console.log("pressed rept")}
               style={{
                 width: 100,

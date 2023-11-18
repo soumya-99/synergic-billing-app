@@ -17,31 +17,35 @@ export default function SurfacePaper({
   elevation,
   backgroundColor,
   children,
-  isBorderEnabled
+  isBorderEnabled,
 }: PropsWithChildren<SurfacePaperProps>) {
   const theme = usePaperColorScheme()
   return (
     <Surface
       style={[styles.bill, { backgroundColor: backgroundColor }]}
       elevation={elevation}>
-      {heading && <Text
-        variant="headlineSmall"
-        style={{
-          fontFamily: "ProductSans-Medium",
-          textAlign: "center",
-          marginBottom: 5,
-        }}>
-        {heading}
-      </Text>}
+      {heading && (
+        <Text
+          variant="headlineSmall"
+          style={{
+            fontFamily: "ProductSans-Medium",
+            textAlign: "center",
+            marginBottom: 5,
+          }}>
+          {heading}
+        </Text>
+      )}
 
-      {isBorderEnabled && <View
-        style={{
-          width: PixelRatio.roundToNearestPixel(320),
-          borderStyle: "dashed",
-          borderWidth: 0.5,
-          // marginBottom: 5,
-          borderColor: theme.colors.primary,
-        }}></View>}
+      {isBorderEnabled && (
+        <View
+          style={{
+            width: PixelRatio.roundToNearestPixel(320),
+            borderStyle: "dashed",
+            borderWidth: 0.5,
+            // marginBottom: 5,
+            borderColor: theme.colors.primary,
+          }}></View>
+      )}
       {children}
     </Surface>
   )
