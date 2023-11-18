@@ -6,7 +6,7 @@ import LOGIN_DATA from "../data/login_dummy_data.json"
 export const AppStore = createContext(null)
 
 const AppContext = ({ children }) => {
-  const [isLogin, setIsLogin] = useState(() => !false)
+  const [isLogin, setIsLogin] = useState(() => false)
 
   const login = (
     loginText: string,

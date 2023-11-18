@@ -4,26 +4,109 @@ import {
   SafeAreaView,
   View,
   PixelRatio,
+  ToastAndroid,
 } from "react-native"
-import { useState } from "react"
+import React, { useState } from "react"
 import AnimatedFABPaper from "../components/AnimatedFABPaper"
-import { Button, List, Surface, Text } from "react-native-paper"
+import { Button, Divider, List, Surface, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import HeaderImage from "../components/HeaderImage"
 import { flowerHome, flowerHomeDark } from "../resources/images"
 import navigationRoutes from "../routes/navigationRoutes"
 import { useNavigation } from "@react-navigation/native"
 import SurfacePaper from "../components/SurfacePaper"
+import DialogBox from "../components/DialogBox"
+
+type ProductsDataObject = {
+  id: number
+  item: string
+  description: string
+  quantity: number
+  unit_price: number
+}
 
 function HomeScreen() {
   const navigation = useNavigation()
   const theme = usePaperColorScheme()
   const [isExtended, setIsExtended] = useState(() => true)
 
+  const [addedProductsList, setAddedProductsList] = useState<
+    ProductsDataObject[]
+  >(() => [{
+    id: 1,
+    item: "Emami Rice Bran Oil",
+    description: "Item description",
+    unit_price: 240,
+    quantity: 2
+  },
+  {
+    id: 2,
+    item: "Lux Soap",
+    description: "Item description",
+    unit_price: 65,
+    quantity: 9
+  },
+  {
+    id: 3,
+    item: "Mung Daal",
+    description: "Item description",
+    unit_price: 160,
+    quantity: 12
+  },
+  {
+    id: 4,
+    item: "Cadbury Dairy Milk",
+    description: "Item description",
+    unit_price: 110,
+    quantity: 7
+  },
+  {
+    id: 9,
+    item: "Cadbury Dairy Milk",
+    description: "Item description",
+    unit_price: 110,
+    quantity: 7
+  },
+  {
+    id: 78,
+    item: "Cadbury Dairy Milk",
+    description: "Item description",
+    unit_price: 110,
+    quantity: 7
+  },
+  {
+    id: 23,
+    item: "Cadbury Dairy Milk",
+    description: "Item description",
+    unit_price: 110,
+    quantity: 7
+  }
+])
+
+  let netTotal = 0
+
   const onScroll = ({ nativeEvent }) => {
     const currentScrollPosition = Math.floor(nativeEvent?.contentOffset?.y) ?? 0
 
     setIsExtended(currentScrollPosition <= 0)
+  }
+
+  const [visible, setVisible] = useState(() => false)
+  const hideDialog = () => setVisible(() => false)
+
+  const onDialogFailure = () => {
+    setVisible(!visible)
+  }
+
+  const onDialogSuccecss = () => {
+    setVisible(!visible)
+    ToastAndroid.showWithGravityAndOffset(
+      "Printing feature will be added in some days.",
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+      25,
+      50,
+    )
   }
 
   return (
@@ -74,7 +157,7 @@ function HomeScreen() {
           </SurfacePaper>
 
           <SurfacePaper
-          isBorderEnabled
+            isBorderEnabled
             heading="Recent Bills"
             elevation={2}
             backgroundColor={theme.colors.pinkContainer}>
@@ -84,11 +167,11 @@ function HomeScreen() {
                   key={i}
                   title={`Bill ${i + 1}`}
                   description={"Cadbury, Oil, Daal..."}
-                  onPress={() => console.log(`Bill ${i + 1} clicked.`)}
+                  onPress={() => setVisible(!visible)}
                   left={props => <List.Icon {...props} icon="basket" />}
-                  // right={props => (
-                  //   <List.Icon {...props} icon="download" />
-                  // )}
+                // right={props => (
+                //   <List.Icon {...props} icon="download" />
+                // )}
                 />
               ))}
             </View>
@@ -109,6 +192,105 @@ function HomeScreen() {
           <Text key={i}>{i}</Text>
         ))} */}
       </ScrollView>
+      <DialogBox
+        iconSize={40}
+        visible={visible}
+        hide={hideDialog}
+        titleStyle={styles.title}
+        btnSuccess="REPRINT"
+        onFailure={onDialogFailure}
+        onSuccess={onDialogSuccecss}
+        title="Print Bill"
+        icon="printer-outline">
+        <ScrollView style={{
+          width: 320,
+          height: 200,
+          backgroundColor: theme.colors.surfaceVariant,
+          alignSelf: "center",
+          borderRadius: 30,
+        }} nestedScrollEnabled={true}>
+          {/* <View
+            style={{
+              justifyContent: "space-around",
+              alignItems: "center",
+              flexDirection: "row",
+            }}>
+            <View>
+              <Text variant="labelMedium">Product ID:</Text>
+            </View>
+          </View> */}
+          {addedProductsList.map(item => {
+            netTotal += item.unit_price * item.quantity
+            return (
+              <React.Fragment key={item.id}>
+                <View
+                  style={{
+                    flex: 0.2,
+                    justifyContent: "space-between",
+                    margin: 15,
+                  }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}>
+                    <View>
+                      <Text>{item.item}</Text>
+                    </View>
+                    <View>
+                      <Text>₹{item.unit_price}</Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}>
+                    <View>
+                      <Text>QTY: {item.quantity}</Text>
+                    </View>
+                    <View>
+                      <Text>TOTAL: ₹{item.unit_price * item.quantity}</Text>
+                    </View>
+                  </View>
+                </View>
+                <Divider />
+              </React.Fragment>
+            )
+          })}
+        </ScrollView>
+            <View
+              style={{
+                width: 320,
+                height: "auto",
+                backgroundColor: theme.colors.orangeContainer,
+                alignSelf: "center",
+                borderRadius: 30,
+                marginTop: 15,
+              }}>
+              <View
+                style={{
+                  margin: 15,
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexDirection: "row",
+                }}>
+                <View>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    CGST: 18%
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    SGST: 18%
+                  </Text>
+                </View>
+                <View>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    NET TOTAL: ₹{netTotal}
+                  </Text>
+                </View>
+              </View>
+            </View>
+      </DialogBox>
       <AnimatedFABPaper
         icon="plus"
         label="Bill"
