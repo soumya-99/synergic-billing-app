@@ -44,7 +44,7 @@ export default function HeaderImage({
             style={{
               position: "absolute",
               top: normalize(20),
-              right: normalize(120),
+              right: normalize(110),
               zIndex: 10,
             }}
           />
