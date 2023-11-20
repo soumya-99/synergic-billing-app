@@ -207,10 +207,10 @@ function HomeScreen() {
         <ScrollView
           style={{
             width: normalize(300),
-            height: normalize(200),
+            height: normalize(250),
             backgroundColor: theme.colors.surfaceVariant,
             alignSelf: "center",
-            borderRadius: 30,
+            borderRadius: normalize(30),
           }}
           nestedScrollEnabled={true}>
           {/* <View
@@ -251,10 +251,22 @@ function HomeScreen() {
                       justifyContent: "space-between",
                     }}>
                     <View>
+                      <Text>Discount:</Text>
+                    </View>
+                    <View>
+                      <Text>₹{2}</Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}>
+                    <View>
                       <Text>QTY: {item.quantity}</Text>
                     </View>
                     <View>
-                      <Text>TOTAL: ₹{item.unit_price * item.quantity}</Text>
+                      <Text>TOTAL: ₹{item.unit_price * item.quantity - 2}</Text>
                     </View>
                   </View>
                 </View>
@@ -269,28 +281,77 @@ function HomeScreen() {
             height: "auto",
             backgroundColor: theme.colors.orangeContainer,
             alignSelf: "center",
-            borderRadius: 30,
-            marginTop: 15,
+            borderRadius: normalize(30),
+            marginTop: normalize(15),
           }}>
           <View
             style={{
-              margin: 15,
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: "row",
+              // margin: 15,
+              // justifyContent: "space-between",
+              // alignItems: "center",
+              // flexDirection: "row",
+              // flex: 1,
+              width: normalize(320),
+              height: "auto",
+              // backgroundColor: theme.colors.greenContainer,
+              alignSelf: "center",
+              borderRadius: normalize(30),
+              padding: normalize(10),
             }}>
-            <View>
-              <Text style={{ color: theme.colors.onGreenContainer }}>
-                CGST: 9%
-              </Text>
-              <Text style={{ color: theme.colors.onGreenContainer }}>
-                SGST: 9%
-              </Text>
-            </View>
-            <View>
-              <Text style={{ color: theme.colors.onGreenContainer }}>
-                NET TOTAL: ₹{netTotal}
-              </Text>
+            <View
+              style={
+                {
+                  // flex: 1,
+                  // width: normalize(320),
+                  // height: "auto",
+                  // backgroundColor: theme.colors.greenContainer,
+                  // alignSelf: "center",
+                  // borderRadius: normalize(30),
+                  // marginTop: normalize(15),
+                }
+              }>
+              <View
+                style={{
+                  margin: normalize(15),
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexDirection: "row",
+                }}>
+                <View>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    TOTAL AMOUNT
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    DISCOUNT
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    CGST
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    SGST
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    NET AMOUNT
+                  </Text>
+                </View>
+                <View>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    ₹{netTotal}
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    ₹{2}
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    9%
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    9%
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    ₹{6174}
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
         </View>
@@ -321,19 +382,19 @@ const styles = StyleSheet.create({
   },
 
   bill: {
-    margin: 20,
-    padding: 10,
+    margin: normalize(20),
+    padding: normalize(10),
     // minHeight: 200,
     height: "auto",
     maxHeight: "auto",
-    borderRadius: 30,
-    width: 320,
+    borderRadius: normalize(30),
+    width: normalize(320),
     alignItems: "center",
   },
 
   fabStyle: {
-    bottom: 16,
-    right: 16,
+    bottom: normalize(16),
+    right: normalize(16),
     position: "absolute",
   },
 })

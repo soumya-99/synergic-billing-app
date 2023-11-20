@@ -222,10 +222,22 @@ function AllBillsScreen() {
                       justifyContent: "space-between",
                     }}>
                     <View>
+                      <Text>Discount:</Text>
+                    </View>
+                    <View>
+                      <Text>₹{2}</Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}>
+                    <View>
                       <Text>QTY: {item.quantity}</Text>
                     </View>
                     <View>
-                      <Text>TOTAL: ₹{item.unit_price * item.quantity}</Text>
+                      <Text>TOTAL: ₹{item.unit_price * item.quantity - 2}</Text>
                     </View>
                   </View>
                 </View>
@@ -245,23 +257,72 @@ function AllBillsScreen() {
           }}>
           <View
             style={{
-              margin: 15,
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: "row",
+              // margin: 15,
+              // justifyContent: "space-between",
+              // alignItems: "center",
+              // flexDirection: "row",
+              // flex: 1,
+              width: normalize(320),
+              height: "auto",
+              // backgroundColor: theme.colors.greenContainer,
+              alignSelf: "center",
+              borderRadius: normalize(30),
+              padding: normalize(10),
             }}>
-            <View>
-              <Text style={{ color: theme.colors.onGreenContainer }}>
-                CGST: 9%
-              </Text>
-              <Text style={{ color: theme.colors.onGreenContainer }}>
-                SGST: 9%
-              </Text>
-            </View>
-            <View>
-              <Text style={{ color: theme.colors.onGreenContainer }}>
-                NET TOTAL: ₹{netTotal}
-              </Text>
+            <View
+              style={
+                {
+                  // flex: 1,
+                  // width: normalize(320),
+                  // height: "auto",
+                  // backgroundColor: theme.colors.greenContainer,
+                  // alignSelf: "center",
+                  // borderRadius: normalize(30),
+                  // marginTop: normalize(15),
+                }
+              }>
+              <View
+                style={{
+                  margin: normalize(15),
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexDirection: "row",
+                }}>
+                <View>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    TOTAL AMOUNT
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    DISCOUNT
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    CGST
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    SGST
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    NET AMOUNT
+                  </Text>
+                </View>
+                <View>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    ₹{netTotal}
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    ₹{2}
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    9%
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    9%
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    ₹{6174}
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
         </View>

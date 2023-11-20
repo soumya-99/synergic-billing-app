@@ -89,7 +89,14 @@ function LoginScreen() {
           </View>
 
           {!next && (
-            <View style={{ padding: normalize(40), width: "100%", flex: 1, flexDirection: "column", gap: 20 }}>
+            <View
+              style={{
+                padding: normalize(40),
+                width: "100%",
+                flex: 1,
+                flexDirection: "column",
+                gap: 20,
+              }}>
               <View>
                 <InputPaper
                   value={loginText}
@@ -115,7 +122,14 @@ function LoginScreen() {
           )}
 
           {next && (
-            <View style={{ padding: normalize(40), width: "100%", flex: 1, flexDirection: "column", gap: 20 }}>
+            <View
+              style={{
+                padding: normalize(40),
+                width: "100%",
+                flex: 1,
+                flexDirection: "column",
+                gap: 20,
+              }}>
               <View>
                 <InputPaper
                   value={passwordText}
@@ -132,7 +146,7 @@ function LoginScreen() {
                   justifyContent: "space-between",
                   alignItems: "center",
                   flexDirection: "row",
-                  gap: 15
+                  gap: 15,
                 }}>
                 <View>
                   <ButtonPaper
@@ -142,7 +156,7 @@ function LoginScreen() {
                     onPress={() => {
                       setNext(!next)
                     }}
-                    style={{ width: normalize(100)}}
+                    style={{ width: normalize(100) }}
                     icon="arrow-left">
                     BACK
                   </ButtonPaper>

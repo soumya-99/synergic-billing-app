@@ -71,7 +71,7 @@ function ProductsScreen() {
   })
 
   const [noOfProducts, setNoOfProducts] = useState<string>(() => "")
-  const [discount, setDiscount] = useState<string>(() => "")
+  const [discount, setDiscount] = useState<string>(() => "0")
 
   const [addedProductsList, setAddedProductsList] = useState<
     ProductsDataObject[]
@@ -80,6 +80,7 @@ function ProductsScreen() {
   // const [netTotal, setNetTotal] = useState<number>(() => 0)
 
   let netTotal = 0
+  let totalDiscount = 0
 
   const productDetails = (item: ProductsDataObject) => {
     setProduct(item)
@@ -98,7 +99,7 @@ function ProductsScreen() {
       addProducts()
       setSearch(() => "")
       setNoOfProducts(() => "")
-      setDiscount(() => "")
+      setDiscount(() => "0")
       setVisible(!visible)
       setFilteredItems(() => [])
     } else {
@@ -237,13 +238,14 @@ function ProductsScreen() {
           </HeaderImage>
         </View>
 
-        <View style={{ padding: 20 }}>
+        <View style={{ padding: normalize(20) }}>
           <Searchbar
             placeholder="Search Products"
             onChangeText={onChangeSearch}
             value={search}
             elevation={search && 2}
             // loading={search ? true : false}
+            autoFocus
           />
         </View>
 
@@ -252,12 +254,12 @@ function ProductsScreen() {
             <ScrollView
               style={{
                 flex: 1,
-                width: 320,
-                height: 220,
+                width: normalize(320),
+                height: normalize(220),
                 zIndex: 999,
                 backgroundColor: theme.colors.surfaceVariant,
                 alignSelf: "center",
-                borderRadius: 30,
+                borderRadius: normalize(30),
               }}
               nestedScrollEnabled={true}
               keyboardShouldPersistTaps="handled">
@@ -276,21 +278,23 @@ function ProductsScreen() {
             <ScrollView
               style={{
                 flex: 1,
-                width: 320,
-                height: 220,
+                width: normalize(320),
+                height: normalize(220),
                 backgroundColor: theme.colors.pinkContainer,
                 alignSelf: "center",
-                borderRadius: 30,
-              }}>
+                borderRadius: normalize(30),
+              }}
+              nestedScrollEnabled={true}>
               {addedProductsList.map(item => {
                 netTotal += item.unit_price * item["quantity"]
+                totalDiscount += parseInt(item["discount"])
                 return (
                   <React.Fragment key={item.id}>
                     <View
                       style={{
                         flex: 0.2,
                         justifyContent: "space-between",
-                        margin: 15,
+                        margin: normalize(15),
                       }}>
                       <View
                         style={{
@@ -318,7 +322,7 @@ function ProductsScreen() {
                           <Text>Discount</Text>
                         </View>
                         <View>
-                          <Text>-₹{item["discount"]}</Text>
+                          <Text>₹{item["discount"]}</Text>
                         </View>
                       </View>
                       <View
@@ -351,12 +355,12 @@ function ProductsScreen() {
             <TouchableRipple
               style={{
                 flex: 1,
-                width: 320,
+                width: normalize(320),
                 height: "auto",
                 backgroundColor: theme.colors.greenContainer,
                 alignSelf: "center",
-                borderRadius: 30,
-                marginTop: 15,
+                borderRadius: normalize(30),
+                marginTop: normalize(15),
               }}
               onPress={() => {
                 ToastAndroid.showWithGravityAndOffset(
@@ -369,22 +373,46 @@ function ProductsScreen() {
               }}>
               <View
                 style={{
-                  margin: 15,
+                  margin: normalize(15),
                   justifyContent: "space-between",
                   alignItems: "center",
                   flexDirection: "row",
                 }}>
                 <View>
                   <Text style={{ color: theme.colors.onGreenContainer }}>
-                    CGST: 9%
+                    TOTAL AMOUNT
                   </Text>
                   <Text style={{ color: theme.colors.onGreenContainer }}>
-                    SGST: 9%
+                    DISCOUNT
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    CGST
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    SGST
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    NET AMOUNT
                   </Text>
                 </View>
                 <View>
                   <Text style={{ color: theme.colors.onGreenContainer }}>
-                    NET TOTAL: ₹{netTotal}
+                    ₹{netTotal}
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    ₹{totalDiscount}
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    9%
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    9%
+                  </Text>
+                  <Text style={{ color: theme.colors.onGreenContainer }}>
+                    ₹
+                    {netTotal -
+                      totalDiscount +
+                      (18 / 100) * (netTotal - totalDiscount)}
                   </Text>
                 </View>
               </View>
