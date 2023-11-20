@@ -4,14 +4,20 @@ import {
   useColorScheme,
   StyleSheet,
   PixelRatio,
+  View,
 } from "react-native"
-import { Text } from "react-native-paper"
+import normalize from "react-native-normalize"
+import { IconButton, Text } from "react-native-paper"
+import { usePaperColorScheme } from "../theme/theme"
+import { NavigationProp, useNavigation } from "@react-navigation/native"
 
 type HeaderImageProps = {
   imgLight: { uri: string }
   imgDark?: { uri: string }
   borderRadius?: number
   blur?: number
+  navigation?: any
+  isBackEnabled?: boolean
 }
 
 export default function HeaderImage({
@@ -20,20 +26,42 @@ export default function HeaderImage({
   borderRadius,
   blur,
   children,
+  navigation,
+  isBackEnabled,
 }: PropsWithChildren<HeaderImageProps>) {
   const colorScheme = useColorScheme()
+  const theme = usePaperColorScheme()
+  // const navigation = useNavigation()
   return (
-    <ImageBackground
-      imageStyle={{ borderRadius: borderRadius }}
-      blurRadius={blur}
-      source={colorScheme !== "dark" ? imgLight : imgDark}
-      style={styles.surface}>
-      <Text
-        variant="displaySmall"
-        style={{ fontFamily: "ProductSans-Medium", textAlign: "center" }}>
-        {children}
-      </Text>
-    </ImageBackground>
+    <>
+      {isBackEnabled && (
+        <View>
+          <IconButton
+            icon="arrow-left"
+            iconColor={theme.colors.onBackground}
+            size={20}
+            onPress={() => navigation.goBack()}
+            style={{
+              position: "absolute",
+              top: normalize(20),
+              right: normalize(120),
+              zIndex: 10,
+            }}
+          />
+        </View>
+      )}
+      <ImageBackground
+        imageStyle={{ borderRadius: normalize(borderRadius) }}
+        blurRadius={blur}
+        source={colorScheme !== "dark" ? imgLight : imgDark}
+        style={styles.surface}>
+        <Text
+          variant="displaySmall"
+          style={{ fontFamily: "ProductSans-Medium", textAlign: "center" }}>
+          {children}
+        </Text>
+      </ImageBackground>
+    </>
   )
 }
 

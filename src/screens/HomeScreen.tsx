@@ -16,6 +16,7 @@ import navigationRoutes from "../routes/navigationRoutes"
 import { useNavigation } from "@react-navigation/native"
 import SurfacePaper from "../components/SurfacePaper"
 import DialogBox from "../components/DialogBox"
+import normalize from "react-native-normalize"
 
 type ProductsDataObject = {
   id: number
@@ -205,8 +206,8 @@ function HomeScreen() {
         icon="printer-outline">
         <ScrollView
           style={{
-            width: 320,
-            height: 200,
+            width: normalize(300),
+            height: normalize(200),
             backgroundColor: theme.colors.surfaceVariant,
             alignSelf: "center",
             borderRadius: 30,
@@ -264,7 +265,7 @@ function HomeScreen() {
         </ScrollView>
         <View
           style={{
-            width: 320,
+            width: normalize(300),
             height: "auto",
             backgroundColor: theme.colors.orangeContainer,
             alignSelf: "center",
@@ -280,10 +281,10 @@ function HomeScreen() {
             }}>
             <View>
               <Text style={{ color: theme.colors.onGreenContainer }}>
-                CGST: 18%
+                CGST: 9%
               </Text>
               <Text style={{ color: theme.colors.onGreenContainer }}>
-                SGST: 18%
+                SGST: 9%
               </Text>
             </View>
             <View>

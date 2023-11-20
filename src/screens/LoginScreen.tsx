@@ -97,6 +97,7 @@ function LoginScreen() {
                   // customStyle={{ marginBottom: 20 }}
                   leftIcon="account-circle-outline"
                   keyboardType="phone-pad"
+                  autoFocus
                 />
               </View>
               <View style={{ padding: 20 }}>
@@ -121,6 +122,7 @@ function LoginScreen() {
                   secureTextEntry={true}
                   onChangeText={(text: string) => setPasswordText(text)}
                   leftIcon="shield-lock-outline"
+                  autoFocus
                 />
               </View>
               <View

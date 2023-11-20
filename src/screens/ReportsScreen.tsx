@@ -10,11 +10,13 @@ import {
 import {
   Divider,
   List,
+  MD3Colors,
   Searchbar,
   Surface,
   Text,
   TouchableRipple,
   withTheme,
+  IconButton,
 } from "react-native-paper"
 
 import TRANS_DATA from "../data/transaction_dummy_data.json"
@@ -26,6 +28,8 @@ import {
   blurredBlueDark,
 } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
+import ReportButton from "../components/ReportButton"
+import ReportButtonsWrapper from "../components/ReportButtonsWrapper"
 
 type TransactionDataObject = {
   id: number
@@ -56,7 +60,7 @@ function ReportsScreen() {
             imgDark={blurReportDark}
             borderRadius={30}
             blur={10}>
-            Your Reports
+            My Reports
           </HeaderImage>
         </View>
 
@@ -69,109 +73,48 @@ function ReportsScreen() {
             // loading={search && true}
           />
         </View> */}
-        <View style={{ padding: 20 }}>
-          {/* {filteredItems.map(item => (
-            <View key={item.id}>
-              <List.Item
-                title={item.item}
-                description={item.description}
-                onPress={() => console.log(item.item)}
-                left={props => (
-                  <List.Icon {...props} icon="clipboard-text-clock" />
-                )}
-              />
-              <Divider />
-            </View>
-          ))} */}
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              padding: 20,
-            }}>
-            <TouchableRipple
-              onPress={() => console.log("pressed rept")}
-              style={{
-                width: 100,
-                height: 100,
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 20,
-                backgroundColor: theme.colors.greenContainer,
-              }}>
-              <Text>Report 1</Text>
-            </TouchableRipple>
-            <TouchableRipple
-              onPress={() => console.log("pressed rept")}
-              style={{
-                width: 100,
-                height: 100,
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 20,
-                backgroundColor: theme.colors.orangeContainer,
-              }}>
-              <Text>Report 2</Text>
-            </TouchableRipple>
-            <TouchableRipple
-              rippleColor="rgba(255, 0, 0, .32)"
-              onPress={() => console.log("pressed rept")}
-              style={{
-                width: 100,
-                height: 100,
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 20,
-                backgroundColor: theme.colors.tertiaryContainer,
-              }}>
-              <Text>Report 3</Text>
-            </TouchableRipple>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              padding: 20,
-            }}>
-            <TouchableRipple
-              onPress={() => console.log("pressed rept")}
-              style={{
-                width: 100,
-                height: 100,
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 20,
-                backgroundColor: theme.colors.primaryContainer,
-              }}>
-              <Text>Report 4</Text>
-            </TouchableRipple>
-            <TouchableRipple
-              onPress={() => console.log("pressed rept")}
-              style={{
-                width: 100,
-                height: 100,
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 20,
-                backgroundColor: theme.colors.pinkContainer,
-              }}>
-              <Text>Report 5</Text>
-            </TouchableRipple>
-            <TouchableRipple
-              onPress={() => console.log("pressed rept")}
-              style={{
-                width: 100,
-                height: 100,
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 20,
-                backgroundColor: theme.colors.secondaryContainer,
-              }}>
-              <Text>Report 6</Text>
-            </TouchableRipple>
-          </View>
-        </View>
+        <ReportButtonsWrapper>
+          <ReportButton
+            text="Bill Wise"
+            color={theme.colors.greenContainer}
+            icon="billboard"
+          />
+          <ReportButton
+            text="Item Wise"
+            color={theme.colors.orangeContainer}
+            icon="billboard"
+          />
+          <ReportButton
+            text="Operaotr Wise"
+            color={theme.colors.tertiaryContainer}
+            icon="billboard"
+          />
+          <ReportButton
+            text="Duplicate Receipt"
+            color={theme.colors.primaryContainer}
+            icon="billboard"
+          />
+          <ReportButton
+            text="Month Wise"
+            color={theme.colors.pinkContainer}
+            icon="billboard"
+          />
+          <ReportButton
+            text="Year Wise"
+            color={theme.colors.orangeContainer}
+            icon="billboard"
+          />
+          <ReportButton
+            text="Day Wise"
+            color={theme.colors.pinkContainer}
+            icon="billboard"
+          />
+          <ReportButton
+            text="GST Report"
+            color={theme.colors.primaryContainer}
+            icon="billboard"
+          />
+        </ReportButtonsWrapper>
         {/* {[...new Array(50).keys()].map((_, i) => (
           <Text key={i}>{i + 1}</Text>
         ))} */}

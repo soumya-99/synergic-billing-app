@@ -29,13 +29,18 @@ import DialogBox from "../components/DialogBox"
 import { useNavigation } from "@react-navigation/native"
 import InputPaper from "../components/InputPaper"
 import ListSuggestion from "../components/ListSuggestion"
+import normalize from "react-native-normalize"
+
+// type ProductsData = {
+//   [key: string]: any
+// }
 
 type ProductsDataObject = {
   id: number
   item: string
   description: string
-  quantity: number
   unit_price: number
+  unit: string
 }
 
 function ProductsScreen() {
@@ -61,11 +66,12 @@ function ProductsScreen() {
     id: 0,
     item: "",
     description: "",
-    quantity: 0,
     unit_price: 0,
+    unit: "",
   })
 
   const [noOfProducts, setNoOfProducts] = useState<string>(() => "")
+  const [discount, setDiscount] = useState<string>(() => "")
 
   const [addedProductsList, setAddedProductsList] = useState<
     ProductsDataObject[]
@@ -92,6 +98,7 @@ function ProductsScreen() {
       addProducts()
       setSearch(() => "")
       setNoOfProducts(() => "")
+      setDiscount(() => "")
       setVisible(!visible)
       setFilteredItems(() => [])
     } else {
@@ -107,7 +114,8 @@ function ProductsScreen() {
 
   const addProducts = () => {
     addedProductsList.push(product)
-    product.quantity = parseInt(noOfProducts)
+    product["quantity"] = parseInt(noOfProducts)
+    product["discount"] = parseInt(discount)
     setAddedProductsList([...addedProductsList])
     console.log(
       "==========UPDATED ADDED PRODUCTS LIST==========",
@@ -147,9 +155,11 @@ function ProductsScreen() {
 
           <View
             style={{
-              justifyContent: "space-around",
+              justifyContent: "space-between",
               alignItems: "center",
               flexDirection: "row",
+              marginLeft: 10,
+              marginRight: 10,
             }}>
             <View>
               <Text variant="labelMedium">Product ID:</Text>
@@ -161,9 +171,11 @@ function ProductsScreen() {
 
           <View
             style={{
-              justifyContent: "space-around",
+              justifyContent: "space-between",
               alignItems: "center",
               flexDirection: "row",
+              marginLeft: 10,
+              marginRight: 10,
             }}>
             <View>
               <Text variant="labelMedium">Unit Price:</Text>
@@ -173,33 +185,54 @@ function ProductsScreen() {
             </View>
           </View>
 
-          <View>
-            <InputPaper
-              label="Number of Products"
-              onChangeText={(txt: string) => setNoOfProducts(txt)}
-              value={noOfProducts}
-              keyboardType="numeric"
-              autoFocus={true}
-            />
+          <View></View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 5,
+            }}>
+            <View style={{ width: "50%" }}>
+              <InputPaper
+                label="Quantity"
+                onChangeText={(txt: string) => setNoOfProducts(txt)}
+                value={noOfProducts}
+                keyboardType="numeric"
+                autoFocus={true}
+                mode="outlined"
+              />
+            </View>
+            <View style={{ width: "50%" }}>
+              <InputPaper
+                label="Discount"
+                onChangeText={(txt: string) => setDiscount(txt)}
+                value={discount}
+                keyboardType="numeric"
+                mode="outlined"
+              />
+            </View>
           </View>
         </View>
       </DialogBox>
       <ScrollView keyboardShouldPersistTaps="handled">
-        <View>
+        {/* <View>
           <IconButton
             icon="arrow-left"
             iconColor={theme.colors.onBackground}
             size={20}
             onPress={() => navigation.goBack()}
-            style={{ position: "absolute", top: 20, left: "10%", zIndex: 10 }}
+            style={{ position: "absolute", top: normalize(20), left: normalize(20), zIndex: 10 }}
           />
-        </View>
+        </View> */}
         <View style={{ alignItems: "center" }}>
           <HeaderImage
             imgLight={productHeader}
             imgDark={productHeaderDark}
             borderRadius={30}
-            blur={10}>
+            blur={10}
+            isBackEnabled
+            navigation={navigation}>
             Your Products
           </HeaderImage>
         </View>
@@ -250,7 +283,7 @@ function ProductsScreen() {
                 borderRadius: 30,
               }}>
               {addedProductsList.map(item => {
-                netTotal += item.unit_price * item.quantity
+                netTotal += item.unit_price * item["quantity"]
                 return (
                   <React.Fragment key={item.id}>
                     <View
@@ -265,10 +298,15 @@ function ProductsScreen() {
                           justifyContent: "space-between",
                         }}>
                         <View>
-                          <Text>{item.item}</Text>
+                          <Text>
+                            {item.item} (₹{item.unit_price})
+                          </Text>
                         </View>
                         <View>
-                          <Text>₹{item.unit_price}</Text>
+                          <Text>
+                            {item["quantity"]}x{item.unit_price}=
+                            {item.unit_price * item["quantity"]}
+                          </Text>
                         </View>
                       </View>
                       <View
@@ -277,10 +315,28 @@ function ProductsScreen() {
                           justifyContent: "space-between",
                         }}>
                         <View>
-                          <Text>QTY: {item.quantity}</Text>
+                          <Text>Discount</Text>
                         </View>
                         <View>
-                          <Text>TOTAL: ₹{item.unit_price * item.quantity}</Text>
+                          <Text>-₹{item["discount"]}</Text>
+                        </View>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}>
+                        <View>
+                          <Text>
+                            QTY: {item["quantity"]} {item.unit}
+                          </Text>
+                        </View>
+                        <View>
+                          <Text>
+                            TOTAL: ₹
+                            {item.unit_price * item["quantity"] -
+                              item["discount"]}
+                          </Text>
                         </View>
                       </View>
                     </View>
@@ -320,10 +376,10 @@ function ProductsScreen() {
                 }}>
                 <View>
                   <Text style={{ color: theme.colors.onGreenContainer }}>
-                    CGST: 18%
+                    CGST: 9%
                   </Text>
                   <Text style={{ color: theme.colors.onGreenContainer }}>
-                    SGST: 18%
+                    SGST: 9%
                   </Text>
                 </View>
                 <View>

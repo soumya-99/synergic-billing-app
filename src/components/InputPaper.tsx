@@ -10,6 +10,7 @@ type InputPaperProps = {
   customStyle?: {}
   leftIcon?: string
   autoFocus?: boolean
+  mode?: "outlined" | "flat"
 }
 
 const InputPaper = ({
@@ -21,9 +22,11 @@ const InputPaper = ({
   customStyle,
   leftIcon,
   autoFocus,
+  mode = "flat",
 }: InputPaperProps) => {
   return (
     <TextInput
+      mode={mode}
       keyboardType={keyboardType}
       label={label}
       value={value}

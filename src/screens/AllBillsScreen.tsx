@@ -23,6 +23,7 @@ import { textureBill, textureBillDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
 import { useNavigation } from "@react-navigation/native"
 import DialogBox from "../components/DialogBox"
+import normalize from "react-native-normalize"
 
 type ProductsDataObject = {
   id: number
@@ -118,7 +119,7 @@ function AllBillsScreen() {
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView>
-        <View>
+        {/* <View>
           <IconButton
             icon="arrow-left"
             iconColor={theme.colors.onBackground}
@@ -126,14 +127,16 @@ function AllBillsScreen() {
             onPress={() => navigation.goBack()}
             style={{ position: "absolute", top: 20, left: "10%", zIndex: 10 }}
           />
-        </View>
+        </View> */}
         <View style={{ alignItems: "center" }}>
           <HeaderImage
             imgLight={textureBill}
             imgDark={textureBillDark}
             borderRadius={30}
-            blur={10}>
-            Your Bills
+            blur={10}
+            isBackEnabled
+            navigation={navigation}>
+            My Bills
           </HeaderImage>
         </View>
 
@@ -174,8 +177,8 @@ function AllBillsScreen() {
         icon="printer-outline">
         <ScrollView
           style={{
-            width: 320,
-            height: 200,
+            width: normalize(300),
+            height: normalize(200),
             backgroundColor: theme.colors.surfaceVariant,
             alignSelf: "center",
             borderRadius: 30,
@@ -233,7 +236,7 @@ function AllBillsScreen() {
         </ScrollView>
         <View
           style={{
-            width: 320,
+            width: normalize(300),
             height: "auto",
             backgroundColor: theme.colors.orangeContainer,
             alignSelf: "center",
@@ -249,10 +252,10 @@ function AllBillsScreen() {
             }}>
             <View>
               <Text style={{ color: theme.colors.onGreenContainer }}>
-                CGST: 18%
+                CGST: 9%
               </Text>
               <Text style={{ color: theme.colors.onGreenContainer }}>
-                SGST: 18%
+                SGST: 9%
               </Text>
             </View>
             <View>
