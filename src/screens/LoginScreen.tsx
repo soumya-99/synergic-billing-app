@@ -14,6 +14,7 @@ import { usePaperColorScheme } from "../theme/theme"
 import InputPaper from "../components/InputPaper"
 import ButtonPaper from "../components/ButtonPaper"
 import { AppStore } from "../context/AppContext"
+import normalize from "react-native-normalize"
 
 function LoginScreen() {
   const { login } = useContext(AppStore)
@@ -88,8 +89,8 @@ function LoginScreen() {
           </View>
 
           {!next && (
-            <View style={{ paddingTop: 80 }}>
-              <View style={styles.textFields}>
+            <View style={{ padding: normalize(40), width: "100%", flex: 1, flexDirection: "column", gap: 20 }}>
+              <View>
                 <InputPaper
                   value={loginText}
                   label={"Mobile Number"}
@@ -100,7 +101,7 @@ function LoginScreen() {
                   autoFocus
                 />
               </View>
-              <View style={{ padding: 20 }}>
+              <View>
                 <ButtonPaper
                   mode="contained"
                   onPress={() => {
@@ -114,8 +115,8 @@ function LoginScreen() {
           )}
 
           {next && (
-            <View style={{ paddingTop: 80 }}>
-              <View style={styles.textFields}>
+            <View style={{ padding: normalize(40), width: "100%", flex: 1, flexDirection: "column", gap: 20 }}>
+              <View>
                 <InputPaper
                   value={passwordText}
                   label={"Password"}
@@ -127,43 +128,51 @@ function LoginScreen() {
               </View>
               <View
                 style={{
-                  margin: 20,
+                  // margin: 20,
                   justifyContent: "space-between",
+                  alignItems: "center",
                   flexDirection: "row",
+                  gap: 15
                 }}>
-                <ButtonPaper
-                  mode="contained"
-                  buttonColor={theme.colors.error}
-                  textColor={theme.colors.onError}
-                  onPress={() => {
-                    setNext(!next)
-                  }}
-                  icon="arrow-left">
-                  BACK
-                </ButtonPaper>
-                <ButtonPaper
-                  mode="contained"
-                  onPress={() => {
-                    login(
-                      loginText,
-                      passwordText,
-                      setLoginText,
-                      setPasswordText,
-                    )
-                  }}
-                  icon="login"
-                  style={{ width: 200 }}>
-                  LOGIN
-                </ButtonPaper>
+                <View>
+                  <ButtonPaper
+                    mode="contained"
+                    buttonColor={theme.colors.error}
+                    textColor={theme.colors.onError}
+                    onPress={() => {
+                      setNext(!next)
+                    }}
+                    style={{ width: normalize(100)}}
+                    icon="arrow-left">
+                    BACK
+                  </ButtonPaper>
+                </View>
+                <View>
+                  <ButtonPaper
+                    mode="contained"
+                    onPress={() => {
+                      login(
+                        loginText,
+                        passwordText,
+                        setLoginText,
+                        setPasswordText,
+                      )
+                    }}
+                    icon="login"
+                    style={{ width: normalize(150) }}>
+                    LOGIN
+                  </ButtonPaper>
+                </View>
               </View>
             </View>
           )}
           <View
             style={{
-              // padding: 25,
-              marginLeft: 25,
-              alignItems: "flex-start",
-              flexDirection: "column",
+              // padding: 35,
+              marginTop: normalize(180),
+              marginLeft: normalize(10),
+              // alignItems: "flex-end",
+              // flexDirection: "column",
             }}>
             <Text style={{ fontFamily: "ProductSans-Regular", fontSize: 10 }}>
               Powered by, Synergic Softek Solutions Pvt. Ltd.
@@ -183,7 +192,7 @@ const styles = StyleSheet.create({
   },
 
   loginHeader: {
-    margin: 20,
+    margin: normalize(20),
     justifyContent: "center",
     alignItems: "center",
   },
@@ -192,10 +201,10 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 
-  textFields: {
-    flex: 1,
-    margin: 20,
-    height: "45%",
-    justifyContent: "flex-end",
-  },
+  // textFields: {
+  //   flex: 1,
+  //   margin: normalize(20),
+  //   height: "45%",
+  //   justifyContent: "flex-end",
+  // },
 })
