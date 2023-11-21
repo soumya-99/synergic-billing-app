@@ -215,7 +215,7 @@ function ProductsScreen() {
             blur={10}
             isBackEnabled
             navigation={navigation}>
-            Your Products
+            My Products
           </HeaderImage>
         </View>
 
