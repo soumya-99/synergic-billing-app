@@ -1,29 +1,23 @@
-import React, { useContext, useState } from "react"
+import React, {  useState } from "react"
 import {
   StyleSheet,
   ScrollView,
   SafeAreaView,
   View,
-  PixelRatio,
   ToastAndroid,
 } from "react-native"
 import {
-  Divider,
-  IconButton,
   List,
   Searchbar,
-  Surface,
-  Text,
-  withTheme,
 } from "react-native-paper"
-import ButtonPaper from "../components/ButtonPaper"
-import { AppStore } from "../context/AppContext"
 import HeaderImage from "../components/HeaderImage"
 import { textureBill, textureBillDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
 import { useNavigation } from "@react-navigation/native"
 import DialogBox from "../components/DialogBox"
-import normalize from "react-native-normalize"
+import AddedProductList from "../components/AddedProductList"
+import ScrollableListContainer from "../components/ScrollableListContainer"
+import NetTotalButton from "../components/NetTotalButton"
 
 type ProductsDataObject = {
   id: number
@@ -31,6 +25,7 @@ type ProductsDataObject = {
   description: string
   quantity: number
   unit_price: number
+  unit: string
 }
 
 function AllBillsScreen() {
@@ -51,6 +46,7 @@ function AllBillsScreen() {
       description: "Item description",
       unit_price: 240,
       quantity: 2,
+      unit: "Lt",
     },
     {
       id: 2,
@@ -58,6 +54,7 @@ function AllBillsScreen() {
       description: "Item description",
       unit_price: 65,
       quantity: 9,
+      unit: "Pc",
     },
     {
       id: 3,
@@ -65,6 +62,7 @@ function AllBillsScreen() {
       description: "Item description",
       unit_price: 160,
       quantity: 12,
+      unit: "Kg",
     },
     {
       id: 4,
@@ -72,6 +70,7 @@ function AllBillsScreen() {
       description: "Item description",
       unit_price: 110,
       quantity: 7,
+      unit: "Pc",
     },
     {
       id: 9,
@@ -79,6 +78,7 @@ function AllBillsScreen() {
       description: "Item description",
       unit_price: 110,
       quantity: 7,
+      unit: "Pc",
     },
     {
       id: 78,
@@ -86,6 +86,7 @@ function AllBillsScreen() {
       description: "Item description",
       unit_price: 110,
       quantity: 7,
+      unit: "Pc",
     },
     {
       id: 23,
@@ -93,6 +94,7 @@ function AllBillsScreen() {
       description: "Item description",
       unit_price: 110,
       quantity: 7,
+      unit: "Pc",
     },
   ])
 
@@ -119,15 +121,6 @@ function AllBillsScreen() {
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView>
-        {/* <View>
-          <IconButton
-            icon="arrow-left"
-            iconColor={theme.colors.onBackground}
-            size={20}
-            onPress={() => navigation.goBack()}
-            style={{ position: "absolute", top: 20, left: "10%", zIndex: 10 }}
-          />
-        </View> */}
         <View style={{ alignItems: "center" }}>
           <HeaderImage
             imgLight={textureBill}
@@ -175,157 +168,30 @@ function AllBillsScreen() {
         onSuccess={onDialogSuccecss}
         title="Print Bill"
         icon="printer-outline">
-        <ScrollView
-          style={{
-            width: normalize(300),
-            height: normalize(200),
-            backgroundColor: theme.colors.surfaceVariant,
-            alignSelf: "center",
-            borderRadius: 30,
-          }}
-          nestedScrollEnabled={true}>
-          {/* <View
-            style={{
-              justifyContent: "space-around",
-              alignItems: "center",
-              flexDirection: "row",
-            }}>
-            <View>
-              <Text variant="labelMedium">Product ID:</Text>
-            </View>
-          </View> */}
+        <ScrollableListContainer
+          backgroundColor={theme.colors.surfaceVariant}
+          width={300}
+          height={200}>
           {addedProductsList.map(item => {
             netTotal += item.unit_price * item.quantity
             return (
-              <React.Fragment key={item.id}>
-                <View
-                  style={{
-                    flex: 0.2,
-                    justifyContent: "space-between",
-                    margin: 15,
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}>
-                    <View>
-                      <Text>{item.item}</Text>
-                    </View>
-                    <View>
-                      <Text>₹{item.unit_price}</Text>
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}>
-                    <View>
-                      <Text>Discount:</Text>
-                    </View>
-                    <View>
-                      <Text>₹{2}</Text>
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}>
-                    <View>
-                      <Text>QTY: {item.quantity}</Text>
-                    </View>
-                    <View>
-                      <Text>TOTAL: ₹{item.unit_price * item.quantity - 2}</Text>
-                    </View>
-                  </View>
-                </View>
-                <Divider />
-              </React.Fragment>
+              <AddedProductList
+                key={item.id}
+                itemName={item.item}
+                quantity={item.quantity}
+                unitPrice={item.unit_price}
+                unit={item.unit}
+              />
             )
           })}
-        </ScrollView>
-        <View
-          style={{
-            width: normalize(300),
-            height: "auto",
-            backgroundColor: theme.colors.orangeContainer,
-            alignSelf: "center",
-            borderRadius: 30,
-            marginTop: 15,
-          }}>
-          <View
-            style={{
-              // margin: 15,
-              // justifyContent: "space-between",
-              // alignItems: "center",
-              // flexDirection: "row",
-              // flex: 1,
-              width: normalize(320),
-              height: "auto",
-              // backgroundColor: theme.colors.greenContainer,
-              alignSelf: "center",
-              borderRadius: normalize(30),
-              padding: normalize(10),
-            }}>
-            <View
-              style={
-                {
-                  // flex: 1,
-                  // width: normalize(320),
-                  // height: "auto",
-                  // backgroundColor: theme.colors.greenContainer,
-                  // alignSelf: "center",
-                  // borderRadius: normalize(30),
-                  // marginTop: normalize(15),
-                }
-              }>
-              <View
-                style={{
-                  margin: normalize(15),
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  flexDirection: "row",
-                }}>
-                <View>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    TOTAL AMOUNT
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    DISCOUNT
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    CGST
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    SGST
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    NET AMOUNT
-                  </Text>
-                </View>
-                <View>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    ₹{netTotal}
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    ₹{2}
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    9%
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    9%
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    ₹{6174}
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
+        </ScrollableListContainer>
+        <NetTotalButton
+          backgroundColor={theme.colors.orangeContainer}
+          netTotal={netTotal}
+          textColor={theme.colors.onGreenContainer}
+          totalDiscount={4}
+          disabled
+        />
       </DialogBox>
     </SafeAreaView>
   )

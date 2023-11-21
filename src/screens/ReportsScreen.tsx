@@ -3,29 +3,14 @@ import {
   StyleSheet,
   ScrollView,
   SafeAreaView,
-  useColorScheme,
   View,
-  PixelRatio,
 } from "react-native"
-import {
-  Divider,
-  List,
-  MD3Colors,
-  Searchbar,
-  Surface,
-  Text,
-  TouchableRipple,
-  withTheme,
-  IconButton,
-} from "react-native-paper"
 
 import TRANS_DATA from "../data/transaction_dummy_data.json"
 import HeaderImage from "../components/HeaderImage"
 import {
   blurReport,
   blurReportDark,
-  blurredBlue,
-  blurredBlueDark,
 } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
 import ReportButton from "../components/ReportButton"

@@ -4,32 +4,22 @@ import {
   SafeAreaView,
   View,
   PixelRatio,
-  FlatList,
-  TouchableOpacity,
   ToastAndroid,
 } from "react-native"
-import {
-  Appbar,
-  Badge,
-  Button,
-  Divider,
-  IconButton,
-  List,
-  Searchbar,
-  Snackbar,
-  Text,
-  TouchableRipple,
-} from "react-native-paper"
+import { Appbar, Searchbar, Text } from "react-native-paper"
 import HeaderImage from "../components/HeaderImage"
 import { productHeader, productHeaderDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
-import React, { useState } from "react"
+import { useState } from "react"
 import PRODUCTS_DATA from "../data/products_dummy_data.json"
 import DialogBox from "../components/DialogBox"
 import { useNavigation } from "@react-navigation/native"
 import InputPaper from "../components/InputPaper"
-import ListSuggestion from "../components/ListSuggestion"
 import normalize from "react-native-normalize"
+import ProductListSuggestion from "../components/ProductListSuggestion"
+import AddedProductList from "../components/AddedProductList"
+import ScrollableListContainer from "../components/ScrollableListContainer"
+import NetTotalButton from "../components/NetTotalButton"
 
 // type ProductsData = {
 //   [key: string]: any
@@ -217,15 +207,6 @@ function ProductsScreen() {
         </View>
       </DialogBox>
       <ScrollView keyboardShouldPersistTaps="handled">
-        {/* <View>
-          <IconButton
-            icon="arrow-left"
-            iconColor={theme.colors.onBackground}
-            size={20}
-            onPress={() => navigation.goBack()}
-            style={{ position: "absolute", top: normalize(20), left: normalize(20), zIndex: 10 }}
-          />
-        </View> */}
         <View style={{ alignItems: "center" }}>
           <HeaderImage
             imgLight={productHeader}
@@ -251,118 +232,46 @@ function ProductsScreen() {
 
         <View style={{ paddingBottom: PixelRatio.roundToNearestPixel(10) }}>
           {search && (
-            <ScrollView
-              style={{
-                flex: 1,
-                width: normalize(320),
-                height: normalize(220),
-                zIndex: 999,
-                backgroundColor: theme.colors.surfaceVariant,
-                alignSelf: "center",
-                borderRadius: normalize(30),
-              }}
-              nestedScrollEnabled={true}
-              keyboardShouldPersistTaps="handled">
+            <ScrollableListContainer
+              backgroundColor={theme.colors.surfaceVariant}>
               {filteredItems.map(item => (
-                <ListSuggestion
+                <ProductListSuggestion
                   key={item.id}
                   itemName={item.item}
                   onPress={() => productDetails(item)}
                   unitPrice={item.unit_price}
                 />
               ))}
-            </ScrollView>
+            </ScrollableListContainer>
           )}
 
           {addedProductsList.length > 0 && !search && (
-            <ScrollView
-              style={{
-                flex: 1,
-                width: normalize(320),
-                height: normalize(220),
-                backgroundColor: theme.colors.pinkContainer,
-                alignSelf: "center",
-                borderRadius: normalize(30),
-              }}
-              nestedScrollEnabled={true}>
+            <ScrollableListContainer
+              backgroundColor={theme.colors.pinkContainer}>
               {addedProductsList.map(item => {
                 netTotal += item.unit_price * item["quantity"]
                 totalDiscount += parseInt(item["discount"])
                 return (
-                  <React.Fragment key={item.id}>
-                    <View
-                      style={{
-                        flex: 0.2,
-                        justifyContent: "space-between",
-                        margin: normalize(15),
-                      }}>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                        }}>
-                        <View>
-                          <Text>
-                            {item.item} (₹{item.unit_price})
-                          </Text>
-                        </View>
-                        <View>
-                          <Text>
-                            {item["quantity"]}x{item.unit_price}=
-                            {item.unit_price * item["quantity"]}
-                          </Text>
-                        </View>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                        }}>
-                        <View>
-                          <Text>Discount</Text>
-                        </View>
-                        <View>
-                          <Text>₹{item["discount"]}</Text>
-                        </View>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                        }}>
-                        <View>
-                          <Text>
-                            QTY: {item["quantity"]} {item.unit}
-                          </Text>
-                        </View>
-                        <View>
-                          <Text>
-                            TOTAL: ₹
-                            {item.unit_price * item["quantity"] -
-                              item["discount"]}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                    <Divider />
-                  </React.Fragment>
+                  <AddedProductList
+                    key={item.id}
+                    itemName={item.item}
+                    quantity={item["quantity"]}
+                    unitPrice={item.unit_price}
+                    discount={item["discount"]}
+                    unit={item.unit}
+                  />
                 )
               })}
-            </ScrollView>
+            </ScrollableListContainer>
           )}
 
           {netTotal > 0 && (
-            <TouchableRipple
-              style={{
-                flex: 1,
-                width: normalize(320),
-                height: "auto",
-                backgroundColor: theme.colors.greenContainer,
-                alignSelf: "center",
-                borderRadius: normalize(30),
-                marginTop: normalize(15),
-              }}
-              onPress={() => {
+            <NetTotalButton
+              backgroundColor={theme.colors.greenContainer}
+              textColor={theme.colors.onGreenContainer}
+              netTotal={netTotal}
+              totalDiscount={totalDiscount}
+              onPress={() =>
                 ToastAndroid.showWithGravityAndOffset(
                   "Printing feature will be added in some days.",
                   ToastAndroid.SHORT,
@@ -370,53 +279,8 @@ function ProductsScreen() {
                   25,
                   50,
                 )
-              }}>
-              <View
-                style={{
-                  margin: normalize(15),
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  flexDirection: "row",
-                }}>
-                <View>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    TOTAL AMOUNT
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    DISCOUNT
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    CGST
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    SGST
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    NET AMOUNT
-                  </Text>
-                </View>
-                <View>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    ₹{netTotal}
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    ₹{totalDiscount}
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    9%
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    9%
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    ₹
-                    {netTotal -
-                      totalDiscount +
-                      (18 / 100) * (netTotal - totalDiscount)}
-                  </Text>
-                </View>
-              </View>
-            </TouchableRipple>
+              }
+            />
           )}
         </View>
       </ScrollView>

@@ -5,11 +5,10 @@ import {
   Image,
   ScrollView,
   SafeAreaView,
-  ToastAndroid,
   ImageBackground,
   useColorScheme,
 } from "react-native"
-import { withTheme, Divider, Text } from "react-native-paper"
+import { withTheme, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import InputPaper from "../components/InputPaper"
 import ButtonPaper from "../components/ButtonPaper"

@@ -1,5 +1,5 @@
 import { PixelRatio, StyleSheet, View } from "react-native"
-import { Surface, Text, ThemeProvider, useTheme } from "react-native-paper"
+import { Surface, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import { PropsWithChildren } from "react"
 import { ElevationLevels } from "react-native-paper/lib/typescript/types"

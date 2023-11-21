@@ -1,9 +1,7 @@
-import { ScrollView, View } from "react-native"
-import React from "react"
 import { Badge, Divider, List } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 
-type ListSuggestionProps = {
+type ProductListSuggestionProps = {
   itemName: string
   unitPrice: number
   onPress?: () => void
@@ -11,13 +9,13 @@ type ListSuggestionProps = {
   itemDesc?: string
 }
 
-export default function ListSuggestion({
+export default function ProductListSuggestion({
   id,
   itemName,
   itemDesc,
   unitPrice,
   onPress,
-}: ListSuggestionProps) {
+}: ProductListSuggestionProps) {
   const theme = usePaperColorScheme()
   return (
     <>

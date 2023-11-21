@@ -9,7 +9,6 @@ import {
 import normalize from "react-native-normalize"
 import { IconButton, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
-import { NavigationProp, useNavigation } from "@react-navigation/native"
 
 type HeaderImageProps = {
   imgLight: { uri: string }

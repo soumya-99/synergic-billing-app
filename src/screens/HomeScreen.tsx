@@ -3,12 +3,11 @@ import {
   ScrollView,
   SafeAreaView,
   View,
-  PixelRatio,
   ToastAndroid,
 } from "react-native"
 import React, { useState } from "react"
 import AnimatedFABPaper from "../components/AnimatedFABPaper"
-import { Button, Divider, List, Surface, Text } from "react-native-paper"
+import { Button, Divider, List, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import HeaderImage from "../components/HeaderImage"
 import { flowerHome, flowerHomeDark } from "../resources/images"

@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { BottomNavigation } from "react-native-paper"
-import HomeScreen from "../screens/HomeScreen"
 import SettingsScreen from "../screens/SettingsScreen"
 import ReportsScreen from "../screens/ReportsScreen"
 import HomeNavigation from "./HomeNavigation"

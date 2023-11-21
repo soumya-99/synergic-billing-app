@@ -1,4 +1,4 @@
-import { View, Text } from "react-native"
+import { View } from "react-native"
 import React, { PropsWithChildren } from "react"
 import normalize from "react-native-normalize"
 

@@ -4,9 +4,7 @@ import {
   ScrollView,
   SafeAreaView,
   View,
-  PixelRatio,
 } from "react-native"
-import { Divider, Surface, Text, withTheme } from "react-native-paper"
 import ButtonPaper from "../components/ButtonPaper"
 import { AppStore } from "../context/AppContext"
 import HeaderImage from "../components/HeaderImage"
