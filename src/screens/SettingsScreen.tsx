@@ -1,10 +1,5 @@
 import { useContext } from "react"
-import {
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  View,
-} from "react-native"
+import { StyleSheet, ScrollView, SafeAreaView, View } from "react-native"
 import ButtonPaper from "../components/ButtonPaper"
 import { AppStore } from "../context/AppContext"
 import HeaderImage from "../components/HeaderImage"

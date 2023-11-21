@@ -1,17 +1,9 @@
 import { useState } from "react"
-import {
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  View,
-} from "react-native"
+import { StyleSheet, ScrollView, SafeAreaView, View } from "react-native"
 
 import TRANS_DATA from "../data/transaction_dummy_data.json"
 import HeaderImage from "../components/HeaderImage"
-import {
-  blurReport,
-  blurReportDark,
-} from "../resources/images"
+import { blurReport, blurReportDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
 import ReportButton from "../components/ReportButton"
 import ReportButtonsWrapper from "../components/ReportButtonsWrapper"

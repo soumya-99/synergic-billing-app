@@ -8,6 +8,8 @@ type NetTotalButtonProps = {
   netTotal: number
   totalDiscount: number
   onPress?: () => void
+  height?: number | "auto"
+  width?: number
   disabled?: boolean
   cgst?: number
   sgst?: number
@@ -19,6 +21,8 @@ export default function NetTotalButton({
   textColor,
   netTotal,
   totalDiscount,
+  width = 320,
+  height = "auto",
   cgst = 9,
   sgst = 9,
   onPress,
@@ -27,9 +31,8 @@ export default function NetTotalButton({
     <TouchableRipple
       disabled={disabled}
       style={{
-        flex: 1,
-        width: normalize(320),
-        height: "auto",
+        width: normalize(width),
+        height: height,
         backgroundColor: backgroundColor,
         alignSelf: "center",
         borderRadius: normalize(30),

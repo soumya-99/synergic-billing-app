@@ -18,7 +18,6 @@ export default function ScrollableListContainer({
     <ScrollView
       keyboardShouldPersistTaps="handled"
       style={{
-        flex: 1,
         width: normalize(width),
         height: normalize(height),
         backgroundColor: backgroundColor,

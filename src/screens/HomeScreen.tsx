@@ -16,6 +16,9 @@ import { useNavigation } from "@react-navigation/native"
 import SurfacePaper from "../components/SurfacePaper"
 import DialogBox from "../components/DialogBox"
 import normalize from "react-native-normalize"
+import AddedProductList from "../components/AddedProductList"
+import NetTotalButton from "../components/NetTotalButton"
+import ScrollableListContainer from "../components/ScrollableListContainer"
 
 type ProductsDataObject = {
   id: number
@@ -23,6 +26,7 @@ type ProductsDataObject = {
   description: string
   quantity: number
   unit_price: number
+  unit: string
 }
 
 function HomeScreen() {
@@ -39,6 +43,7 @@ function HomeScreen() {
       description: "Item description",
       unit_price: 240,
       quantity: 2,
+      unit: "Lt",
     },
     {
       id: 2,
@@ -46,6 +51,7 @@ function HomeScreen() {
       description: "Item description",
       unit_price: 65,
       quantity: 9,
+      unit: "Pc",
     },
     {
       id: 3,
@@ -53,6 +59,7 @@ function HomeScreen() {
       description: "Item description",
       unit_price: 160,
       quantity: 12,
+      unit: "Kg",
     },
     {
       id: 4,
@@ -60,6 +67,7 @@ function HomeScreen() {
       description: "Item description",
       unit_price: 110,
       quantity: 7,
+      unit: "Pc",
     },
     {
       id: 9,
@@ -67,6 +75,7 @@ function HomeScreen() {
       description: "Item description",
       unit_price: 110,
       quantity: 7,
+      unit: "Pc",
     },
     {
       id: 78,
@@ -74,6 +83,7 @@ function HomeScreen() {
       description: "Item description",
       unit_price: 110,
       quantity: 7,
+      unit: "Pc",
     },
     {
       id: 23,
@@ -81,6 +91,7 @@ function HomeScreen() {
       description: "Item description",
       unit_price: 110,
       quantity: 7,
+      unit: "Pc",
     },
   ])
 
@@ -203,78 +214,33 @@ function HomeScreen() {
         onSuccess={onDialogSuccecss}
         title="Print Bill"
         icon="printer-outline">
-        <ScrollView
-          style={{
-            width: normalize(300),
-            height: normalize(250),
-            backgroundColor: theme.colors.surfaceVariant,
-            alignSelf: "center",
-            borderRadius: normalize(30),
-          }}
-          nestedScrollEnabled={true}>
-          {/* <View
-            style={{
-              justifyContent: "space-around",
-              alignItems: "center",
-              flexDirection: "row",
-            }}>
-            <View>
-              <Text variant="labelMedium">Product ID:</Text>
-            </View>
-          </View> */}
+        <ScrollableListContainer
+          backgroundColor={theme.colors.surfaceVariant}
+          height={250}
+          width={300}>
           {addedProductsList.map(item => {
             netTotal += item.unit_price * item.quantity
             return (
-              <React.Fragment key={item.id}>
-                <View
-                  style={{
-                    flex: 0.2,
-                    justifyContent: "space-between",
-                    margin: 15,
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}>
-                    <View>
-                      <Text>{item.item}</Text>
-                    </View>
-                    <View>
-                      <Text>₹{item.unit_price}</Text>
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}>
-                    <View>
-                      <Text>Discount:</Text>
-                    </View>
-                    <View>
-                      <Text>₹{2}</Text>
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}>
-                    <View>
-                      <Text>QTY: {item.quantity}</Text>
-                    </View>
-                    <View>
-                      <Text>TOTAL: ₹{item.unit_price * item.quantity - 2}</Text>
-                    </View>
-                  </View>
-                </View>
-                <Divider />
-              </React.Fragment>
+              <AddedProductList
+                itemName={item.item}
+                quantity={item.quantity}
+                unit={item.unit}
+                unitPrice={item.unit_price}
+                discount={22}
+                key={item.id}
+              />
             )
           })}
-        </ScrollView>
-        <View
+        </ScrollableListContainer>
+        <NetTotalButton
+          width={300}
+          backgroundColor={theme.colors.orangeContainer}
+          netTotal={netTotal}
+          textColor={theme.colors.onGreenContainer}
+          totalDiscount={22}
+          disabled
+        />
+        {/* <View
           style={{
             width: normalize(300),
             height: "auto",
@@ -285,30 +251,12 @@ function HomeScreen() {
           }}>
           <View
             style={{
-              // margin: 15,
-              // justifyContent: "space-between",
-              // alignItems: "center",
-              // flexDirection: "row",
-              // flex: 1,
               width: normalize(320),
               height: "auto",
-              // backgroundColor: theme.colors.greenContainer,
               alignSelf: "center",
               borderRadius: normalize(30),
               padding: normalize(10),
             }}>
-            <View
-              style={
-                {
-                  // flex: 1,
-                  // width: normalize(320),
-                  // height: "auto",
-                  // backgroundColor: theme.colors.greenContainer,
-                  // alignSelf: "center",
-                  // borderRadius: normalize(30),
-                  // marginTop: normalize(15),
-                }
-              }>
               <View
                 style={{
                   margin: normalize(15),
@@ -351,9 +299,8 @@ function HomeScreen() {
                   </Text>
                 </View>
               </View>
-            </View>
           </View>
-        </View>
+        </View> */}
       </DialogBox>
       <AnimatedFABPaper
         icon="plus"

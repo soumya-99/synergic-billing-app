@@ -1,4 +1,4 @@
-import React, {  useState } from "react"
+import React, { useState } from "react"
 import {
   StyleSheet,
   ScrollView,
@@ -6,10 +6,7 @@ import {
   View,
   ToastAndroid,
 } from "react-native"
-import {
-  List,
-  Searchbar,
-} from "react-native-paper"
+import { List, Searchbar } from "react-native-paper"
 import HeaderImage from "../components/HeaderImage"
 import { textureBill, textureBillDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
@@ -186,6 +183,7 @@ function AllBillsScreen() {
           })}
         </ScrollableListContainer>
         <NetTotalButton
+          width={300}
           backgroundColor={theme.colors.orangeContainer}
           netTotal={netTotal}
           textColor={theme.colors.onGreenContainer}
