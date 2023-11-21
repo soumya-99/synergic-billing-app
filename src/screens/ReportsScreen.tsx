@@ -26,41 +26,49 @@ function ReportsScreen() {
             text="Bill Wise"
             color={theme.colors.greenContainer}
             icon="billboard"
+            onPress={() => console.log("Rprt Pressed!")}
           />
           <ReportButton
             text="Item Wise"
             color={theme.colors.orangeContainer}
             icon="billboard"
+            onPress={() => console.log("Rprt Pressed!")}
           />
           <ReportButton
             text="Operaotr Wise"
             color={theme.colors.tertiaryContainer}
             icon="billboard"
+            onPress={() => console.log("Rprt Pressed!")}
           />
           <ReportButton
             text="Duplicate Receipt"
             color={theme.colors.primaryContainer}
             icon="billboard"
+            onPress={() => console.log("Rprt Pressed!")}
           />
           <ReportButton
             text="Month Wise"
             color={theme.colors.pinkContainer}
             icon="billboard"
+            onPress={() => console.log("Rprt Pressed!")}
           />
           <ReportButton
             text="Year Wise"
             color={theme.colors.orangeContainer}
             icon="billboard"
+            onPress={() => console.log("Rprt Pressed!")}
           />
           <ReportButton
             text="Day Wise"
             color={theme.colors.pinkContainer}
             icon="billboard"
+            onPress={() => console.log("Rprt Pressed!")}
           />
           <ReportButton
             text="GST Report"
             color={theme.colors.primaryContainer}
             icon="billboard"
+            onPress={() => console.log("Rprt Pressed!")}
           />
         </ReportButtonsWrapper>
       </ScrollView>

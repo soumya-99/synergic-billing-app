@@ -20,6 +20,7 @@ import ProductListSuggestion from "../components/ProductListSuggestion"
 import AddedProductList from "../components/AddedProductList"
 import ScrollableListContainer from "../components/ScrollableListContainer"
 import NetTotalButton from "../components/NetTotalButton"
+import { clearStates } from "../utils/clearStates"
 
 // type ProductsData = {
 //   [key: string]: any
@@ -87,8 +88,9 @@ function ProductsScreen() {
       // check for 0 will be added
       console.log("OK PRODUCT: ", product.item)
       addProducts()
-      setSearch(() => "")
-      setNoOfProducts(() => "")
+      // setSearch(() => "")
+      // setNoOfProducts(() => "")
+      clearStates([setSearch, setNoOfProducts], () => "")
       setDiscount(() => "0")
       setVisible(!visible)
       setFilteredItems(() => [])

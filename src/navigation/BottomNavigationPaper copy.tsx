@@ -2,7 +2,7 @@ import { createMaterialBottomTabNavigator } from "react-native-paper/react-navig
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import HomeScreen from "../screens/HomeScreen"
 import SettingsScreen from "../screens/SettingsScreen"
-import TransactionScreen from "../screens/ReportsScreen"
+import ReportsScreen from "../screens/ReportsScreen"
 import { usePaperColorScheme } from "../theme/theme"
 
 const Tab = createMaterialBottomTabNavigator()
@@ -25,8 +25,8 @@ function BottomNavigationPaper() {
         }}
       />
       <Tab.Screen
-        name="Transaction"
-        component={TransactionScreen}
+        name="Reports"
+        component={ReportsScreen}
         options={{
           tabBarLabel: "Transaction",
           tabBarIcon: ({ color }) => (
