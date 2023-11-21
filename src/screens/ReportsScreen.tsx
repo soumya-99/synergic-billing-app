@@ -6,12 +6,6 @@ import { usePaperColorScheme } from "../theme/theme"
 import ReportButton from "../components/ReportButton"
 import ReportButtonsWrapper from "../components/ReportButtonsWrapper"
 
-type TransactionDataObject = {
-  id: number
-  item: string
-  description: string
-}
-
 function ReportsScreen() {
   const theme = usePaperColorScheme()
 
@@ -69,9 +63,6 @@ function ReportsScreen() {
             icon="billboard"
           />
         </ReportButtonsWrapper>
-        {/* {[...new Array(50).keys()].map((_, i) => (
-          <Text key={i}>{i + 1}</Text>
-        ))} */}
       </ScrollView>
     </SafeAreaView>
   )
