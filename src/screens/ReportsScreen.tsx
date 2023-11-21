@@ -1,7 +1,5 @@
-import { useState } from "react"
 import { StyleSheet, ScrollView, SafeAreaView, View } from "react-native"
 
-import TRANS_DATA from "../data/transaction_dummy_data.json"
 import HeaderImage from "../components/HeaderImage"
 import { blurReport, blurReportDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
@@ -16,17 +14,6 @@ type TransactionDataObject = {
 
 function ReportsScreen() {
   const theme = usePaperColorScheme()
-  const [search, setSearch] = useState<string>(() => "")
-  const [filteredItems, setFilteredItems] = useState<TransactionDataObject[]>(
-    () => [],
-  )
-  const onChangeSearch = (query: string) => {
-    setSearch(query)
-
-    const filtered = TRANS_DATA.filter(item => item.item.includes(query))
-    setFilteredItems(filtered)
-    if (query === "") setFilteredItems(() => [])
-  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -40,16 +27,6 @@ function ReportsScreen() {
             My Reports
           </HeaderImage>
         </View>
-
-        {/* <View style={{ padding: 20 }}>
-          <Searchbar
-            placeholder="Search Transactions"
-            onChangeText={onChangeSearch}
-            value={search}
-            elevation={search && 2}
-            // loading={search && true}
-          />
-        </View> */}
         <ReportButtonsWrapper>
           <ReportButton
             text="Bill Wise"
