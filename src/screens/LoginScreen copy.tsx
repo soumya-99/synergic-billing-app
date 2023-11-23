@@ -5,15 +5,15 @@ import {
   Image,
   ScrollView,
   SafeAreaView,
-  ToastAndroid,
   ImageBackground,
   useColorScheme,
 } from "react-native"
-import { withTheme, Divider, Text } from "react-native-paper"
+import { withTheme, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import InputPaper from "../components/InputPaper"
 import ButtonPaper from "../components/ButtonPaper"
 import { AppStore } from "../context/AppContext"
+import normalize from "react-native-normalize"
 
 function LoginScreen() {
   const { login } = useContext(AppStore)
@@ -22,6 +22,8 @@ function LoginScreen() {
 
   const [loginText, setLoginText] = useState<string>(() => "")
   const [passwordText, setPasswordText] = useState<string>(() => "")
+
+  const [next, setNext] = useState<boolean>(() => false)
 
   return (
     <SafeAreaView>
@@ -84,36 +86,110 @@ function LoginScreen() {
               style={{ height: 260, width: 300, borderRadius: 30 }}
             />
           </View>
-          <View style={styles.textFields}>
-            <InputPaper
-              value={loginText}
-              label={"Mobile Number"}
-              onChangeText={(text: string) => setLoginText(text)}
-              customStyle={{ marginBottom: 20 }}
-              leftIcon="account-circle-outline"
-            />
-            <InputPaper
-              value={passwordText}
-              label={"Password"}
-              secureTextEntry={true}
-              onChangeText={(text: string) => setPasswordText(text)}
-              leftIcon="shield-lock-outline"
-            />
-          </View>
-          <View style={{ margin: 20 }}>
-            <ButtonPaper
-              mode="contained"
-              onPress={() =>
-                login(loginText, passwordText, setLoginText, setPasswordText)
-              }
-              icon="login">
-              LOGIN
-            </ButtonPaper>
-            <View style={{ margin: 2, padding: 2 }}>
-              <Text style={{ fontFamily: "ProductSans-Regular", fontSize: 10 }}>
-                Powered by, Synergic Softek Solutions Pvt. Ltd.
-              </Text>
+
+          {!next && (
+            <View
+              style={{
+                padding: normalize(40),
+                width: "100%",
+                flex: 1,
+                flexDirection: "column",
+                gap: 20,
+              }}>
+              <View>
+                <InputPaper
+                  value={loginText}
+                  label={"Mobile Number"}
+                  onChangeText={(text: string) => setLoginText(text)}
+                  // customStyle={{ marginBottom: 20 }}
+                  leftIcon="account-circle-outline"
+                  keyboardType="phone-pad"
+                  autoFocus
+                />
+              </View>
+              <View>
+                <ButtonPaper
+                  mode="contained"
+                  onPress={() => {
+                    if (loginText !== "") setNext(!next)
+                  }}
+                  icon="arrow-right">
+                  NEXT
+                </ButtonPaper>
+              </View>
             </View>
+          )}
+
+          {next && (
+            <View
+              style={{
+                padding: normalize(40),
+                width: "100%",
+                flex: 1,
+                flexDirection: "column",
+                gap: 20,
+              }}>
+              <View>
+                <InputPaper
+                  value={passwordText}
+                  label={"Password"}
+                  secureTextEntry={true}
+                  onChangeText={(text: string) => setPasswordText(text)}
+                  leftIcon="shield-lock-outline"
+                  autoFocus
+                />
+              </View>
+              <View
+                style={{
+                  // margin: 20,
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexDirection: "row",
+                  gap: 15,
+                }}>
+                <View>
+                  <ButtonPaper
+                    mode="contained"
+                    buttonColor={theme.colors.error}
+                    textColor={theme.colors.onError}
+                    onPress={() => {
+                      setNext(!next)
+                    }}
+                    style={{ width: normalize(100) }}
+                    icon="arrow-left">
+                    BACK
+                  </ButtonPaper>
+                </View>
+                <View>
+                  <ButtonPaper
+                    mode="contained"
+                    onPress={() => {
+                      login(
+                        loginText,
+                        passwordText,
+                        setLoginText,
+                        setPasswordText,
+                      )
+                    }}
+                    icon="login"
+                    style={{ width: normalize(150) }}>
+                    LOGIN
+                  </ButtonPaper>
+                </View>
+              </View>
+            </View>
+          )}
+          <View
+            style={{
+              // padding: 35,
+              marginTop: normalize(180),
+              marginLeft: normalize(10),
+              // alignItems: "flex-end",
+              // flexDirection: "column",
+            }}>
+            <Text style={{ fontFamily: "ProductSans-Regular", fontSize: 10 }}>
+              Powered by, Synergic Softek Solutions Pvt. Ltd.
+            </Text>
           </View>
         </ScrollView>
       </ImageBackground>
@@ -129,7 +205,7 @@ const styles = StyleSheet.create({
   },
 
   loginHeader: {
-    margin: 20,
+    margin: normalize(20),
     justifyContent: "center",
     alignItems: "center",
   },
@@ -138,10 +214,10 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 
-  textFields: {
-    flex: 1,
-    margin: 20,
-    height: "45%",
-    justifyContent: "flex-end",
-  },
+  // textFields: {
+  //   flex: 1,
+  //   margin: normalize(20),
+  //   height: "45%",
+  //   justifyContent: "flex-end",
+  // },
 })
