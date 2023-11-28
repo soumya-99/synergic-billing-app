@@ -13,7 +13,7 @@ export default function ReportButton({
   text,
   icon,
   color,
-  onPress
+  onPress,
 }: PropsWithChildren<ReportButtonProps>) {
   return (
     <TouchableRipple

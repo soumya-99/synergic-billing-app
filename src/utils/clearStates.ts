@@ -6,6 +6,17 @@
  * boolean)} val - The `val` parameter can be a number, string, array, boolean, or a function that
  * returns a number, string, array or boolean.
  */
-export const clearStates = (funcs: Function[], val: number | string | [] | boolean | (() => number) | (() => string) | (() => []) | (() => boolean)) => {
-    funcs.map(item => item(val))
+export const clearStates = (
+  funcs: Function[],
+  val:
+    | number
+    | string
+    | []
+    | boolean
+    | (() => number)
+    | (() => string)
+    | (() => [])
+    | (() => boolean),
+) => {
+  funcs.map(item => item(val))
 }

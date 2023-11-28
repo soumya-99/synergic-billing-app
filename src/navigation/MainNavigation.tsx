@@ -6,6 +6,7 @@ import { AppStore } from "../context/AppContext"
 import { NavigationContainer } from "@react-navigation/native"
 import BottomNavigationPaper from "./BottomNavigationPaper"
 import HomeNavigation from "./HomeNavigation"
+import SettingsNavigation from "./SettingsNavigation"
 
 export default function MainNavigation() {
   const Stack = createNativeStackNavigator()
@@ -22,10 +23,14 @@ export default function MainNavigation() {
                 name={navigationRoutes.bottomNavigationPaper}
                 component={BottomNavigationPaper}
               />
-              <Stack.Screen
+              {/* <Stack.Screen
                 name={navigationRoutes.homeNavigation}
                 component={HomeNavigation}
               />
+              <Stack.Screen
+                name={navigationRoutes.settingsNavigation}
+                component={SettingsNavigation}
+              /> */}
             </>
           ) : (
             <>

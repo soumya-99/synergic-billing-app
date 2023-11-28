@@ -1,10 +1,10 @@
 import { useState } from "react"
 import { BottomNavigation } from "react-native-paper"
-import SettingsScreen from "../screens/SettingsScreen"
 import ReportsScreen from "../screens/ReportsScreen"
 import HomeNavigation from "./HomeNavigation"
 import { CommonActions, useNavigation } from "@react-navigation/native"
 import navigationRoutes from "../routes/navigationRoutes"
+import SettingsNavigation from "./SettingsNavigation"
 // import { usePaperColorScheme } from '../theme/theme';
 
 function BottomNavigationPaper() {
@@ -36,7 +36,7 @@ function BottomNavigationPaper() {
   const renderScene = BottomNavigation.SceneMap({
     home: HomeNavigation,
     reports: ReportsScreen,
-    settings: SettingsScreen,
+    settings: SettingsNavigation,
   })
 
   return (
