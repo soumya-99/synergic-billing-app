@@ -181,9 +181,9 @@ function HomeScreen() {
                   description={"Cadbury, Oil, Daal..."}
                   onPress={() => setVisible(!visible)}
                   left={props => <List.Icon {...props} icon="basket" />}
-                  // right={props => (
-                  //   <List.Icon {...props} icon="download" />
-                  // )}
+                // right={props => (
+                //   <List.Icon {...props} icon="download" />
+                // )}
                 />
               ))}
             </View>

@@ -125,7 +125,7 @@ function LoginScreen() {
               style={{
                 padding: normalize(40),
                 width: "100%",
-                flex: 1,
+                // flex: 1,
                 flexDirection: "column",
                 gap: 20,
               }}>
@@ -172,7 +172,7 @@ function LoginScreen() {
                       )
                     }}
                     icon="login"
-                    style={{ width: normalize(150) }}>
+                    style={{ width: normalize(190) }}>
                     LOGIN
                   </ButtonPaper>
                 </View>
