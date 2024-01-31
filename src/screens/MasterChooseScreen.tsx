@@ -10,8 +10,8 @@ import { useNavigation } from '@react-navigation/native'
 import navigationRoutes from '../routes/navigationRoutes'
 
 export default function MasterChooseScreen() {
-    const theme = usePaperColorScheme()
-    const navigation = useNavigation()
+  const theme = usePaperColorScheme()
+  const navigation = useNavigation()
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView keyboardShouldPersistTaps="handled">
@@ -21,7 +21,7 @@ export default function MasterChooseScreen() {
             imgDark={blurReportDark}
             borderRadius={30}
             blur={10}>
-            My Reports
+            Master
           </HeaderImage>
         </View>
         <ReportButtonsWrapper>
@@ -45,12 +45,11 @@ export default function MasterChooseScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flexGrow: 1,
-    },
-  
-    title: {
-      textAlign: "center",
-    },
-  })
-  
+  container: {
+    flexGrow: 1,
+  },
+
+  title: {
+    textAlign: "center",
+  },
+})

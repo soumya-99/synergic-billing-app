@@ -9,21 +9,19 @@ export default function SettingsNavigation() {
   const Stack = createNativeStackNavigator()
 
   return (
-    <NavigationContainer independent>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen
-          name={navigationRoutes.settingsScreen}
-          component={SettingsScreen}
-        />
-        <Stack.Screen
-          name={navigationRoutes.masterChooseScreen}
-          component={MasterChooseScreen}
-        />
-        <Stack.Screen
-          name={navigationRoutes.itemMasterScreen}
-          component={ItemMasterScreen}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name={navigationRoutes.settingsScreen}
+        component={SettingsScreen}
+      />
+      <Stack.Screen
+        name={navigationRoutes.masterChooseScreen}
+        component={MasterChooseScreen}
+      />
+      <Stack.Screen
+        name={navigationRoutes.itemMasterScreen}
+        component={ItemMasterScreen}
+      />
+    </Stack.Navigator>
   )
 }

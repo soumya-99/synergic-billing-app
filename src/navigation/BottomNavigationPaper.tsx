@@ -1,66 +1,51 @@
-import { useState } from "react"
-import { BottomNavigation } from "react-native-paper"
+import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation"
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import HomeScreen from "../screens/HomeScreen"
+import SettingsScreen from "../screens/SettingsScreen"
 import ReportsScreen from "../screens/ReportsScreen"
-import HomeNavigation from "./HomeNavigation"
-import { CommonActions, useNavigation } from "@react-navigation/native"
-import navigationRoutes from "../routes/navigationRoutes"
+import { usePaperColorScheme } from "../theme/theme"
 import SettingsNavigation from "./SettingsNavigation"
-// import { usePaperColorScheme } from '../theme/theme';
+
+const Tab = createMaterialBottomTabNavigator()
 
 function BottomNavigationPaper() {
-  // const theme = usePaperColorScheme()
-  const navigation = useNavigation()
-
-  const [index, setIndex] = useState(() => 0)
-  const [routes] = useState([
-    {
-      key: "home",
-      title: "Home",
-      focusedIcon: "home",
-      unfocusedIcon: "home-outline",
-    },
-    {
-      key: "reports",
-      title: "Reports",
-      focusedIcon: "cash-multiple",
-      unfocusedIcon: "cash",
-    },
-    {
-      key: "settings",
-      title: "Settings",
-      focusedIcon: "cog",
-      unfocusedIcon: "cog-outline",
-    },
-  ])
-
-  const renderScene = BottomNavigation.SceneMap({
-    home: HomeNavigation,
-    reports: ReportsScreen,
-    settings: SettingsNavigation,
-  })
-
+  const theme = usePaperColorScheme()
   return (
-    <BottomNavigation
-      navigationState={{ index, routes }} // this is not deprecated. It's vital.
-      onIndexChange={setIndex}
-      renderScene={renderScene}
-      sceneAnimationEnabled
-      sceneAnimationType="shifting"
-      compact
-      onTabPress={() =>
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [
-              {
-                name: navigationRoutes.homeScreen,
-              },
-            ],
-          }),
-        )
-      }
-      // theme={theme}
-    />
+    <Tab.Navigator
+      initialRouteName="Home"
+      activeColor={theme.colors.primary}
+      barStyle={{ backgroundColor: theme.colors.surface }}>
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: "Home",
+          tabBarIcon: ({ color, focused }) => (
+            !focused ? <MaterialCommunityIcons name="home-outline" color={color} size={26} /> : <MaterialCommunityIcons name="home" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Reports"
+        component={ReportsScreen}
+        options={{
+          tabBarLabel: "Reports",
+          tabBarIcon: ({ color, focused }) => (
+            !focused ? <MaterialCommunityIcons name="cash" color={color} size={26} /> : <MaterialCommunityIcons name="cash-multiple" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsNavigation}
+        options={{
+          tabBarLabel: "Settings",
+          tabBarIcon: ({ color, focused }) => (
+            !focused ? <MaterialCommunityIcons name="cog-outline" color={color} size={26} /> : <MaterialCommunityIcons name="cog" color={color} size={26} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
   )
 }
 
