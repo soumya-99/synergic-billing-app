@@ -12,7 +12,8 @@ const navigationRoutes = {
   productsScreen: "ProductsScreen",
   allBillsScreen: "AllBillsScreen",
   masterChooseScreen: "MasterChooseScreen",
-  itemMasterScreen: "ItemMasterScreen"
+  itemMasterScreen: "ItemMasterScreen",
+  printMain: "PrintMainScreen"
 }
 
 export default navigationRoutes

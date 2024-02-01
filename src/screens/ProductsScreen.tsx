@@ -21,6 +21,7 @@ import AddedProductList from "../components/AddedProductList"
 import ScrollableListContainer from "../components/ScrollableListContainer"
 import NetTotalButton from "../components/NetTotalButton"
 import { clearStates } from "../utils/clearStates"
+import { useBluetoothPrint } from "../hooks/printables/useBluetoothPrint"
 
 // type ProductsData = {
 //   [key: string]: any
@@ -37,6 +38,7 @@ type ProductsDataObject = {
 function ProductsScreen() {
   const navigation = useNavigation()
   const theme = usePaperColorScheme()
+  const { printReceipt, printReceiptWithoutGst } = useBluetoothPrint()
 
   const [visible, setVisible] = useState(() => false)
   const hideDialog = () => setVisible(() => false)
@@ -273,14 +275,16 @@ function ProductsScreen() {
               textColor={theme.colors.onGreenContainer}
               netTotal={netTotal}
               totalDiscount={totalDiscount}
-              onPress={() =>
-                ToastAndroid.showWithGravityAndOffset(
-                  "Printing feature will be added in some days.",
-                  ToastAndroid.SHORT,
-                  ToastAndroid.CENTER,
-                  25,
-                  50,
-                )
+              onPress={async () =>
+                // ToastAndroid.showWithGravityAndOffset(
+                //   "Printing feature will be added in some days.",
+                //   ToastAndroid.SHORT,
+                //   ToastAndroid.CENTER,
+                //   25,
+                //   50,
+                // )
+                // await printReceipt()
+                await printReceiptWithoutGst()
               }
             />
           )}

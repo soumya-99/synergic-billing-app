@@ -60,7 +60,7 @@ export default function NetTotalButton({
           <Text style={{ color: textColor }}>{sgst}%</Text>
           <Text style={{ color: textColor }}>
             ₹
-            {netTotal - totalDiscount + (18 / 100) * (netTotal - totalDiscount)}
+            {netTotal - totalDiscount + ((cgst + sgst) / 100) * (netTotal - totalDiscount)}
           </Text>
         </View>
       </View>

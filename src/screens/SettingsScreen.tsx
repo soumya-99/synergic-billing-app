@@ -13,10 +13,12 @@ import { useNavigation } from "@react-navigation/native"
 import navigationRoutes from "../routes/navigationRoutes"
 
 function SettingsScreen() {
-  const { logout } = useContext(AppStore)
-  const theme = usePaperColorScheme()
+  const navigation = useNavigation()
 
+  const { logout } = useContext(AppStore)
   const [isExtended, setIsExtended] = useState(() => true)
+
+  const theme = usePaperColorScheme()
 
   const onScroll = ({ nativeEvent }) => {
     const currentScrollPosition = Math.floor(nativeEvent?.contentOffset?.y) ?? 0
@@ -24,7 +26,6 @@ function SettingsScreen() {
     setIsExtended(currentScrollPosition <= 0)
   }
 
-  const navigation = useNavigation()
 
   return (
     <SafeAreaView style={styles.container}>
@@ -94,6 +95,12 @@ function SettingsScreen() {
             color={theme.colors.primaryContainer}
             icon="billboard"
             onPress={() => console.log("Rprt Pressed!")}
+          />
+          <ReportButton
+            text="Printer Connect"
+            color={theme.colors.greenContainer}
+            icon="printer"
+            onPress={() => navigation.navigate(navigationRoutes.printMain as never)}
           />
         </ReportButtonsWrapper>
       </ScrollView>
