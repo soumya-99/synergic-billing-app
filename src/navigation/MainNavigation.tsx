@@ -5,8 +5,6 @@ import navigationRoutes from "../routes/navigationRoutes"
 import { AppStore } from "../context/AppContext"
 import { NavigationContainer } from "@react-navigation/native"
 import BottomNavigationPaper from "./BottomNavigationPaper"
-import HomeNavigation from "./HomeNavigation"
-import SettingsNavigation from "./SettingsNavigation"
 import RegisterScreen from "../screens/RegisterScreen"
 import CreatePinScreen from "../screens/CreatePinScreen"
 

@@ -5,4 +5,5 @@ export const ADDRESSES = {
     VERYFY_ACTIVE: `${BASE_URL}/api/verify_active`,
     OTP: `${BASE_URL}/api/otp`,
     CREATE_PIN: `${BASE_URL}/api/create_pin`,
+    LOGIN: `${BASE_URL}/api/login`,
 }

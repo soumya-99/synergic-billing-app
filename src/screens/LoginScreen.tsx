@@ -8,26 +8,44 @@ import {
   ImageBackground,
   useColorScheme,
   TouchableOpacity,
+  Alert,
 } from "react-native"
 import { withTheme, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import InputPaper from "../components/InputPaper"
 import ButtonPaper from "../components/ButtonPaper"
-import { AppStore } from "../context/AppContext"
 import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from "react-native-normalize"
-import { useNavigation } from "@react-navigation/native"
+import { CommonActions, useNavigation } from "@react-navigation/native"
 import navigationRoutes from "../routes/navigationRoutes"
+import useLogin from "../hooks/api/useLogin"
+import { AppStore } from "../context/AppContext"
 
 function LoginScreen() {
   const navigation = useNavigation()
-  const { login } = useContext(AppStore)
+
+  const { setIsLogin } = useContext(AppStore)
+
   const theme = usePaperColorScheme()
   const colorScheme = useColorScheme()
+
+  const { login } = useLogin()
 
   const [loginText, setLoginText] = useState<string>(() => "")
   const [passwordText, setPasswordText] = useState<string>(() => "")
 
   const [next, setNext] = useState<boolean>(() => false)
+
+  const handleLogin = async () => {
+    let loginData = await login(loginText, passwordText)
+    console.log("loginData", loginData)
+
+    if (loginData?.suc === 0) {
+      Alert.alert("Error", "Login credentials are wrong! Please try again.")
+      setIsLogin(false)
+      return
+    }
+    setIsLogin(true)
+  }
 
   return (
     <SafeAreaView>
@@ -124,7 +142,11 @@ function LoginScreen() {
 
               <View style={{ justifyContent: 'space-around', alignItems: 'center' }}>
                 <Text style={{ color: theme.colors.primary }}>Don't have an account?</Text>
-                <TouchableOpacity onPress={() => navigation.navigate(navigationRoutes.register as never)}>
+                <TouchableOpacity onPress={() => (navigation.dispatch(
+                  CommonActions.navigate({
+                    name: navigationRoutes.register,
+                  }))
+                )}>
                   <Text style={{ textTransform: 'uppercase', color: theme.colors.green, textDecorationLine: 'underline' }}>Create new account</Text>
                 </TouchableOpacity>
               </View>
@@ -174,14 +196,7 @@ function LoginScreen() {
                 <View>
                   <ButtonPaper
                     mode="contained"
-                    onPress={() => {
-                      login(
-                        loginText,
-                        passwordText,
-                        setLoginText,
-                        setPasswordText,
-                      )
-                    }}
+                    onPress={handleLogin}
                     icon="login"
                     style={{ width: normalize(190) }}>
                     LOGIN
