@@ -11,6 +11,7 @@ type InputPaperProps = {
   leftIcon?: string
   autoFocus?: boolean
   mode?: "outlined" | "flat"
+  maxLength?: number
 }
 
 const InputPaper = ({
@@ -23,6 +24,7 @@ const InputPaper = ({
   leftIcon,
   autoFocus,
   mode = "flat",
+  maxLength = 10
 }: InputPaperProps) => {
   return (
     <TextInput
@@ -36,6 +38,7 @@ const InputPaper = ({
       left={leftIcon && <TextInput.Icon icon={leftIcon} />}
       // right={<TextInput.Icon icon={secureTextEntry ? "eye-off" : "eye"} onPress={() => setSecureTextEntry(!secureTextEntry)} />}
       autoFocus={autoFocus}
+      maxLength={maxLength}
     />
   )
 }

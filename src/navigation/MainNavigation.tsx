@@ -7,6 +7,7 @@ import { NavigationContainer } from "@react-navigation/native"
 import BottomNavigationPaper from "./BottomNavigationPaper"
 import HomeNavigation from "./HomeNavigation"
 import SettingsNavigation from "./SettingsNavigation"
+import RegisterScreen from "../screens/RegisterScreen"
 
 export default function MainNavigation() {
   const Stack = createNativeStackNavigator()
@@ -37,6 +38,10 @@ export default function MainNavigation() {
               <Stack.Screen
                 name={navigationRoutes.login}
                 component={LoginScreen}
+              />
+              <Stack.Screen
+                name={navigationRoutes.register}
+                component={RegisterScreen}
               />
               {/* <Stack.Screen
                 name={mainNavigationRoutes.forgotPasscode}

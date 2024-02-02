@@ -1,11 +1,12 @@
 import { PropsWithChildren } from "react"
 import { Button } from "react-native-paper"
+import { IconSource } from "react-native-paper/lib/typescript/components/Icon"
 
 type ButtonPaperProps = {
   children: React.ReactNode
   mode: "text" | "outlined" | "contained" | "elevated" | "contained-tonal"
   onPress: (e: any) => void
-  icon?: string
+  icon?: IconSource
   buttonColor?: string
   textColor?: string
   style?: {}

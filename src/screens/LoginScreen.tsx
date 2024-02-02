@@ -7,15 +7,19 @@ import {
   SafeAreaView,
   ImageBackground,
   useColorScheme,
+  TouchableOpacity,
 } from "react-native"
 import { withTheme, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import InputPaper from "../components/InputPaper"
 import ButtonPaper from "../components/ButtonPaper"
 import { AppStore } from "../context/AppContext"
-import normalize from "react-native-normalize"
+import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from "react-native-normalize"
+import { useNavigation } from "@react-navigation/native"
+import navigationRoutes from "../routes/navigationRoutes"
 
 function LoginScreen() {
+  const navigation = useNavigation()
   const { login } = useContext(AppStore)
   const theme = usePaperColorScheme()
   const colorScheme = useColorScheme()
@@ -27,18 +31,18 @@ function LoginScreen() {
 
   return (
     <SafeAreaView>
-      <ImageBackground
-        blurRadius={10}
-        source={
-          colorScheme === "dark"
-            ? require("../resources/images/flower-2_dark.png")
-            : require("../resources/images/flower-2.png")
-        }
-        style={[
-          styles.loginWrapper,
-          { backgroundColor: theme.colors.background },
-        ]}>
-        <ScrollView keyboardShouldPersistTaps="handled">
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <ImageBackground
+          blurRadius={10}
+          source={
+            colorScheme === "dark"
+              ? require("../resources/images/flower-2_dark.png")
+              : require("../resources/images/flower-2.png")
+          }
+          style={[
+            styles.loginWrapper,
+            { backgroundColor: theme.colors.background },
+          ]}>
           <View style={styles.loginHeader}>
             <Text
               variant="displayMedium"
@@ -117,6 +121,13 @@ function LoginScreen() {
                   NEXT
                 </ButtonPaper>
               </View>
+
+              <View style={{ justifyContent: 'space-around', alignItems: 'center' }}>
+                <Text style={{ color: theme.colors.primary }}>Don't have an account?</Text>
+                <TouchableOpacity onPress={() => navigation.navigate(navigationRoutes.register as never)}>
+                  <Text style={{ textTransform: 'uppercase', color: theme.colors.green, textDecorationLine: 'underline' }}>Create new account</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           )}
 
@@ -179,20 +190,13 @@ function LoginScreen() {
               </View>
             </View>
           )}
-          <View
-            style={{
-              // padding: 35,
-              marginTop: normalize(180),
-              marginLeft: normalize(10),
-              // alignItems: "flex-end",
-              // flexDirection: "column",
-            }}>
+          <View>
             <Text style={{ fontFamily: "ProductSans-Regular", fontSize: 10 }}>
               Powered by, Synergic Softek Solutions Pvt. Ltd.
             </Text>
           </View>
-        </ScrollView>
-      </ImageBackground>
+        </ImageBackground>
+      </ScrollView>
     </SafeAreaView>
   )
 }
@@ -201,7 +205,8 @@ export default withTheme(LoginScreen)
 
 const styles = StyleSheet.create({
   loginWrapper: {
-    height: "100%",
+    minHeight: SCREEN_HEIGHT,
+    height: "auto",
   },
 
   loginHeader: {
