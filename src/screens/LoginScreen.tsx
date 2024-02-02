@@ -19,6 +19,7 @@ import { CommonActions, useNavigation } from "@react-navigation/native"
 import navigationRoutes from "../routes/navigationRoutes"
 import useLogin from "../hooks/api/useLogin"
 import { AppStore } from "../context/AppContext"
+import { loginStorage } from "../storage/appStorage"
 
 function LoginScreen() {
   const navigation = useNavigation()
@@ -32,7 +33,6 @@ function LoginScreen() {
 
   const [loginText, setLoginText] = useState<string>(() => "")
   const [passwordText, setPasswordText] = useState<string>(() => "")
-
   const [next, setNext] = useState<boolean>(() => false)
 
   const handleLogin = async () => {
@@ -43,6 +43,9 @@ function LoginScreen() {
       Alert.alert("Error", "Login credentials are wrong! Please try again.")
       setIsLogin(false)
       return
+    }
+    if (loginData?.suc === 1) {
+      loginStorage.set("login-data", JSON.stringify(loginData?.msg));
     }
     setIsLogin(true)
   }
@@ -165,10 +168,11 @@ function LoginScreen() {
               <View>
                 <InputPaper
                   value={passwordText}
-                  label={"Password"}
+                  label={"Enter PIN"}
                   secureTextEntry={true}
                   onChangeText={(text: string) => setPasswordText(text)}
                   leftIcon="shield-lock-outline"
+                  maxLength={4}
                   autoFocus
                 />
               </View>

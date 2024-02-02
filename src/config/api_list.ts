@@ -6,4 +6,5 @@ export const ADDRESSES = {
     OTP: `${BASE_URL}/api/otp`,
     CREATE_PIN: `${BASE_URL}/api/create_pin`,
     LOGIN: `${BASE_URL}/api/login`,
+    RECEIPT_SETTINGS: `${BASE_URL}/api/receipt_settings`,
 }

@@ -32,6 +32,7 @@ const RegisterScreen = () => {
 
         if (registeredData?.status === 0) {
             Alert.alert("Message", "Mobile No is not Registered.")
+            setMobileNo("")
             return
         }
         else if (registeredData?.status === 1) {
@@ -40,6 +41,7 @@ const RegisterScreen = () => {
 
             if (verifyActiveData?.status === -1) {
                 Alert.alert("Message", "Mobile No is already in use.")
+                setMobileNo("")
                 return
             } else {
                 let otpData = await getOtp(mobileNo)
@@ -87,7 +89,7 @@ const RegisterScreen = () => {
 
                     {!next && <View style={{ justifyContent: 'center' }}>
                         <View style={{ padding: normalize(20) }}>
-                            <InputPaper label='Mobile Number' value={mobileNo} onChangeText={setMobileNo} keyboardType='number-pad' leftIcon='account-arrow-up' />
+                            <InputPaper label='Mobile Number' value={mobileNo} onChangeText={setMobileNo} keyboardType='number-pad' leftIcon='account-arrow-up' autoFocus />
                         </View>
                         <View style={{ padding: normalize(20) }}>
                             <ButtonPaper

@@ -16,7 +16,7 @@ export default function MainNavigation() {
   return (
     <>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator screenOptions={{ headerShown: false, animation: "simple_push" }}>
           {isLogin ? (
             <>
               <Stack.Screen

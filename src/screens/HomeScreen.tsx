@@ -5,20 +5,22 @@ import {
   View,
   ToastAndroid,
 } from "react-native"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import AnimatedFABPaper from "../components/AnimatedFABPaper"
 import { Button, Divider, List, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import HeaderImage from "../components/HeaderImage"
 import { flowerHome, flowerHomeDark } from "../resources/images"
 import navigationRoutes from "../routes/navigationRoutes"
-import { useNavigation } from "@react-navigation/native"
+import { useIsFocused, useNavigation } from "@react-navigation/native"
 import SurfacePaper from "../components/SurfacePaper"
 import DialogBox from "../components/DialogBox"
 import normalize from "react-native-normalize"
 import AddedProductList from "../components/AddedProductList"
 import NetTotalButton from "../components/NetTotalButton"
 import ScrollableListContainer from "../components/ScrollableListContainer"
+import { loginStorage } from "../storage/appStorage"
+import useReceiptSettings from "../hooks/api/useReceiptSettings"
 
 type ProductsDataObject = {
   id: number
@@ -31,6 +33,12 @@ type ProductsDataObject = {
 
 function HomeScreen() {
   const navigation = useNavigation()
+  const isFocused = useIsFocused()
+
+  const { fetchReceiptSettings } = useReceiptSettings()
+
+  const loginStore = JSON.parse(loginStorage.getString("login-data"))
+
   const theme = usePaperColorScheme()
   const [isExtended, setIsExtended] = useState(() => true)
 
@@ -97,6 +105,16 @@ function HomeScreen() {
 
   let netTotal = 0
 
+  const handleGetReceiptSettings = async () => {
+    const companyId = loginStore.comp_id
+    let receiptSettingsData = await fetchReceiptSettings(companyId)
+    console.log("receiptSettingsData", receiptSettingsData)
+  }
+
+  useEffect(() => {
+    handleGetReceiptSettings()
+  }, [isFocused])
+
   const onScroll = ({ nativeEvent }) => {
     const currentScrollPosition = Math.floor(nativeEvent?.contentOffset?.y) ?? 0
 
@@ -131,7 +149,7 @@ function HomeScreen() {
             imgDark={flowerHomeDark}
             borderRadius={30}
             blur={10}>
-            Welcome Back, Kalinga Store!
+            Welcome Back, {loginStore.company_name}!
           </HeaderImage>
         </View>
 
