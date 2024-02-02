@@ -5,6 +5,7 @@
 const navigationRoutes = {
   login: "Login",
   register: "Register",
+  createPinScreen: "CreatePinScreen",
   homeScreen: "HomeScreen",
   settingsScreen: "SetingsScreen",
   bottomNavigationPaper: "BottomNavigationPaper",

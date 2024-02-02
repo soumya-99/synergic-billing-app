@@ -12,3 +12,8 @@ export type OtpData = {
     status: number
     data: string
 }
+
+export type CreatePinData = {
+    status: number
+    data: string
+}

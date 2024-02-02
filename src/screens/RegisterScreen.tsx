@@ -9,8 +9,11 @@ import ButtonPaper from '../components/ButtonPaper'
 import useRegister from '../hooks/api/useRegister'
 import useVerifyActive from '../hooks/api/useVerifyActive'
 import useFetchOtp from '../hooks/api/useOtp'
+import { CommonActions, useNavigation } from '@react-navigation/native'
+import navigationRoutes from '../routes/navigationRoutes'
 
 const RegisterScreen = () => {
+    const navigation = useNavigation()
     const theme = usePaperColorScheme()
 
     const [mobileNo, setMobileNo] = useState<string>(() => "")
@@ -51,8 +54,19 @@ const RegisterScreen = () => {
     const handleOtpMatch = () => {
         if (otp === fetchedOtp) {
             console.log("OTP MATCHED...")
+            navigation.dispatch(
+                CommonActions.navigate({
+                    name: navigationRoutes.createPinScreen,
+                    params: {
+                        mobile_no: mobileNo,
+                    },
+                })
+            )
         } else {
             console.log("WRONG OTP!!!")
+
+            Alert.alert("Error", "OTP doesn't match.")
+            return
         }
     }
 

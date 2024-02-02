@@ -8,6 +8,7 @@ import BottomNavigationPaper from "./BottomNavigationPaper"
 import HomeNavigation from "./HomeNavigation"
 import SettingsNavigation from "./SettingsNavigation"
 import RegisterScreen from "../screens/RegisterScreen"
+import CreatePinScreen from "../screens/CreatePinScreen"
 
 export default function MainNavigation() {
   const Stack = createNativeStackNavigator()
@@ -42,6 +43,10 @@ export default function MainNavigation() {
               <Stack.Screen
                 name={navigationRoutes.register}
                 component={RegisterScreen}
+              />
+              <Stack.Screen
+                name={navigationRoutes.createPinScreen}
+                component={CreatePinScreen}
               />
               {/* <Stack.Screen
                 name={mainNavigationRoutes.forgotPasscode}

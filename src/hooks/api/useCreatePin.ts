@@ -1,0 +1,19 @@
+import axios from "axios"
+import { ADDRESSES } from "../../config/api_list"
+import { CreatePinData } from "../../models/api_types"
+
+export default function useCreatePin() {
+    const createPin = async (pin: string, phoneNumber: string) => {
+        return new Promise<CreatePinData>((resolve, reject) => {
+            axios.post(`${ADDRESSES.CREATE_PIN}`, {
+                PIN: pin,
+                phone_no: phoneNumber
+            }, {}).then(res => {
+                resolve(res.data)
+            }).catch(err => {
+                reject(err)
+            })
+        })
+    }
+    return { createPin }
+}
