@@ -8,6 +8,8 @@ import { ReceiptSettingsData } from "../models/api_types"
 export const AppStore = createContext(null)
 
 const AppContext = ({ children }) => {
+  const appState = useRef(AppState.currentState);
+
   const [isLogin, setIsLogin] = useState<boolean>(() => false)
   const [receiptSettings, setReceiptSettings] = useState<ReceiptSettingsData>()
 
@@ -29,6 +31,21 @@ const AppContext = ({ children }) => {
     setIsLogin(true)
   }
 
+  const isLoggedIn = () => {
+    if (loginStorage.getAllKeys().length === 0) {
+      console.log("IF - isLoggedIn");
+      setIsLogin(isLogin);
+    } else {
+      console.log("ELSE - isLoggedIn");
+      setIsLogin(!isLogin);
+    }
+  };
+
+  useEffect(() => {
+    if (appState.current === "active") {
+      isLoggedIn()
+    }
+  }, []);
 
   const handleGetReceiptSettings = async () => {
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
@@ -46,43 +63,13 @@ const AppContext = ({ children }) => {
     }
   }, [isLogin])
 
-
-
-
-
-
-  const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
-
-  // useEffect(() => {
-  //   const subscription = AppState.addEventListener('change', nextAppState => {
-  //     if (
-  //       appState.current.match(/inactive|background/) &&
-  //       nextAppState === 'active'
-  //     ) {
-  //       console.log('App has come to the foreground!');
-  //     }
-  //     appState.current = nextAppState;
-
-  //     setAppStateVisible(appState.current);
-  //     console.log('AppState', appState.current);
-
-  //     if (appState.current === "background") {
-  //       console.log("TRIGGERED && CLEARED STORES")
-  //       loginStorage.clearAll()
-  //       // receiptSettingsStorage.clearAll()
-
-  //       setIsLogin(!isLogin)
-  //     }
-  //   });
-
-  //   return () => {
-  //     subscription.remove();
-  //   };
-  // }, []);
+  const handleLogout = () => {
+    loginStorage.clearAll();
+    setIsLogin(!isLogin)
+  }
 
   return (
-    <AppStore.Provider value={{ isLogin, handleLogin, appStateVisible, receiptSettings }}>
+    <AppStore.Provider value={{ isLogin, handleLogin, handleLogout, receiptSettings }}>
       {children}
     </AppStore.Provider>
   )

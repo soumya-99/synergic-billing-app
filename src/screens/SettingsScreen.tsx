@@ -15,7 +15,7 @@ import navigationRoutes from "../routes/navigationRoutes"
 function SettingsScreen() {
   const navigation = useNavigation()
 
-  const { logout } = useContext(AppStore)
+  const { handleLogout } = useContext(AppStore)
   const [isExtended, setIsExtended] = useState(() => true)
 
   const theme = usePaperColorScheme()
@@ -41,7 +41,7 @@ function SettingsScreen() {
         </View>
 
         <View style={{ padding: 20 }}>
-          <ButtonPaper icon="logout" mode="text" onPress={logout}>
+          <ButtonPaper icon="logout" mode="text" onPress={handleLogout}>
             Log Out
           </ButtonPaper>
         </View>
