@@ -3,6 +3,7 @@ import { View } from "react-native"
 import normalize from "react-native-normalize"
 import { Divider, Text } from "react-native-paper"
 import { AppStore } from "../context/AppContext"
+import { ReceiptSettingsData } from "../models/api_types"
 // import { receiptSettingsStorage } from "../storage/appStorage"
 
 type AddedProductListProps = {
@@ -20,10 +21,6 @@ export default function AddedProductList({
   discount,
   unit,
 }: AddedProductListProps) {
-  // const receiptSettingsStore = JSON.parse(receiptSettingsStorage.getString("receipt-settings-store"))
-
-  // console.log("receiptSettingsStore=========", receiptSettingsStore)
-
   const { receiptSettings } = useContext(AppStore)
 
   return (
@@ -59,12 +56,24 @@ export default function AddedProductList({
               flexDirection: "row",
               justifyContent: "space-between",
             }}>
-            <View>
-              <Text>Discount</Text>
-            </View>
-            <View>
-              <Text>₹{discount}</Text>
-            </View>
+            {receiptSettings?.discount_type === "A" ? (
+              <View>
+                <Text>Discount</Text>
+              </View>
+            ) : (
+              <View>
+                <Text>Discount ({discount}%)</Text>
+              </View>
+            )}
+            {receiptSettings?.discount_type === "A" ? (
+              <View>
+                <Text>₹{discount}</Text>
+              </View>
+            ) : (
+              <View>
+                <Text>₹{(unitPrice * quantity * discount) / 100}</Text>
+              </View>
+            )}
           </View>
           <View
             style={{
@@ -76,9 +85,15 @@ export default function AddedProductList({
                 QTY: {quantity} {unit}
               </Text>
             </View>
-            <View>
-              <Text>TOTAL: ₹{unitPrice * quantity - discount}</Text>
-            </View>
+            {receiptSettings?.discount_type === "A" ? (
+              <View>
+                <Text>TOTAL: ₹{unitPrice * quantity - discount}</Text>
+              </View>
+            ) : (
+              <View>
+                <Text>TOTAL: ₹{((unitPrice * quantity) - ((unitPrice * quantity * discount) / 100))}</Text>
+              </View>
+            )}
           </View>
         </View>
         <Divider />

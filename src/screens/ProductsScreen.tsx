@@ -10,7 +10,7 @@ import { Searchbar, Text } from "react-native-paper"
 import HeaderImage from "../components/HeaderImage"
 import { productHeader, productHeaderDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import DialogBox from "../components/DialogBox"
 import { CommonActions, useIsFocused, useNavigation } from "@react-navigation/native"
 import InputPaper from "../components/InputPaper"
@@ -25,12 +25,15 @@ import { ItemsData } from "../models/api_types"
 import useItems from "../hooks/api/useItems"
 import ButtonPaper from "../components/ButtonPaper"
 import navigationRoutes from "../routes/navigationRoutes"
+import { AppStore } from "../context/AppContext"
 
 function ProductsScreen() {
   const navigation = useNavigation()
   const isFocused = useIsFocused()
 
   const theme = usePaperColorScheme()
+
+  const { receiptSettings } = useContext(AppStore)
 
   const [visible, setVisible] = useState(() => false)
   const hideDialog = () => setVisible(() => false)
@@ -48,7 +51,7 @@ function ProductsScreen() {
   const [product, setProduct] = useState<ItemsData>()
 
   const [noOfProducts, setNoOfProducts] = useState<string>(() => "")
-  const [discountState, setDiscountState] = useState<number>(() => product?.discount | 0)
+  const [discountState, setDiscountState] = useState<number>(() => 0)
 
   const [addedProductsList, setAddedProductsList] = useState<
     ItemsData[]
@@ -56,8 +59,9 @@ function ProductsScreen() {
 
   // const [netTotal, setNetTotal] = useState<number>(() => 0)
 
+  let totalPrice = 0
+  let totalDiscountedAmount = 0
   let netTotal = 0
-  let totalDiscount = 0
 
 
   const handleGetItems = async () => {
@@ -91,41 +95,29 @@ function ProductsScreen() {
   }
 
   const onDialogSuccecss = () => {
-    if (noOfProducts !== "" || noOfProducts.includes(" ")) {
-      // check for 0 will be added
+    if (noOfProducts.trim() !== "" && !/^0+$/.test(noOfProducts)) {
       console.log("OK PRODUCT: ", product?.item_name)
       addProducts()
-      // setSearch(() => "")
-      // setNoOfProducts(() => "")
+
+      discountState > 0 ? setDiscountState(() => discountState) : setDiscountState(() => product?.discount)
+
       clearStates([setSearch, setNoOfProducts], () => "")
-
-      discountState !== 0 ? setDiscountState(() => product?.discount) : setDiscountState(() => discountState)
-
-
+      setDiscountState(() => 0)
       setVisible(!visible)
       setFilteredItems(() => [])
     } else {
-      ToastAndroid.showWithGravityAndOffset(
+      ToastAndroid.show(
         "Try adding some items.",
         ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
-        25,
-        50,
       )
     }
   }
 
-  // const onDialogPrintFailure = () => {
-  //   setVisible(!visible)
-  // }
-  // const onDialogPrintSuccecss = () => {
-  //   setVisible(!visible)
-  // }
-
   const addProducts = () => {
     addedProductsList.push(product)
     product["quantity"] = parseInt(noOfProducts)
-    // product["discount"] = discountState
+    if (discountState > 0)
+      product["discount"] = discountState!
     setAddedProductsList([...addedProductsList])
     console.log(
       "==========UPDATED ADDED PRODUCTS LIST==========",
@@ -136,18 +128,6 @@ function ProductsScreen() {
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      {/* <Appbar.Header
-        style={{ backgroundColor: theme.colors.secondaryContainer }}>
-        <Appbar.BackAction
-          onPress={() => {
-            navigation.goBack()
-          }}
-        />
-        <Appbar.Content
-          title="Your Products"
-          color={theme.colors.onSecondaryContainer}
-        />
-      </Appbar.Header> */}
       <DialogBox
         iconSize={40}
         visible={visible}
@@ -215,7 +195,7 @@ function ProductsScreen() {
             </View>
             <View style={{ width: "50%" }}>
               <InputPaper
-                label="Discount"
+                label={receiptSettings?.discount_type === "A" ? "Discount" : "Discount (%)"}
                 onChangeText={(discount: number) => setDiscountState(discount)}
                 value={discountState}
                 keyboardType="numeric"
@@ -268,8 +248,13 @@ function ProductsScreen() {
             <ScrollableListContainer
               backgroundColor={theme.colors.pinkContainer}>
               {addedProductsList.map(item => {
-                netTotal += item?.price * item["quantity"]
-                totalDiscount += item["discount"]
+                totalPrice += item?.price * item["quantity"]
+
+                receiptSettings?.discount_type === "A"
+                  ? totalDiscountedAmount += item["discount"]
+                  : totalDiscountedAmount += (item?.price * item["quantity"] * item["discount"] / 100)
+
+                console.log("totalDiscount", totalDiscountedAmount)
                 return (
                   <AddedProductList
                     key={item?.id}
@@ -284,15 +269,16 @@ function ProductsScreen() {
             </ScrollableListContainer>
           )}
 
-          {netTotal > 0 && (
+          {totalPrice > 0 && (
             <>
               <NetTotalButton
                 disabled
                 backgroundColor={theme.colors.greenContainer}
                 textColor={theme.colors.onGreenContainer}
-                netTotal={netTotal}
-                totalDiscount={totalDiscount}
-                onPress={async () =>
+                // addedProductsList={addedProductsList}
+                netTotal={totalPrice}
+                totalDiscount={totalDiscountedAmount}
+                onPress={() =>
                   ToastAndroid.showWithGravityAndOffset(
                     "Printing feature will be added in some days.",
                     ToastAndroid.SHORT,
@@ -300,14 +286,17 @@ function ProductsScreen() {
                     25,
                     50,
                   )
-                  // await printReceipt()
-                  // await printReceiptWithoutGst()
                 }
               />
               <View style={{ padding: normalize(20) }}>
                 <ButtonPaper mode="text" textColor={theme.colors.purple} onPress={() => navigation.dispatch(
                   CommonActions.navigate({
                     name: navigationRoutes.customerDetailsFillScreen,
+                    params: {
+                      added_products: addedProductsList,
+                      net_total: totalPrice,
+                      total_discount: totalDiscountedAmount
+                    }
                   })
                 )}>
                   PRINT RECEIPT

@@ -9,6 +9,7 @@ type NetTotalButtonProps = {
   textColor: string
   netTotal: number
   totalDiscount: number
+  addedProductsList?: {}[]
   onPress?: () => void
   height?: number | "auto"
   width?: number
@@ -21,6 +22,7 @@ export default function NetTotalButton({
   disabled = false,
   backgroundColor,
   textColor,
+  addedProductsList,
   netTotal,
   totalDiscount,
   width = 320,
@@ -29,11 +31,9 @@ export default function NetTotalButton({
   sgst,
   onPress,
 }: NetTotalButtonProps) {
-
-
-
-
   const { receiptSettings } = useContext(AppStore)
+
+  // addedProductsList?.filter((item, i) => item.discount)
 
   return (
     receiptSettings?.gst_flag !== "Y" ? (

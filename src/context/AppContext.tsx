@@ -54,32 +54,32 @@ const AppContext = ({ children }) => {
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', nextAppState => {
-      if (
-        appState.current.match(/inactive|background/) &&
-        nextAppState === 'active'
-      ) {
-        console.log('App has come to the foreground!');
-      }
-      appState.current = nextAppState;
+  // useEffect(() => {
+  //   const subscription = AppState.addEventListener('change', nextAppState => {
+  //     if (
+  //       appState.current.match(/inactive|background/) &&
+  //       nextAppState === 'active'
+  //     ) {
+  //       console.log('App has come to the foreground!');
+  //     }
+  //     appState.current = nextAppState;
 
-      setAppStateVisible(appState.current);
-      console.log('AppState', appState.current);
+  //     setAppStateVisible(appState.current);
+  //     console.log('AppState', appState.current);
 
-      if (appState.current === "background") {
-        console.log("TRIGGERED && CLEARED STORES")
-        loginStorage.clearAll()
-        // receiptSettingsStorage.clearAll()
+  //     if (appState.current === "background") {
+  //       console.log("TRIGGERED && CLEARED STORES")
+  //       loginStorage.clearAll()
+  //       // receiptSettingsStorage.clearAll()
 
-        setIsLogin(!isLogin)
-      }
-    });
+  //       setIsLogin(!isLogin)
+  //     }
+  //   });
 
-    return () => {
-      subscription.remove();
-    };
-  }, []);
+  //   return () => {
+  //     subscription.remove();
+  //   };
+  // }, []);
 
   return (
     <AppStore.Provider value={{ isLogin, handleLogin, appStateVisible, receiptSettings }}>

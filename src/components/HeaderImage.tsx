@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   surface: {
     margin: normalize(20),
     // height: PixelRatio.roundToNearestPixel(200),
-    height: SCREEN_HEIGHT / 3.6,
+    height: SCREEN_HEIGHT / 3.7,
     borderRadius: normalize(30),
     // width: PixelRatio.roundToNearestPixel(330),
     width: SCREEN_WIDTH / 1.16,
