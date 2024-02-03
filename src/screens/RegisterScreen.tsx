@@ -89,7 +89,7 @@ const RegisterScreen = () => {
 
                     {!next && <View style={{ justifyContent: 'center' }}>
                         <View style={{ padding: normalize(20) }}>
-                            <InputPaper label='Mobile Number' value={mobileNo} onChangeText={setMobileNo} keyboardType='number-pad' leftIcon='account-arrow-up' autoFocus />
+                            <InputPaper label='Mobile Number' value={mobileNo} onChangeText={(mob: string) => setMobileNo(mob)} keyboardType='number-pad' leftIcon='account-arrow-up' autoFocus />
                         </View>
                         <View style={{ padding: normalize(20) }}>
                             <ButtonPaper
@@ -105,7 +105,7 @@ const RegisterScreen = () => {
 
                     {next && <View style={{ justifyContent: 'center' }}>
                         <View style={{ padding: normalize(20) }}>
-                            <InputPaper label='OTP' value={otp} onChangeText={setOtp} keyboardType='number-pad' leftIcon='account-arrow-up' maxLength={4} />
+                            <InputPaper label='OTP' value={otp} onChangeText={(otp: string) => setOtp(otp)} keyboardType='number-pad' leftIcon='account-arrow-up' maxLength={4} />
                         </View>
                         <View style={{ padding: normalize(20) }}>
                             <ButtonPaper

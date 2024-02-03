@@ -66,3 +66,22 @@ export type ReceiptSettingsData = {
     footer2: string
     on_off_flag4: "Y" | "N"
 }
+
+export type ItemsData = {
+    id: number,
+    com_id: number,
+    hsn_code: string,
+    item_name: string,
+    description: string,
+    unit_id: number,
+    container_id: number,
+    created_by: string,
+    created_dt: string,
+    modified_by: string,
+    modified_dt: string,
+    item_id: number,
+    price: number,
+    discount: number,
+    cgst: number,
+    sgst: number
+}

@@ -24,31 +24,14 @@ import { loginStorage } from "../storage/appStorage"
 function LoginScreen() {
   const navigation = useNavigation()
 
-  const { setIsLogin } = useContext(AppStore)
+  const { handleLogin } = useContext(AppStore)
 
   const theme = usePaperColorScheme()
   const colorScheme = useColorScheme()
 
-  const { login } = useLogin()
-
   const [loginText, setLoginText] = useState<string>(() => "")
   const [passwordText, setPasswordText] = useState<string>(() => "")
   const [next, setNext] = useState<boolean>(() => false)
-
-  const handleLogin = async () => {
-    let loginData = await login(loginText, passwordText)
-    console.log("loginData", loginData)
-
-    if (loginData?.suc === 0) {
-      Alert.alert("Error", "Login credentials are wrong! Please try again.")
-      setIsLogin(false)
-      return
-    }
-    if (loginData?.suc === 1) {
-      loginStorage.set("login-data", JSON.stringify(loginData?.msg));
-    }
-    setIsLogin(true)
-  }
 
   return (
     <SafeAreaView>
@@ -200,7 +183,7 @@ function LoginScreen() {
                 <View>
                   <ButtonPaper
                     mode="contained"
-                    onPress={handleLogin}
+                    onPress={() => handleLogin(loginText, passwordText)}
                     icon="login"
                     style={{ width: normalize(190) }}>
                     LOGIN

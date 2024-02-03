@@ -21,99 +21,44 @@ import NetTotalButton from "../components/NetTotalButton"
 import ScrollableListContainer from "../components/ScrollableListContainer"
 import { loginStorage } from "../storage/appStorage"
 import useReceiptSettings from "../hooks/api/useReceiptSettings"
+import { ItemsData } from "../models/api_types"
+import useItems from "../hooks/api/useItems"
 
-type ProductsDataObject = {
-  id: number
-  item: string
-  description: string
-  quantity: number
-  unit_price: number
-  unit: string
-}
+// type ProductsDataObject = {
+//   id: number
+//   item: string
+//   description: string
+//   quantity: number
+//   unit_price: number
+//   unit: string
+// }
 
 function HomeScreen() {
   const navigation = useNavigation()
   const isFocused = useIsFocused()
 
-  const { fetchReceiptSettings } = useReceiptSettings()
+  // const { fetchReceiptSettings } = useReceiptSettings()
 
   const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
   const theme = usePaperColorScheme()
   const [isExtended, setIsExtended] = useState(() => true)
 
-  const [addedProductsList, setAddedProductsList] = useState<
-    ProductsDataObject[]
-  >(() => [
-    {
-      id: 1,
-      item: "Emami Rice Bran Oil",
-      description: "Item description",
-      unit_price: 240,
-      quantity: 2,
-      unit: "Lt",
-    },
-    {
-      id: 2,
-      item: "Lux Soap",
-      description: "Item description",
-      unit_price: 65,
-      quantity: 9,
-      unit: "Pc",
-    },
-    {
-      id: 3,
-      item: "Mung Daal",
-      description: "Item description",
-      unit_price: 160,
-      quantity: 12,
-      unit: "Kg",
-    },
-    {
-      id: 4,
-      item: "Cadbury Dairy Milk",
-      description: "Item description",
-      unit_price: 110,
-      quantity: 7,
-      unit: "Pc",
-    },
-    {
-      id: 9,
-      item: "Cadbury Dairy Milk",
-      description: "Item description",
-      unit_price: 110,
-      quantity: 7,
-      unit: "Pc",
-    },
-    {
-      id: 78,
-      item: "Cadbury Dairy Milk",
-      description: "Item description",
-      unit_price: 110,
-      quantity: 7,
-      unit: "Pc",
-    },
-    {
-      id: 23,
-      item: "Cadbury Dairy Milk",
-      description: "Item description",
-      unit_price: 110,
-      quantity: 7,
-      unit: "Pc",
-    },
-  ])
+  const [addedProductsList, setAddedProductsList] = useState<ItemsData[]>(() => [])
 
   let netTotal = 0
 
-  const handleGetReceiptSettings = async () => {
-    const companyId = loginStore.comp_id
-    let receiptSettingsData = await fetchReceiptSettings(companyId)
-    console.log("receiptSettingsData", receiptSettingsData)
-  }
+  // const handleGetReceiptSettings = async () => {
+  //   const companyId = loginStore.comp_id
+  //   let receiptSettingsData = await fetchReceiptSettings(companyId)
+  //   console.log("receiptSettingsData", receiptSettingsData[0])
 
-  useEffect(() => {
-    handleGetReceiptSettings()
-  }, [isFocused])
+  //   // receiptSettingsStorage.set("receipt-settings-store", JSON.stringify(receiptSettingsData[0]));
+  // }
+
+  // useEffect(() => {
+  // handleGetReceiptSettings()
+  // }, [isFocused])
 
   const onScroll = ({ nativeEvent }) => {
     const currentScrollPosition = Math.floor(nativeEvent?.contentOffset?.y) ?? 0
@@ -236,7 +181,7 @@ function HomeScreen() {
           backgroundColor={theme.colors.surfaceVariant}
           height={250}
           width={300}>
-          {addedProductsList.map(item => {
+          {/* {addedProductsList.map(item => {
             netTotal += item.unit_price * item.quantity
             return (
               <AddedProductList
@@ -248,7 +193,7 @@ function HomeScreen() {
                 key={item.id}
               />
             )
-          })}
+          })} */}
         </ScrollableListContainer>
         <NetTotalButton
           width={300}

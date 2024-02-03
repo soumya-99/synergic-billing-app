@@ -3,8 +3,8 @@ import { TextInput } from "react-native-paper"
 
 type InputPaperProps = {
   label: string
-  value: string
-  onChangeText: (msg: string) => void
+  value: string | number
+  onChangeText: (msg: string | number) => void
   secureTextEntry?: boolean
   keyboardType?: KeyboardTypeOptions
   customStyle?: {}
@@ -31,7 +31,7 @@ const InputPaper = ({
       mode={mode}
       keyboardType={keyboardType}
       label={label}
-      value={value}
+      value={value.toString()}
       onChangeText={onChangeText}
       secureTextEntry={secureTextEntry}
       style={customStyle}

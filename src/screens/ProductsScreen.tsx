@@ -10,10 +10,10 @@ import { Appbar, Searchbar, Text } from "react-native-paper"
 import HeaderImage from "../components/HeaderImage"
 import { productHeader, productHeaderDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
-import { useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import PRODUCTS_DATA from "../data/products_dummy_data.json"
 import DialogBox from "../components/DialogBox"
-import { useNavigation } from "@react-navigation/native"
+import { useIsFocused, useNavigation } from "@react-navigation/native"
 import InputPaper from "../components/InputPaper"
 import normalize from "react-native-normalize"
 import ProductListSuggestion from "../components/ProductListSuggestion"
@@ -22,21 +22,15 @@ import ScrollableListContainer from "../components/ScrollableListContainer"
 import NetTotalButton from "../components/NetTotalButton"
 import { clearStates } from "../utils/clearStates"
 import { useBluetoothPrint } from "../hooks/printables/useBluetoothPrint"
-
-// type ProductsData = {
-//   [key: string]: any
-// }
-
-type ProductsDataObject = {
-  id: number
-  item: string
-  description: string
-  unit_price: number
-  unit: string
-}
+import { loginStorage } from "../storage/appStorage"
+import { ItemsData } from "../models/api_types"
+import useItems from "../hooks/api/useItems"
+import ButtonPaper from "../components/ButtonPaper"
 
 function ProductsScreen() {
   const navigation = useNavigation()
+  const isFocused = useIsFocused()
+
   const theme = usePaperColorScheme()
   const { printReceipt, printReceiptWithoutGst } = useBluetoothPrint()
 
@@ -44,30 +38,22 @@ function ProductsScreen() {
   const hideDialog = () => setVisible(() => false)
 
   const [search, setSearch] = useState<string>(() => "")
-  const [filteredItems, setFilteredItems] = useState<ProductsDataObject[]>(
+  const [filteredItems, setFilteredItems] = useState<ItemsData[]>(
     () => [],
   )
-  const onChangeSearch = (query: string) => {
-    setSearch(query)
 
-    const filtered = PRODUCTS_DATA.filter(item => item.item.includes(query))
-    setFilteredItems(filtered)
-    if (query === "") setFilteredItems(() => [])
-  }
+  const { fetchItems } = useItems()
 
-  const [product, setProduct] = useState<ProductsDataObject>({
-    id: 0,
-    item: "",
-    description: "",
-    unit_price: 0,
-    unit: "",
-  })
+  const loginStore = JSON.parse(loginStorage.getString("login-data"))
+
+  const [items, setItems] = useState<ItemsData[]>(() => [])
+  const [product, setProduct] = useState<ItemsData>()
 
   const [noOfProducts, setNoOfProducts] = useState<string>(() => "")
-  const [discount, setDiscount] = useState<string>(() => "0")
+  const [discountState, setDiscountState] = useState<number>(() => product?.discount | 0)
 
   const [addedProductsList, setAddedProductsList] = useState<
-    ProductsDataObject[]
+    ItemsData[]
   >(() => [])
 
   // const [netTotal, setNetTotal] = useState<number>(() => 0)
@@ -75,7 +61,28 @@ function ProductsScreen() {
   let netTotal = 0
   let totalDiscount = 0
 
-  const productDetails = (item: ProductsDataObject) => {
+
+  const handleGetItems = async () => {
+    const companyId = loginStore.comp_id
+    let itemsData = await fetchItems(companyId)
+    console.log("itemsData", itemsData)
+
+    setItems(itemsData)
+  }
+
+  useEffect(() => {
+    handleGetItems()
+  }, [isFocused])
+
+  const onChangeSearch = (query: string) => {
+    setSearch(query)
+
+    const filtered = items.filter(item => item?.item_name?.includes(query))
+    setFilteredItems(filtered)
+    if (query === "") setFilteredItems(() => [])
+  }
+
+  const productDetails = (item: ItemsData) => {
     setProduct(item)
     setVisible(!visible)
   }
@@ -88,12 +95,15 @@ function ProductsScreen() {
   const onDialogSuccecss = () => {
     if (noOfProducts !== "" || noOfProducts.includes(" ")) {
       // check for 0 will be added
-      console.log("OK PRODUCT: ", product.item)
+      console.log("OK PRODUCT: ", product?.item_name)
       addProducts()
       // setSearch(() => "")
       // setNoOfProducts(() => "")
       clearStates([setSearch, setNoOfProducts], () => "")
-      setDiscount(() => "0")
+
+      discountState !== 0 ? setDiscountState(() => product?.discount) : setDiscountState(() => discountState)
+
+
       setVisible(!visible)
       setFilteredItems(() => [])
     } else {
@@ -107,10 +117,17 @@ function ProductsScreen() {
     }
   }
 
+  // const onDialogPrintFailure = () => {
+  //   setVisible(!visible)
+  // }
+  // const onDialogPrintSuccecss = () => {
+  //   setVisible(!visible)
+  // }
+
   const addProducts = () => {
     addedProductsList.push(product)
     product["quantity"] = parseInt(noOfProducts)
-    product["discount"] = parseInt(discount)
+    // product["discount"] = discountState
     setAddedProductsList([...addedProductsList])
     console.log(
       "==========UPDATED ADDED PRODUCTS LIST==========",
@@ -144,7 +161,7 @@ function ProductsScreen() {
         <View style={{ justifyContent: "space-between", height: 150 }}>
           <View style={{ alignItems: "center" }}>
             <View>
-              <Text variant="titleLarge">{product.item}</Text>
+              <Text variant="titleLarge">{product?.item_name}</Text>
             </View>
           </View>
 
@@ -160,7 +177,7 @@ function ProductsScreen() {
               <Text variant="labelMedium">Product ID:</Text>
             </View>
             <View>
-              <Text variant="labelMedium">{product.id}</Text>
+              <Text variant="labelMedium">{product?.id}</Text>
             </View>
           </View>
 
@@ -176,7 +193,7 @@ function ProductsScreen() {
               <Text variant="labelMedium">Unit Price:</Text>
             </View>
             <View>
-              <Text variant="labelMedium">₹{product.unit_price}</Text>
+              <Text variant="labelMedium">₹{product?.price}</Text>
             </View>
           </View>
 
@@ -201,8 +218,8 @@ function ProductsScreen() {
             <View style={{ width: "50%" }}>
               <InputPaper
                 label="Discount"
-                onChangeText={(txt: string) => setDiscount(txt)}
-                value={discount}
+                onChangeText={(discount: number) => setDiscountState(discount)}
+                value={discountState}
                 keyboardType="numeric"
                 mode="outlined"
               />
@@ -240,10 +257,10 @@ function ProductsScreen() {
               backgroundColor={theme.colors.surfaceVariant}>
               {filteredItems.map(item => (
                 <ProductListSuggestion
-                  key={item.id}
-                  itemName={item.item}
+                  key={item?.id}
+                  itemName={item?.item_name}
                   onPress={() => productDetails(item)}
-                  unitPrice={item.unit_price}
+                  unitPrice={item?.price}
                 />
               ))}
             </ScrollableListContainer>
@@ -253,16 +270,16 @@ function ProductsScreen() {
             <ScrollableListContainer
               backgroundColor={theme.colors.pinkContainer}>
               {addedProductsList.map(item => {
-                netTotal += item.unit_price * item["quantity"]
-                totalDiscount += parseInt(item["discount"])
+                netTotal += item?.price * item["quantity"]
+                totalDiscount += item["discount"]
                 return (
                   <AddedProductList
-                    key={item.id}
-                    itemName={item.item}
+                    key={item?.id}
+                    itemName={item?.item_name}
                     quantity={item["quantity"]}
-                    unitPrice={item.unit_price}
+                    unitPrice={item?.price}
                     discount={item["discount"]}
-                    unit={item.unit}
+                  // unit={item.unit}
                   />
                 )
               })}
@@ -270,23 +287,31 @@ function ProductsScreen() {
           )}
 
           {netTotal > 0 && (
-            <NetTotalButton
-              backgroundColor={theme.colors.greenContainer}
-              textColor={theme.colors.onGreenContainer}
-              netTotal={netTotal}
-              totalDiscount={totalDiscount}
-              onPress={async () =>
-                // ToastAndroid.showWithGravityAndOffset(
-                //   "Printing feature will be added in some days.",
-                //   ToastAndroid.SHORT,
-                //   ToastAndroid.CENTER,
-                //   25,
-                //   50,
-                // )
-                // await printReceipt()
-                await printReceiptWithoutGst()
-              }
-            />
+            <>
+              <NetTotalButton
+                disabled
+                backgroundColor={theme.colors.greenContainer}
+                textColor={theme.colors.onGreenContainer}
+                netTotal={netTotal}
+                totalDiscount={totalDiscount}
+                onPress={async () =>
+                  // ToastAndroid.showWithGravityAndOffset(
+                  //   "Printing feature will be added in some days.",
+                  //   ToastAndroid.SHORT,
+                  //   ToastAndroid.CENTER,
+                  //   25,
+                  //   50,
+                  // )
+                  // await printReceipt()
+                  await printReceiptWithoutGst()
+                }
+              />
+              <View style={{ padding: normalize(20) }}>
+                <ButtonPaper mode="text" textColor={theme.colors.purple} onPress={() => console.log("PRINTING RCPT")}>
+                  PRINT RECEIPT
+                </ButtonPaper>
+              </View>
+            </>
           )}
         </View>
       </ScrollView>
