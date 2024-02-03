@@ -28,7 +28,7 @@ function SettingsScreen() {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView onScroll={onScroll}>
         <View style={{ alignItems: "center" }}>
           <HeaderImage

@@ -6,7 +6,7 @@ import {
   PixelRatio,
   View,
 } from "react-native"
-import normalize from "react-native-normalize"
+import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from "react-native-normalize"
 import { IconButton, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 
@@ -42,8 +42,8 @@ export default function HeaderImage({
             onPress={() => navigation.goBack()}
             style={{
               position: "absolute",
-              top: normalize(20),
-              right: normalize(110),
+              top: SCREEN_HEIGHT / 40,
+              right: SCREEN_WIDTH / 3.2,
               zIndex: 10,
             }}
           />
@@ -66,10 +66,12 @@ export default function HeaderImage({
 
 const styles = StyleSheet.create({
   surface: {
-    margin: 20,
-    height: PixelRatio.roundToNearestPixel(200),
-    borderRadius: 30,
-    width: PixelRatio.roundToNearestPixel(330),
+    margin: normalize(20),
+    // height: PixelRatio.roundToNearestPixel(200),
+    height: SCREEN_HEIGHT / 3.6,
+    borderRadius: normalize(30),
+    // width: PixelRatio.roundToNearestPixel(330),
+    width: SCREEN_WIDTH / 1.16,
     alignItems: "center",
     justifyContent: "center",
   },

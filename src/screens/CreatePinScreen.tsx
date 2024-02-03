@@ -60,8 +60,8 @@ const CreatePinScreen = () => {
 
                     <View style={{ justifyContent: 'center' }}>
                         <View style={{ padding: normalize(20), marginVertical: SCREEN_HEIGHT / 20 }}>
-                            <InputPaper label='Enter New PIN' value={pin} onChangeText={setPin} keyboardType='number-pad' leftIcon='security' maxLength={4} secureTextEntry />
-                            <InputPaper label='Re-Enter PIN' value={confirmPin} onChangeText={setConfirmPin} keyboardType='number-pad' leftIcon='security' maxLength={4} secureTextEntry />
+                            <InputPaper label='Enter New PIN' value={pin} onChangeText={(pin: string) => setPin(pin)} keyboardType='number-pad' leftIcon='security' maxLength={4} secureTextEntry />
+                            <InputPaper label='Re-Enter PIN' value={confirmPin} onChangeText={(confirmPin: string) => setConfirmPin(confirmPin)} keyboardType='number-pad' leftIcon='security' maxLength={4} secureTextEntry />
                         </View>
                         <View style={{ padding: normalize(20) }}>
                             <ButtonPaper

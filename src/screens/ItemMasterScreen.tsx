@@ -75,7 +75,7 @@ export default function ItemMasterScreen() {
     }
 
     return (
-        <SafeAreaView style={{ height: "100%" }}>
+        <SafeAreaView style={[{ backgroundColor: theme.colors.background, height: "100%" }]}>
             <ScrollView onScroll={onScroll}>
                 <View style={{ alignItems: "center" }}>
                     <HeaderImage

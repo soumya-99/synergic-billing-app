@@ -6,14 +6,13 @@ import {
   PixelRatio,
   ToastAndroid,
 } from "react-native"
-import { Appbar, Searchbar, Text } from "react-native-paper"
+import { Searchbar, Text } from "react-native-paper"
 import HeaderImage from "../components/HeaderImage"
 import { productHeader, productHeaderDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
-import { useContext, useEffect, useState } from "react"
-import PRODUCTS_DATA from "../data/products_dummy_data.json"
+import { useEffect, useState } from "react"
 import DialogBox from "../components/DialogBox"
-import { useIsFocused, useNavigation } from "@react-navigation/native"
+import { CommonActions, useIsFocused, useNavigation } from "@react-navigation/native"
 import InputPaper from "../components/InputPaper"
 import normalize from "react-native-normalize"
 import ProductListSuggestion from "../components/ProductListSuggestion"
@@ -21,18 +20,17 @@ import AddedProductList from "../components/AddedProductList"
 import ScrollableListContainer from "../components/ScrollableListContainer"
 import NetTotalButton from "../components/NetTotalButton"
 import { clearStates } from "../utils/clearStates"
-import { useBluetoothPrint } from "../hooks/printables/useBluetoothPrint"
 import { loginStorage } from "../storage/appStorage"
 import { ItemsData } from "../models/api_types"
 import useItems from "../hooks/api/useItems"
 import ButtonPaper from "../components/ButtonPaper"
+import navigationRoutes from "../routes/navigationRoutes"
 
 function ProductsScreen() {
   const navigation = useNavigation()
   const isFocused = useIsFocused()
 
   const theme = usePaperColorScheme()
-  const { printReceipt, printReceiptWithoutGst } = useBluetoothPrint()
 
   const [visible, setVisible] = useState(() => false)
   const hideDialog = () => setVisible(() => false)
@@ -295,19 +293,23 @@ function ProductsScreen() {
                 netTotal={netTotal}
                 totalDiscount={totalDiscount}
                 onPress={async () =>
-                  // ToastAndroid.showWithGravityAndOffset(
-                  //   "Printing feature will be added in some days.",
-                  //   ToastAndroid.SHORT,
-                  //   ToastAndroid.CENTER,
-                  //   25,
-                  //   50,
-                  // )
+                  ToastAndroid.showWithGravityAndOffset(
+                    "Printing feature will be added in some days.",
+                    ToastAndroid.SHORT,
+                    ToastAndroid.CENTER,
+                    25,
+                    50,
+                  )
                   // await printReceipt()
-                  await printReceiptWithoutGst()
+                  // await printReceiptWithoutGst()
                 }
               />
               <View style={{ padding: normalize(20) }}>
-                <ButtonPaper mode="text" textColor={theme.colors.purple} onPress={() => console.log("PRINTING RCPT")}>
+                <ButtonPaper mode="text" textColor={theme.colors.purple} onPress={() => navigation.dispatch(
+                  CommonActions.navigate({
+                    name: navigationRoutes.customerDetailsFillScreen,
+                  })
+                )}>
                   PRINT RECEIPT
                 </ButtonPaper>
               </View>
