@@ -14,7 +14,7 @@ import { useContext, useEffect, useState } from "react"
 import DialogBox from "../components/DialogBox"
 import { CommonActions, useIsFocused, useNavigation } from "@react-navigation/native"
 import InputPaper from "../components/InputPaper"
-import normalize, { SCREEN_WIDTH } from "react-native-normalize"
+import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from "react-native-normalize"
 import ProductListSuggestion from "../components/ProductListSuggestion"
 import AddedProductList from "../components/AddedProductList"
 import ScrollableListContainer from "../components/ScrollableListContainer"
@@ -37,6 +37,7 @@ function ProductsScreen() {
 
   const [visible, setVisible] = useState(() => false)
   const hideDialog = () => setVisible(() => false)
+  const [editState, setEditState] = useState<boolean>(() => false)
 
   const [search, setSearch] = useState<string>(() => "")
   const [filteredItems, setFilteredItems] = useState<ItemsData[]>(
@@ -50,19 +51,15 @@ function ProductsScreen() {
   const [items, setItems] = useState<ItemsData[]>(() => [])
   const [product, setProduct] = useState<ItemsData>()
 
-  const [noOfProducts, setNoOfProducts] = useState<string>(() => "")
+  const [quantity, setQuantity] = useState<number>(() => undefined)
   const [discountState, setDiscountState] = useState<number>(() => 0)
 
   const [addedProductsList, setAddedProductsList] = useState<
     ItemsData[]
   >(() => [])
 
-  // const [netTotal, setNetTotal] = useState<number>(() => 0)
-
   let totalPrice = 0
   let totalDiscountedAmount = 0
-  let netTotal = 0
-
 
   const handleGetItems = async () => {
     const companyId = loginStore.comp_id
@@ -91,19 +88,65 @@ function ProductsScreen() {
     setVisible(!visible)
   }
 
+  const productEditAndDelete = (item: ItemsData) => {
+    setEditState(true)
+
+    setProduct(item)
+    setQuantity(item?.quantity)
+    setDiscountState(item?.discount)
+    setVisible(!visible)
+  }
+
+  const handleOnDelete = (product: ItemsData) => {
+    setAddedProductsList(prevData => prevData?.filter((item, index) => item.id !== product.id))
+
+    setVisible(!visible)
+    setEditState(false)
+  }
+
   const onDialogFailure = () => {
+    setEditState(false)
     setSearch(() => "")
     setVisible(!visible)
   }
 
   const onDialogSuccecss = () => {
-    if (noOfProducts.trim() !== "" && !/^0+$/.test(noOfProducts)) {
+    setEditState(false)
+    if (quantity.toString().trim() !== "" && !/^0+$/.test(quantity.toString())) {
       console.log("OK PRODUCT: ", product?.item_name)
       addProducts()
 
       discountState > 0 ? setDiscountState(() => discountState) : setDiscountState(() => product?.discount)
 
-      clearStates([setSearch, setNoOfProducts], () => "")
+      clearStates([setSearch, setQuantity], () => "")
+      setDiscountState(() => 0)
+      setVisible(!visible)
+      setFilteredItems(() => [])
+    } else {
+      ToastAndroid.show(
+        "Try adding some items.",
+        ToastAndroid.SHORT,
+      )
+    }
+  }
+
+  const onDialogUpdate = (product: ItemsData) => {
+    setEditState(false)
+    if (quantity.toString().trim() !== "" && !/^0+$/.test(quantity.toString())) {
+      console.log("OK PRODUCT UPDATE: ", product?.item_name)
+
+      let filteredSingleProductArray = addedProductsList?.filter((item, index) => (
+        item?.id === product?.id
+      ))
+
+      filteredSingleProductArray[0]["quantity"] = quantity
+      filteredSingleProductArray[0]["discount"] = discountState
+
+      discountState > 0 ? setDiscountState(() => discountState) : setDiscountState(() => product?.discount)
+
+      setProduct(filteredSingleProductArray[0])
+
+      clearStates([setSearch, setQuantity], () => "")
       setDiscountState(() => 0)
       setVisible(!visible)
       setFilteredItems(() => [])
@@ -117,12 +160,12 @@ function ProductsScreen() {
 
   const addProducts = () => {
     addedProductsList.push(product)
-    product["quantity"] = parseInt(noOfProducts)
+    product["quantity"] = quantity
     if (discountState > 0)
       product["discount"] = discountState!
     setAddedProductsList([...addedProductsList])
     console.log(
-      "==========UPDATED ADDED PRODUCTS LIST==========",
+      "==========ADDED PRODUCTS LIST==========",
       addedProductsList,
     )
   }
@@ -135,10 +178,10 @@ function ProductsScreen() {
         visible={visible}
         hide={hideDialog}
         titleStyle={styles.title}
-        btnSuccess="ADD"
+        btnSuccess={!editState ? "ADD" : "UPDATE"}
         onFailure={onDialogFailure}
-        onSuccess={onDialogSuccecss}>
-        <View style={{ justifyContent: "space-between", height: 150 }}>
+        onSuccess={!editState ? onDialogSuccecss : () => onDialogUpdate(product)}>
+        <View style={styles.modalContainer}>
           <View style={{ alignItems: "center" }}>
             <View>
               <Text variant="titleLarge">{product?.item_name}</Text>
@@ -150,11 +193,10 @@ function ProductsScreen() {
               justifyContent: "space-between",
               alignItems: "center",
               flexDirection: "row",
-              marginLeft: 10,
-              marginRight: 10,
+              marginHorizontal: SCREEN_WIDTH / 10
             }}>
             <View>
-              <Text variant="labelMedium">Product ID:</Text>
+              <Text variant="labelMedium">PRODUCT ID:</Text>
             </View>
             <View>
               <Text variant="labelMedium">{product?.id}</Text>
@@ -166,18 +208,17 @@ function ProductsScreen() {
               justifyContent: "space-between",
               alignItems: "center",
               flexDirection: "row",
-              marginLeft: 10,
-              marginRight: 10,
+              marginHorizontal: SCREEN_WIDTH / 10
             }}>
             <View>
-              <Text variant="labelMedium">Unit Price:</Text>
+              <Text variant="labelMedium">UNIT PRICE:</Text>
             </View>
             <View>
               <Text variant="labelMedium">₹{product?.price}</Text>
             </View>
           </View>
 
-          <View></View>
+          {/* <View></View> */}
           <View
             style={{
               flexDirection: "row",
@@ -188,8 +229,8 @@ function ProductsScreen() {
             <View style={{ width: "50%" }}>
               <InputPaper
                 label="Quantity"
-                onChangeText={(txt: string) => setNoOfProducts(txt)}
-                value={noOfProducts}
+                onChangeText={(txt: number) => setQuantity(txt)}
+                value={quantity}
                 keyboardType="numeric"
                 autoFocus={true}
                 mode="outlined"
@@ -205,6 +246,11 @@ function ProductsScreen() {
               />
             </View>
           </View>
+          {editState && <View>
+            <ButtonPaper mode="text" textColor={theme.colors.purple} icon="trash-can-outline" onPress={() => handleOnDelete(product)}>
+              DELETE ITEM
+            </ButtonPaper>
+          </View>}
         </View>
       </DialogBox>
       <ScrollView keyboardShouldPersistTaps="handled">
@@ -256,7 +302,7 @@ function ProductsScreen() {
                   ? totalDiscountedAmount += item["discount"]
                   : totalDiscountedAmount += parseFloat((item?.price * item["quantity"] * item["discount"] / 100).toFixed(2))
                 console.log("totalDiscount", totalDiscountedAmount)
-                
+
                 return (
                   <AddedProductList
                     key={item?.id}
@@ -264,7 +310,7 @@ function ProductsScreen() {
                     quantity={item["quantity"]}
                     unitPrice={item?.price}
                     discount={item["discount"]}
-                  // unit={item.unit}
+                    onPress={() => productEditAndDelete(item)}
                   />
                 )
               })}
@@ -318,8 +364,12 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
   },
-
   title: {
     textAlign: "center",
   },
+  modalContainer: {
+    justifyContent: "space-between",
+    minHeight: SCREEN_HEIGHT / 4,
+    height: "auto"
+  }
 })

@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { View } from "react-native"
+import { TouchableOpacity, View } from "react-native"
 import normalize from "react-native-normalize"
 import { Divider, Text } from "react-native-paper"
 import { AppStore } from "../context/AppContext"
@@ -10,6 +10,7 @@ type AddedProductListProps = {
   itemName: string
   unitPrice: number
   quantity: number
+  onPress: () => void
   discount?: number
   unit?: string
 }
@@ -18,6 +19,7 @@ export default function AddedProductList({
   itemName,
   unitPrice,
   quantity,
+  onPress,
   discount,
   unit,
 }: AddedProductListProps) {
@@ -26,7 +28,8 @@ export default function AddedProductList({
   return (
     receiptSettings?.gst_flag === "N" ? (
       <>
-        <View
+        <TouchableOpacity
+          onPress={onPress}
           style={{
             flex: 0.2,
             justifyContent: "space-between",
@@ -71,7 +74,7 @@ export default function AddedProductList({
               </View>
             ) : (
               <View>
-                <Text>₹{(unitPrice * quantity * discount) / 100}</Text>
+                <Text>₹{((unitPrice * quantity * discount) / 100).toFixed(2)}</Text>
               </View>
             )}
           </View>
@@ -87,15 +90,15 @@ export default function AddedProductList({
             </View>
             {receiptSettings?.discount_type === "A" ? (
               <View>
-                <Text>TOTAL: ₹{unitPrice * quantity - discount}</Text>
+                <Text>TOTAL: ₹{(unitPrice * quantity - discount).toFixed(2)}</Text>
               </View>
             ) : (
               <View>
-                <Text>TOTAL: ₹{((unitPrice * quantity) - ((unitPrice * quantity * discount) / 100))}</Text>
+                <Text>TOTAL: ₹{((unitPrice * quantity) - ((unitPrice * quantity * discount) / 100)).toFixed(2)}</Text>
               </View>
             )}
           </View>
-        </View>
+        </TouchableOpacity>
         <Divider />
       </>
     ) : (

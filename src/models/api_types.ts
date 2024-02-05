@@ -83,5 +83,6 @@ export type ItemsData = {
     price: number,
     discount: number,
     cgst: number,
-    sgst: number
+    sgst: number,
+    quantity?: number
 }
