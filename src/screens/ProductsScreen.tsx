@@ -107,6 +107,7 @@ function ProductsScreen() {
   const onDialogFailure = () => {
     setEditState(false)
     setSearch(() => "")
+    setQuantity(() => undefined)
     setVisible(!visible)
   }
 
@@ -118,7 +119,7 @@ function ProductsScreen() {
 
       for (let item of addedProductsList) {
         if (item?.id === product?.id) {
-          ToastAndroid.show("Can't add duplicate item. Try editing from the list.", ToastAndroid.LONG)
+          ToastAndroid.show("Item already exists. Please edit from the list.", ToastAndroid.LONG)
           isFoundDuplicate = true
           break
         }
@@ -129,7 +130,8 @@ function ProductsScreen() {
 
         discountState > 0 ? setDiscountState(() => discountState) : setDiscountState(() => product?.discount)
 
-        clearStates([setSearch, setQuantity], () => "")
+        clearStates([setSearch], () => "")
+        setQuantity(() => undefined)
         setDiscountState(() => 0)
         setVisible(!visible)
         setFilteredItems(() => [])
