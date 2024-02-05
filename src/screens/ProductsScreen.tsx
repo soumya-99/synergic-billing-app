@@ -14,7 +14,7 @@ import { useContext, useEffect, useState } from "react"
 import DialogBox from "../components/DialogBox"
 import { CommonActions, useIsFocused, useNavigation } from "@react-navigation/native"
 import InputPaper from "../components/InputPaper"
-import normalize from "react-native-normalize"
+import normalize, { SCREEN_WIDTH } from "react-native-normalize"
 import ProductListSuggestion from "../components/ProductListSuggestion"
 import AddedProductList from "../components/AddedProductList"
 import ScrollableListContainer from "../components/ScrollableListContainer"
@@ -86,6 +86,8 @@ function ProductsScreen() {
 
   const productDetails = (item: ItemsData) => {
     setProduct(item)
+
+    setDiscountState(item?.discount)
     setVisible(!visible)
   }
 
@@ -252,9 +254,9 @@ function ProductsScreen() {
 
                 receiptSettings?.discount_type === "A"
                   ? totalDiscountedAmount += item["discount"]
-                  : totalDiscountedAmount += (item?.price * item["quantity"] * item["discount"] / 100)
-
+                  : totalDiscountedAmount += parseFloat((item?.price * item["quantity"] * item["discount"] / 100).toFixed(2))
                 console.log("totalDiscount", totalDiscountedAmount)
+                
                 return (
                   <AddedProductList
                     key={item?.id}
@@ -288,7 +290,7 @@ function ProductsScreen() {
                   )
                 }
               />
-              <View style={{ padding: normalize(20) }}>
+              <View style={{ padding: normalize(15), width: SCREEN_WIDTH / 1.16, alignSelf: "center", justifyContent: "center", }}>
                 <ButtonPaper mode="text" textColor={theme.colors.purple} onPress={() => navigation.dispatch(
                   CommonActions.navigate({
                     name: navigationRoutes.customerDetailsFillScreen,

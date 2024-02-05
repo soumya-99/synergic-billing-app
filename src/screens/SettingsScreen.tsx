@@ -9,7 +9,7 @@ import normalize from "react-native-normalize"
 import ReportButtonsWrapper from "../components/ReportButtonsWrapper"
 import ReportButton from "../components/ReportButton"
 import { usePaperColorScheme } from "../theme/theme"
-import { useNavigation } from "@react-navigation/native"
+import { CommonActions, useNavigation } from "@react-navigation/native"
 import navigationRoutes from "../routes/navigationRoutes"
 
 function SettingsScreen() {
@@ -51,8 +51,12 @@ function SettingsScreen() {
             text="Master"
             color={theme.colors.greenContainer}
             icon="billboard"
-            //@ts-ignore
-            onPress={() => navigation.navigate(navigationRoutes.masterChooseScreen)}
+            onPress={() =>
+              navigation.dispatch(
+                CommonActions.navigate({
+                  name: navigationRoutes.masterChooseScreen,
+                })
+              )}
           />
           <ReportButton
             text="Item Wise"
@@ -100,7 +104,13 @@ function SettingsScreen() {
             text="Printer Connect"
             color={theme.colors.greenContainer}
             icon="printer"
-            onPress={() => navigation.navigate(navigationRoutes.printMain as never)}
+            onPress={() =>
+              navigation.dispatch(
+                CommonActions.navigate({
+                  name: navigationRoutes.printMain,
+                })
+              )
+            }
           />
         </ReportButtonsWrapper>
       </ScrollView>

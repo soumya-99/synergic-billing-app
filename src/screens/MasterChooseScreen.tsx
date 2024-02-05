@@ -6,7 +6,7 @@ import ReportButtonsWrapper from '../components/ReportButtonsWrapper'
 import ReportButton from '../components/ReportButton'
 import { usePaperColorScheme } from '../theme/theme'
 import { blurReport, blurReportDark } from '../resources/images'
-import { useNavigation } from '@react-navigation/native'
+import { CommonActions, useNavigation } from '@react-navigation/native'
 import navigationRoutes from '../routes/navigationRoutes'
 
 export default function MasterChooseScreen() {
@@ -29,8 +29,12 @@ export default function MasterChooseScreen() {
             text="Item Master"
             color={theme.colors.greenContainer}
             icon="billboard"
-            //@ts-ignore
-            onPress={() => navigation.navigate(navigationRoutes.itemMasterScreen)}
+            onPress={() =>
+              navigation.dispatch(
+                CommonActions.navigate({
+                  name: navigationRoutes.itemMasterScreen,
+                })
+              )}
           />
           <ReportButton
             text="Storage Master"

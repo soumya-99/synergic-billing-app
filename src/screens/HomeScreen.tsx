@@ -12,7 +12,7 @@ import { usePaperColorScheme } from "../theme/theme"
 import HeaderImage from "../components/HeaderImage"
 import { flowerHome, flowerHomeDark } from "../resources/images"
 import navigationRoutes from "../routes/navigationRoutes"
-import { useIsFocused, useNavigation } from "@react-navigation/native"
+import { CommonActions, useIsFocused, useNavigation } from "@react-navigation/native"
 import SurfacePaper from "../components/SurfacePaper"
 import DialogBox from "../components/DialogBox"
 import normalize from "react-native-normalize"
@@ -154,8 +154,11 @@ function HomeScreen() {
               <Button
                 textColor={theme.colors.onPinkContainer}
                 onPress={() =>
-                  //@ts-ignore
-                  navigation.navigate(navigationRoutes.allBillsScreen)
+                  navigation.dispatch(
+                    CommonActions.navigate({
+                      name: navigationRoutes.allBillsScreen,
+                    })
+                  )
                 }>
                 ALL BILLS
               </Button>
@@ -268,8 +271,12 @@ function HomeScreen() {
       <AnimatedFABPaper
         icon="plus"
         label="Bill"
-        //@ts-ignore
-        onPress={() => navigation.navigate(navigationRoutes.productsScreen)}
+        onPress={() =>
+          navigation.dispatch(
+            CommonActions.navigate({
+              name: navigationRoutes.productsScreen,
+            })
+          )}
         extended={isExtended}
         animateFrom="right"
         iconMode="dynamic"
