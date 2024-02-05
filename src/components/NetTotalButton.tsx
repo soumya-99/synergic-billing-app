@@ -61,11 +61,11 @@ export default function NetTotalButton({
             <Text style={{ color: textColor }}>NET AMOUNT</Text>
           </View>
           <View>
-            <Text style={{ color: textColor }}>₹{netTotal}</Text>
-            <Text style={{ color: textColor }}>₹{totalDiscount}</Text>
+            <Text style={{ color: textColor }}>₹{netTotal?.toFixed(2)}</Text>
+            <Text style={{ color: textColor }}>₹{totalDiscount?.toFixed(2)}</Text>
             <Text style={{ color: textColor }}>
               ₹
-              {netTotal - totalDiscount}
+              {(netTotal - totalDiscount).toFixed(2)}
             </Text>
           </View>
         </View>

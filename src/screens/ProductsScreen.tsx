@@ -111,23 +111,36 @@ function ProductsScreen() {
   }
 
   const onDialogSuccecss = () => {
+    let isFoundDuplicate = false
     setEditState(false)
     if (quantity.toString().trim() !== "" && !/^0+$/.test(quantity.toString())) {
       console.log("OK PRODUCT: ", product?.item_name)
-      addProducts()
 
-      discountState > 0 ? setDiscountState(() => discountState) : setDiscountState(() => product?.discount)
+      for (let item of addedProductsList) {
+        if (item?.id === product?.id) {
+          ToastAndroid.show("Can't add duplicate item. Try editing from the list.", ToastAndroid.LONG)
+          isFoundDuplicate = true
+          break
+        }
+      }
 
-      clearStates([setSearch, setQuantity], () => "")
-      setDiscountState(() => 0)
-      setVisible(!visible)
-      setFilteredItems(() => [])
+      if (!isFoundDuplicate) {
+        addProducts()
+
+        discountState > 0 ? setDiscountState(() => discountState) : setDiscountState(() => product?.discount)
+
+        clearStates([setSearch, setQuantity], () => "")
+        setDiscountState(() => 0)
+        setVisible(!visible)
+        setFilteredItems(() => [])
+      }
     } else {
       ToastAndroid.show(
         "Try adding some items.",
         ToastAndroid.SHORT,
       )
     }
+
   }
 
   const onDialogUpdate = (product: ItemsData) => {
@@ -146,7 +159,8 @@ function ProductsScreen() {
 
       setProduct(filteredSingleProductArray[0])
 
-      clearStates([setSearch, setQuantity], () => "")
+      clearStates([setSearch], () => "")
+      setQuantity(() => undefined)
       setDiscountState(() => 0)
       setVisible(!visible)
       setFilteredItems(() => [])
