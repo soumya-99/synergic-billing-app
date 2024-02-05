@@ -71,11 +71,11 @@ export default function NetTotalButton({
             </Text>
             <Text style={{ color: textColor }}>
               ₹
-              {(Math.ceil(parseFloat((netTotal - totalDiscount).toFixed(2))) - parseFloat((netTotal - totalDiscount).toFixed(2))).toFixed(2)}
+              {(Math.round(parseFloat((netTotal - totalDiscount).toFixed(2))) - parseFloat((netTotal - totalDiscount).toFixed(2))).toFixed(2)}
             </Text>
             <Text style={{ color: textColor }}>
               ₹
-              {Math.ceil(parseFloat((netTotal - totalDiscount).toFixed(2)))}
+              {Math.round(parseFloat((netTotal - totalDiscount).toFixed(2)))}
             </Text>
           </View>
         </View>
