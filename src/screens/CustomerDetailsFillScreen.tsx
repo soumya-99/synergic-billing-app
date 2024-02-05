@@ -4,19 +4,28 @@ import LinearGradient from 'react-native-linear-gradient'
 import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from 'react-native-normalize'
 import { usePaperColorScheme } from '../theme/theme'
 import InputPaper from '../components/InputPaper'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import ButtonPaper from '../components/ButtonPaper'
 import useCreatePin from '../hooks/api/useCreatePin'
-import { CommonActions, useNavigation, useRoute } from '@react-navigation/native'
+import { CommonActions, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { clearStates } from '../utils/clearStates'
 import navigationRoutes from '../routes/navigationRoutes'
 import HeaderImage from '../components/HeaderImage'
 import { productHeader, productHeaderDark } from '../resources/images'
 import { useBluetoothPrint } from '../hooks/printables/useBluetoothPrint'
+import NetTotalButton from '../components/NetTotalButton'
+import { AppStore } from '../context/AppContext'
+
+// type RouteProp<ParamListBase> = {
+//     net_total: number
+//     total_discount: number
+// }
 
 const CustomerDetailsFillScreen = () => {
     const navigation = useNavigation()
     const { params } = useRoute()
+
+    const { receiptSettings } = useContext(AppStore)
 
     const { printReceipt, printReceiptWithoutGst } = useBluetoothPrint()
 
@@ -59,22 +68,44 @@ const CustomerDetailsFillScreen = () => {
                         <Text variant='displayMedium' style={{ color: theme.colors.onPrimary, textAlign: 'center' }}>Customer Details</Text>
                     </View> */}
 
-                    <View style={{ justifyContent: 'center' }}>
+                    <View>
+                        <NetTotalButton
+                            disabled
+                            backgroundColor={theme.colors.primaryContainer}
+                            textColor={theme.colors.onPrimaryContainer}
+                            // addedProductsList={addedProductsList}
+                            //@ts-ignore
+                            netTotal={params?.net_total}
+                            //@ts-ignore
+                            totalDiscount={params?.total_discount}
+                            onPress={() =>
+                                ToastAndroid.showWithGravityAndOffset(
+                                    "Printing feature will be added in some days.",
+                                    ToastAndroid.SHORT,
+                                    ToastAndroid.CENTER,
+                                    25,
+                                    50,
+                                )
+                            }
+                        />
+                    </View>
+
+                    {receiptSettings?.cust_inf === "Y" && (<View style={{ justifyContent: 'center' }}>
                         <View style={{ padding: normalize(20), marginVertical: SCREEN_HEIGHT / 20 }}>
                             <InputPaper label='Enter Name (Optional)' value={customerName} onChangeText={(confirmPin: string) => setCustomerName(confirmPin)} keyboardType='default' leftIcon='account-circle-outline' maxLength={15} customStyle={{ marginBottom: normalize(10) }} />
 
                             <InputPaper label='Enter Mobile (Optional)' value={customerMobileNumber} onChangeText={(pin: string) => setCustomerMobileNumber(pin)} keyboardType='number-pad' leftIcon='card-account-phone-outline' maxLength={10} />
                         </View>
-                        <View style={{ padding: normalize(20) }}>
-                            <ButtonPaper
-                                mode="contained"
-                                buttonColor={theme.colors.primary}
-                                textColor={theme.colors.primaryContainer}
-                                onPress={handlePrintReceipt}
-                                icon="arrow-right">
-                                PRINT
-                            </ButtonPaper>
-                        </View>
+                    </View>)}
+                    <View style={{ padding: normalize(20) }}>
+                        <ButtonPaper
+                            mode="contained"
+                            buttonColor={theme.colors.primary}
+                            textColor={theme.colors.primaryContainer}
+                            onPress={handlePrintReceipt}
+                            icon="arrow-right">
+                            PRINT
+                        </ButtonPaper>
                     </View>
                 </LinearGradient>
             </ScrollView>
