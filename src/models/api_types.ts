@@ -86,3 +86,11 @@ export type ItemsData = {
     sgst: number,
     quantity?: number
 }
+
+export type SaleInsertData = {
+    status: number
+    data: {
+        status: number
+        data: number
+    }
+}

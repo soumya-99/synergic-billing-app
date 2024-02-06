@@ -33,11 +33,11 @@ const AppContext = ({ children }) => {
 
   const isLoggedIn = () => {
     if (loginStorage.getAllKeys().length === 0) {
-      console.log("IF - isLoggedIn");
-      setIsLogin(isLogin);
+      console.log("IF - isLoggedIn")
+      setIsLogin(isLogin)
     } else {
-      console.log("ELSE - isLoggedIn");
-      setIsLogin(!isLogin);
+      console.log("ELSE - isLoggedIn")
+      setIsLogin(!isLogin)
     }
   };
 
@@ -45,7 +45,7 @@ const AppContext = ({ children }) => {
     if (appState.current === "active") {
       isLoggedIn()
     }
-  }, []);
+  }, [])
 
   const handleGetReceiptSettings = async () => {
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
@@ -64,7 +64,7 @@ const AppContext = ({ children }) => {
   }, [isLogin])
 
   const handleLogout = () => {
-    loginStorage.clearAll();
+    loginStorage.clearAll()
     setIsLogin(!isLogin)
   }
 

@@ -8,4 +8,5 @@ export const ADDRESSES = {
     LOGIN: `${BASE_URL}/api/login`,
     RECEIPT_SETTINGS: `${BASE_URL}/api/receipt_settings`,
     ITEMS: `${BASE_URL}/api/items`,
+    SALE_INSERT: `${BASE_URL}/api/saleinsert`,
 }
