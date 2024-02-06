@@ -67,6 +67,7 @@ export default function HeaderImage({
 const styles = StyleSheet.create({
   surface: {
     margin: normalize(20),
+    padding: normalize(20),
     // height: PixelRatio.roundToNearestPixel(200),
     height: SCREEN_HEIGHT / 3.7,
     borderRadius: normalize(30),

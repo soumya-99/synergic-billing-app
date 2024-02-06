@@ -69,7 +69,7 @@ const AppContext = ({ children }) => {
   }
 
   return (
-    <AppStore.Provider value={{ isLogin, handleLogin, handleLogout, receiptSettings }}>
+    <AppStore.Provider value={{ isLogin, handleLogin, handleLogout, receiptSettings, handleGetReceiptSettings }}>
       {children}
     </AppStore.Provider>
   )

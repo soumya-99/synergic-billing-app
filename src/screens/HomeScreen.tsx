@@ -4,8 +4,9 @@ import {
   SafeAreaView,
   View,
   ToastAndroid,
+  RefreshControl,
 } from "react-native"
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import AnimatedFABPaper from "../components/AnimatedFABPaper"
 import { Button, Divider, List, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
@@ -23,6 +24,7 @@ import { loginStorage } from "../storage/appStorage"
 import useReceiptSettings from "../hooks/api/useReceiptSettings"
 import { ItemsData } from "../models/api_types"
 import useItems from "../hooks/api/useItems"
+import { AppStore } from "../context/AppContext"
 
 // type ProductsDataObject = {
 //   id: number
@@ -37,28 +39,25 @@ function HomeScreen() {
   const navigation = useNavigation()
   const isFocused = useIsFocused()
 
-  // const { fetchReceiptSettings } = useReceiptSettings()
+  const { handleGetReceiptSettings } = useContext(AppStore)
 
   const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
   const theme = usePaperColorScheme()
-  const [isExtended, setIsExtended] = useState(() => true)
+  const [isExtended, setIsExtended] = useState<boolean>(() => true)
 
   const [addedProductsList, setAddedProductsList] = useState<ItemsData[]>(() => [])
+  const [refreshing, setRefreshing] = useState<boolean>(() => false);
 
   let netTotal = 0
 
-  // const handleGetReceiptSettings = async () => {
-  //   const companyId = loginStore.comp_id
-  //   let receiptSettingsData = await fetchReceiptSettings(companyId)
-  //   console.log("receiptSettingsData", receiptSettingsData[0])
-
-  //   // receiptSettingsStorage.set("receipt-settings-store", JSON.stringify(receiptSettingsData[0]));
-  // }
-
-  // useEffect(() => {
-  // handleGetReceiptSettings()
-  // }, [isFocused])
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    handleGetReceiptSettings()
+    setTimeout(() => {
+      setRefreshing(false)
+    }, 2000)
+  }, [])
 
   const onScroll = ({ nativeEvent }) => {
     const currentScrollPosition = Math.floor(nativeEvent?.contentOffset?.y) ?? 0
@@ -87,7 +86,9 @@ function HomeScreen() {
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <ScrollView onScroll={onScroll} keyboardShouldPersistTaps="handled">
+      <ScrollView onScroll={onScroll} keyboardShouldPersistTaps="handled" refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
         <View style={{ alignItems: "center" }}>
           <HeaderImage
             imgLight={flowerHome}

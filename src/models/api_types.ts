@@ -49,10 +49,10 @@ export type LoginData = {
 
 export type ReceiptSettingsData = {
     comp_id: number
-    rcpt_type: "B"
+    rcpt_type: "B" | "S" | "P"
     gst_flag: "N" | "Y"
-    cust_inf: "Y"
-    pay_mode: "Y"
+    cust_inf: "Y" | "N"
+    pay_mode: "Y" | "N"
     created_by: string
     created_at: string
     modified_by: string
