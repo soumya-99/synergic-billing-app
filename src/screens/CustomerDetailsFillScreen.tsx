@@ -43,6 +43,9 @@ const CustomerDetailsFillScreen = () => {
     const handleSendSaleData = async () => {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
         const branchId = loginStore.br_id
+        const createdBy = loginStore.user_name
+
+        console.log("createdBy", createdBy)
 
         //@ts-ignore
         // (params?.added_products as [])
@@ -53,8 +56,8 @@ const CustomerDetailsFillScreen = () => {
                 const { cgst, sgst, com_id, discount, item_id, quantity, price } = item
 
                 return {
-                    cgst_amt: cgst,
-                    sgst_amt: sgst,
+                    cgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
+                    sgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
                     comp_id: com_id,
                     discount_amt: (((price * quantity * discount) / 100).toFixed(2)),
                     item_id: item_id,
@@ -62,8 +65,11 @@ const CustomerDetailsFillScreen = () => {
                     price: price,
                     br_id: parseInt(branchId),
                     amount: ((price * quantity) - ((price * quantity * discount) / 100)).toFixed(2), pay_mode: checked,
-                    received_amt: finalCashAmount.toString(),
-                    pay_dtls: "something P"
+                    received_amt: cashAmount.toString(),
+                    pay_dtls: "something P",
+                    cust_name: customerName,
+                    phone_no: customerMobileNumber,
+                    created_by: createdBy.toString()
                 }
             })
         } else {
@@ -72,8 +78,8 @@ const CustomerDetailsFillScreen = () => {
                 const { cgst, sgst, com_id, discount, item_id, quantity, price } = item
 
                 return {
-                    cgst_amt: cgst,
-                    sgst_amt: sgst,
+                    cgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
+                    sgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
                     comp_id: com_id,
                     discount_amt: (discount).toFixed(2),
                     item_id: item_id,
@@ -82,8 +88,11 @@ const CustomerDetailsFillScreen = () => {
                     br_id: parseInt(branchId),
                     amount: (price * quantity - discount).toFixed(2),
                     pay_mode: checked,
-                    received_amt: finalCashAmount.toString(),
-                    pay_dtls: "something A"
+                    received_amt: cashAmount.toString(),
+                    pay_dtls: "something A",
+                    cust_name: customerName,
+                    phone_no: customerMobileNumber,
+                    created_by: createdBy.toString()
                 }
             })
         }
