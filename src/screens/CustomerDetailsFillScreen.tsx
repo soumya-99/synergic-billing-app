@@ -71,7 +71,9 @@ const CustomerDetailsFillScreen = () => {
                     tprice: params?.net_total?.toFixed(2),
                     //@ts-ignore
                     tdiscount_amt: params?.total_discount?.toFixed(2),
-                    amount: ((price * quantity) - ((price * quantity * discount) / 100)).toFixed(2),
+                    // amount: ((price * quantity) - ((price * quantity * discount) / 100)).toFixed(2),
+                    //@ts-ignore
+                    amount: (params?.net_total - params?.total_discount).toFixed(2),
                     //@ts-ignore
                     round_off: (Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) - parseFloat((params?.net_total - params?.total_discount).toFixed(2))).toFixed(2),
                     //@ts-ignore
@@ -104,7 +106,9 @@ const CustomerDetailsFillScreen = () => {
                     tprice: params?.net_total?.toFixed(2),
                     //@ts-ignore
                     tdiscount_amt: params?.total_discount?.toFixed(2),
-                    amount: (price * quantity - discount).toFixed(2),
+                    // amount: (price * quantity - discount).toFixed(2),
+                    //@ts-ignore
+                    amount: (params?.net_total - params?.total_discount).toFixed(2),
                     //@ts-ignore
                     round_off: (Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) - parseFloat((params?.net_total - params?.total_discount).toFixed(2))).toFixed(2),
                     //@ts-ignore

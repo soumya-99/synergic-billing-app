@@ -1,5 +1,6 @@
 import { BluetoothEscposPrinter } from "react-native-bluetooth-escpos-printer"
 import { BASE_64_IMAGE } from "../../resources/base64/logo"
+import { loginStorage } from "../../storage/appStorage"
 // import base64Img fro
 
 export const useBluetoothPrint = () => {
@@ -387,6 +388,8 @@ export const useBluetoothPrint = () => {
 
 
     async function printReceiptWithoutGst(billNo?: number, totalAmt?: number, discount?: number, netAmt?: number) {
+        const loginStore = JSON.parse(loginStorage.getString("login-data"))
+
         try {
 
             let columnWidths = [11, 1, 18]

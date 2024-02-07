@@ -6,9 +6,9 @@ import {
   ToastAndroid,
   RefreshControl,
 } from "react-native"
-import React, { useCallback, useContext, useEffect, useState } from "react"
+import React, { useCallback, useContext, useState } from "react"
 import AnimatedFABPaper from "../components/AnimatedFABPaper"
-import { Button, Divider, List, Text } from "react-native-paper"
+import { Button, List, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import HeaderImage from "../components/HeaderImage"
 import { flowerHome, flowerHomeDark } from "../resources/images"
@@ -17,23 +17,11 @@ import { CommonActions, useIsFocused, useNavigation } from "@react-navigation/na
 import SurfacePaper from "../components/SurfacePaper"
 import DialogBox from "../components/DialogBox"
 import normalize from "react-native-normalize"
-import AddedProductList from "../components/AddedProductList"
 import NetTotalButton from "../components/NetTotalButton"
 import ScrollableListContainer from "../components/ScrollableListContainer"
 import { loginStorage } from "../storage/appStorage"
-import useReceiptSettings from "../hooks/api/useReceiptSettings"
 import { ItemsData } from "../models/api_types"
-import useItems from "../hooks/api/useItems"
 import { AppStore } from "../context/AppContext"
-
-// type ProductsDataObject = {
-//   id: number
-//   item: string
-//   description: string
-//   quantity: number
-//   unit_price: number
-//   unit: string
-// }
 
 function HomeScreen() {
   const navigation = useNavigation()
