@@ -32,6 +32,7 @@ export default function useSaleInsert() {
     //     })
     // }
     const sendSaleDetails = async (productsWithCredentials: FilteredItem[]) => {
+        // console.log("===========***********==========", productsWithCredentials)
         return new Promise<SaleInsertData>((resolve, reject) => {
             axios.post(`${ADDRESSES.SALE_INSERT}`, productsWithCredentials).then(res => {
                 resolve(res.data)

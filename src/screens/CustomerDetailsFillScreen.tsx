@@ -6,7 +6,7 @@ import { usePaperColorScheme } from '../theme/theme'
 import InputPaper from '../components/InputPaper'
 import { useContext, useEffect, useState } from 'react'
 import ButtonPaper from '../components/ButtonPaper'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { CommonActions, useNavigation, useRoute } from '@react-navigation/native'
 import HeaderImage from '../components/HeaderImage'
 import { productHeader, productHeaderDark } from '../resources/images'
 import { useBluetoothPrint } from '../hooks/printables/useBluetoothPrint'
@@ -17,6 +17,7 @@ import useSaleInsert from '../hooks/api/useSaleInsert'
 import { ItemsData } from '../models/api_types'
 import { loginStorage } from '../storage/appStorage'
 import { FilteredItem } from '../models/custom_types'
+import navigationRoutes from '../routes/navigationRoutes'
 
 const CustomerDetailsFillScreen = () => {
     const navigation = useNavigation()
@@ -58,13 +59,24 @@ const CustomerDetailsFillScreen = () => {
                 return {
                     cgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
                     sgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
+                    tcgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
+                    tsgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
                     comp_id: com_id,
                     discount_amt: (((price * quantity * discount) / 100).toFixed(2)),
                     item_id: item_id,
                     qty: quantity,
                     price: price,
                     br_id: parseInt(branchId),
-                    amount: ((price * quantity) - ((price * quantity * discount) / 100)).toFixed(2), pay_mode: checked,
+                    //@ts-ignore
+                    tprice: params?.net_total?.toFixed(2),
+                    //@ts-ignore
+                    tdiscount_amt: params?.total_discount?.toFixed(2),
+                    amount: ((price * quantity) - ((price * quantity * discount) / 100)).toFixed(2),
+                    //@ts-ignore
+                    round_off: (Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) - parseFloat((params?.net_total - params?.total_discount).toFixed(2))).toFixed(2),
+                    //@ts-ignore
+                    net_amt: Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))),
+                    pay_mode: checked,
                     received_amt: cashAmount.toString(),
                     pay_dtls: "something P",
                     cust_name: customerName,
@@ -80,13 +92,23 @@ const CustomerDetailsFillScreen = () => {
                 return {
                     cgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
                     sgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
+                    tcgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
+                    tsgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
                     comp_id: com_id,
                     discount_amt: (discount).toFixed(2),
                     item_id: item_id,
                     qty: quantity,
                     price: price,
                     br_id: parseInt(branchId),
+                    //@ts-ignore
+                    tprice: params?.net_total?.toFixed(2),
+                    //@ts-ignore
+                    tdiscount_amt: params?.total_discount?.toFixed(2),
                     amount: (price * quantity - discount).toFixed(2),
+                    //@ts-ignore
+                    round_off: (Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) - parseFloat((params?.net_total - params?.total_discount).toFixed(2))).toFixed(2),
+                    //@ts-ignore
+                    net_amt: Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))),
                     pay_mode: checked,
                     received_amt: cashAmount.toString(),
                     pay_dtls: "something A",
@@ -98,9 +120,14 @@ const CustomerDetailsFillScreen = () => {
         }
 
         console.log("filteredData - handleSendSaleData", filteredData)
-        await sendSaleDetails(filteredData)?.then(res => {
+        await sendSaleDetails(filteredData).then(res => {
             if (res.data.status === 1) {
                 Alert.alert("Success", "Data Uploaded Successfully.")
+                navigation.dispatch(
+                    CommonActions.navigate({
+                        name: navigationRoutes.homeScreen,
+                    })
+                )
             } else {
                 Alert.alert("Fail", "Something Went Wrong!")
             }
@@ -111,8 +138,8 @@ const CustomerDetailsFillScreen = () => {
 
     const handlePrintReceipt = async () => {
         // Printing receipts
-        handleSendSaleData()
-        console.log("Printing receipts...")
+        await handleSendSaleData()
+        console.log("Sending data and printing receipts...")
         // printReceiptWithoutGst()
     }
 
