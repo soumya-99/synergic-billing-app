@@ -593,8 +593,9 @@ export const useBluetoothPrint = () => {
             for (const item of addedProducts) {
                 //@ts-ignore
                 totalQuantities += parseInt(item?.quantity)
-                totalAmountAfterDiscount += ((item?.price * item?.quantity) - ((item?.price * item?.quantity * item?.discount) / 100))
-                // totalDiscountedAmount += ((item?.price * item?.quantity * item?.discount) / 100)
+                receiptSettings?.discount_type === "P"
+                    ? totalAmountAfterDiscount += ((item?.price * item?.quantity) - ((item?.price * item?.quantity * item?.discount) / 100))
+                    : totalAmountAfterDiscount += ((item?.price * item?.quantity) - item?.discount)
 
                 if (item?.item_name?.length > 9) {
                     await BluetoothEscposPrinter.printColumn(

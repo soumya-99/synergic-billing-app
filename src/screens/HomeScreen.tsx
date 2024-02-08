@@ -84,7 +84,7 @@ function HomeScreen() {
   }
 
   const handleGetBillSummary = async () => {
-    await fetchBillSummary(formattedDate).then(res => {
+    await fetchBillSummary(formattedDate, loginStore.comp_id, loginStore.br_id, loginStore.user_id).then(res => {
       setTotalBills(res?.data[0]?.total_bills)
       setAmountCollected(res?.data[0]?.amount_collected)
     }).catch(err => {

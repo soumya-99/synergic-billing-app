@@ -8,7 +8,7 @@ export default function useLogin() {
             axios.post(`${ADDRESSES.LOGIN}`, {
                 user_id: phoneNumber,
                 PIN: pin
-            }, {}).then(res => {
+            }).then(res => {
                 resolve(res.data)
             }).catch(err => {
                 reject(err)

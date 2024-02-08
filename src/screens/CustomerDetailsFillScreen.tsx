@@ -35,7 +35,6 @@ const CustomerDetailsFillScreen = () => {
     const [customerMobileNumber, setCustomerMobileNumber] = useState<string>(() => "")
     const [cashAmount, setCashAmount] = useState<number | undefined>(() => undefined)
     const [finalCashAmount, setFinalCashAmount] = useState<number | undefined>(() => undefined)
-    // const [receiptNumber, setReceiptNumber] = useState<number | undefined>(() => undefined)
     let receiptNumber: number | undefined = undefined
 
     const [checked, setChecked] = useState<string>(() => "C")
@@ -75,11 +74,25 @@ const CustomerDetailsFillScreen = () => {
 
     const handlePrintReceipt = async () => {
         // Printing receipts
-        await handleSendSaleData()
-        console.log("Sending data and printing receipts...")
+        console.log("saifhksuifsdfsdfhisdgfigdsvsdgvdg", checked)
+        if (checked === "C") {
+            if (cashAmount === undefined) {
+                ToastAndroid.show("Add valid cash amount.", ToastAndroid.SHORT)
+                return
+            } else {
+                await handleSendSaleData()
+                console.log("Sending data and printing receipts...")
 
-        printReceiptWithoutGst(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber)
-        console.log("params?.added_products", params?.added_products)
+                printReceiptWithoutGst(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber)
+                console.log("params?.added_products", params?.added_products)
+            }
+        } else {
+            await handleSendSaleData()
+            console.log("Sending data and printing receipts...")
+
+            printReceiptWithoutGst(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber)
+            console.log("params?.added_products", params?.added_products)
+        }
     }
 
     return (

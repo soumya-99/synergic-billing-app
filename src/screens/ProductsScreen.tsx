@@ -114,6 +114,7 @@ function ProductsScreen() {
   const onDialogSuccecss = () => {
     let isFoundDuplicate = false
     setEditState(false)
+
     if (quantity.toString().trim() !== "" && !/^0+$/.test(quantity.toString())) {
       console.log("OK PRODUCT: ", product?.item_name)
 

@@ -7,7 +7,7 @@ import { VerifyActiveData } from "../../models/api_types"
 export default function useVerifyActive() {
     const verifyActive = async (phoneNumber: string) => {
         return new Promise<VerifyActiveData>((resolve, reject) => {
-            axios.post(`${ADDRESSES.VERYFY_ACTIVE}/${phoneNumber}`, {}, {}).then(res => {
+            axios.post(`${ADDRESSES.VERYFY_ACTIVE}/${phoneNumber}`).then(res => {
                 resolve(res.data)
             }).catch(err => {
                 reject(err)
