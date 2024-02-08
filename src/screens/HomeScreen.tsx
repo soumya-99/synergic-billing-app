@@ -20,9 +20,10 @@ import normalize from "react-native-normalize"
 import NetTotalButton from "../components/NetTotalButton"
 import ScrollableListContainer from "../components/ScrollableListContainer"
 import { loginStorage } from "../storage/appStorage"
-import { ItemsData } from "../models/api_types"
+import { ItemsData, RecentBillsData } from "../models/api_types"
 import { AppStore } from "../context/AppContext"
 import useBillSummary from "../hooks/api/useBillSummary"
+import useRecentBills from "../hooks/api/useRecentBills"
 
 function HomeScreen() {
   const navigation = useNavigation()
@@ -30,6 +31,7 @@ function HomeScreen() {
 
   const { handleGetReceiptSettings } = useContext(AppStore)
   const { fetchBillSummary } = useBillSummary()
+  const { fetchRecentBills } = useRecentBills()
 
   const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
@@ -39,6 +41,7 @@ function HomeScreen() {
   // const [addedProductsList, setAddedProductsList] = useState<ItemsData[]>(() => [])
   const [totalBills, setTotalBills] = useState<number | undefined>(() => undefined)
   const [amountCollected, setAmountCollected] = useState<number | undefined>(() => undefined)
+  const [recentBills, setRecentBills] = useState<RecentBillsData[]>(() => [])
 
   const [refreshing, setRefreshing] = useState<boolean>(() => false)
 
@@ -54,6 +57,7 @@ function HomeScreen() {
     setRefreshing(true)
     handleGetReceiptSettings()
     handleGetBillSummary()
+    handleGetRecentBills()
     setTimeout(() => {
       setRefreshing(false)
     }, 2000)
@@ -93,8 +97,14 @@ function HomeScreen() {
     })
   }
 
+  const handleGetRecentBills = async () => {
+    let recentBillsData: RecentBillsData[] = await fetchRecentBills(formattedDate, loginStore.comp_id, loginStore.br_id, loginStore.user_id)
+    setRecentBills(recentBillsData)
+  }
+
   useEffect(() => {
     handleGetBillSummary()
+    handleGetRecentBills()
   }, [isFocused])
 
   return (
@@ -152,11 +162,11 @@ function HomeScreen() {
             elevation={2}
             backgroundColor={theme.colors.pinkContainer}>
             <View style={{ width: "100%" }}>
-              {[...new Array(4).keys()].map((_, i) => (
+              {recentBills?.map((item, i) => (
                 <List.Item
                   key={i}
-                  title={`Bill ${i + 1}`}
-                  description={"Cadbury, Oil, Daal..."}
+                  title={`Bill ${item?.receipt_no}`}
+                  description={`₹${item?.amount}`}
                   onPress={() => setVisible(!visible)}
                   left={props => <List.Icon {...props} icon="basket" />}
                 // right={props => (

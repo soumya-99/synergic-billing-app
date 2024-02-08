@@ -46,7 +46,7 @@ const CustomerDetailsFillScreen = () => {
     const handleSendSaleData = async () => {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
         const branchId = loginStore.br_id
-        const createdBy = loginStore.user_name
+        const createdBy = loginStore.user_id
 
         let filteredData: FilteredItem[]
         filteredData = (params?.added_products as ItemsData[]).map(item =>
