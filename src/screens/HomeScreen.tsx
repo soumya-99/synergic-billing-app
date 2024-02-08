@@ -89,7 +89,7 @@ function HomeScreen() {
       setAmountCollected(res?.data[0]?.amount_collected)
     }).catch(err => {
       ToastAndroid.show("Check your internet connection or something went wrong in the server.", ToastAndroid.SHORT)
-      console.log("handleGetBillSummary - HomeScreen", formattedDate)
+      console.log("handleGetBillSummary - HomeScreen", err, formattedDate)
     })
   }
 

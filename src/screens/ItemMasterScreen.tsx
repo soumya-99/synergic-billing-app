@@ -116,7 +116,6 @@ export default function ItemMasterScreen() {
             <AnimatedFABPaper
                 icon="plus"
                 label="Add Item"
-                //@ts-ignore
                 onPress={() => setVisible(!visible)}
                 extended={isExtended}
                 animateFrom="right"

@@ -18,11 +18,10 @@ import { ItemsData } from '../models/api_types'
 import { loginStorage } from '../storage/appStorage'
 import { FilteredItem } from '../models/custom_types'
 import navigationRoutes from '../routes/navigationRoutes'
-import { CustomerDetailsFillScreenRouteProp } from '../models/route_types'
 
 const CustomerDetailsFillScreen = () => {
     const navigation = useNavigation()
-    const { params } = useRoute<CustomerDetailsFillScreenRouteProp>()
+    const { params } = useRoute()
 
     const { receiptSettings } = useContext(AppStore)
 
@@ -40,6 +39,7 @@ const CustomerDetailsFillScreen = () => {
     const [checked, setChecked] = useState<string>(() => "C")
 
     useEffect(() => {
+        //@ts-ignore
         setFinalCashAmount(() => (cashAmount !== undefined ? cashAmount - Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) : 0))
     }, [cashAmount])
 
@@ -48,9 +48,12 @@ const CustomerDetailsFillScreen = () => {
         const branchId = loginStore.br_id
         const createdBy = loginStore.user_name
 
+        //@ts-ignore
+        // (params?.added_products as [])
         let filteredData: FilteredItem[]
         if (receiptSettings?.discount_type === "P") {
-            filteredData = (params?.added_products as ItemsData[]).map((item): FilteredItem => {
+            //@ts-ignore
+            filteredData = (params?.added_products as ItemsData[]).map(item => {
                 const { cgst, sgst, com_id, discount, item_id, quantity, price } = item
 
                 return {
@@ -59,16 +62,21 @@ const CustomerDetailsFillScreen = () => {
                     tcgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
                     tsgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
                     comp_id: com_id,
-                    discount_amt: parseFloat((((price * quantity * discount) / 100).toFixed(2))),
+                    discount_amt: (((price * quantity * discount) / 100).toFixed(2)),
                     item_id: item_id,
                     qty: quantity,
                     price: price,
                     br_id: parseInt(branchId),
-                    tprice: parseFloat(params?.net_total?.toFixed(2)),
-                    tdiscount_amt: parseFloat(params?.total_discount?.toFixed(2)),
+                    //@ts-ignore
+                    tprice: params?.net_total?.toFixed(2),
+                    //@ts-ignore
+                    tdiscount_amt: params?.total_discount?.toFixed(2),
                     // amount: ((price * quantity) - ((price * quantity * discount) / 100)).toFixed(2),
-                    amount: parseFloat((params?.net_total - params?.total_discount).toFixed(2)),
-                    round_off: parseFloat((Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) - parseFloat((params?.net_total - params?.total_discount).toFixed(2))).toFixed(2)),
+                    //@ts-ignore
+                    amount: (params?.net_total - params?.total_discount).toFixed(2),
+                    //@ts-ignore
+                    round_off: (Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) - parseFloat((params?.net_total - params?.total_discount).toFixed(2))).toFixed(2),
+                    //@ts-ignore
                     net_amt: Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))),
                     pay_mode: checked,
                     received_amt: cashAmount.toString(),
@@ -79,7 +87,8 @@ const CustomerDetailsFillScreen = () => {
                 }
             })
         } else {
-            filteredData = (params?.added_products as ItemsData[]).map((item): FilteredItem => {
+            //@ts-ignore
+            filteredData = (params?.added_products as ItemsData[]).map(item => {
                 const { cgst, sgst, com_id, discount, item_id, quantity, price } = item
 
                 return {
@@ -88,16 +97,21 @@ const CustomerDetailsFillScreen = () => {
                     tcgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
                     tsgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
                     comp_id: com_id,
-                    discount_amt: parseFloat((discount).toFixed(2)),
+                    discount_amt: (discount).toFixed(2),
                     item_id: item_id,
                     qty: quantity,
                     price: price,
                     br_id: parseInt(branchId),
-                    tprice: parseFloat(params?.net_total?.toFixed(2)),
-                    tdiscount_amt: parseFloat(params?.total_discount?.toFixed(2)),
+                    //@ts-ignore
+                    tprice: params?.net_total?.toFixed(2),
+                    //@ts-ignore
+                    tdiscount_amt: params?.total_discount?.toFixed(2),
                     // amount: (price * quantity - discount).toFixed(2),
-                    amount: parseFloat((params?.net_total - params?.total_discount).toFixed(2)),
-                    round_off: parseFloat((Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) - parseFloat((params?.net_total - params?.total_discount).toFixed(2))).toFixed(2)),
+                    //@ts-ignore
+                    amount: (params?.net_total - params?.total_discount).toFixed(2),
+                    //@ts-ignore
+                    round_off: (Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) - parseFloat((params?.net_total - params?.total_discount).toFixed(2))).toFixed(2),
+                    //@ts-ignore
                     net_amt: Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))),
                     pay_mode: checked,
                     received_amt: cashAmount.toString(),
@@ -133,8 +147,9 @@ const CustomerDetailsFillScreen = () => {
         // Printing receipts
         await handleSendSaleData()
         console.log("Sending data and printing receipts...")
-
-        printReceiptWithoutGst(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber)
+        //@ts-ignore
+        printReceiptWithoutGst(params?.added_products as ItemsData[], params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber)
+        //@ts-ignore
         console.log("params?.added_products", params?.added_products)
     }
 
@@ -170,7 +185,9 @@ const CustomerDetailsFillScreen = () => {
                             backgroundColor={theme.colors.primaryContainer}
                             textColor={theme.colors.onPrimaryContainer}
                             // addedProductsList={addedProductsList}
+                            //@ts-ignore
                             netTotal={params?.net_total}
+                            //@ts-ignore
                             totalDiscount={params?.total_discount}
                             onPress={() =>
                                 ToastAndroid.showWithGravityAndOffset(
