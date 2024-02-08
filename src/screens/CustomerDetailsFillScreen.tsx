@@ -74,7 +74,7 @@ const CustomerDetailsFillScreen = () => {
 
     const handlePrintReceipt = async () => {
         // Printing receipts
-        console.log("saifhksuifsdfsdfhisdgfigdsvsdgvdg", checked)
+        // console.log("saifhksuifsdfsdfhisdgfigdsvsdgvdg", checked)
         if (checked === "C") {
             if (cashAmount === undefined) {
                 ToastAndroid.show("Add valid cash amount.", ToastAndroid.SHORT)
@@ -83,10 +83,11 @@ const CustomerDetailsFillScreen = () => {
                 await handleSendSaleData()
                 console.log("Sending data and printing receipts...")
 
-                printReceiptWithoutGst(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber)
+                printReceiptWithoutGst(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
                 console.log("params?.added_products", params?.added_products)
             }
         } else {
+            console.log("wquetwqagyrfasfkcbh,usdrgfyszgydfzguzxd")
             await handleSendSaleData()
             console.log("Sending data and printing receipts...")
 

@@ -391,7 +391,7 @@ export const useBluetoothPrint = () => {
         }
     }
 
-    async function printReceiptWithoutGst(addedProducts: ItemsData[], netTotal: number, totalDiscountAmount: number, cashAmount?: number, returnedAmt?: number, customerName?: string, customerPhone?: string, rcptNo?: number) {
+    async function printReceiptWithoutGst(addedProducts: ItemsData[], netTotal: number, totalDiscountAmount: number, cashAmount?: number, returnedAmt?: number, customerName?: string, customerPhone?: string, rcptNo?: number, paymentMode?: string) {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
         const shopName: string = loginStore?.company_name?.toString()
@@ -540,7 +540,7 @@ export const useBluetoothPrint = () => {
             )
             await BluetoothEscposPrinter.printText("\n", {})
 
-            {
+            if (customerName.length !== 0 || customerPhone.length !== 0) {
                 receiptSettings?.cust_inf === "Y" && await BluetoothEscposPrinter.printColumn(
                     columnWidthsHeader,
                     [
@@ -567,6 +567,8 @@ export const useBluetoothPrint = () => {
                 "------------------------",
                 { align: "center" },
             )
+
+
             await BluetoothEscposPrinter.printText("\n", {})
 
             await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER)
@@ -699,26 +701,28 @@ export const useBluetoothPrint = () => {
                 { align: "center" },
             )
             await BluetoothEscposPrinter.printText("\n", {})
-            await BluetoothEscposPrinter.printText(
-                "PAYMENT MODE",
-                { align: "center" },
-            )
-            await BluetoothEscposPrinter.printText("\n", {})
-            await BluetoothEscposPrinter.printText(
-                `CASH RECEIVED:       ${cashAmount}`,
-                { align: "center" },
-            )
-            await BluetoothEscposPrinter.printText("\n", {})
-            await BluetoothEscposPrinter.printText(
-                `RETURNED AMT:        ${returnedAmt}`,
-                { align: "center" },
-            )
+            if (paymentMode === "C") {
+                await BluetoothEscposPrinter.printText(
+                    "PAYMENT MODE",
+                    { align: "center" },
+                )
+                await BluetoothEscposPrinter.printText("\n", {})
+                await BluetoothEscposPrinter.printText(
+                    `CASH RECEIVED:       ${cashAmount}`,
+                    { align: "center" },
+                )
+                await BluetoothEscposPrinter.printText("\n", {})
+                await BluetoothEscposPrinter.printText(
+                    `RETURNED AMT:        ${returnedAmt}`,
+                    { align: "center" },
+                )
 
-            await BluetoothEscposPrinter.printText("\n", {})
-            await BluetoothEscposPrinter.printText(
-                "------------------------",
-                { align: "center" },
-            )
+                await BluetoothEscposPrinter.printText("\n", {})
+                await BluetoothEscposPrinter.printText(
+                    "------------------------",
+                    { align: "center" },
+                )
+            }
             await BluetoothEscposPrinter.printText("\n", {})
 
 
