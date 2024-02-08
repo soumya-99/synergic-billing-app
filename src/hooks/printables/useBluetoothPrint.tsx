@@ -391,7 +391,7 @@ export const useBluetoothPrint = () => {
         }
     }
 
-    async function printReceiptWithoutGst(addedProducts: ItemsData[], netTotal: number, totalDiscountAmount: number, cashAmount?: number, returnedAmt?: number, customerName?: string, customerPhone?: string) {
+    async function printReceiptWithoutGst(addedProducts: ItemsData[], netTotal: number, totalDiscountAmount: number, cashAmount?: number, returnedAmt?: number, customerName?: string, customerPhone?: string, rcptNo?: number) {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
         const shopName: string = loginStore?.company_name?.toString()
@@ -403,7 +403,6 @@ export const useBluetoothPrint = () => {
 
         let totalQuantities: number = 0
         let totalAmountAfterDiscount: number = 0
-        // let totalDiscountedAmount: number = 0
 
         try {
 
@@ -511,7 +510,7 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["RCPT.NO", ":", "15474"],
+                ["RCPT.NO", ":", rcptNo?.toString()],
                 {},
             )
             await BluetoothEscposPrinter.printColumn(
@@ -729,7 +728,7 @@ export const useBluetoothPrint = () => {
                 await BluetoothEscposPrinter.printText("\n", {})
             }
             if (receiptSettings?.on_off_flag4 === "Y") {
-                await BluetoothEscposPrinter.printText(receiptSettings?.footer4, {})
+                await BluetoothEscposPrinter.printText(receiptSettings?.footer2, {})
             }
             await BluetoothEscposPrinter.printText("\n", {})
 

@@ -33,6 +33,8 @@ const CustomerDetailsFillScreen = () => {
     const [customerMobileNumber, setCustomerMobileNumber] = useState<string>(() => "")
     const [cashAmount, setCashAmount] = useState<number | undefined>(() => undefined)
     const [finalCashAmount, setFinalCashAmount] = useState<number | undefined>(() => undefined)
+    // const [receiptNumber, setReceiptNumber] = useState<number | undefined>(() => undefined)
+    let receiptNumber: number | undefined = undefined
 
     const [checked, setChecked] = useState<string>(() => "C")
 
@@ -45,8 +47,6 @@ const CustomerDetailsFillScreen = () => {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
         const branchId = loginStore.br_id
         const createdBy = loginStore.user_name
-
-        console.log("createdBy", createdBy)
 
         //@ts-ignore
         // (params?.added_products as [])
@@ -126,6 +126,9 @@ const CustomerDetailsFillScreen = () => {
         console.log("filteredData - handleSendSaleData", filteredData)
         await sendSaleDetails(filteredData).then(res => {
             if (res.data.status === 1) {
+                receiptNumber = res?.data?.data
+                // setReceiptNumber(res?.data?.data)
+
                 Alert.alert("Success", "Data Uploaded Successfully.")
                 navigation.dispatch(
                     CommonActions.navigate({
@@ -142,10 +145,10 @@ const CustomerDetailsFillScreen = () => {
 
     const handlePrintReceipt = async () => {
         // Printing receipts
-        // await handleSendSaleData()
+        await handleSendSaleData()
         console.log("Sending data and printing receipts...")
         //@ts-ignore
-        printReceiptWithoutGst(params?.added_products as ItemsData[], params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber)
+        printReceiptWithoutGst(params?.added_products as ItemsData[], params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber)
         //@ts-ignore
         console.log("params?.added_products", params?.added_products)
     }

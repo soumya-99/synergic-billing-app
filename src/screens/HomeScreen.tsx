@@ -6,7 +6,7 @@ import {
   ToastAndroid,
   RefreshControl,
 } from "react-native"
-import React, { useCallback, useContext, useState } from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import AnimatedFABPaper from "../components/AnimatedFABPaper"
 import { Button, List, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
@@ -22,26 +22,38 @@ import ScrollableListContainer from "../components/ScrollableListContainer"
 import { loginStorage } from "../storage/appStorage"
 import { ItemsData } from "../models/api_types"
 import { AppStore } from "../context/AppContext"
+import useBillSummary from "../hooks/api/useBillSummary"
 
 function HomeScreen() {
   const navigation = useNavigation()
   const isFocused = useIsFocused()
 
   const { handleGetReceiptSettings } = useContext(AppStore)
+  const { fetchBillSummary } = useBillSummary()
 
   const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
   const theme = usePaperColorScheme()
   const [isExtended, setIsExtended] = useState<boolean>(() => true)
 
-  const [addedProductsList, setAddedProductsList] = useState<ItemsData[]>(() => [])
-  const [refreshing, setRefreshing] = useState<boolean>(() => false);
+  // const [addedProductsList, setAddedProductsList] = useState<ItemsData[]>(() => [])
+  const [totalBills, setTotalBills] = useState<number | undefined>(() => undefined)
+  const [amountCollected, setAmountCollected] = useState<number | undefined>(() => undefined)
+
+  const [refreshing, setRefreshing] = useState<boolean>(() => false)
+
+  let today = new Date()
+  let year = today.getFullYear()
+  let month = ("0" + (today.getMonth() + 1)).slice(-2)
+  let day = ("0" + today.getDate()).slice(-2)
+  let formattedDate = year + "-" + month + "-" + day
 
   let netTotal = 0
 
   const onRefresh = useCallback(() => {
     setRefreshing(true)
     handleGetReceiptSettings()
+    handleGetBillSummary()
     setTimeout(() => {
       setRefreshing(false)
     }, 2000)
@@ -70,6 +82,20 @@ function HomeScreen() {
       50,
     )
   }
+
+  const handleGetBillSummary = async () => {
+    await fetchBillSummary(formattedDate).then(res => {
+      setTotalBills(res?.data[0]?.total_bills)
+      setAmountCollected(res?.data[0]?.amount_collected)
+    }).catch(err => {
+      ToastAndroid.show("Check your internet connection or something went wrong in the server.", ToastAndroid.SHORT)
+      console.log("handleGetBillSummary - HomeScreen", formattedDate)
+    })
+  }
+
+  useEffect(() => {
+    handleGetBillSummary()
+  }, [isFocused])
 
   return (
     <SafeAreaView
@@ -102,7 +128,7 @@ function HomeScreen() {
                   <Text variant="titleLarge">Total Bills</Text>
                 </View>
                 <View>
-                  <Text variant="titleLarge">50</Text>
+                  <Text variant="titleLarge">{totalBills}</Text>
                 </View>
               </View>
               <View
@@ -114,7 +140,7 @@ function HomeScreen() {
                   <Text variant="titleLarge">Amount Collected</Text>
                 </View>
                 <View>
-                  <Text variant="titleLarge">₹14000</Text>
+                  <Text variant="titleLarge">₹{amountCollected}</Text>
                 </View>
               </View>
             </View>
