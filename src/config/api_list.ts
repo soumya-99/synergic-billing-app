@@ -9,4 +9,5 @@ export const ADDRESSES = {
     RECEIPT_SETTINGS: `${BASE_URL}/api/receipt_settings`,
     ITEMS: `${BASE_URL}/api/items`,
     SALE_INSERT: `${BASE_URL}/api/saleinsert`,
+    BILL_SUMMARY: `${BASE_URL}/api/billsummary`,
 }

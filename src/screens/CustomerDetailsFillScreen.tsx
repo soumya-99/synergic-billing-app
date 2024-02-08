@@ -142,9 +142,12 @@ const CustomerDetailsFillScreen = () => {
 
     const handlePrintReceipt = async () => {
         // Printing receipts
-        await handleSendSaleData()
+        // await handleSendSaleData()
         console.log("Sending data and printing receipts...")
-        // printReceiptWithoutGst()
+        //@ts-ignore
+        printReceiptWithoutGst(params?.added_products as ItemsData[], params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber)
+        //@ts-ignore
+        console.log("params?.added_products", params?.added_products)
     }
 
     return (

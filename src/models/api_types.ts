@@ -94,3 +94,13 @@ export type SaleInsertData = {
         data: number
     }
 }
+
+export type BillSummaryData = {
+    status: number
+    data: [
+        {
+            total_bills: number
+            amount_collected: number
+        }
+    ]
+}
