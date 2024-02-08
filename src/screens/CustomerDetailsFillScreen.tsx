@@ -14,11 +14,12 @@ import NetTotalButton from '../components/NetTotalButton'
 import { AppStore } from '../context/AppContext'
 import SquircleBox from '../components/SquircleBox'
 import useSaleInsert from '../hooks/api/useSaleInsert'
-import { ItemsData } from '../models/api_types'
+import { ItemsData, ReceiptSettingsData } from '../models/api_types'
 import { loginStorage } from '../storage/appStorage'
 import { FilteredItem } from '../models/custom_types'
 import navigationRoutes from '../routes/navigationRoutes'
 import { CustomerDetailsFillScreenRouteProp } from '../models/route_types'
+import { mapItemToFilteredItem } from '../utils/mapItemToFilteredItem'
 
 const CustomerDetailsFillScreen = () => {
     const navigation = useNavigation()
@@ -49,71 +50,14 @@ const CustomerDetailsFillScreen = () => {
         const createdBy = loginStore.user_name
 
         let filteredData: FilteredItem[]
-        if (receiptSettings?.discount_type === "P") {
-            filteredData = (params?.added_products as ItemsData[]).map((item): FilteredItem => {
-                const { cgst, sgst, com_id, discount, item_id, quantity, price } = item
-
-                return {
-                    cgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
-                    sgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
-                    tcgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
-                    tsgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
-                    comp_id: com_id,
-                    discount_amt: parseFloat((((price * quantity * discount) / 100).toFixed(2))),
-                    item_id: item_id,
-                    qty: quantity,
-                    price: price,
-                    br_id: parseInt(branchId),
-                    tprice: parseFloat(params?.net_total?.toFixed(2)),
-                    tdiscount_amt: parseFloat(params?.total_discount?.toFixed(2)),
-                    // amount: ((price * quantity) - ((price * quantity * discount) / 100)).toFixed(2),
-                    amount: parseFloat((params?.net_total - params?.total_discount).toFixed(2)),
-                    round_off: parseFloat((Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) - parseFloat((params?.net_total - params?.total_discount).toFixed(2))).toFixed(2)),
-                    net_amt: Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))),
-                    pay_mode: checked,
-                    received_amt: cashAmount.toString(),
-                    pay_dtls: "something P",
-                    cust_name: customerName,
-                    phone_no: customerMobileNumber,
-                    created_by: createdBy.toString()
-                }
-            })
-        } else {
-            filteredData = (params?.added_products as ItemsData[]).map((item): FilteredItem => {
-                const { cgst, sgst, com_id, discount, item_id, quantity, price } = item
-
-                return {
-                    cgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
-                    sgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
-                    tcgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
-                    tsgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
-                    comp_id: com_id,
-                    discount_amt: parseFloat((discount).toFixed(2)),
-                    item_id: item_id,
-                    qty: quantity,
-                    price: price,
-                    br_id: parseInt(branchId),
-                    tprice: parseFloat(params?.net_total?.toFixed(2)),
-                    tdiscount_amt: parseFloat(params?.total_discount?.toFixed(2)),
-                    // amount: (price * quantity - discount).toFixed(2),
-                    amount: parseFloat((params?.net_total - params?.total_discount).toFixed(2)),
-                    round_off: parseFloat((Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) - parseFloat((params?.net_total - params?.total_discount).toFixed(2))).toFixed(2)),
-                    net_amt: Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))),
-                    pay_mode: checked,
-                    received_amt: cashAmount.toString(),
-                    pay_dtls: "something A",
-                    cust_name: customerName,
-                    phone_no: customerMobileNumber,
-                    created_by: createdBy.toString()
-                }
-            })
-        }
+        filteredData = (params?.added_products as ItemsData[]).map(item =>
+            mapItemToFilteredItem(item, receiptSettings, branchId, params, checked, cashAmount, customerName, customerMobileNumber, createdBy)
+        )
 
         console.log("filteredData - handleSendSaleData", filteredData)
         await sendSaleDetails(filteredData).then(res => {
             if (res.data.status === 1) {
                 receiptNumber = res?.data?.data
-                // setReceiptNumber(res?.data?.data)
 
                 Alert.alert("Success", "Data Uploaded Successfully.")
                 navigation.dispatch(
