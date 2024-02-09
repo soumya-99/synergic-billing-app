@@ -340,7 +340,7 @@ function ProductsScreen() {
                 disabled
                 backgroundColor={theme.colors.greenContainer}
                 textColor={theme.colors.onGreenContainer}
-                // addedProductsList={addedProductsList}
+                addedProductsList={addedProductsList}
                 netTotal={totalPrice}
                 totalDiscount={totalDiscountedAmount}
                 onPress={() =>

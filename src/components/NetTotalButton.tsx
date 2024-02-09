@@ -3,13 +3,15 @@ import { TouchableRipple, Text } from "react-native-paper"
 import normalize from "react-native-normalize"
 import { useContext } from "react"
 import { AppStore } from "../context/AppContext"
+import { ItemsData } from "../models/api_types"
+import { gstFilterationAndTotals } from "../utils/gstFilterTotal"
 
 type NetTotalButtonProps = {
   backgroundColor: string
   textColor: string
   netTotal: number
   totalDiscount: number
-  addedProductsList?: {}[]
+  addedProductsList?: ItemsData[]
   onPress?: () => void
   height?: number | "auto"
   width?: number
@@ -34,6 +36,7 @@ export default function NetTotalButton({
   const { receiptSettings } = useContext(AppStore)
 
   // addedProductsList?.filter((item, i) => item.discount)
+  let { totalCGST_5, totalCGST_12, totalCGST_18, totalCGST_28, totalSGST_5, totalSGST_12, totalSGST_18, totalSGST_28 } = gstFilterationAndTotals(addedProductsList)
 
   return (
     receiptSettings?.gst_flag !== "Y" ? (
@@ -102,18 +105,40 @@ export default function NetTotalButton({
           <View>
             <Text style={{ color: textColor }}>TOTAL AMOUNT</Text>
             <Text style={{ color: textColor }}>DISCOUNT</Text>
-            <Text style={{ color: textColor }}>CGST</Text>
-            <Text style={{ color: textColor }}>SGST</Text>
+
+            <Text style={{ color: textColor }}>CGST @5%</Text>
+            <Text style={{ color: textColor }}>SGST @5%</Text>
+            <Text style={{ color: textColor }}>CGST @12%</Text>
+            <Text style={{ color: textColor }}>SGST @12%</Text>
+            <Text style={{ color: textColor }}>CGST @18%</Text>
+            <Text style={{ color: textColor }}>SGST @18%</Text>
+            <Text style={{ color: textColor }}>CGST @28%</Text>
+            <Text style={{ color: textColor }}>SGST @28%</Text>
+
+            {/* <Text style={{ color: textColor }}>CGST</Text>
+            <Text style={{ color: textColor }}>SGST</Text> */}
             <Text style={{ color: textColor }}>GRAND TOTAL</Text>
           </View>
           <View>
             <Text style={{ color: textColor }}>₹{netTotal}</Text>
             <Text style={{ color: textColor }}>₹{totalDiscount}</Text>
-            <Text style={{ color: textColor }}>{cgst}%</Text>
-            <Text style={{ color: textColor }}>{sgst}%</Text>
+            {/* <Text style={{ color: textColor }}>{cgst}%</Text>
+            <Text style={{ color: textColor }}>{sgst}%</Text> */}
+
+            <Text style={{ color: textColor }}>{totalCGST_5 && totalCGST_5.toFixed(2)}</Text>
+            <Text style={{ color: textColor }}>{totalSGST_5 && totalSGST_5.toFixed(2)}</Text>
+            <Text style={{ color: textColor }}>{totalCGST_12 && totalCGST_12.toFixed(2)}</Text>
+            <Text style={{ color: textColor }}>{totalSGST_12 && totalSGST_12.toFixed(2)}</Text>
+            <Text style={{ color: textColor }}>{totalCGST_18 && totalCGST_18.toFixed(2)}</Text>
+            <Text style={{ color: textColor }}>{totalSGST_18 && totalSGST_18.toFixed(2)}</Text>
+            <Text style={{ color: textColor }}>{totalCGST_28 && totalCGST_28.toFixed(2)}</Text>
+            <Text style={{ color: textColor }}>{totalSGST_28 && totalSGST_28.toFixed(2)}</Text>
+
+
+
             <Text style={{ color: textColor }}>
               ₹
-              {netTotal - totalDiscount + ((cgst + sgst) / 100) * (netTotal - totalDiscount)}
+              {(netTotal - totalDiscount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2)}
             </Text>
           </View>
         </View>
