@@ -20,10 +20,12 @@ import normalize from "react-native-normalize"
 import NetTotalButton from "../components/NetTotalButton"
 import ScrollableListContainer from "../components/ScrollableListContainer"
 import { loginStorage } from "../storage/appStorage"
-import { ItemsData, RecentBillsData } from "../models/api_types"
+import { ItemsData, RecentBillsData, ShowBillData } from "../models/api_types"
 import { AppStore } from "../context/AppContext"
 import useBillSummary from "../hooks/api/useBillSummary"
 import useRecentBills from "../hooks/api/useRecentBills"
+import useShowBill from "../hooks/api/useShowBill"
+import AddedProductList from "../components/AddedProductList"
 
 function HomeScreen() {
   const navigation = useNavigation()
@@ -32,6 +34,7 @@ function HomeScreen() {
   const { handleGetReceiptSettings } = useContext(AppStore)
   const { fetchBillSummary } = useBillSummary()
   const { fetchRecentBills } = useRecentBills()
+  const { fetchBill } = useShowBill()
 
   const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
@@ -42,6 +45,7 @@ function HomeScreen() {
   const [totalBills, setTotalBills] = useState<number | undefined>(() => undefined)
   const [amountCollected, setAmountCollected] = useState<number | undefined>(() => undefined)
   const [recentBills, setRecentBills] = useState<RecentBillsData[]>(() => [])
+  const [billedSaleData, setBilledSaleData] = useState<ShowBillData[]>(() => [])
 
   const [refreshing, setRefreshing] = useState<boolean>(() => false)
 
@@ -107,6 +111,17 @@ function HomeScreen() {
     handleGetRecentBills()
   }, [isFocused])
 
+  const handleGetBill = async (rcptNo: number) => {
+    let bill = await fetchBill(rcptNo)
+
+    setBilledSaleData(bill?.data)
+  }
+
+  const handleRecentBillListClick = (rcptNo: number) => {
+    setVisible(!visible)
+    handleGetBill(rcptNo)
+  }
+
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -167,7 +182,7 @@ function HomeScreen() {
                   key={i}
                   title={`Bill ${item?.receipt_no}`}
                   description={`₹${item?.amount}`}
-                  onPress={() => setVisible(!visible)}
+                  onPress={() => handleRecentBillListClick(item?.receipt_no)}
                   left={props => <List.Icon {...props} icon="basket" />}
                 // right={props => (
                 //   <List.Icon {...props} icon="download" />
@@ -222,10 +237,25 @@ function HomeScreen() {
               />
             )
           })} */}
+          {billedSaleData?.map((item, i) => {
+            netTotal += item.price * item.qty
+            return (
+              <AddedProductList
+                disabled
+                itemName={item.item_name}
+                quantity={item.qty}
+                // unit={item.unit}
+                unitPrice={item.price}
+                discount={item?.discount_amt}
+                key={i}
+              />
+            )
+          })}
         </ScrollableListContainer>
         <NetTotalButton
           width={300}
           backgroundColor={theme.colors.orangeContainer}
+          // addedProductsList={billedSaleData}
           netTotal={netTotal}
           textColor={theme.colors.onGreenContainer}
           totalDiscount={22}

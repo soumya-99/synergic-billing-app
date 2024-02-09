@@ -10,9 +10,10 @@ type AddedProductListProps = {
   itemName: string
   unitPrice: number
   quantity: number
-  onPress: () => void
+  onPress?: () => void
   discount?: number
   unit?: string
+  disabled?: boolean
 }
 
 export default function AddedProductList({
@@ -22,6 +23,7 @@ export default function AddedProductList({
   onPress,
   discount,
   unit,
+  disabled,
 }: AddedProductListProps) {
   const { receiptSettings } = useContext(AppStore)
 
@@ -29,6 +31,7 @@ export default function AddedProductList({
     // receiptSettings?.gst_flag === "N" ? (
     <>
       <TouchableOpacity
+        disabled={disabled}
         onPress={onPress}
         style={{
           flex: 0.2,

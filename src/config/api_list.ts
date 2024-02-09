@@ -11,4 +11,5 @@ export const ADDRESSES = {
     SALE_INSERT: `${BASE_URL}/api/saleinsert`,
     BILL_SUMMARY: `${BASE_URL}/api/billsummary`,
     RECENT_BILLS: `${BASE_URL}/api/recent_bills`,
+    SHOW_BILL: `${BASE_URL}/api/show_bill`,
 }
