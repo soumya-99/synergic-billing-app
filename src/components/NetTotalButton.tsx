@@ -115,8 +115,8 @@ export default function NetTotalButton({
             <Text style={{ color: textColor }}>CGST @28%</Text>
             <Text style={{ color: textColor }}>SGST @28%</Text>
 
-            {/* <Text style={{ color: textColor }}>CGST</Text>
-            <Text style={{ color: textColor }}>SGST</Text> */}
+            <Text style={{ color: textColor }}>NET TOTAL</Text>
+            <Text style={{ color: textColor }}>ROUNDING OFF</Text>
             <Text style={{ color: textColor }}>GRAND TOTAL</Text>
           </View>
           <View>
@@ -134,11 +134,15 @@ export default function NetTotalButton({
             <Text style={{ color: textColor }}>{totalCGST_28 && totalCGST_28.toFixed(2)}</Text>
             <Text style={{ color: textColor }}>{totalSGST_28 && totalSGST_28.toFixed(2)}</Text>
 
+            <Text style={{ color: textColor }}>{(netTotal - totalDiscount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2)}</Text>
+
+            <Text style={{ color: textColor }}>{(Math.round(parseFloat((netTotal - totalDiscount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2))) - parseFloat((netTotal - totalDiscount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2))).toFixed(2)}</Text>
+
 
 
             <Text style={{ color: textColor }}>
               ₹
-              {(netTotal - totalDiscount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2)}
+              {Math.round(parseFloat((netTotal - totalDiscount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2)))}
             </Text>
           </View>
         </View>

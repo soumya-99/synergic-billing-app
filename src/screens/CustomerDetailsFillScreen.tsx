@@ -127,7 +127,7 @@ const CustomerDetailsFillScreen = () => {
                             disabled
                             backgroundColor={theme.colors.primaryContainer}
                             textColor={theme.colors.onPrimaryContainer}
-                            // addedProductsList={addedProductsList}
+                            addedProductsList={params?.added_products}
                             netTotal={params?.net_total}
                             totalDiscount={params?.total_discount}
                             onPress={() =>
