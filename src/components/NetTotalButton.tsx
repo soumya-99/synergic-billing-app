@@ -142,7 +142,7 @@ export default function NetTotalButton({
 
             <Text style={{ color: textColor }}>
               ₹
-              {Math.round(parseFloat((netTotal - totalDiscount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2)))}
+              {Math.round(parseFloat((netTotal - totalDiscount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2))).toFixed(2)}
             </Text>
           </View>
         </View>
