@@ -18,12 +18,12 @@ import { ItemsData, ReceiptSettingsData } from '../models/api_types'
 import { loginStorage } from '../storage/appStorage'
 import { FilteredItem } from '../models/custom_types'
 import navigationRoutes from '../routes/navigationRoutes'
-import { CustomerDetailsFillScreenRouteProp } from '../models/route_types'
+import { ProductsScreenRouteProp } from '../models/route_types'
 import { mapItemToFilteredItem } from '../utils/mapItemToFilteredItem'
 
 const CustomerDetailsFillScreen = () => {
     const navigation = useNavigation()
-    const { params } = useRoute<CustomerDetailsFillScreenRouteProp>()
+    const { params } = useRoute<ProductsScreenRouteProp>()
 
     const { receiptSettings } = useContext(AppStore)
 

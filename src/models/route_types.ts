@@ -2,13 +2,13 @@ import { RouteProp } from "@react-navigation/native"
 import { ItemsData } from "./api_types"
 
 type RootStackParamList = {
-    CustomerDetailsFillScreen: {
+    ProductsScreen: {
         added_products: ItemsData[]
         net_total: number
         total_discount: number
     }
 }
 
-type CustomerDetailsFillScreenRouteProp = RouteProp<RootStackParamList, "CustomerDetailsFillScreen">
+type ProductsScreenRouteProp = RouteProp<RootStackParamList, "ProductsScreen">
 
-export type { CustomerDetailsFillScreenRouteProp }
+export type { ProductsScreenRouteProp }
