@@ -36,6 +36,9 @@ export function mapItemToFilteredItem(item: ItemsData, receiptSettings: ReceiptS
         pay_dtls: receiptSettings?.discount_type === "P" ? "something P" : "something A",
         cust_name: customerName,
         phone_no: customerMobileNumber,
-        created_by: createdBy?.toString()
+        created_by: createdBy?.toString(),
+        dis_pertg: receiptSettings?.discount_type === "P" ? discount : 0,
+        cgst_prtg: receiptSettings?.gst_flag === "Y" ? cgst : 0,
+        sgst_prtg: receiptSettings?.gst_flag === "Y" ? sgst : 0,
     }
 }

@@ -148,6 +148,9 @@ export type ShowBillData = {
     "modified_by": null
     "modified_dt": null
     "item_name": string
+    "dis_pertg": number
+    "cgst_prtg": number
+    "sgst_prtg": number
 }
 
 export type SearchBillsData = {

@@ -121,7 +121,7 @@ export default function NetTotalButton({
           </View>
           <View>
             <Text style={{ color: textColor }}>₹{netTotal}</Text>
-            <Text style={{ color: textColor }}>₹{totalDiscount}</Text>
+            <Text style={{ color: textColor }}>₹{totalDiscount?.toFixed(2)}</Text>
             {/* <Text style={{ color: textColor }}>{cgst}%</Text>
             <Text style={{ color: textColor }}>{sgst}%</Text> */}
 

@@ -20,4 +20,7 @@ export type FilteredItem = {
     cust_name: string
     phone_no: string
     created_by: string
+    dis_pertg: number,
+    cgst_prtg: number,
+    sgst_prtg: number,
 }

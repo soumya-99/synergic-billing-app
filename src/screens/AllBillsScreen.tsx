@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import {
   StyleSheet,
   ScrollView,
@@ -23,12 +23,17 @@ import { loginStorage } from "../storage/appStorage"
 import { SearchedBills, ShowBillData } from "../models/api_types"
 import { formattedDate } from "../utils/dateFormatter"
 import useShowBill from "../hooks/api/useShowBill"
+import { useBluetoothPrint } from "../hooks/printables/useBluetoothPrint"
+import { AppStore } from "../context/AppContext"
+import NetTotalForRePrints from "../components/NetTotalForRePrints"
 
 function AllBillsScreen() {
   const theme = usePaperColorScheme()
   const navigation = useNavigation()
 
   const loginStore = JSON.parse(loginStorage.getString("login-data"))
+
+  const { receiptSettings } = useContext(AppStore)
 
   const [visible, setVisible] = useState(() => false)
   const hideDialog = () => setVisible(() => false)
@@ -47,6 +52,8 @@ function AllBillsScreen() {
   const { fetchSearchedBills } = useSearchBills()
   const { fetchBill } = useShowBill()
 
+  const { rePrintWithoutGst } = useBluetoothPrint()
+
   const handleGetBill = async (rcptNo: number) => {
     let bill = await fetchBill(rcptNo)
     setBilledSaleData(bill?.data)
@@ -55,6 +62,10 @@ function AllBillsScreen() {
   const handleBillListClick = (rcptNo: number) => {
     setVisible(!visible)
     handleGetBill(rcptNo)
+  }
+
+  const handleRePrint = () => {
+    // rePrintWithoutGst(billedSaleData, netTotal, totalDiscount as number, 0, 0, customerName, customerMobileNumber, receiptNumber, checked)
   }
 
   const onDialogFailure = () => {
@@ -178,15 +189,16 @@ function AllBillsScreen() {
                 quantity={item.qty}
                 // unit={item.unit}
                 unitPrice={item.price}
-                discount={item?.discount_amt}
+                discount={receiptSettings?.discount_type === "P" ? item?.dis_pertg : item?.discount_amt}
                 key={i}
               />
             )
           })}
         </ScrollableListContainer>
-        <NetTotalButton
+        <NetTotalForRePrints
           width={300}
           backgroundColor={theme.colors.orangeContainer}
+          addedProductsList={billedSaleData}
           netTotal={netTotal}
           textColor={theme.colors.onGreenContainer}
           totalDiscount={totalDiscount}

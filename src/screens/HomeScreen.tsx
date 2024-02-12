@@ -26,6 +26,7 @@ import useBillSummary from "../hooks/api/useBillSummary"
 import useRecentBills from "../hooks/api/useRecentBills"
 import useShowBill from "../hooks/api/useShowBill"
 import AddedProductList from "../components/AddedProductList"
+import NetTotalForRePrints from "../components/NetTotalForRePrints"
 
 function HomeScreen() {
   const navigation = useNavigation()
@@ -226,19 +227,6 @@ function HomeScreen() {
           backgroundColor={theme.colors.surfaceVariant}
           height={250}
           width={300}>
-          {/* {addedProductsList.map(item => {
-            netTotal += item.unit_price * item.quantity
-            return (
-              <AddedProductList
-                itemName={item.item}
-                quantity={item.quantity}
-                unit={item.unit}
-                unitPrice={item.unit_price}
-                discount={22}
-                key={item.id}
-              />
-            )
-          })} */}
           {billedSaleData?.map((item, i) => {
             netTotal += item.price * item.qty
             totalDiscount += parseFloat(item?.discount_amt?.toFixed(2))
@@ -249,16 +237,25 @@ function HomeScreen() {
                 quantity={item.qty}
                 // unit={item.unit}
                 unitPrice={item.price}
-                discount={item?.discount_amt}
+                discount={receiptSettings?.discount_type === "P" ? item?.dis_pertg : item?.discount_amt}
                 key={i}
               />
             )
           })}
         </ScrollableListContainer>
-        <NetTotalButton
+        {/* <NetTotalButton
           width={300}
           backgroundColor={theme.colors.orangeContainer}
           // addedProductsList={billedSaleData}
+          netTotal={netTotal}
+          textColor={theme.colors.onGreenContainer}
+          totalDiscount={totalDiscount}
+          disabled
+        /> */}
+        <NetTotalForRePrints
+          width={300}
+          backgroundColor={theme.colors.orangeContainer}
+          addedProductsList={billedSaleData}
           netTotal={netTotal}
           textColor={theme.colors.onGreenContainer}
           totalDiscount={totalDiscount}
