@@ -52,7 +52,7 @@ function AllBillsScreen() {
   const { fetchSearchedBills } = useSearchBills()
   const { fetchBill } = useShowBill()
 
-  const { rePrintWithoutGst } = useBluetoothPrint()
+  const { rePrint, rePrintWithoutGst } = useBluetoothPrint()
 
   const handleGetBill = async (rcptNo: number) => {
     let bill = await fetchBill(rcptNo)
@@ -74,13 +74,25 @@ function AllBillsScreen() {
 
   const onDialogSuccecss = () => {
     setVisible(!visible)
-    ToastAndroid.showWithGravityAndOffset(
-      "Printing feature will be added in some days.",
-      ToastAndroid.SHORT,
-      ToastAndroid.CENTER,
-      25,
-      50,
-    )
+    // ToastAndroid.showWithGravityAndOffset(
+    //   "Printing feature will be added in some days.",
+    //   ToastAndroid.SHORT,
+    //   ToastAndroid.CENTER,
+    //   25,
+    //   50,
+    // )
+    handleRePrintReceipt()
+  }
+
+  const handleRePrintReceipt = () => {
+    if (billedSaleData.length > 0) {
+      receiptSettings?.gst_flag === "N"
+        ? rePrintWithoutGst(billedSaleData, netTotal, totalDiscount, billedSaleData[0]?.received_amt, (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - Math.round(parseFloat((netTotal - totalDiscount).toFixed(2))) : 0), billedSaleData[0]?.cust_name, billedSaleData[0]?.phone_no, billedSaleData[0]?.receipt_no, billedSaleData[0]?.pay_mode)
+        : rePrint(billedSaleData, netTotal, totalDiscount, billedSaleData[0]?.received_amt, (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - Math.round(parseFloat((netTotal - totalDiscount).toFixed(2))) : 0), billedSaleData[0]?.cust_name, billedSaleData[0]?.phone_no, billedSaleData[0]?.receipt_no, billedSaleData[0]?.pay_mode)
+    } else {
+      ToastAndroid.show("Something went wrong!", ToastAndroid.SHORT)
+      return
+    }
   }
 
   const handleGetBillsByDate = async (fromDate: string, toDate: string) => {

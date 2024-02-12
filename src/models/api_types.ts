@@ -151,6 +151,14 @@ export type ShowBillData = {
     "dis_pertg": number
     "cgst_prtg": number
     "sgst_prtg": number
+    "amount": number
+    "round_off": number
+    "net_amt": number
+    "pay_mode": "C" | "D" | "U"
+    "received_amt": number
+    "pay_dtls": string
+    "cust_name": string
+    "phone_no": string
 }
 
 export type SearchBillsData = {
