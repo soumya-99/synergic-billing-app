@@ -6,7 +6,7 @@ import {
   View,
   ToastAndroid,
 } from "react-native"
-import { List, Searchbar } from "react-native-paper"
+import { List } from "react-native-paper"
 import HeaderImage from "../components/HeaderImage"
 import { textureBill, textureBillDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
@@ -22,17 +22,7 @@ import useSearchBills from "../hooks/api/useSearchBills"
 import { loginStorage } from "../storage/appStorage"
 import { SearchedBills, ShowBillData } from "../models/api_types"
 import { formattedDate } from "../utils/dateFormatter"
-import SurfacePaper from "../components/SurfacePaper"
 import useShowBill from "../hooks/api/useShowBill"
-
-type ProductsDataObject = {
-  id: number
-  item: string
-  description: string
-  quantity: number
-  unit_price: number
-  unit: string
-}
 
 function AllBillsScreen() {
   const theme = usePaperColorScheme()
@@ -88,6 +78,7 @@ function AllBillsScreen() {
   }
 
   let netTotal = 0
+  let totalDiscount = 0
 
   return (
     <SafeAreaView
@@ -179,6 +170,7 @@ function AllBillsScreen() {
           height={200}>
           {billedSaleData.map((item, i) => {
             netTotal += item.price * item.qty
+            totalDiscount += parseFloat(item?.discount_amt?.toFixed(2))
             return (
               <AddedProductList
                 disabled
@@ -197,7 +189,7 @@ function AllBillsScreen() {
           backgroundColor={theme.colors.orangeContainer}
           netTotal={netTotal}
           textColor={theme.colors.onGreenContainer}
-          totalDiscount={4}
+          totalDiscount={totalDiscount}
           disabled
         />
       </DialogBox>

@@ -31,7 +31,8 @@ function HomeScreen() {
   const navigation = useNavigation()
   const isFocused = useIsFocused()
 
-  const { handleGetReceiptSettings } = useContext(AppStore)
+  const { handleGetReceiptSettings, receiptSettings } = useContext(AppStore)
+
   const { fetchBillSummary } = useBillSummary()
   const { fetchRecentBills } = useRecentBills()
   const { fetchBill } = useShowBill()
@@ -56,6 +57,7 @@ function HomeScreen() {
   let formattedDate = year + "-" + month + "-" + day
 
   let netTotal = 0
+  let totalDiscount = 0
 
   const onRefresh = useCallback(() => {
     setRefreshing(true)
@@ -239,6 +241,7 @@ function HomeScreen() {
           })} */}
           {billedSaleData?.map((item, i) => {
             netTotal += item.price * item.qty
+            totalDiscount += parseFloat(item?.discount_amt?.toFixed(2))
             return (
               <AddedProductList
                 disabled
@@ -258,70 +261,9 @@ function HomeScreen() {
           // addedProductsList={billedSaleData}
           netTotal={netTotal}
           textColor={theme.colors.onGreenContainer}
-          totalDiscount={22}
+          totalDiscount={totalDiscount}
           disabled
         />
-        {/* <View
-          style={{
-            width: normalize(300),
-            height: "auto",
-            backgroundColor: theme.colors.orangeContainer,
-            alignSelf: "center",
-            borderRadius: normalize(30),
-            marginTop: normalize(15),
-          }}>
-          <View
-            style={{
-              width: normalize(320),
-              height: "auto",
-              alignSelf: "center",
-              borderRadius: normalize(30),
-              padding: normalize(10),
-            }}>
-              <View
-                style={{
-                  margin: normalize(15),
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  flexDirection: "row",
-                }}>
-                <View>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    TOTAL AMOUNT
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    DISCOUNT
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    CGST
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    SGST
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    NET AMOUNT
-                  </Text>
-                </View>
-                <View>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    ₹{netTotal}
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    ₹{2}
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    9%
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    9%
-                  </Text>
-                  <Text style={{ color: theme.colors.onGreenContainer }}>
-                    ₹{6174}
-                  </Text>
-                </View>
-              </View>
-          </View>
-        </View> */}
       </DialogBox>
       <AnimatedFABPaper
         icon="plus"
