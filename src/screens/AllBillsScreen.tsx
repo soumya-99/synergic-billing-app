@@ -15,6 +15,15 @@ import DialogBox from "../components/DialogBox"
 import AddedProductList from "../components/AddedProductList"
 import ScrollableListContainer from "../components/ScrollableListContainer"
 import NetTotalButton from "../components/NetTotalButton"
+import ButtonPaper from "../components/ButtonPaper"
+import DatePicker from "react-native-date-picker"
+import normalize from "react-native-normalize"
+import useSearchBills from "../hooks/api/useSearchBills"
+import { loginStorage } from "../storage/appStorage"
+import { SearchedBills, ShowBillData } from "../models/api_types"
+import { formattedDate } from "../utils/dateFormatter"
+import SurfacePaper from "../components/SurfacePaper"
+import useShowBill from "../hooks/api/useShowBill"
 
 type ProductsDataObject = {
   id: number
@@ -29,76 +38,34 @@ function AllBillsScreen() {
   const theme = usePaperColorScheme()
   const navigation = useNavigation()
 
-  const [search, setSearch] = useState<string>(() => "")
-  const onChangeSearch = (query: string) => {
-    setSearch(query)
-  }
-
-  const [addedProductsList, setAddedProductsList] = useState<
-    ProductsDataObject[]
-  >(() => [
-    {
-      id: 1,
-      item: "Emami Rice Bran Oil",
-      description: "Item description",
-      unit_price: 240,
-      quantity: 2,
-      unit: "Lt",
-    },
-    {
-      id: 2,
-      item: "Lux Soap",
-      description: "Item description",
-      unit_price: 65,
-      quantity: 9,
-      unit: "Pc",
-    },
-    {
-      id: 3,
-      item: "Mung Daal",
-      description: "Item description",
-      unit_price: 160,
-      quantity: 12,
-      unit: "Kg",
-    },
-    {
-      id: 4,
-      item: "Cadbury Dairy Milk",
-      description: "Item description",
-      unit_price: 110,
-      quantity: 7,
-      unit: "Pc",
-    },
-    {
-      id: 9,
-      item: "Cadbury Dairy Milk",
-      description: "Item description",
-      unit_price: 110,
-      quantity: 7,
-      unit: "Pc",
-    },
-    {
-      id: 78,
-      item: "Cadbury Dairy Milk",
-      description: "Item description",
-      unit_price: 110,
-      quantity: 7,
-      unit: "Pc",
-    },
-    {
-      id: 23,
-      item: "Cadbury Dairy Milk",
-      description: "Item description",
-      unit_price: 110,
-      quantity: 7,
-      unit: "Pc",
-    },
-  ])
-
-  let netTotal = 0
+  const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
   const [visible, setVisible] = useState(() => false)
   const hideDialog = () => setVisible(() => false)
+
+  const [fromDate, setFromDate] = useState(() => new Date())
+  const [toDate, setToDate] = useState(() => new Date())
+  const [openFromDate, setOpenFromDate] = useState(() => false)
+  const [openToDate, setOpenToDate] = useState(() => false)
+
+  const formattedFromDate = formattedDate(fromDate)
+  const formattedToDate = formattedDate(toDate)
+
+  const [billsArray, setBillsArray] = useState<SearchedBills[]>(() => [])
+  const [billedSaleData, setBilledSaleData] = useState<ShowBillData[]>(() => [])
+
+  const { fetchSearchedBills } = useSearchBills()
+  const { fetchBill } = useShowBill()
+
+  const handleGetBill = async (rcptNo: number) => {
+    let bill = await fetchBill(rcptNo)
+    setBilledSaleData(bill?.data)
+  }
+
+  const handleBillListClick = (rcptNo: number) => {
+    setVisible(!visible)
+    handleGetBill(rcptNo)
+  }
 
   const onDialogFailure = () => {
     setVisible(!visible)
@@ -114,6 +81,14 @@ function AllBillsScreen() {
       50,
     )
   }
+
+  const handleGetBillsByDate = async (fromDate: string, toDate: string) => {
+    let billResponseData = await fetchSearchedBills(fromDate, toDate, loginStore.comp_id, loginStore.br_id, loginStore.user_id)
+    setBillsArray(billResponseData?.data)
+  }
+
+  let netTotal = 0
+
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -130,27 +105,60 @@ function AllBillsScreen() {
           </HeaderImage>
         </View>
 
-        <View style={{ padding: 20 }}>
-          <Searchbar
-            placeholder="Search Bills"
-            onChangeText={onChangeSearch}
-            value={search}
-            elevation={search && 2}
-            // loading={search ? true : false}
+        <View style={{ padding: 10, flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
+          <ButtonPaper onPress={() => setOpenFromDate(true)} mode="text">
+            FROM: {fromDate?.toLocaleDateString("en-GB")}
+          </ButtonPaper>
+          <ButtonPaper onPress={() => setOpenToDate(true)} mode="text">
+            TO: {toDate?.toLocaleDateString("en-GB")}
+          </ButtonPaper>
+
+          <DatePicker
+            modal
+            mode="date"
+            // minimumDate={toDate.setMonth(toDate.getMonth() - 1)}
+            open={openFromDate}
+            date={fromDate}
+            onConfirm={(date) => {
+              setOpenFromDate(false)
+              setFromDate(date)
+            }}
+            onCancel={() => {
+              setOpenFromDate(false)
+            }}
+          />
+          <DatePicker
+            modal
+            mode="date"
+            open={openToDate}
+            date={toDate}
+            onConfirm={(date) => {
+              setOpenToDate(false)
+              setToDate(date)
+            }}
+            onCancel={() => {
+              setOpenToDate(false)
+            }}
           />
         </View>
 
+        <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
+          <ButtonPaper onPress={() => handleGetBillsByDate(formattedFromDate, formattedToDate)} mode="contained-tonal">
+            SUBMIT
+          </ButtonPaper>
+        </View>
+
         <View style={{ width: "100%" }}>
-          {[...new Array(20).keys()].map((_, i) => (
+          {billsArray?.map((item, i) => (
             <List.Item
               key={i}
-              title={`Bill ${i + 1}`}
-              description={"Cadbury, Oil, Daal..."}
-              onPress={() => setVisible(!visible)}
+              title={`Bill ${item?.receipt_no}`}
+              description={`₹${item?.amount}`}
+              onPress={() => handleBillListClick(item?.receipt_no)}
               left={props => <List.Icon {...props} icon="basket" />}
-              // right={props => (
-              //   <List.Icon {...props} icon="download" />
-              // )}
+            // right={props => (
+            //   <List.Icon {...props} icon="download" />
+            // )}
             />
           ))}
         </View>
@@ -169,15 +177,17 @@ function AllBillsScreen() {
           backgroundColor={theme.colors.surfaceVariant}
           width={300}
           height={200}>
-          {addedProductsList.map(item => {
-            netTotal += item.unit_price * item.quantity
+          {billedSaleData.map((item, i) => {
+            netTotal += item.price * item.qty
             return (
               <AddedProductList
-                key={item.id}
-                itemName={item.item}
-                quantity={item.quantity}
-                unitPrice={item.unit_price}
-                unit={item.unit}
+                disabled
+                itemName={item.item_name}
+                quantity={item.qty}
+                // unit={item.unit}
+                unitPrice={item.price}
+                discount={item?.discount_amt}
+                key={i}
               />
             )
           })}

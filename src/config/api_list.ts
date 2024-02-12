@@ -12,4 +12,5 @@ export const ADDRESSES = {
     BILL_SUMMARY: `${BASE_URL}/api/billsummary`,
     RECENT_BILLS: `${BASE_URL}/api/recent_bills`,
     SHOW_BILL: `${BASE_URL}/api/show_bill`,
+    SEARCH_BILLS: `${BASE_URL}/api/search_bills`,
 }

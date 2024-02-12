@@ -149,3 +149,29 @@ export type ShowBillData = {
     "modified_dt": null
     "item_name": string
 }
+
+export type SearchBillsData = {
+    "status": 1,
+    "data": SearchedBills[]
+}
+
+export type SearchedBills = {
+    "receipt_no": number
+    "trn_date": string
+    "price": number
+    "discount_amt": number
+    "cgst_amt": number
+    "sgst_amt": number
+    "amount": number
+    "round_off": number
+    "net_amt": number
+    "pay_mode": "C" | "D" | "U"
+    "received_amt": number
+    "pay_dtls": string
+    "cust_name": string
+    "phone_no": string
+    "created_by": string
+    "created_dt": string
+    "modified_by": null
+    "modified_dt": null
+}
