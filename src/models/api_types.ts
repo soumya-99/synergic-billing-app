@@ -186,3 +186,42 @@ export type SearchedBills = {
     "modified_by": null
     "modified_dt": null
 }
+
+export type SaleReportData = {
+    "status": number
+    "data": SaleReport[]
+}
+
+export type SaleReport = {
+    "cust_name": string
+    "phone_no": string
+    "receipt_no": number
+    "trn_date": string
+    "no_of_items": number
+    "price": number
+    "discount_amt": number
+    "cgst_amt": number
+    "sgst_amt": number
+    "rount_off": number
+    "net_amt": number
+    "created_by": string
+}
+
+export type ItemReportData = {
+    "status": number
+    "data": ItemReport[]
+}
+
+export type ItemReport = {
+    "receipt_no": number
+    "trn_date": string
+    "qty": number
+    "price": number
+    "discount_amt": number
+    "cgst_amt": number
+    "sgst_amt": number
+    "amount": number
+    "pay_mode": "C" | "U" | "D"
+    "item_name": string
+    "branch_name": string
+}
