@@ -40,11 +40,11 @@ function CollectionReportScreen() {
         console.log("XXXXXXXXXXXXXXXXX", collectionResponse?.data)
     }
 
-    const handlePrint = (collectionReport: CollectionReport[]) => {
+    const handlePrint = (collectionReport: CollectionReport[], fromDate: string, toDate: string) => {
         if (collectionReport.length !== 0) {
-            printCollectionReport(collectionReport)
+            printCollectionReport(collectionReport, fromDate, toDate)
         } else {
-            ToastAndroid.show("Something went wrong in Sale Report!", ToastAndroid.SHORT)
+            ToastAndroid.show("Something went wrong in Collection Report!", ToastAndroid.SHORT)
             return
         }
     }
@@ -128,7 +128,7 @@ function CollectionReportScreen() {
                     </DataTable>
                 </SurfacePaper>
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
-                    <ButtonPaper icon={"cloud-print-outline"} onPress={() => console.log("sagfsdffasd")} mode="contained-tonal">
+                    <ButtonPaper icon={"cloud-print-outline"} onPress={() => handlePrint(collectionReport, formattedFromDate, formattedToDate)} mode="contained-tonal">
                         PRINT
                     </ButtonPaper>
                 </View>
