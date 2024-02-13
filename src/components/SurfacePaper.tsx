@@ -3,6 +3,7 @@ import { Surface, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import { PropsWithChildren } from "react"
 import { ElevationLevels } from "react-native-paper/lib/typescript/types"
+import { SCREEN_WIDTH } from "react-native-normalize"
 
 type SurfacePaperProps = {
   backgroundColor: string
@@ -10,6 +11,8 @@ type SurfacePaperProps = {
   elevation?: ElevationLevels
   customTheme?: {}
   isBorderEnabled?: boolean
+  paddingEnabled?: boolean
+  borderRadiusEnabled?: boolean
 }
 
 export default function SurfacePaper({
@@ -18,11 +21,13 @@ export default function SurfacePaper({
   backgroundColor,
   children,
   isBorderEnabled,
+  paddingEnabled,
+  borderRadiusEnabled
 }: PropsWithChildren<SurfacePaperProps>) {
   const theme = usePaperColorScheme()
   return (
     <Surface
-      style={[styles.bill, { backgroundColor: backgroundColor }]}
+      style={[styles.bill, { backgroundColor: backgroundColor, padding: paddingEnabled ? 10 : 0, borderRadius: borderRadiusEnabled ? 30 : 0 }]}
       elevation={elevation}>
       {heading && (
         <Text
@@ -53,13 +58,14 @@ export default function SurfacePaper({
 
 const styles = StyleSheet.create({
   bill: {
-    margin: 20,
-    padding: 10,
+    alignSelf: "center",
+    margin: 10,
+    // padding: 10,
     // minHeight: 200,
     height: "auto",
     maxHeight: "auto",
-    borderRadius: 30,
-    width: 330,
+    // borderRadius: 30,
+    width: SCREEN_WIDTH / 1.05,
     alignItems: "center",
   },
 })

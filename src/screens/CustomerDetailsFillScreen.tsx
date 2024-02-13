@@ -115,8 +115,7 @@ const CustomerDetailsFillScreen = () => {
                             imgDark={productHeaderDark}
                             borderRadius={30}
                             blur={10}
-                            isBackEnabled
-                            navigation={navigation}>
+                            isBackEnabled>
                             {receiptSettings?.cust_inf === "Y" ? "Customer Details & Print" : "Print"}
                         </HeaderImage>
                     </View>

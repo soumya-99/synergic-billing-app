@@ -1662,5 +1662,9 @@ export const useBluetoothPrint = () => {
         }
     }
 
-    return { printReceipt, printReceiptWithoutGst, rePrint, rePrintWithoutGst }
+    async function printSaleReport() {
+
+    }
+
+    return { printReceipt, printReceiptWithoutGst, rePrint, rePrintWithoutGst, printSaleReport }
 }

@@ -157,6 +157,8 @@ function HomeScreen() {
 
         <View style={{ alignItems: "center" }}>
           <SurfacePaper
+            borderRadiusEnabled
+            paddingEnabled
             // heading="Summary"
             elevation={2}
             backgroundColor={theme.colors.surfaceVariant}>
@@ -189,6 +191,8 @@ function HomeScreen() {
           </SurfacePaper>
 
           <SurfacePaper
+            borderRadiusEnabled
+            paddingEnabled
             isBorderEnabled
             heading="Recent Bills"
             elevation={2}

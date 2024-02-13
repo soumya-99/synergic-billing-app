@@ -9,13 +9,13 @@ import {
 import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from "react-native-normalize"
 import { IconButton, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
+import { CommonActions, useNavigation } from "@react-navigation/native"
 
 type HeaderImageProps = {
   imgLight: { uri: string }
   imgDark?: { uri: string }
   borderRadius?: number
   blur?: number
-  navigation?: any
   isBackEnabled?: boolean
 }
 
@@ -25,12 +25,12 @@ export default function HeaderImage({
   borderRadius,
   blur,
   children,
-  navigation,
   isBackEnabled,
 }: PropsWithChildren<HeaderImageProps>) {
   const colorScheme = useColorScheme()
   const theme = usePaperColorScheme()
-  // const navigation = useNavigation()
+
+  const navigation = useNavigation()
   return (
     <>
       {isBackEnabled && (
@@ -39,7 +39,9 @@ export default function HeaderImage({
             icon="arrow-left"
             iconColor={theme.colors.onBackground}
             size={20}
-            onPress={() => navigation.goBack()}
+            onPress={() => navigation.dispatch(
+              CommonActions.goBack()
+            )}
             style={{
               position: "absolute",
               top: SCREEN_HEIGHT / 40,
