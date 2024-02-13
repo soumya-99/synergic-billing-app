@@ -40,7 +40,7 @@ function CollectionReportScreen() {
         console.log("XXXXXXXXXXXXXXXXX", collectionResponse?.data)
     }
 
-    const handlePrintCollectionReport = (collectionReport: CollectionReport[]) => {
+    const handlePrint = (collectionReport: CollectionReport[]) => {
         if (collectionReport.length !== 0) {
             printCollectionReport(collectionReport)
         } else {

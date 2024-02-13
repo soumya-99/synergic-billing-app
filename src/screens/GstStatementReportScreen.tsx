@@ -40,7 +40,7 @@ function GstStatementReportScreen() {
         console.log("WWWWWWWWWWWWWW", gstStatementResponse?.data)
     }
 
-    const handlePrintItemReport = (gstStatementReport: GstStatement[]) => {
+    const handlePrint = (gstStatementReport: GstStatement[]) => {
         if (gstStatementReport.length !== 0) {
             printGstStatement(gstStatementReport)
         } else {

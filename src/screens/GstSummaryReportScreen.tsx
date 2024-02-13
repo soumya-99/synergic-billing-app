@@ -10,21 +10,22 @@ import { useState } from "react"
 import normalize from "react-native-normalize"
 import { formattedDate } from "../utils/dateFormatter"
 import { loginStorage } from "../storage/appStorage"
-import { CollectionReport, ItemReport } from "../models/api_types"
+import { GstStatement, GstSummary } from "../models/api_types"
 import SurfacePaper from "../components/SurfacePaper"
 import { useBluetoothPrint } from "../hooks/printables/useBluetoothPrint"
-import useCollectionReport from "../hooks/api/useCollectionReport"
-import useItemReport from "../hooks/api/useItemReport"
+import useGstStatementReport from "../hooks/api/useGstStatementReport"
+import useGstSummary from "../hooks/api/useGstSummaryReport"
+import useGstSummaryReport from "../hooks/api/useGstSummaryReport"
 
-function ItemReportScreen() {
+function GstSummaryReportScreen() {
     const theme = usePaperColorScheme()
 
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
-    const { fetchItemReport } = useItemReport()
-    const { printItemReport } = useBluetoothPrint()
+    const { fetchGstSummary } = useGstSummaryReport()
+    const { printGstSummary } = useBluetoothPrint()
 
-    const [itemReport, setItemReport] = useState<ItemReport[]>(() => [])
+    const [gstStatement, setGstStatement] = useState<GstSummary[]>(() => [])
 
     const [fromDate, setFromDate] = useState(() => new Date())
     const [toDate, setToDate] = useState(() => new Date())
@@ -35,17 +36,17 @@ function ItemReportScreen() {
     const formattedToDate = formattedDate(toDate)
 
     const handleGetCollectionReport = async (fromDate: string, toDate: string, companyId: number, branchId: number) => {
-        let itemResponse = await fetchItemReport(fromDate, toDate, companyId, branchId, 1)
+        let gstSummaryResponse = await fetchGstSummary(fromDate, toDate, companyId, branchId)
 
-        setItemReport(itemResponse?.data)
-        console.log("XXXXXXXXXXXXXXXXX", itemResponse?.data)
+        setGstStatement(gstSummaryResponse?.data)
+        console.log("LLLLLLLLLLLLLLLL", gstSummaryResponse?.data)
     }
 
-    const handlePrint = (itemReport: ItemReport[]) => {
-        if (itemReport.length !== 0) {
-            printItemReport(itemReport)
+    const handlePrint = (gstSummaryReport: GstSummary[]) => {
+        if (gstSummaryReport.length !== 0) {
+            printGstSummary(gstSummaryReport)
         } else {
-            ToastAndroid.show("Something went wrong in Item Report!", ToastAndroid.SHORT)
+            ToastAndroid.show("Something went wrong in GST Statement Report!", ToastAndroid.SHORT)
             return
         }
     }
@@ -60,7 +61,7 @@ function ItemReportScreen() {
                         imgDark={blurReportDark}
                         borderRadius={30}
                         blur={10}>
-                        Item Report
+                        GST Summary
                     </HeaderImage>
                 </View>
                 <View style={{ padding: normalize(10), flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
@@ -111,20 +112,22 @@ function ItemReportScreen() {
                     <DataTable>
 
                         <DataTable.Header>
-                            <DataTable.Title>Created By</DataTable.Title>
-                            <DataTable.Title>Pay Mode</DataTable.Title>
-                            <DataTable.Title numeric>Net Amount</DataTable.Title>
+                            <DataTable.Title numeric>CGST (%)</DataTable.Title>
+                            <DataTable.Title numeric>CGST Amt.</DataTable.Title>
+                            <DataTable.Title numeric>SGST Amt.</DataTable.Title>
+                            <DataTable.Title numeric>Total Tax</DataTable.Title>
                         </DataTable.Header>
 
-                        {/* {itemReport.map((item, i) => {
+                        {gstStatement.map((item, i) => {
                             return (
                                 <DataTable.Row key={i}>
-                                    <DataTable.Cell>{item?.created_by}</DataTable.Cell>
-                                    <DataTable.Cell>{item?.pay_mode === "C" ? "Cash" : item?.pay_mode === "U" ? "UPI" : item?.pay_mode === "D" ? "Card" : ""}</DataTable.Cell>
-                                    <DataTable.Cell numeric>{item?.net_amt}</DataTable.Cell>
+                                    <DataTable.Cell numeric>{item?.cgst_prtg}</DataTable.Cell>
+                                    <DataTable.Cell numeric>{item?.cgst_amt}</DataTable.Cell>
+                                    <DataTable.Cell numeric>{item?.sgst_amt}</DataTable.Cell>
+                                    <DataTable.Cell numeric>{item?.total_tax}</DataTable.Cell>
                                 </DataTable.Row>
                             )
-                        })} */}
+                        })}
 
                     </DataTable>
                 </SurfacePaper>
@@ -138,7 +141,7 @@ function ItemReportScreen() {
     )
 }
 
-export default ItemReportScreen
+export default GstSummaryReportScreen
 
 const styles = StyleSheet.create({
     container: {

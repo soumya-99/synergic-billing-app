@@ -2,7 +2,7 @@ import axios from "axios"
 import { ADDRESSES } from "../../config/api_list"
 import { GstSummaryData } from "../../models/api_types"
 
-export default function useGstSummary() {
+export default function useGstSummaryReport() {
     const fetchGstSummary = async (fromDate: string, toDate: string, companyId: number, branchId: number) => {
         return new Promise<PromiseLike<GstSummaryData>>((resolve, reject) => {
             axios.post(`${ADDRESSES.GST_SUMMARY}`, {
