@@ -40,9 +40,9 @@ function GstStatementReportScreen() {
         console.log("WWWWWWWWWWWWWW", gstStatementResponse?.data)
     }
 
-    const handlePrint = (gstStatementReport: GstStatement[]) => {
+    const handlePrint = (gstStatementReport: GstStatement[], fromDate: string, toDate: string) => {
         if (gstStatementReport.length !== 0) {
-            printGstStatement(gstStatementReport)
+            printGstStatement(gstStatementReport, fromDate, toDate)
         } else {
             ToastAndroid.show("Something went wrong in GST Statement Report!", ToastAndroid.SHORT)
             return
@@ -111,18 +111,22 @@ function GstStatementReportScreen() {
 
                         <DataTable.Header>
                             <DataTable.Title>Rcpt No.</DataTable.Title>
+                            <DataTable.Title numeric>CGST</DataTable.Title>
+                            <DataTable.Title numeric>SGST</DataTable.Title>
+                            <DataTable.Title numeric>Total Tax</DataTable.Title>
                             <DataTable.Title numeric>Taxable Amt.</DataTable.Title>
-                            <DataTable.Title numeric>GST</DataTable.Title>
-                            <DataTable.Title numeric>Net Amount</DataTable.Title>
+                            {/* <DataTable.Title numeric>Net Amount</DataTable.Title> */}
                         </DataTable.Header>
 
                         {gstStatement.map((item, i) => {
                             return (
                                 <DataTable.Row key={i}>
                                     <DataTable.Cell>{item?.receipt_no}</DataTable.Cell>
-                                    <DataTable.Cell numeric>{item?.taxable_amt}</DataTable.Cell>
+                                    <DataTable.Cell numeric>{item?.cgst_amt}</DataTable.Cell>
+                                    <DataTable.Cell numeric>{item?.sgst_amt}</DataTable.Cell>
                                     <DataTable.Cell numeric>{item?.total_tax}</DataTable.Cell>
-                                    <DataTable.Cell numeric>{item?.net_amt}</DataTable.Cell>
+                                    <DataTable.Cell numeric>{item?.taxable_amt}</DataTable.Cell>
+                                    {/* <DataTable.Cell numeric>{item?.net_amt}</DataTable.Cell> */}
                                 </DataTable.Row>
                             )
                         })}
@@ -130,7 +134,7 @@ function GstStatementReportScreen() {
                     </DataTable>
                 </SurfacePaper>
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
-                    <ButtonPaper icon={"cloud-print-outline"} onPress={() => console.log("sagfsdffasd")} mode="contained-tonal">
+                    <ButtonPaper icon={"cloud-print-outline"} onPress={() => handlePrint(gstStatement, formattedFromDate, formattedToDate)} mode="contained-tonal">
                         PRINT
                     </ButtonPaper>
                 </View>

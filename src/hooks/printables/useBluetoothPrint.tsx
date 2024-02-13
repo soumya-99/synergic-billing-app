@@ -2074,7 +2074,203 @@ export const useBluetoothPrint = () => {
 
     async function printItemReport(saleReport: ItemReport[]) { }
 
-    async function printGstStatement(saleReport: GstStatement[]) { }
+    async function printGstStatement(gstStatement: GstStatement[], fromDate: string, toDate: string) {
+        const loginStore = JSON.parse(loginStorage.getString("login-data"))
+
+        const shopName: string = loginStore?.company_name?.toString()
+        const address: string = loginStore?.address?.toString()
+        const location: string = loginStore?.branch_name?.toString()
+        const shopMobile: string = loginStore?.phone_no?.toString()
+        const shopEmail: string = loginStore?.email_id?.toString()
+        // const cashier: string = loginStore?.user_name?.toString()
+
+
+        let totalCGST: number = 0
+        let totalSGST: number = 0
+        let totalTaxes: number = 0
+
+        try {
+
+            let columnWidths = [11, 1, 18]
+            let columnWidthsHeader = [8, 1, 21]
+            // let columnWidthsProductsHeaderAndBody = [5, 4, 8, 6, 4, 4] // 1 in hand
+            // let columnWidthsProductsHeaderAndBody = [5, 5, 5, 8, 8] // 1 in hand
+            let columnWidthsProductsHeaderAndBody = [8, 5, 5, 8] // 6 in hand
+            // let columnWidthsProductsHeaderAndBody = [18, 3, 4, 3, 4]
+            let columnWidthsTotals = [15, 15]
+            let columnWidthIfNameIsBig = [32]
+
+            // let newColumnWidths: number[] = [9, 9, 6, 7]
+
+            await BluetoothEscposPrinter.printerAlign(
+                BluetoothEscposPrinter.ALIGN.CENTER,
+            )
+            await BluetoothEscposPrinter.printText(shopName.toUpperCase(), {
+                align: "center",
+                widthtimes: 1.2,
+                heigthtimes: 2,
+            })
+            await BluetoothEscposPrinter.printText("\n", {})
+            // await BluetoothEscposPrinter.printText("hasifughaf", { align: "center" })
+
+            // if (receiptSettings?.on_off_flag1 === "Y") {
+            //     await BluetoothEscposPrinter.printText(receiptSettings?.header1, {})
+            //     await BluetoothEscposPrinter.printText("\n", {})
+            // }
+
+            // if (receiptSettings?.on_off_flag2 === "Y") {
+            //     await BluetoothEscposPrinter.printText(receiptSettings?.header2, {})
+            // }
+            // await BluetoothEscposPrinter.printText("\n", {})
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText("GST STATEMENT", {
+                align: "center",
+            })
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(`From: ${new Date(fromDate).toLocaleDateString("en-GB")}  To: ${new Date(toDate).toLocaleDateString("en-GB")}`, {})
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+            await BluetoothEscposPrinter.printText(address, {
+                align: "center",
+            })
+            await BluetoothEscposPrinter.printText("\n", {})
+            await BluetoothEscposPrinter.printText(location, {
+                align: "center",
+            })
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER)
+            await BluetoothEscposPrinter.printColumn(
+                columnWidthsProductsHeaderAndBody,
+                [
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.CENTER,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                    // BluetoothEscposPrinter.ALIGN.RIGHT,
+                ],
+                // ["RCPT", "CGST", "SGST", "TOT_TAX", "TAX_AMT"],
+                ["RCPT", "CGST", "SGST", "TOT_TAX"],
+                {},
+            )
+
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            for (const item of gstStatement) {
+                // let totalGST: number = 0
+
+                // totalGST += item?.cgst_amt + item?.sgst_amt
+                // totalQuantities += item?.no_of_items
+                // totalPrice += item?.price
+                // totalDiscount += item?.discount_amt
+                // totalGSTs += totalGST
+                // totalNet += item?.net_amt + item?.rount_off
+                totalCGST += item?.cgst_amt
+                totalSGST += item?.sgst_amt
+                totalTaxes += item?.total_tax
+
+                await BluetoothEscposPrinter.printColumn(
+                    columnWidthsProductsHeaderAndBody,
+                    [
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.CENTER,
+                        BluetoothEscposPrinter.ALIGN.RIGHT,
+                        // BluetoothEscposPrinter.ALIGN.RIGHT,
+                    ],
+                    // [item?.receipt_no?.toString()?.substring(item?.receipt_no?.toString()?.length - 4), item?.cgst_amt?.toString(), item?.sgst_amt?.toString(), item?.total_tax?.toString(), item?.taxable_amt?.toString()],
+                    [item?.receipt_no?.toString()?.substring(item?.receipt_no?.toString()?.length - 4), item?.cgst_amt?.toString(), item?.sgst_amt?.toString(), item?.total_tax?.toString()],
+                    {},
+                )
+            }
+
+            await BluetoothEscposPrinter.printText("\n", {})
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printColumn(
+                columnWidthsTotals,
+                [
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                ],
+                [`CGST: ${totalCGST?.toString()}`, `SGST: ${totalSGST?.toFixed(2)?.toString()}`],
+                {},
+            )
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(`Total Taxes: ${totalTaxes?.toString()}`, {})
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
+            // if (receiptSettings?.on_off_flag3 === "Y") {
+            //     await BluetoothEscposPrinter.printText(receiptSettings?.footer1, {})
+            //     await BluetoothEscposPrinter.printText("\n", {})
+            // }
+            // if (receiptSettings?.on_off_flag4 === "Y") {
+            //     await BluetoothEscposPrinter.printText(receiptSettings?.footer2, {})
+            // }
+            // await BluetoothEscposPrinter.printText("\n", {})
+
+
+            // await BluetoothEscposPrinter.printText(
+            //     "THANK YOU, VISIT AGAIN!",
+            //     { align: "center" },
+            // )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(
+                "------X------",
+                {},
+            )
+            await BluetoothEscposPrinter.printText("\n\r\n\r\n\r", {})
+        } catch (e) {
+            console.log(e.message || "ERROR")
+        }
+    }
 
     async function printGstSummary(saleReport: GstSummary[]) { }
 
