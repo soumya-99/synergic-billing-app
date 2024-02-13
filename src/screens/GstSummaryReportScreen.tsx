@@ -42,11 +42,11 @@ function GstSummaryReportScreen() {
         console.log("LLLLLLLLLLLLLLLL", gstSummaryResponse?.data)
     }
 
-    const handlePrint = (gstSummaryReport: GstSummary[]) => {
+    const handlePrint = (gstSummaryReport: GstSummary[], fromDate: string, toDate: string) => {
         if (gstSummaryReport.length !== 0) {
-            printGstSummary(gstSummaryReport)
+            printGstSummary(gstSummaryReport, fromDate, toDate)
         } else {
-            ToastAndroid.show("Something went wrong in GST Statement Report!", ToastAndroid.SHORT)
+            ToastAndroid.show("Something went wrong in GST Summary Report!", ToastAndroid.SHORT)
             return
         }
     }
@@ -132,7 +132,7 @@ function GstSummaryReportScreen() {
                     </DataTable>
                 </SurfacePaper>
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
-                    <ButtonPaper icon={"cloud-print-outline"} onPress={() => console.log("sagfsdffasd")} mode="contained-tonal">
+                    <ButtonPaper icon={"cloud-print-outline"} onPress={() => handlePrint(gstStatement, formattedFromDate, formattedToDate)} mode="contained-tonal">
                         PRINT
                     </ButtonPaper>
                 </View>
