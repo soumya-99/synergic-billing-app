@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView, SafeAreaView, View } from "react-native"
+import { StyleSheet, ScrollView, SafeAreaView, View, ToastAndroid } from "react-native"
 
 import HeaderImage from "../components/HeaderImage"
 import { blurReport, blurReportDark } from "../resources/images"
@@ -13,6 +13,7 @@ import { formattedDate } from "../utils/dateFormatter"
 import { loginStorage } from "../storage/appStorage"
 import { SaleReport } from "../models/api_types"
 import SurfacePaper from "../components/SurfacePaper"
+import { useBluetoothPrint } from "../hooks/printables/useBluetoothPrint"
 
 function SaleReportScreen() {
   const theme = usePaperColorScheme()
@@ -20,6 +21,7 @@ function SaleReportScreen() {
   const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
   const { fetchSaleReport } = useSaleReport()
+  const { printSaleReport } = useBluetoothPrint()
 
   const [saleReport, setSaleReport] = useState<SaleReport[]>(() => [])
 
@@ -36,6 +38,15 @@ function SaleReportScreen() {
 
     setSaleReport(saleResponse?.data)
     console.log("DDDDDDDDDDDDDDD", saleResponse?.data)
+  }
+
+  const handlePrintSaleReport = (saleReport: SaleReport[]) => {
+    if (saleReport.length !== 0) {
+      printSaleReport(saleReport)
+    } else {
+      ToastAndroid.show("Something went wrong in Sale Report!", ToastAndroid.SHORT)
+      return
+    }
   }
 
   return (

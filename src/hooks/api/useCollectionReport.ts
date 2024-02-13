@@ -1,10 +1,10 @@
 import axios from "axios"
 import { ADDRESSES } from "../../config/api_list"
-import { SaleReportData } from "../../models/api_types"
+import { CollectionReportData } from "../../models/api_types"
 
 export default function useCollectionReport() {
     const fetchCollectionReport = async (fromDate: string, toDate: string, companyId: number, branchId: number) => {
-        return new Promise<PromiseLike<any>>((resolve, reject) => {
+        return new Promise<PromiseLike<CollectionReportData>>((resolve, reject) => {
             axios.post(`${ADDRESSES.COLLECTION_REPORT}`, {
                 from_date: fromDate,
                 to_date: toDate,

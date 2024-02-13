@@ -225,3 +225,42 @@ export type ItemReport = {
     "item_name": string
     "branch_name": string
 }
+
+export type CollectionReportData = {
+    "status": number,
+    "data": CollectionReport[]
+}
+
+export type CollectionReport = {
+    "created_by": string,
+    "pay_mode": "C" | "U" | "D"
+    "net_amt": number
+}
+
+export type GstStatementData = {
+    "status": number
+    "data": GstStatement[]
+}
+
+export type GstStatement = {
+    "receipt_no": number
+    "trn_date": string
+    "taxable_amt": number
+    "cgst_amt": number
+    "sgst_amt": number
+    "total_tax": number
+    "net_amt": number
+}
+
+export type GstSummaryData = {
+    "status": number
+    "data": GstSummary[]
+}
+
+export type GstSummary = {
+    "cgst_prtg": number
+    "cgst_amt": number
+    "sgst_amt": number
+    "total_tax": number
+}
+
