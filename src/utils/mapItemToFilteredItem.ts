@@ -4,8 +4,8 @@ import { FilteredItem } from "../models/custom_types"
 export function mapItemToFilteredItem(item: ItemsData, receiptSettings: ReceiptSettingsData, branchId: string, params: any, checked: string, cashAmount: number, customerName: string, customerMobileNumber: string, createdBy: string): FilteredItem {
     const { cgst, sgst, com_id, discount, item_id, quantity, price } = item
 
-    const cgstAmt = receiptSettings?.gst_flag === "N" ? 0 : cgst
-    const sgstAmt = receiptSettings?.gst_flag === "N" ? 0 : sgst
+    const cgstAmt = receiptSettings?.gst_flag === "N" ? 0 : (price * quantity * cgst / 100)
+    const sgstAmt = receiptSettings?.gst_flag === "N" ? 0 : (price * quantity * sgst / 100)
 
     const discountAmt = receiptSettings?.discount_type === "P" ?
         parseFloat((((price * quantity * discount) / 100).toFixed(2))) :

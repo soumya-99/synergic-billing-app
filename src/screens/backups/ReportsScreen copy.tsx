@@ -5,11 +5,8 @@ import { blurReport, blurReportDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
 import ReportButton from "../components/ReportButton"
 import ReportButtonsWrapper from "../components/ReportButtonsWrapper"
-import { CommonActions, useNavigation } from "@react-navigation/native"
-import navigationRoutes from "../routes/navigationRoutes"
 
 function ReportsScreen() {
-  const navigation = useNavigation()
   const theme = usePaperColorScheme()
 
   return (
@@ -26,14 +23,10 @@ function ReportsScreen() {
         </View>
         <ReportButtonsWrapper>
           <ReportButton
-            text="Sale Report"
+            text="Bill Wise"
             color={theme.colors.greenContainer}
             icon="billboard"
-            onPress={() => navigation.dispatch(
-              CommonActions.navigate({
-                name: navigationRoutes.saleReportScreen,
-              })
-            )}
+            onPress={() => console.log("Rprt Pressed!")}
           />
           <ReportButton
             text="Item Wise"

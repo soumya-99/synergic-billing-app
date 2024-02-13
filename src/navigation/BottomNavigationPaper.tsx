@@ -4,6 +4,7 @@ import ReportsScreen from "../screens/ReportsScreen"
 import { usePaperColorScheme } from "../theme/theme"
 import SettingsNavigation from "./SettingsNavigation"
 import HomeNavigation from "./HomeNavigation"
+import ReportsNavigation from "./ReportsNavigation"
 
 const Tab = createMaterialBottomTabNavigator()
 
@@ -26,7 +27,7 @@ function BottomNavigationPaper() {
       />
       <Tab.Screen
         name="Reports"
-        component={ReportsScreen}
+        component={ReportsNavigation}
         options={{
           tabBarLabel: "Reports",
           tabBarIcon: ({ color, focused }) => (
