@@ -46,22 +46,34 @@ function ReportsScreen() {
             )}
           />
           <ReportButton
-            text="Operaotr Wise"
+            text="Item Report"
             color={theme.colors.tertiaryContainer}
             icon="billboard"
-            onPress={() => console.log("Rprt Pressed!")}
+            onPress={() => navigation.dispatch(
+              CommonActions.navigate({
+                name: navigationRoutes.itemReportScreen,
+              })
+            )}
           />
           <ReportButton
-            text="Duplicate Receipt"
+            text="GST Statement"
             color={theme.colors.primaryContainer}
             icon="billboard"
-            onPress={() => console.log("Rprt Pressed!")}
+            onPress={() => navigation.dispatch(
+              CommonActions.navigate({
+                name: navigationRoutes.gstStatementReportScreen,
+              })
+            )}
           />
           <ReportButton
-            text="Month Wise"
+            text="GST Summary"
             color={theme.colors.pinkContainer}
             icon="billboard"
-            onPress={() => console.log("Rprt Pressed!")}
+            onPress={() => navigation.dispatch(
+              CommonActions.navigate({
+                name: navigationRoutes.gstSummaryReportScreen,
+              })
+            )}
           />
           <ReportButton
             text="Year Wise"

@@ -2,7 +2,7 @@ import axios from "axios"
 import { ADDRESSES } from "../../config/api_list"
 import { GstStatementData } from "../../models/api_types"
 
-export default function useGstStatemen() {
+export default function useGstStatementReport() {
     const fetchGstStatement = async (fromDate: string, toDate: string, companyId: number, branchId: number) => {
         return new Promise<PromiseLike<GstStatementData>>((resolve, reject) => {
             axios.post(`${ADDRESSES.GST_STATEMENT}`, {

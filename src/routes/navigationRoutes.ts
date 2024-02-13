@@ -21,6 +21,9 @@ const navigationRoutes = {
   reportsScreen: "ReportsScreen",
   saleReportScreen: "SaleReportScreen",
   collectionReportScreen: "CollectionReportScreen",
+  itemReportScreen: "ItemReportScreen",
+  gstStatementReportScreen: "GstStatementReportScreen",
+  gstSummaryReportScreen: "GstSummaryReportScreen",
 }
 
 export default navigationRoutes

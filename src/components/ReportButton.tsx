@@ -21,6 +21,7 @@ export default function ReportButton({
       style={{
         width: 100,
         height: 100,
+        padding: 5,
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 20,
