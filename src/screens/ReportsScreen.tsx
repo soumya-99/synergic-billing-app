@@ -13,7 +13,7 @@ function ReportsScreen() {
   const theme = usePaperColorScheme()
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView keyboardShouldPersistTaps="handled">
         <View style={{ alignItems: "center" }}>
           <HeaderImage
