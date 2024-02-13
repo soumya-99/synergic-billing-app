@@ -19,7 +19,8 @@ const navigationRoutes = {
   customerDetailsFillScreen: "CustomerDetailsFillScreen",
   reportsNavigation: "ReportsNavigation",
   reportsScreen: "ReportsScreen",
-  saleReportScreen: "SaleReportScreen"
+  saleReportScreen: "SaleReportScreen",
+  collectionReportScreen: "CollectionReportScreen",
 }
 
 export default navigationRoutes

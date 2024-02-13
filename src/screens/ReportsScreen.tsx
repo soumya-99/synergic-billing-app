@@ -36,10 +36,14 @@ function ReportsScreen() {
             )}
           />
           <ReportButton
-            text="Item Wise"
+            text="Collection Report"
             color={theme.colors.orangeContainer}
             icon="billboard"
-            onPress={() => console.log("Rprt Pressed!")}
+            onPress={() => navigation.dispatch(
+              CommonActions.navigate({
+                name: navigationRoutes.collectionReportScreen,
+              })
+            )}
           />
           <ReportButton
             text="Operaotr Wise"

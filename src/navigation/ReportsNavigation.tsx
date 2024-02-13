@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import navigationRoutes from "../routes/navigationRoutes"
 import ReportsScreen from "../screens/ReportsScreen"
 import SaleReportScreen from "../screens/SaleReportScreen"
+import CollectionReportScreen from "../screens/CollectionReportScreen"
 
 export default function ReportsNavigation() {
     const Stack = createNativeStackNavigator()
@@ -15,6 +16,10 @@ export default function ReportsNavigation() {
             <Stack.Screen
                 name={navigationRoutes.saleReportScreen}
                 component={SaleReportScreen}
+            />
+            <Stack.Screen
+                name={navigationRoutes.collectionReportScreen}
+                component={CollectionReportScreen}
             />
         </Stack.Navigator>
     )

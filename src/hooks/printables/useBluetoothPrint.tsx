@@ -3,7 +3,7 @@ import { BASE_64_IMAGE } from "../../resources/base64/logo"
 import { loginStorage } from "../../storage/appStorage"
 import { useContext } from "react"
 import { AppStore } from "../../context/AppContext"
-import { ItemsData, SaleReport, ShowBillData } from "../../models/api_types"
+import { CollectionReport, GstStatement, GstSummary, ItemReport, ItemsData, SaleReport, ShowBillData } from "../../models/api_types"
 import { gstFilterationAndTotals } from "../../utils/gstFilterTotal"
 import { gstFilterationAndTotalForRePrint } from "../../utils/gstFilterTotalForRePrint"
 
@@ -1853,5 +1853,202 @@ export const useBluetoothPrint = () => {
         }
     }
 
-    return { printReceipt, printReceiptWithoutGst, rePrint, rePrintWithoutGst, printSaleReport }
+    async function printCollectionReport(saleReport: CollectionReport[]) {
+        const loginStore = JSON.parse(loginStorage.getString("login-data"))
+
+        const shopName: string = loginStore?.company_name?.toString()
+        const address: string = loginStore?.address?.toString()
+        const location: string = loginStore?.branch_name?.toString()
+        const shopMobile: string = loginStore?.phone_no?.toString()
+        const shopEmail: string = loginStore?.email_id?.toString()
+        const cashier: string = loginStore?.user_name?.toString()
+
+
+        let totalQuantities: number = 0
+        let totalAmountAfterDiscount: number = 0
+
+        try {
+
+            let columnWidths = [11, 1, 18]
+            let columnWidthsHeader = [8, 1, 21]
+            let columnWidthsProductsHeaderAndBody = [5, 4, 5, 5, 5, 6]
+            // let columnWidthsProductsHeaderAndBody = [18, 3, 4, 3, 4]
+            let columnWidthsItemTotal = [18, 12]
+            let columnWidthIfNameIsBig = [32]
+
+            // let newColumnWidths: number[] = [9, 9, 6, 7]
+
+            await BluetoothEscposPrinter.printerAlign(
+                BluetoothEscposPrinter.ALIGN.CENTER,
+            )
+            await BluetoothEscposPrinter.printText(shopName.toUpperCase(), {
+                align: "center",
+                widthtimes: 1.2,
+                heigthtimes: 2,
+            })
+            await BluetoothEscposPrinter.printText("\n", {})
+            // await BluetoothEscposPrinter.printText("hasifughaf", { align: "center" })
+
+            if (receiptSettings?.on_off_flag1 === "Y") {
+                await BluetoothEscposPrinter.printText(receiptSettings?.header1, {})
+                await BluetoothEscposPrinter.printText("\n", {})
+            }
+
+            if (receiptSettings?.on_off_flag2 === "Y") {
+                await BluetoothEscposPrinter.printText(receiptSettings?.header2, {})
+            }
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText("SALE REPORT", {
+                align: "center",
+            })
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
+
+            await BluetoothEscposPrinter.printText("\n", {})
+            await BluetoothEscposPrinter.printText(address, {
+                align: "center",
+            })
+            await BluetoothEscposPrinter.printText("\n", {})
+            await BluetoothEscposPrinter.printText(location, {
+                align: "center",
+            })
+            await BluetoothEscposPrinter.printText("\n", {})
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            // await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.LEFT)
+
+
+            await BluetoothEscposPrinter.printColumn(
+                columnWidthsHeader,
+                [
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.CENTER,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                ],
+                ["MOBILE", ":", shopMobile],
+                {},
+            )
+            await BluetoothEscposPrinter.printColumn(
+                columnWidthsHeader,
+                [
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.CENTER,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                ],
+                ["EMAIL", ":", shopEmail],
+                {},
+            )
+            // await BluetoothEscposPrinter.printColumn(
+            //     columnWidthsHeader,
+            //     [
+            //         BluetoothEscposPrinter.ALIGN.LEFT,
+            //         BluetoothEscposPrinter.ALIGN.CENTER,
+            //         BluetoothEscposPrinter.ALIGN.RIGHT,
+            //     ],
+            //     ["SITE", ":", "SHOPNAME.COM"],
+            //     {},
+            // )
+
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER)
+            await BluetoothEscposPrinter.printColumn(
+                columnWidthsProductsHeaderAndBody,
+                [
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                ],
+                ["RCPT", "QTY", "PRC", "GST", "DIS", "TOT"],
+                {},
+            )
+
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            for (const item of saleReport) {
+                await BluetoothEscposPrinter.printColumn(
+                    columnWidthsProductsHeaderAndBody,
+                    [
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.RIGHT,
+                        BluetoothEscposPrinter.ALIGN.RIGHT,
+                        BluetoothEscposPrinter.ALIGN.RIGHT,
+                    ],
+                    ["", item?.qty.toString(), item?.price.toString(), (((item?.price * item?.qty * item?.dis_pertg) / 100).toFixed(2)).toString(), `${((item?.price * item?.qty) - ((item?.price * item?.qty * item?.dis_pertg) / 100)).toFixed(2).toString()}`, ""],
+                    {},
+                )
+            }
+
+            await BluetoothEscposPrinter.printText("\n", {})
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+            await BluetoothEscposPrinter.printText("\n", {})
+
+
+            if (receiptSettings?.on_off_flag3 === "Y") {
+                await BluetoothEscposPrinter.printText(receiptSettings?.footer1, {})
+                await BluetoothEscposPrinter.printText("\n", {})
+            }
+            if (receiptSettings?.on_off_flag4 === "Y") {
+                await BluetoothEscposPrinter.printText(receiptSettings?.footer2, {})
+            }
+            await BluetoothEscposPrinter.printText("\n", {})
+
+
+            await BluetoothEscposPrinter.printText(
+                "THANK YOU, VISIT AGAIN!",
+                { align: "center" },
+            )
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(
+                "------X------",
+                {},
+            )
+            await BluetoothEscposPrinter.printText("\n\r\n\r\n\r", {})
+        } catch (e) {
+            console.log(e.message || "ERROR")
+        }
+    }
+
+    async function printItemReport(saleReport: ItemReport[]) { }
+
+    async function printGstStatement(saleReport: GstStatement[]) { }
+
+    async function printGstSummary(saleReport: GstSummary[]) { }
+
+    return { printReceipt, printReceiptWithoutGst, rePrint, rePrintWithoutGst, printSaleReport, printCollectionReport, printItemReport, printGstStatement, printGstSummary }
 }
