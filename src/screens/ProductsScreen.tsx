@@ -277,8 +277,7 @@ function ProductsScreen() {
             imgDark={productHeaderDark}
             borderRadius={30}
             blur={10}
-            isBackEnabled
-            navigation={navigation}>
+            isBackEnabled>
             My Products
           </HeaderImage>
         </View>
