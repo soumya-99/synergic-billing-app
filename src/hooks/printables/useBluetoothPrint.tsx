@@ -1662,7 +1662,7 @@ export const useBluetoothPrint = () => {
         }
     }
 
-    async function printSaleReport(saleReport: SaleReport[]) {
+    async function printSaleReport(saleReport: SaleReport[], fromDate: string, toDate: string) {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
         const shopName: string = loginStore?.company_name?.toString()
@@ -1670,19 +1670,22 @@ export const useBluetoothPrint = () => {
         const location: string = loginStore?.branch_name?.toString()
         const shopMobile: string = loginStore?.phone_no?.toString()
         const shopEmail: string = loginStore?.email_id?.toString()
-        const cashier: string = loginStore?.user_name?.toString()
+        // const cashier: string = loginStore?.user_name?.toString()
 
 
         let totalQuantities: number = 0
-        let totalAmountAfterDiscount: number = 0
+        let totalPrice: number = 0
+        let totalDiscount: number = 0
+        let totalGSTs: number = 0
+        let totalNet: number = 0
 
         try {
 
             let columnWidths = [11, 1, 18]
             let columnWidthsHeader = [8, 1, 21]
-            let columnWidthsProductsHeaderAndBody = [5, 4, 5, 5, 5, 6]
+            let columnWidthsProductsHeaderAndBody = [5, 4, 8, 6, 4, 4] // 1 in hand
             // let columnWidthsProductsHeaderAndBody = [18, 3, 4, 3, 4]
-            let columnWidthsItemTotal = [18, 12]
+            let columnWidthsTotals = [15, 15]
             let columnWidthIfNameIsBig = [32]
 
             // let newColumnWidths: number[] = [9, 9, 6, 7]
@@ -1698,14 +1701,20 @@ export const useBluetoothPrint = () => {
             await BluetoothEscposPrinter.printText("\n", {})
             // await BluetoothEscposPrinter.printText("hasifughaf", { align: "center" })
 
-            if (receiptSettings?.on_off_flag1 === "Y") {
-                await BluetoothEscposPrinter.printText(receiptSettings?.header1, {})
-                await BluetoothEscposPrinter.printText("\n", {})
-            }
+            // if (receiptSettings?.on_off_flag1 === "Y") {
+            //     await BluetoothEscposPrinter.printText(receiptSettings?.header1, {})
+            //     await BluetoothEscposPrinter.printText("\n", {})
+            // }
 
-            if (receiptSettings?.on_off_flag2 === "Y") {
-                await BluetoothEscposPrinter.printText(receiptSettings?.header2, {})
-            }
+            // if (receiptSettings?.on_off_flag2 === "Y") {
+            //     await BluetoothEscposPrinter.printText(receiptSettings?.header2, {})
+            // }
+            // await BluetoothEscposPrinter.printText("\n", {})
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
             await BluetoothEscposPrinter.printText("\n", {})
 
             await BluetoothEscposPrinter.printText("SALE REPORT", {
@@ -1719,6 +1728,16 @@ export const useBluetoothPrint = () => {
                 { align: "center" },
             )
 
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(`From: ${new Date(fromDate).toLocaleDateString("en-GB")}  To: ${new Date(toDate).toLocaleDateString("en-GB")}`, {})
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
 
             await BluetoothEscposPrinter.printText("\n", {})
             await BluetoothEscposPrinter.printText(address, {
@@ -1729,45 +1748,6 @@ export const useBluetoothPrint = () => {
                 align: "center",
             })
             await BluetoothEscposPrinter.printText("\n", {})
-            await BluetoothEscposPrinter.printText(
-                "------------------------",
-                { align: "center" },
-            )
-            await BluetoothEscposPrinter.printText("\n", {})
-
-            // await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.LEFT)
-
-
-            await BluetoothEscposPrinter.printColumn(
-                columnWidthsHeader,
-                [
-                    BluetoothEscposPrinter.ALIGN.LEFT,
-                    BluetoothEscposPrinter.ALIGN.CENTER,
-                    BluetoothEscposPrinter.ALIGN.RIGHT,
-                ],
-                ["MOBILE", ":", shopMobile],
-                {},
-            )
-            await BluetoothEscposPrinter.printColumn(
-                columnWidthsHeader,
-                [
-                    BluetoothEscposPrinter.ALIGN.LEFT,
-                    BluetoothEscposPrinter.ALIGN.CENTER,
-                    BluetoothEscposPrinter.ALIGN.RIGHT,
-                ],
-                ["EMAIL", ":", shopEmail],
-                {},
-            )
-            // await BluetoothEscposPrinter.printColumn(
-            //     columnWidthsHeader,
-            //     [
-            //         BluetoothEscposPrinter.ALIGN.LEFT,
-            //         BluetoothEscposPrinter.ALIGN.CENTER,
-            //         BluetoothEscposPrinter.ALIGN.RIGHT,
-            //     ],
-            //     ["SITE", ":", "SHOPNAME.COM"],
-            //     {},
-            // )
 
             await BluetoothEscposPrinter.printText(
                 "------------------------",
@@ -1786,7 +1766,7 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["RCPT", "QTY", "PRC", "GST", "DIS", "TOT"],
+                ["RCPT", "QTY", "PRC", "DIS", "GST", "NET"],
                 {},
             )
 
@@ -1798,6 +1778,15 @@ export const useBluetoothPrint = () => {
             await BluetoothEscposPrinter.printText("\n", {})
 
             for (const item of saleReport) {
+                let totalGST: number = 0
+
+                totalGST += item?.cgst_amt + item?.sgst_amt
+                totalQuantities += item?.no_of_items
+                totalPrice += item?.price
+                totalDiscount += item?.discount_amt
+                totalGSTs += totalGST
+                totalNet += item?.net_amt + item?.rount_off
+
                 await BluetoothEscposPrinter.printColumn(
                     columnWidthsProductsHeaderAndBody,
                     [
@@ -1808,7 +1797,7 @@ export const useBluetoothPrint = () => {
                         BluetoothEscposPrinter.ALIGN.RIGHT,
                         BluetoothEscposPrinter.ALIGN.RIGHT,
                     ],
-                    ["", item?.qty.toString(), item?.price.toString(), (((item?.price * item?.qty * item?.dis_pertg) / 100).toFixed(2)).toString(), `${((item?.price * item?.qty) - ((item?.price * item?.qty * item?.dis_pertg) / 100)).toFixed(2).toString()}`, ""],
+                    [item?.receipt_no?.toString()?.substring(item?.receipt_no?.toString()?.length - 4), item?.no_of_items?.toString(), item?.price?.toFixed(2)?.toString(), item?.discount_amt?.toString(), totalGST?.toString(), (item?.net_amt + item?.rount_off)?.toString()],
                     {},
                 )
             }
@@ -1820,27 +1809,78 @@ export const useBluetoothPrint = () => {
             )
 
             await BluetoothEscposPrinter.printText("\n", {})
+
+            // await BluetoothEscposPrinter.printColumn(
+            //     columnWidthsProductsHeaderAndBody,
+            //     [
+            //         BluetoothEscposPrinter.ALIGN.LEFT,
+            //         BluetoothEscposPrinter.ALIGN.LEFT,
+            //         BluetoothEscposPrinter.ALIGN.LEFT,
+            //         BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         BluetoothEscposPrinter.ALIGN.RIGHT,
+            //     ],
+            //     ["TOT", totalQuantities.toFixed(2).toString(), totalPrice?.toFixed(2)?.toString(), totalDiscount?.toString(), totalGSTs?.toFixed(2)?.toString(), totalNet?.toFixed(2)?.toString()],
+            //     {},
+            // )
+
+            await BluetoothEscposPrinter.printColumn(
+                columnWidthsTotals,
+                [
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                ],
+                [`QTY: ${totalQuantities.toString()}`, `PRICE: ${totalPrice?.toFixed(2)?.toString()}`],
+                {},
+            )
+            await BluetoothEscposPrinter.printColumn(
+                columnWidthsTotals,
+                [
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                ],
+                [`DISC: ${totalDiscount?.toString()}`, `GST: ${totalGSTs?.toFixed(2)?.toString()}`],
+                {},
+            )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(
+                `NET TOTAL:   ${totalNet?.toFixed(2)?.toString()}`,
+                { align: "center" },
+            )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
             await BluetoothEscposPrinter.printText(
                 "------------------------",
                 { align: "center" },
             )
             await BluetoothEscposPrinter.printText("\n", {})
 
+            // if (receiptSettings?.on_off_flag3 === "Y") {
+            //     await BluetoothEscposPrinter.printText(receiptSettings?.footer1, {})
+            //     await BluetoothEscposPrinter.printText("\n", {})
+            // }
+            // if (receiptSettings?.on_off_flag4 === "Y") {
+            //     await BluetoothEscposPrinter.printText(receiptSettings?.footer2, {})
+            // }
+            // await BluetoothEscposPrinter.printText("\n", {})
 
-            if (receiptSettings?.on_off_flag3 === "Y") {
-                await BluetoothEscposPrinter.printText(receiptSettings?.footer1, {})
-                await BluetoothEscposPrinter.printText("\n", {})
-            }
-            if (receiptSettings?.on_off_flag4 === "Y") {
-                await BluetoothEscposPrinter.printText(receiptSettings?.footer2, {})
-            }
-            await BluetoothEscposPrinter.printText("\n", {})
 
+            // await BluetoothEscposPrinter.printText(
+            //     "THANK YOU, VISIT AGAIN!",
+            //     { align: "center" },
+            // )
 
-            await BluetoothEscposPrinter.printText(
-                "THANK YOU, VISIT AGAIN!",
-                { align: "center" },
-            )
             await BluetoothEscposPrinter.printText("\n", {})
 
             await BluetoothEscposPrinter.printText(
@@ -1853,7 +1893,7 @@ export const useBluetoothPrint = () => {
         }
     }
 
-    async function printCollectionReport(saleReport: CollectionReport[]) {
+    async function printCollectionReport(collectionReport: CollectionReport[]) {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
         const shopName: string = loginStore?.company_name?.toString()
@@ -1988,7 +2028,7 @@ export const useBluetoothPrint = () => {
 
             await BluetoothEscposPrinter.printText("\n", {})
 
-            for (const item of saleReport) {
+            for (const item of collectionReport) {
                 await BluetoothEscposPrinter.printColumn(
                     columnWidthsProductsHeaderAndBody,
                     [
