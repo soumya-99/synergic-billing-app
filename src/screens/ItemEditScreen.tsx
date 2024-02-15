@@ -35,11 +35,6 @@ export default function ItemEditScreen() {
 
     const [items, setItems] = useState<ItemsData[]>(() => [])
 
-    const onScroll = ({ nativeEvent }) => {
-        const currentScrollPosition = Math.floor(nativeEvent?.contentOffset?.y) ?? 0
-        setIsExtended(currentScrollPosition <= 0)
-    }
-
     const { fetchItems } = useItems()
 
     const [visible, setVisible] = useState(() => false)
@@ -66,6 +61,8 @@ export default function ItemEditScreen() {
         if (query === "") setFilteredItems(() => [])
     }
 
+    const [product, setProduct] = useState<ItemsData>()
+
     const [hsnCode, setHsnCode] = useState<string>(() => "")
     const [productName, setProductName] = useState<string>(() => "")
     const [mrp, setMrp] = useState<string>(() => "")
@@ -83,13 +80,19 @@ export default function ItemEditScreen() {
         setVisible(!visible)
         setFilteredItems(() => [])
     }
+
+    const handleProductPressed = (item: ItemsData) => {
+        setProduct(item)
+        setVisible(!visible)
+    }
+
     useEffect(() => {
         handleGetItems()
     }, [isFocused])
 
     return (
         <SafeAreaView style={[{ backgroundColor: theme.colors.background, height: "100%" }]}>
-            <ScrollView onScroll={onScroll}>
+            <ScrollView>
                 <View style={{ alignItems: "center" }}>
                     <HeaderImage
                         isBackEnabled
@@ -119,7 +122,7 @@ export default function ItemEditScreen() {
                                 <ProductListSuggestion
                                     key={item.id}
                                     itemName={item.item_name}
-                                    onPress={() => console.log("Product Clicked!!", item)}
+                                    onPress={() => handleProductPressed(item)}
                                     unitPrice={item.price}
                                 />
                             ))}
@@ -127,15 +130,6 @@ export default function ItemEditScreen() {
                     )}
                 </View>
             </ScrollView>
-            <AnimatedFABPaper
-                icon="plus"
-                label="Add Item"
-                onPress={() => setVisible(!visible)}
-                extended={isExtended}
-                animateFrom="right"
-                iconMode="dynamic"
-                customStyle={styles.fabStyle}
-            />
             <DialogBox
                 iconSize={40}
                 visible={visible}
@@ -159,28 +153,8 @@ export default function ItemEditScreen() {
                             gap: 5,
                         }}>
                         <View style={{ width: "50%" }}>
-                            <Text variant="labelMedium">Sl No. 546454</Text>
+                            <Text variant="labelMedium">Item ID {product?.item_id}</Text>
                         </View>
-                        <View style={{ width: "50%" }}>
-                            <InputPaper
-                                label="HSN Code"
-                                onChangeText={(txt: string) => setHsnCode(txt)}
-                                value={hsnCode}
-                                keyboardType="default"
-                                autoFocus
-                                mode="outlined"
-                            />
-                        </View>
-                    </View>
-
-                    <View style={{ width: "100%" }}>
-                        <InputPaper
-                            label="Item Name"
-                            onChangeText={(txt: string) => setProductName(txt)}
-                            value={productName}
-                            keyboardType="default"
-                            mode="outlined"
-                        />
                     </View>
 
                     <View
