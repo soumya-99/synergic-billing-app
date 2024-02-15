@@ -66,11 +66,21 @@ function SettingsScreen() {
             onPress={() => console.log("Rprt Pressed!")}
           /> */}
           <ReportButton
+            text="Edit Item"
+            color={theme.colors.tertiaryContainer}
+            icon="billboard"
+            onPress={() => navigation.dispatch(
+              CommonActions.navigate({
+                name: navigationRoutes.itemEditScreen,
+              })
+            )}
+          />
+          {/* <ReportButton
             text="Operaotr Wise"
             color={theme.colors.tertiaryContainer}
             icon="billboard"
             onPress={() => console.log("Rprt Pressed!")}
-          />
+          /> */}
           <ReportButton
             text="Duplicate Receipt"
             color={theme.colors.primaryContainer}

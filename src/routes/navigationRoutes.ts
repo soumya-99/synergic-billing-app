@@ -25,6 +25,7 @@ const navigationRoutes = {
   gstStatementReportScreen: "GstStatementReportScreen",
   gstSummaryReportScreen: "GstSummaryReportScreen",
   headerFooterScreen: "HeaderFooterScreen",
+  itemEditScreen: "ItemEditScreen",
 }
 
 export default navigationRoutes

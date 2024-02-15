@@ -268,3 +268,8 @@ export type HeaderFooterData = {
     "status": number
     "data": string
 }
+
+export type ItemEditData = {
+    "status": number
+    "data": string
+}
