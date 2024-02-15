@@ -14,22 +14,13 @@ import navigationRoutes from "../routes/navigationRoutes"
 
 function SettingsScreen() {
   const navigation = useNavigation()
-
-  const { handleLogout } = useContext(AppStore)
-  const [isExtended, setIsExtended] = useState(() => true)
-
   const theme = usePaperColorScheme()
 
-  const onScroll = ({ nativeEvent }) => {
-    const currentScrollPosition = Math.floor(nativeEvent?.contentOffset?.y) ?? 0
-
-    setIsExtended(currentScrollPosition <= 0)
-  }
-
+  const { handleLogout } = useContext(AppStore)
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <ScrollView onScroll={onScroll}>
+      <ScrollView>
         <View style={{ alignItems: "center" }}>
           <HeaderImage
             imgLight={flowerSetting}
@@ -59,11 +50,21 @@ function SettingsScreen() {
               )}
           />
           <ReportButton
+            text="Header/Footer"
+            color={theme.colors.orangeContainer}
+            icon="table-headers-eye"
+            onPress={() => navigation.dispatch(
+              CommonActions.navigate({
+                name: navigationRoutes.headerFooterScreen,
+              })
+            )}
+          />
+          {/* <ReportButton
             text="Item Wise"
             color={theme.colors.orangeContainer}
             icon="billboard"
             onPress={() => console.log("Rprt Pressed!")}
-          />
+          /> */}
           <ReportButton
             text="Operaotr Wise"
             color={theme.colors.tertiaryContainer}

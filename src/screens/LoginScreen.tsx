@@ -156,6 +156,7 @@ function LoginScreen() {
                   onChangeText={(text: string) => setPasswordText(text)}
                   leftIcon="shield-lock-outline"
                   maxLength={4}
+                  keyboardType="numeric"
                   autoFocus
                 />
               </View>

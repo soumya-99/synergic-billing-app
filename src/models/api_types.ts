@@ -30,7 +30,7 @@ export type LoginData = {
         branch_address: string
         user_id: string
         user_name: string
-        user_type: "U" | "A"
+        user_type: "U" | "A" | "M"
         phone_no: number
         email_id: string
         device_id: string
@@ -264,3 +264,7 @@ export type GstSummary = {
     "total_tax": number
 }
 
+export type HeaderFooterData = {
+    "status": number
+    "data": string
+}

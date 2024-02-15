@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native"
 import MasterChooseScreen from "../screens/MasterChooseScreen"
 import ItemMasterScreen from "../screens/ItemMasterScreen"
 import PrintMain from "../screens/printer_connect_screens/PrintMain"
+import HeaderFooterScreen from "../screens/HeaderFooterScreen"
 
 export default function SettingsNavigation() {
   const Stack = createNativeStackNavigator()
@@ -22,6 +23,10 @@ export default function SettingsNavigation() {
       <Stack.Screen
         name={navigationRoutes.itemMasterScreen}
         component={ItemMasterScreen}
+      />
+      <Stack.Screen
+        name={navigationRoutes.headerFooterScreen}
+        component={HeaderFooterScreen}
       />
       <Stack.Screen
         name={navigationRoutes.printMain}
