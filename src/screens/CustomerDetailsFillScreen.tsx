@@ -20,10 +20,13 @@ import { FilteredItem } from '../models/custom_types'
 import navigationRoutes from '../routes/navigationRoutes'
 import { ProductsScreenRouteProp } from '../models/route_types'
 import { mapItemToFilteredItem } from '../utils/mapItemToFilteredItem'
+import { gstFilterationAndTotals } from '../utils/gstFilterTotal'
 
 const CustomerDetailsFillScreen = () => {
     const navigation = useNavigation()
     const { params } = useRoute<ProductsScreenRouteProp>()
+
+    const { totalGST } = gstFilterationAndTotals(params?.added_products)
 
     const { receiptSettings } = useContext(AppStore)
 
@@ -49,8 +52,9 @@ const CustomerDetailsFillScreen = () => {
         const createdBy = loginStore.user_id
 
         let filteredData: FilteredItem[]
-        filteredData = (params?.added_products as ItemsData[]).map(item =>
-            mapItemToFilteredItem(item, receiptSettings, branchId, params, checked, cashAmount, customerName, customerMobileNumber, createdBy)
+
+        filteredData = (params?.added_products).map(item =>
+            mapItemToFilteredItem(item, receiptSettings, branchId, params, checked, cashAmount, customerName, customerMobileNumber, createdBy, totalGST)
         )
 
         console.log("filteredData - handleSendSaleData", filteredData)

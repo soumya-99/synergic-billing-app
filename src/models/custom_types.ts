@@ -9,8 +9,6 @@ export type FilteredItem = {
     qty: number
     tprice: number
     tdiscount_amt: number
-    tcgst_amt?: number
-    tsgst_amt?: number
     amount: number
     round_off: number
     net_amt: number
@@ -20,7 +18,7 @@ export type FilteredItem = {
     cust_name: string
     phone_no: string
     created_by: string
-    dis_pertg: number,
-    cgst_prtg: number,
-    sgst_prtg: number,
+    dis_pertg: number
+    cgst_prtg: number
+    sgst_prtg: number
 }

@@ -1,7 +1,7 @@
 import { ItemsData, ReceiptSettingsData } from "../models/api_types"
 import { FilteredItem } from "../models/custom_types"
 
-export function mapItemToFilteredItem(item: ItemsData, receiptSettings: ReceiptSettingsData, branchId: string, params: any, checked: string, cashAmount: number, customerName: string, customerMobileNumber: string, createdBy: string): FilteredItem {
+export function mapItemToFilteredItem(item: ItemsData, receiptSettings: ReceiptSettingsData, branchId: string, params: any, checked: string, cashAmount: number, customerName: string, customerMobileNumber: string, createdBy: string, totalGST: number): FilteredItem {
     const { cgst, sgst, com_id, discount, item_id, quantity, price } = item
 
     const cgstAmt = receiptSettings?.gst_flag === "N" ? 0 : (price * quantity * cgst / 100)
@@ -11,15 +11,15 @@ export function mapItemToFilteredItem(item: ItemsData, receiptSettings: ReceiptS
         parseFloat((((price * quantity * discount) / 100).toFixed(2))) :
         parseFloat((discount).toFixed(2))
 
-    const amount = parseFloat((params?.net_total - params?.total_discount).toFixed(2))
+    let amount = receiptSettings?.gst_flag !== "N" ? parseFloat((params?.net_total - params?.total_discount + totalGST).toFixed(2)) : parseFloat((params?.net_total - params?.total_discount).toFixed(2))
+
+    // const amount = parseFloat((params?.net_total - params?.total_discount).toFixed(2))
     const roundOff = parseFloat((Math.round(amount) - amount).toFixed(2))
     const netAmt = Math.round(amount)
 
     return {
         cgst_amt: cgstAmt,
         sgst_amt: sgstAmt,
-        tcgst_amt: cgstAmt,
-        tsgst_amt: sgstAmt,
         comp_id: com_id,
         discount_amt: discountAmt,
         item_id: item_id,
