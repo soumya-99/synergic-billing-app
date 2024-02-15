@@ -1,5 +1,5 @@
 import { View, ScrollView, StyleSheet, PixelRatio, ToastAndroid } from "react-native"
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Switch, Text } from "react-native-paper"
 import AnimatedFABPaper from "../components/AnimatedFABPaper"
@@ -9,14 +9,16 @@ import { flowerHome, flowerHomeDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
 import DialogBox from "../components/DialogBox"
 import InputPaper from "../components/InputPaper"
-import { clearStates } from "../utils/clearStates"
 import { loginStorage } from "../storage/appStorage"
 import { AppStore } from "../context/AppContext"
 import useEditHeaderFooter from "../hooks/api/useEditHeaderFooter"
+import { useIsFocused } from "@react-navigation/native"
 
 export default function HeaderFooterScreen() {
+    const isFocused = useIsFocused()
+
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
-    const { receiptSettings } = useContext(AppStore)
+    const { receiptSettings, handleGetReceiptSettings } = useContext(AppStore)
 
     const [isExtended, setIsExtended] = useState(() => true)
 
@@ -45,6 +47,10 @@ export default function HeaderFooterScreen() {
     const [footer2, setFooter2] = useState<string>(() => receiptSettings?.footer2)
 
     const { editHeaderFooter } = useEditHeaderFooter()
+
+    useEffect(() => {
+        handleGetReceiptSettings()
+    }, [isFocused])
 
     const onDialogFailure = () => {
         setVisible(!visible)
