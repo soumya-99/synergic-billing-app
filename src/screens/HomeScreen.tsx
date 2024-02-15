@@ -157,6 +157,7 @@ function HomeScreen() {
 
         <View style={{ alignItems: "center" }}>
           <SurfacePaper
+            smallWidthEnabled
             borderRadiusEnabled
             paddingEnabled
             // heading="Summary"
@@ -191,6 +192,7 @@ function HomeScreen() {
           </SurfacePaper>
 
           <SurfacePaper
+            smallWidthEnabled
             borderRadiusEnabled
             paddingEnabled
             isBorderEnabled
