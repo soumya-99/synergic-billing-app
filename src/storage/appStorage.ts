@@ -7,3 +7,7 @@ export const loginStorage = new MMKV({
 // export const receiptSettingsStorage = new MMKV({
 //     id: "receipt-settings-store"
 // })
+
+export const fileStorage = new MMKV({
+    id: "file-store"
+})

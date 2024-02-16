@@ -27,6 +27,7 @@ const navigationRoutes = {
   headerFooterScreen: "HeaderFooterScreen",
   itemEditScreen: "ItemEditScreen",
   receiptSettingsEditScreen: "ReceiptSettingsEditScreen",
+  logoUploadScreen: "LogoUploadScreen",
 }
 
 export default navigationRoutes

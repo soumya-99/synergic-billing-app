@@ -92,7 +92,7 @@ function SettingsScreen() {
           <ReportButton
             text="Edit Item"
             color={theme.colors.tertiaryContainer}
-            icon="billboard"
+            icon="circle-edit-outline"
             onPress={() => navigation.dispatch(
               CommonActions.navigate({
                 name: navigationRoutes.itemEditScreen,
@@ -108,10 +108,20 @@ function SettingsScreen() {
           <ReportButton
             text="Receipt Settings"
             color={theme.colors.primaryContainer}
-            icon="billboard"
+            icon="card-bulleted-settings-outline"
             onPress={() => navigation.dispatch(
               CommonActions.navigate({
                 name: navigationRoutes.receiptSettingsEditScreen,
+              })
+            )}
+          />
+          <ReportButton
+            text="Logo Upload"
+            color={theme.colors.tertiaryContainer}
+            icon="emoticon-happy-outline"
+            onPress={() => navigation.dispatch(
+              CommonActions.navigate({
+                name: navigationRoutes.logoUploadScreen,
               })
             )}
           />
@@ -139,12 +149,12 @@ function SettingsScreen() {
             icon="billboard"
             onPress={() => console.log("Rprt Pressed!")}
           />
-          <ReportButton
+          {/* <ReportButton
             text="GST Report"
             color={theme.colors.primaryContainer}
             icon="billboard"
             onPress={() => console.log("Rprt Pressed!")}
-          />
+          /> */}
           <ReportButton
             text="Printer Connect"
             color={theme.colors.greenContainer}

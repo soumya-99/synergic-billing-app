@@ -1,7 +1,7 @@
 import { BluetoothEscposPrinter } from "react-native-bluetooth-escpos-printer"
 import { BASE_64_IMAGE } from "../../resources/base64/logo"
 import img1 from "../../resources/images/blur_report.jpg"
-import { loginStorage } from "../../storage/appStorage"
+import { fileStorage, loginStorage } from "../../storage/appStorage"
 import { useContext } from "react"
 import { AppStore } from "../../context/AppContext"
 import { CollectionReport, GstStatement, GstSummary, ItemReport, ItemsData, SaleReport, ShowBillData } from "../../models/api_types"
@@ -1666,6 +1666,7 @@ export const useBluetoothPrint = () => {
 
     async function printSaleReport(saleReport: SaleReport[], fromDate: string, toDate: string) {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
+        const fileStore = fileStorage.getString("file-data")
 
         const shopName: string = loginStore?.company_name?.toString()
         const address: string = loginStore?.address?.toString()
@@ -1698,7 +1699,7 @@ export const useBluetoothPrint = () => {
             };
 
             // Print the image
-            await BluetoothEscposPrinter.printPic(BASE_64_IMAGE, options)
+            await BluetoothEscposPrinter.printPic(fileStore, options)
 
             await BluetoothEscposPrinter.printerAlign(
                 BluetoothEscposPrinter.ALIGN.CENTER,
