@@ -1,11 +1,13 @@
 import { BluetoothEscposPrinter } from "react-native-bluetooth-escpos-printer"
 import { BASE_64_IMAGE } from "../../resources/base64/logo"
+import img1 from "../../resources/images/blur_report.jpg"
 import { loginStorage } from "../../storage/appStorage"
 import { useContext } from "react"
 import { AppStore } from "../../context/AppContext"
 import { CollectionReport, GstStatement, GstSummary, ItemReport, ItemsData, SaleReport, ShowBillData } from "../../models/api_types"
 import { gstFilterationAndTotals } from "../../utils/gstFilterTotal"
 import { gstFilterationAndTotalForRePrint } from "../../utils/gstFilterTotalForRePrint"
+import { convertImageToBase64 } from "../../utils/base64Converter"
 
 export const useBluetoothPrint = () => {
     const { receiptSettings } = useContext(AppStore)
@@ -1689,6 +1691,14 @@ export const useBluetoothPrint = () => {
             let columnWidthIfNameIsBig = [32]
 
             // let newColumnWidths: number[] = [9, 9, 6, 7]
+
+            const options = {
+                width: 384, // Assuming 58mm paper width with 8 dots/mm resolution (58mm * 8dots/mm = 384 dots)
+                left: 0, // No left padding
+            };
+
+            // Print the image
+            await BluetoothEscposPrinter.printPic(BASE_64_IMAGE, options)
 
             await BluetoothEscposPrinter.printerAlign(
                 BluetoothEscposPrinter.ALIGN.CENTER,
