@@ -7,6 +7,7 @@ import ItemMasterScreen from "../screens/ItemMasterScreen"
 import PrintMain from "../screens/printer_connect_screens/PrintMain"
 import HeaderFooterScreen from "../screens/HeaderFooterScreen"
 import ItemEditScreen from "../screens/ItemEditScreen"
+import ReceiptSettingsEditScreen from "../screens/ReceiptSettingsEditScreen"
 
 export default function SettingsNavigation() {
   const Stack = createNativeStackNavigator()
@@ -32,6 +33,10 @@ export default function SettingsNavigation() {
       <Stack.Screen
         name={navigationRoutes.itemEditScreen}
         component={ItemEditScreen}
+      />
+      <Stack.Screen
+        name={navigationRoutes.receiptSettingsEditScreen}
+        component={ReceiptSettingsEditScreen}
       />
       <Stack.Screen
         name={navigationRoutes.printMain}

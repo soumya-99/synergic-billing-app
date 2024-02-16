@@ -106,11 +106,21 @@ function SettingsScreen() {
             onPress={() => console.log("Rprt Pressed!")}
           /> */}
           <ReportButton
+            text="Receipt Settings"
+            color={theme.colors.primaryContainer}
+            icon="billboard"
+            onPress={() => navigation.dispatch(
+              CommonActions.navigate({
+                name: navigationRoutes.receiptSettingsEditScreen,
+              })
+            )}
+          />
+          {/* <ReportButton
             text="Duplicate Receipt"
             color={theme.colors.primaryContainer}
             icon="billboard"
             onPress={() => console.log("Rprt Pressed!")}
-          />
+          /> */}
           <ReportButton
             text="Month Wise"
             color={theme.colors.pinkContainer}

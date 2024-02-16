@@ -115,7 +115,7 @@ function CollectionReportScreen() {
                             <DataTable.Title numeric>Net Amount</DataTable.Title>
                         </DataTable.Header>
 
-                        {collectionReport.map((item, i) => {
+                        {collectionReport?.map((item, i) => {
                             return (
                                 <DataTable.Row key={i}>
                                     <DataTable.Cell>{item?.created_by}</DataTable.Cell>

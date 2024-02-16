@@ -1,6 +1,5 @@
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
-import ReportsScreen from "../screens/ReportsScreen"
 import { usePaperColorScheme } from "../theme/theme"
 import SettingsNavigation from "./SettingsNavigation"
 import HomeNavigation from "./HomeNavigation"

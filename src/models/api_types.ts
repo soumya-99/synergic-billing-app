@@ -273,3 +273,8 @@ export type ItemEditData = {
     "status": number
     "data": string
 }
+
+export type ReceiptSettingsEditData = {
+    "status": number
+    "data": string
+}
