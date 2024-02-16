@@ -1,14 +1,12 @@
 import { View, ScrollView, StyleSheet, PixelRatio, ToastAndroid } from "react-native"
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { List, Searchbar, Text } from "react-native-paper"
-import AnimatedFABPaper from "../components/AnimatedFABPaper"
-import normalize from "react-native-normalize"
+import normalize, { SCREEN_HEIGHT } from "react-native-normalize"
 import HeaderImage from "../components/HeaderImage"
 import { flowerHome, flowerHomeDark } from "../resources/images"
 import ScrollableListContainer from "../components/ScrollableListContainer"
 import ProductListSuggestion from "../components/ProductListSuggestion"
-import PRODUCTS_DATA from "../data/products_dummy_data.json"
 import { usePaperColorScheme } from "../theme/theme"
 import DialogBox from "../components/DialogBox"
 import InputPaper from "../components/InputPaper"
@@ -17,25 +15,18 @@ import { ItemsData } from "../models/api_types"
 import { loginStorage } from "../storage/appStorage"
 import useItems from "../hooks/api/useItems"
 import { useIsFocused } from "@react-navigation/native"
-
-type ProductsDataObject = {
-    id: number
-    item: string
-    description: string
-    unit_price: number
-    unit: string
-}
+import useEditItem from "../hooks/api/useEditItem"
+import { AppStore } from "../context/AppContext"
 
 export default function ItemEditScreen() {
     const theme = usePaperColorScheme()
     const isFocused = useIsFocused()
 
+    const { items, handleGetItems } = useContext(AppStore)
+
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
-    const [isExtended, setIsExtended] = useState(() => true)
 
-    const [items, setItems] = useState<ItemsData[]>(() => [])
-
-    const { fetchItems } = useItems()
+    const { editItem } = useEditItem()
 
     const [visible, setVisible] = useState(() => false)
     const hideDialog = () => setVisible(() => false)
@@ -44,14 +35,6 @@ export default function ItemEditScreen() {
     const [filteredItems, setFilteredItems] = useState<ItemsData[]>(
         () => [],
     )
-
-    const handleGetItems = async () => {
-        const companyId = loginStore.comp_id
-        let itemsData = await fetchItems(companyId)
-        console.log("itemsData", itemsData)
-
-        setItems(itemsData)
-    }
 
     const onChangeSearch = (query: string) => {
         setSearch(query)
@@ -63,26 +46,40 @@ export default function ItemEditScreen() {
 
     const [product, setProduct] = useState<ItemsData>()
 
-    const [hsnCode, setHsnCode] = useState<string>(() => "")
-    const [productName, setProductName] = useState<string>(() => "")
-    const [mrp, setMrp] = useState<string>(() => "")
-    const [discount, setDiscount] = useState(() => "")
-    const [CGST, setCGST] = useState<string>(() => "")
-    const [SGST, setSGST] = useState<string>(() => "")
+    const [price, setPrice] = useState<number>(product?.price)
+    const [discount, setDiscount] = useState<number>(product?.discount)
+    const [CGST, setCGST] = useState<number>(product?.cgst)
+    const [SGST, setSGST] = useState<number>(product?.sgst)
+
+    const handleUpdateProductDetails = async () => {
+        await editItem(loginStore?.comp_id, product?.item_id, price, discount, CGST, SGST, loginStore?.user_name)
+    }
 
     const onDialogFailure = () => {
-        clearStates([setSearch, setHsnCode, setProductName, setMrp, setDiscount, setCGST, setSGST], () => "")
+        clearStates([setSearch, setPrice, setDiscount, setCGST, setSGST], () => "")
         setVisible(!visible)
     }
 
     const onDialogSuccecss = () => {
-        clearStates([setSearch, setHsnCode, setProductName, setMrp, setDiscount, setCGST, setSGST], () => "")
-        setVisible(!visible)
-        setFilteredItems(() => [])
+        handleUpdateProductDetails().then(() => {
+            clearStates([setSearch, setPrice, setDiscount, setCGST, setSGST], () => "")
+            setVisible(!visible)
+            setFilteredItems(() => [])
+
+            ToastAndroid.show("Product Updated Successfully.", ToastAndroid.SHORT)
+        }).catch(err => {
+            ToastAndroid.show("An error occurred while updating product", ToastAndroid.SHORT)
+        })
     }
 
     const handleProductPressed = (item: ItemsData) => {
         setProduct(item)
+
+        setPrice(item?.price)
+        setDiscount(item?.discount)
+        setCGST(item?.cgst)
+        setSGST(item?.sgst)
+
         setVisible(!visible)
     }
 
@@ -92,7 +89,7 @@ export default function ItemEditScreen() {
 
     return (
         <SafeAreaView style={[{ backgroundColor: theme.colors.background, height: "100%" }]}>
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps="handled">
                 <View style={{ alignItems: "center" }}>
                     <HeaderImage
                         isBackEnabled
@@ -104,14 +101,19 @@ export default function ItemEditScreen() {
                     </HeaderImage>
                 </View>
                 <View style={{ padding: normalize(20) }}>
-                    <Searchbar
-                        placeholder="Search Products"
-                        onChangeText={onChangeSearch}
-                        value={search}
-                        elevation={search && 2}
-                        // loading={search ? true : false}
-                        autoFocus
-                    />
+                    {loginStore?.user_type === "M" ? (
+                        <Searchbar
+                            placeholder="Search Products"
+                            onChangeText={onChangeSearch}
+                            value={search}
+                            elevation={search && 2}
+                            // loading={search ? true : false}
+                            autoFocus
+                        />
+                    ) : (
+                        <Text variant="displayMedium" style={{ alignSelf: "center", textAlign: "center", color: theme.colors.error }}>You don't have permissions to edit anything!</Text>
+                    )}
+
                 </View>
 
                 <View style={{ paddingBottom: PixelRatio.roundToNearestPixel(10) }}>
@@ -138,7 +140,7 @@ export default function ItemEditScreen() {
                 btnSuccess="SAVE"
                 onFailure={onDialogFailure}
                 onSuccess={onDialogSuccecss}>
-                <View style={{ justifyContent: "space-between", height: 300 }}>
+                <View style={{ justifyContent: "space-between", minHeight: SCREEN_HEIGHT / 4, height: "auto" }}>
                     <View style={{ alignItems: "center" }}>
                         <View>
                             <Text variant="titleLarge">Edit Item</Text>
@@ -159,16 +161,6 @@ export default function ItemEditScreen() {
 
                     <View
                         style={{
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            flexDirection: "row",
-                            marginLeft: 10,
-                            marginRight: 10,
-                        }}>
-                    </View>
-
-                    <View
-                        style={{
                             flexDirection: "row",
                             justifyContent: "space-between",
                             alignItems: "center",
@@ -176,9 +168,9 @@ export default function ItemEditScreen() {
                         }}>
                         <View style={{ width: "50%" }}>
                             <InputPaper
-                                label="M.R.P."
-                                onChangeText={(txt: string) => setMrp(txt)}
-                                value={mrp}
+                                label="Price"
+                                onChangeText={(txt: number) => setPrice(txt)}
+                                value={price}
                                 keyboardType="numeric"
                                 mode="outlined"
                             />
@@ -186,15 +178,13 @@ export default function ItemEditScreen() {
                         <View style={{ width: "50%" }}>
                             <InputPaper
                                 label="Discount"
-                                onChangeText={(txt: string) => setDiscount(txt)}
+                                onChangeText={(txt: number) => setDiscount(txt)}
                                 value={discount}
                                 keyboardType="numeric"
                                 mode="outlined"
                             />
                         </View>
                     </View>
-
-                    <View></View>
                     <View
                         style={{
                             flexDirection: "row",
@@ -205,7 +195,7 @@ export default function ItemEditScreen() {
                         <View style={{ width: "50%" }}>
                             <InputPaper
                                 label="CGST (%)"
-                                onChangeText={(txt: string) => setCGST(txt)}
+                                onChangeText={(txt: number) => setCGST(txt)}
                                 value={CGST}
                                 keyboardType="numeric"
                                 mode="outlined"
@@ -214,7 +204,7 @@ export default function ItemEditScreen() {
                         <View style={{ width: "50%" }}>
                             <InputPaper
                                 label="SGST (%)"
-                                onChangeText={(txt: string) => setSGST(txt)}
+                                onChangeText={(txt: number) => setSGST(txt)}
                                 value={SGST}
                                 keyboardType="numeric"
                                 mode="outlined"

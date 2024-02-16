@@ -33,7 +33,7 @@ function ProductsScreen() {
 
   const theme = usePaperColorScheme()
 
-  const { receiptSettings } = useContext(AppStore)
+  const { receiptSettings, items, handleGetItems } = useContext(AppStore)
 
   const [visible, setVisible] = useState(() => false)
   const hideDialog = () => setVisible(() => false)
@@ -44,11 +44,6 @@ function ProductsScreen() {
     () => [],
   )
 
-  const { fetchItems } = useItems()
-
-  const loginStore = JSON.parse(loginStorage.getString("login-data"))
-
-  const [items, setItems] = useState<ItemsData[]>(() => [])
   const [product, setProduct] = useState<ItemsData>()
 
   const [quantity, setQuantity] = useState<number>(() => undefined)
@@ -60,14 +55,6 @@ function ProductsScreen() {
 
   let totalPrice = 0
   let totalDiscountedAmount = 0
-
-  const handleGetItems = async () => {
-    const companyId = loginStore.comp_id
-    let itemsData = await fetchItems(companyId)
-    console.log("itemsData", itemsData)
-
-    setItems(itemsData)
-  }
 
   useEffect(() => {
     handleGetItems()

@@ -3,7 +3,8 @@ import { AppState, Alert } from "react-native"
 import { loginStorage } from "../storage/appStorage"
 import useReceiptSettings from "../hooks/api/useReceiptSettings"
 import useLogin from "../hooks/api/useLogin"
-import { ReceiptSettingsData } from "../models/api_types"
+import { ItemsData, ReceiptSettingsData } from "../models/api_types"
+import useItems from "../hooks/api/useItems"
 
 export const AppStore = createContext(null)
 
@@ -12,9 +13,11 @@ const AppContext = ({ children }) => {
 
   const [isLogin, setIsLogin] = useState<boolean>(() => false)
   const [receiptSettings, setReceiptSettings] = useState<ReceiptSettingsData>()
+  const [items, setItems] = useState<ItemsData[]>(() => [])
 
   const { login } = useLogin()
   const { fetchReceiptSettings } = useReceiptSettings()
+  const { fetchItems } = useItems()
 
   const handleLogin = async (loginText: string, passwordText: string) => {
     let loginData = await login(loginText, passwordText)
@@ -57,6 +60,15 @@ const AppContext = ({ children }) => {
     setReceiptSettings(receiptSettingsData[0])
   }
 
+  const handleGetItems = async () => {
+    const loginStore = JSON.parse(loginStorage.getString("login-data"))
+    const companyId = loginStore.comp_id
+    let itemsData = await fetchItems(companyId)
+    console.log("itemsData", itemsData)
+
+    setItems(itemsData)
+  }
+
   useEffect(() => {
     if (isLogin) {
       handleGetReceiptSettings()
@@ -69,7 +81,7 @@ const AppContext = ({ children }) => {
   }
 
   return (
-    <AppStore.Provider value={{ isLogin, handleLogin, handleLogout, receiptSettings, handleGetReceiptSettings }}>
+    <AppStore.Provider value={{ isLogin, handleLogin, handleLogout, receiptSettings, handleGetReceiptSettings, items, handleGetItems }}>
       {children}
     </AppStore.Provider>
   )
