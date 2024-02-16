@@ -94,7 +94,7 @@ export default function ReceiptSettingsEditScreen() {
                     <List.Item
                         title="GST Flag"
                         description={gstFlag === "Y" ? "Allowed" : gstFlag === "N" ? "Denied" : "Error Occurred!"}
-                        left={props => <List.Icon {...props} icon="receipt" />}
+                        left={props => <List.Icon {...props} icon="account-cash-outline" />}
                         right={props => {
                             return (
                                 <MenuPaper menuArrOfObjects={gstFlagArr} />
@@ -105,7 +105,7 @@ export default function ReceiptSettingsEditScreen() {
                     <List.Item
                         title="Customer Information"
                         description={customerInfo === "Y" ? "Allowed" : customerInfo === "N" ? "Denied" : "Error Occurred!"}
-                        left={props => <List.Icon {...props} icon="receipt" />}
+                        left={props => <List.Icon {...props} icon="account-circle-outline" />}
                         right={props => {
                             return (
                                 <MenuPaper menuArrOfObjects={customerInfoArr} />
@@ -116,7 +116,7 @@ export default function ReceiptSettingsEditScreen() {
                     <List.Item
                         title="Payment Mode"
                         description={payMode === "Y" ? "Allowed" : payMode === "N" ? "Denied" : "Error Occurred!"}
-                        left={props => <List.Icon {...props} icon="receipt" />}
+                        left={props => <List.Icon {...props} icon="contactless-payment-circle-outline" />}
                         right={props => {
                             return (
                                 <MenuPaper menuArrOfObjects={payModeArr} />
@@ -127,7 +127,7 @@ export default function ReceiptSettingsEditScreen() {
                     <List.Item
                         title="Discount Type"
                         description={discountType === "P" ? "Percentage (%)" : discountType === "A" ? "Amount (₹)" : "Error Occurred!"}
-                        left={props => <List.Icon {...props} icon="receipt" />}
+                        left={props => <List.Icon {...props} icon="cash-minus" />}
                         right={props => {
                             return (
                                 <MenuPaper menuArrOfObjects={discountTypeArr} />
