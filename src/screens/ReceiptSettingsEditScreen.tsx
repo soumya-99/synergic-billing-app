@@ -10,6 +10,8 @@ import { loginStorage } from "../storage/appStorage"
 import { useIsFocused } from "@react-navigation/native"
 import { AppStore } from "../context/AppContext"
 import MenuPaper from "../components/MenuPaper"
+import ButtonPaper from "../components/ButtonPaper"
+import useEditReceiptSettings from "../hooks/api/useEditReceiptSettings"
 
 export default function ReceiptSettingsEditScreen() {
     const theme = usePaperColorScheme()
@@ -18,6 +20,8 @@ export default function ReceiptSettingsEditScreen() {
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
     const { receiptSettings } = useContext(AppStore)
+
+    const { editReceiptSettings } = useEditReceiptSettings()
 
     const [rcptType, setRcptType] = useState<"P" | "B" | "S">(() => receiptSettings?.rcpt_type)
     const [gstFlag, setGstFlag] = useState<"Y" | "N">(() => receiptSettings?.gst_flag)
@@ -50,6 +54,16 @@ export default function ReceiptSettingsEditScreen() {
         { icon: "percent-outline", title: "Percentage", func: () => setDiscountType("P") },
         { icon: "cash", title: "Amount", func: () => setDiscountType("A") },
     ]
+
+    const handleReceiptSettingsUpdate = async () => {
+        await editReceiptSettings(loginStore?.comp_id, rcptType, gstFlag, customerInfo, payMode, discountType, loginStore?.user_name, loginStore?.user_name)
+            .then(res => {
+                ToastAndroid.show("Receipt Settings Updated!", ToastAndroid.SHORT)
+            })
+            .catch(err => {
+                ToastAndroid.show("Something went wrong in the server!", ToastAndroid.SHORT)
+            })
+    }
 
     return (
         <SafeAreaView style={[{ backgroundColor: theme.colors.background, height: "100%" }]}>
@@ -121,6 +135,17 @@ export default function ReceiptSettingsEditScreen() {
                         }}
                     />
                     <Divider />
+                </View>
+                <View style={{ paddingHorizontal: normalize(20), paddingVertical: normalize(10) }}>
+                    {loginStore?.user_type === "M" ? (
+                        <ButtonPaper mode="elevated" onPress={handleReceiptSettingsUpdate}>
+                            UPDATE
+                        </ButtonPaper>
+                    ) : (
+                        <ButtonPaper disabled mode="elevated" onPress={() => console.log("UPDATE")}>
+                            YOU CAN'T UPDATE
+                        </ButtonPaper>
+                    )}
                 </View>
             </ScrollView>
         </SafeAreaView>
