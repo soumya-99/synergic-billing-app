@@ -19,10 +19,9 @@ import { CommonActions, useIsFocused, useNavigation } from "@react-navigation/na
 import SurfacePaper from "../components/SurfacePaper"
 import DialogBox from "../components/DialogBox"
 import normalize from "react-native-normalize"
-import NetTotalButton from "../components/NetTotalButton"
 import ScrollableListContainer from "../components/ScrollableListContainer"
 import { loginStorage } from "../storage/appStorage"
-import { ItemsData, RecentBillsData, ShowBillData } from "../models/api_types"
+import { RecentBillsData, ShowBillData } from "../models/api_types"
 import { AppStore } from "../context/AppContext"
 import useBillSummary from "../hooks/api/useBillSummary"
 import useRecentBills from "../hooks/api/useRecentBills"
@@ -130,8 +129,11 @@ function HomeScreen() {
   }
 
   const handleGetRecentBills = async () => {
-    let recentBillsData: RecentBillsData[] = await fetchRecentBills(formattedDate, loginStore.comp_id, loginStore.br_id, loginStore.user_id)
-    setRecentBills(recentBillsData)
+    await fetchRecentBills(formattedDate, loginStore.comp_id, loginStore.br_id, loginStore.user_id).then(res => {
+      setRecentBills(res)
+    }).catch(err => {
+      ToastAndroid.show("Error during fetching recent bills.", ToastAndroid.SHORT)
+    })
   }
 
   const handleGetVersion = async () => {
@@ -141,6 +143,8 @@ function HomeScreen() {
         // Alert.alert("UPDATE FOUND!", "Please update your app.")
       }
       setUpdateUrl(res?.data[0]?.url)
+    }).catch(err => {
+      ToastAndroid.show("Error during getting version info.", ToastAndroid.SHORT)
     })
   }
 
@@ -156,10 +160,12 @@ function HomeScreen() {
   }
 
   const handleGetBill = async (rcptNo: number) => {
-    let bill = await fetchBill(rcptNo)
-
-    setBilledSaleData(bill?.data)
-    console.log("handleGetBill - HOMESCREEN - fetchBill", bill?.data)
+    await fetchBill(rcptNo).then(res => {
+      setBilledSaleData(res?.data)
+      console.log("handleGetBill - HOMESCREEN - fetchBill", res?.data)
+    }).catch(err => {
+      ToastAndroid.show("Error during fetching old bill", ToastAndroid.SHORT)
+    })
   }
 
   const handleRecentBillListClick = (rcptNo: number) => {
@@ -289,9 +295,9 @@ function HomeScreen() {
           height={250}
           width={300}>
           {billedSaleData?.map((item, i) => {
-            console.log("billedSaleData - item.item_name", item.item_name)
-            console.log("billedSaleData - item.qty", item.qty)
-            console.log("billedSaleData - item.price", item.price)
+            // console.log("billedSaleData - item.item_name", item.item_name)
+            // console.log("billedSaleData - item.qty", item.qty)
+            // console.log("billedSaleData - item.price", item.price)
             netTotal += item.price * item.qty
             totalDiscount += parseFloat(item?.discount_amt?.toFixed(2))
             return (

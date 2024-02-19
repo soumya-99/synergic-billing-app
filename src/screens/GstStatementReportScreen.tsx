@@ -33,11 +33,13 @@ function GstStatementReportScreen() {
     const formattedFromDate = formattedDate(fromDate)
     const formattedToDate = formattedDate(toDate)
 
-    const handleGetCollectionReport = async (fromDate: string, toDate: string, companyId: number, branchId: number) => {
-        let gstStatementResponse = await fetchGstStatement(fromDate, toDate, companyId, branchId)
-
-        setGstStatement(gstStatementResponse?.data)
-        console.log("WWWWWWWWWWWWWW", gstStatementResponse?.data)
+    const handleGetGstReport = async (fromDate: string, toDate: string, companyId: number, branchId: number) => {
+        await fetchGstStatement(fromDate, toDate, companyId, branchId).then(res => {
+            setGstStatement(res?.data)
+            console.log("WWWWWWWWWWWWWW", res?.data)
+        }).catch(err => {
+            ToastAndroid.show("Error fetching GST report.", ToastAndroid.SHORT)
+        })
     }
 
     const handlePrint = (gstStatementReport: GstStatement[], fromDate: string, toDate: string) => {
@@ -100,7 +102,7 @@ function GstStatementReportScreen() {
                 </View>
 
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
-                    <ButtonPaper onPress={() => handleGetCollectionReport(formattedFromDate, formattedToDate, loginStore.comp_id, loginStore.br_id)} mode="contained-tonal" buttonColor={theme.colors.green} textColor={theme.colors.onGreen}>
+                    <ButtonPaper onPress={() => handleGetGstReport(formattedFromDate, formattedToDate, loginStore.comp_id, loginStore.br_id)} mode="contained-tonal" buttonColor={theme.colors.green} textColor={theme.colors.onGreen}>
                         SUBMIT
                     </ButtonPaper>
                 </View>

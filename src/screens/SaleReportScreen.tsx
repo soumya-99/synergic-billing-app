@@ -34,10 +34,12 @@ function SaleReportScreen() {
   const formattedToDate = formattedDate(toDate)
 
   const handleGetSaleReport = async (fromDate: string, toDate: string, companyId: number, branchId: number) => {
-    let saleResponse = await fetchSaleReport(fromDate, toDate, companyId, branchId)
-
-    setSaleReport(saleResponse?.data)
-    console.log("DDDDDDDDDDDDDDD", saleResponse?.data)
+    await fetchSaleReport(fromDate, toDate, companyId, branchId).then(res => {
+      setSaleReport(res?.data)
+      console.log("DDDDDDDDDDDDDDD", res?.data)
+    }).catch(err => {
+      ToastAndroid.show("Error fetching sale report.", ToastAndroid.SHORT)
+    })
   }
 
   const handlePrint = (saleReport: SaleReport[], fromDate: string, toDate: string) => {

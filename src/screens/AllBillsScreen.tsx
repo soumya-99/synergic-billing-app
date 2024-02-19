@@ -14,7 +14,6 @@ import { useNavigation } from "@react-navigation/native"
 import DialogBox from "../components/DialogBox"
 import AddedProductList from "../components/AddedProductList"
 import ScrollableListContainer from "../components/ScrollableListContainer"
-import NetTotalButton from "../components/NetTotalButton"
 import ButtonPaper from "../components/ButtonPaper"
 import DatePicker from "react-native-date-picker"
 import normalize from "react-native-normalize"
@@ -55,17 +54,16 @@ function AllBillsScreen() {
   const { rePrint, rePrintWithoutGst } = useBluetoothPrint()
 
   const handleGetBill = async (rcptNo: number) => {
-    let bill = await fetchBill(rcptNo)
-    setBilledSaleData(bill?.data)
+    await fetchBill(rcptNo).then(res => {
+      setBilledSaleData(res?.data)
+    }).catch(err => {
+      ToastAndroid.show("Error during fetching bills.", ToastAndroid.SHORT)
+    })
   }
 
   const handleBillListClick = (rcptNo: number) => {
     setVisible(!visible)
     handleGetBill(rcptNo)
-  }
-
-  const handleRePrint = () => {
-    // rePrintWithoutGst(billedSaleData, netTotal, totalDiscount as number, 0, 0, customerName, customerMobileNumber, receiptNumber, checked)
   }
 
   const onDialogFailure = () => {
@@ -113,8 +111,7 @@ function AllBillsScreen() {
             imgDark={textureBillDark}
             borderRadius={30}
             blur={10}
-            isBackEnabled
-            navigation={navigation}>
+            isBackEnabled>
             My Bills
           </HeaderImage>
         </View>

@@ -62,7 +62,7 @@ function SettingsScreen() {
         </View>
 
         <ReportButtonsWrapper>
-          <ReportButton
+          {/* <ReportButton
             text="Master"
             color={theme.colors.greenContainer}
             icon="billboard"
@@ -72,7 +72,7 @@ function SettingsScreen() {
                   name: navigationRoutes.masterChooseScreen,
                 })
               )}
-          />
+          /> */}
           <ReportButton
             text="Header/Footer"
             color={theme.colors.orangeContainer}

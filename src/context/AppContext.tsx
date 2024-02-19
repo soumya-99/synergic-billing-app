@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useRef, useState } from "react"
-import { AppState, Alert } from "react-native"
+import { AppState, Alert, ToastAndroid } from "react-native"
 import { loginStorage } from "../storage/appStorage"
 import { fileStorage } from "../storage/appStorage"
 import useReceiptSettings from "../hooks/api/useReceiptSettings"
@@ -55,10 +55,12 @@ const AppContext = ({ children }) => {
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
     const companyId = loginStore.comp_id
-    let receiptSettingsData = await fetchReceiptSettings(companyId)
-    console.log("receiptSettingsData", receiptSettingsData)
-
-    setReceiptSettings(receiptSettingsData[0])
+    await fetchReceiptSettings(companyId).then(res => {
+      setReceiptSettings(res[0])
+      console.log("receiptSettingsData", res[0])
+    }).catch(err => {
+      ToastAndroid.show("Error fetching Receipt Settings.", ToastAndroid.SHORT)
+    })
   }
 
   const handleGetItems = async () => {

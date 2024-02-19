@@ -1,4 +1,4 @@
-import { Alert, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
+import { Alert, SafeAreaView, ScrollView, StyleSheet, ToastAndroid, View } from 'react-native'
 import { Text } from "react-native-paper"
 import LinearGradient from 'react-native-linear-gradient'
 import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from 'react-native-normalize'
@@ -27,30 +27,39 @@ const RegisterScreen = () => {
     const { getOtp } = useFetchOtp()
 
     const handleRegister = async () => {
-        let registeredData = await register(mobileNo)
-        console.log("registeredData", registeredData)
+        await register(mobileNo).then(async res => {
+            console.log("registeredData", res)
 
-        if (registeredData?.status === 0) {
-            Alert.alert("Message", "Mobile No is not Registered.")
-            setMobileNo("")
-            return
-        }
-        else if (registeredData?.status === 1) {
-            let verifyActiveData = await verifyActive(mobileNo)
-            console.log("verifyActiveData", verifyActiveData)
-
-            if (verifyActiveData?.status === -1) {
-                Alert.alert("Message", "Mobile No is already in use.")
+            if (res?.status === 0) {
+                Alert.alert("Message", "Mobile No is not Registered.")
                 setMobileNo("")
                 return
-            } else {
-                let otpData = await getOtp(mobileNo)
-                console.log("otpData", otpData)
-
-                setFetchedOtp(otpData?.data)
-                setNext(!next)
             }
-        }
+            else if (res?.status === 1) {
+                await verifyActive(mobileNo).then(async res => {
+                    console.log("verifyActiveData", res)
+
+                    if (res?.status === -1) {
+                        Alert.alert("Message", "Mobile No is already in use.")
+                        setMobileNo("")
+                        return
+                    } else {
+                        await getOtp(mobileNo).then(res => {
+                            console.log("otpData", res)
+
+                            setFetchedOtp(res?.data)
+                            setNext(!next)
+                        }).catch(err => {
+                            ToastAndroid.show("Some error on server.", ToastAndroid.SHORT)
+                        })
+                    }
+                }).catch(err => {
+                    ToastAndroid.show("Some error on server.", ToastAndroid.SHORT)
+                })
+            }
+        }).catch(err => {
+            ToastAndroid.show("Some error on server.", ToastAndroid.SHORT)
+        })
     }
 
     const handleOtpMatch = () => {

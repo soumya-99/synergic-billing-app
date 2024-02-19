@@ -1,5 +1,5 @@
-import { StyleSheet, ScrollView, SafeAreaView, View, ImageBackground, Image, ToastAndroid } from "react-native"
-import { ImageLibraryOptions, ImagePickerResponse, launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { StyleSheet, ScrollView, SafeAreaView, View, Image } from "react-native"
+import { ImageLibraryOptions, ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 
 import HeaderImage from "../components/HeaderImage"
 import { blurReport, blurReportDark } from "../resources/images"

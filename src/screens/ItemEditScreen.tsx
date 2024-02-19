@@ -52,7 +52,11 @@ export default function ItemEditScreen() {
     const [SGST, setSGST] = useState<number>(product?.sgst)
 
     const handleUpdateProductDetails = async () => {
-        await editItem(loginStore?.comp_id, product?.item_id, price, discount, CGST, SGST, loginStore?.user_name)
+        await editItem(loginStore?.comp_id, product?.item_id, price, discount, CGST, SGST, loginStore?.user_name).then(res => {
+            ToastAndroid.show(res?.data, ToastAndroid.SHORT)
+        }).catch(err => {
+            ToastAndroid.show("Error updating product details.", ToastAndroid.SHORT)
+        })
     }
 
     const onDialogFailure = () => {

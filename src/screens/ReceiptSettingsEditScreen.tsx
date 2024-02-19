@@ -61,7 +61,7 @@ export default function ReceiptSettingsEditScreen() {
                 ToastAndroid.show("Receipt Settings Updated!", ToastAndroid.SHORT)
             })
             .catch(err => {
-                ToastAndroid.show("Something went wrong in the server!", ToastAndroid.SHORT)
+                ToastAndroid.show("Something went wrong while updating!", ToastAndroid.SHORT)
             })
     }
 

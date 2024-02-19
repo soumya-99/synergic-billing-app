@@ -70,10 +70,12 @@ function ItemReportScreen() {
     }
 
     const handleGetItemReport = async (fromDate: string, toDate: string, companyId: number, branchId: number, productId: number) => {
-        let itemResponse = await fetchItemReport(fromDate, toDate, companyId, branchId, productId)
-
-        setItemReport(itemResponse?.data)
-        console.log("XXXXXXXXXXXXXXXXX", itemResponse?.data)
+        await fetchItemReport(fromDate, toDate, companyId, branchId, productId).then(res => {
+            setItemReport(res?.data)
+            console.log("XXXXXXXXXXXXXXXXX", res?.data)
+        }).catch(err => {
+            ToastAndroid.show("Error fetching item report.", ToastAndroid.SHORT)
+        })
     }
 
     const handlePrint = (itemReport: ItemReport[]) => {

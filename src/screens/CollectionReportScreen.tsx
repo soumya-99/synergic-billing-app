@@ -34,10 +34,12 @@ function CollectionReportScreen() {
     const formattedToDate = formattedDate(toDate)
 
     const handleGetCollectionReport = async (fromDate: string, toDate: string, companyId: number, branchId: number) => {
-        let collectionResponse = await fetchCollectionReport(fromDate, toDate, companyId, branchId)
-
-        setCollectionReport(collectionResponse?.data)
-        console.log("XXXXXXXXXXXXXXXXX", collectionResponse?.data)
+        await fetchCollectionReport(fromDate, toDate, companyId, branchId).then(res => {
+            setCollectionReport(res?.data)
+            console.log("XXXXXXXXXXXXXXXXX", res?.data)
+        }).catch(err => {
+            ToastAndroid.show("Error during fetching report.", ToastAndroid.SHORT)
+        })
     }
 
     const handlePrint = (collectionReport: CollectionReport[], fromDate: string, toDate: string) => {
