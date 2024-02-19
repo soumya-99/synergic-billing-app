@@ -44,7 +44,7 @@ function ProductsScreen() {
 
   const [product, setProduct] = useState<ItemsData>()
 
-  const [quantity, setQuantity] = useState<number>(() => undefined)
+  const [quantity, setQuantity] = useState<number>()
   const [discountState, setDiscountState] = useState<number>(() => 0)
 
   const [addedProductsList, setAddedProductsList] = useState<
@@ -61,7 +61,7 @@ function ProductsScreen() {
   const onChangeSearch = (query: string) => {
     setSearch(query)
 
-    const filtered = items.filter(item => item?.item_name?.includes(query))
+    const filtered = items.filter((item: ItemsData) => item?.item_name?.includes(query))
     setFilteredItems(filtered)
     if (query === "") setFilteredItems(() => [])
   }
@@ -100,7 +100,7 @@ function ProductsScreen() {
     let isFoundDuplicate = false
     setEditState(false)
 
-    if (quantity.toString().trim() !== "" && !/^0+$/.test(quantity.toString())) {
+    if (typeof quantity !== "undefined" && quantity !== 0) {
       console.log("OK PRODUCT: ", product?.item_name)
 
       for (let item of addedProductsList) {
@@ -122,18 +122,19 @@ function ProductsScreen() {
         setVisible(!visible)
         setFilteredItems(() => [])
       }
+
+      console.log("asiurweagsaygeutseygfsdytfgsydtfse", quantity)
     } else {
       ToastAndroid.show(
         "Try adding some items.",
         ToastAndroid.SHORT,
       )
     }
-
   }
 
   const onDialogUpdate = (product: ItemsData) => {
     setEditState(false)
-    if (quantity.toString().trim() !== "" && !/^0+$/.test(quantity.toString())) {
+    if (quantity > 0) {
       console.log("OK PRODUCT UPDATE: ", product?.item_name)
 
       let filteredSingleProductArray = addedProductsList?.filter((item, index) => (
