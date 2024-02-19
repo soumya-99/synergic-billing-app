@@ -19,7 +19,7 @@ export default function ReceiptSettingsEditScreen() {
 
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
-    const { receiptSettings } = useContext(AppStore)
+    const { receiptSettings, handleGetReceiptSettings } = useContext(AppStore)
 
     const { editReceiptSettings } = useEditReceiptSettings()
 
@@ -59,6 +59,7 @@ export default function ReceiptSettingsEditScreen() {
         await editReceiptSettings(loginStore?.comp_id, rcptType, gstFlag, customerInfo, payMode, discountType, loginStore?.user_name, loginStore?.user_name)
             .then(res => {
                 ToastAndroid.show("Receipt Settings Updated!", ToastAndroid.SHORT)
+                handleGetReceiptSettings()
             })
             .catch(err => {
                 ToastAndroid.show("Something went wrong while updating!", ToastAndroid.SHORT)
