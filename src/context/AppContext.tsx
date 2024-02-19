@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useRef, useState } from "react"
 import { AppState, Alert } from "react-native"
 import { loginStorage } from "../storage/appStorage"
+import { fileStorage } from "../storage/appStorage"
 import useReceiptSettings from "../hooks/api/useReceiptSettings"
 import useLogin from "../hooks/api/useLogin"
 import { ItemsData, ReceiptSettingsData } from "../models/api_types"
@@ -77,6 +78,7 @@ const AppContext = ({ children }) => {
 
   const handleLogout = () => {
     loginStorage.clearAll()
+    fileStorage.clearAll()
     setIsLogin(!isLogin)
   }
 
