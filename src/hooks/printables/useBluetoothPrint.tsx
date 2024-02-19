@@ -1,19 +1,17 @@
 import { BluetoothEscposPrinter } from "react-native-bluetooth-escpos-printer"
-import { BASE_64_IMAGE } from "../../resources/base64/logo"
-import img1 from "../../resources/images/blur_report.jpg"
 import { fileStorage, loginStorage } from "../../storage/appStorage"
 import { useContext } from "react"
 import { AppStore } from "../../context/AppContext"
 import { CollectionReport, GstStatement, GstSummary, ItemReport, ItemsData, SaleReport, ShowBillData } from "../../models/api_types"
 import { gstFilterationAndTotals } from "../../utils/gstFilterTotal"
 import { gstFilterationAndTotalForRePrint } from "../../utils/gstFilterTotalForRePrint"
-import { convertImageToBase64 } from "../../utils/base64Converter"
 
 export const useBluetoothPrint = () => {
     const { receiptSettings } = useContext(AppStore)
 
     async function printReceipt(addedProducts: ItemsData[], netTotal: number, totalDiscountAmount: number, cashAmount?: number, returnedAmt?: number, customerName?: string, customerPhone?: string, rcptNo?: number, paymentMode?: string) {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
+        const fileStore = fileStorage.getString("file-data")
 
         const shopName: string = loginStore?.company_name?.toString()
         const address: string = loginStore?.address?.toString()
@@ -37,6 +35,18 @@ export const useBluetoothPrint = () => {
             let columnWidthIfNameIsBig = [32]
 
             // let newColumnWidths: number[] = [9, 9, 6, 7]
+
+            if (fileStore?.length > 0) {
+                await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER)
+                const options = {
+                    width: 250, // Assuming 58mm paper width with 8 dots/mm resolution (58mm * 8dots/mm = 384 dots)
+                    left: 50, // No left padding
+                    // align: "CENTER"
+                }
+
+                // Print the image
+                await BluetoothEscposPrinter.printPic(fileStore, options)
+            }
 
             await BluetoothEscposPrinter.printerAlign(
                 BluetoothEscposPrinter.ALIGN.CENTER,
@@ -479,6 +489,7 @@ export const useBluetoothPrint = () => {
 
     async function printReceiptWithoutGst(addedProducts: ItemsData[], netTotal: number, totalDiscountAmount: number, cashAmount?: number, returnedAmt?: number, customerName?: string, customerPhone?: string, rcptNo?: number, paymentMode?: string) {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
+        const fileStore = fileStorage.getString("file-data")
 
         const shopName: string = loginStore?.company_name?.toString()
         const address: string = loginStore?.address?.toString()
@@ -500,6 +511,18 @@ export const useBluetoothPrint = () => {
             let columnWidthIfNameIsBig = [32]
 
             // let newColumnWidths: number[] = [9, 9, 6, 7]
+
+            if (fileStore?.length > 0) {
+                await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER)
+                const options = {
+                    width: 250, // Assuming 58mm paper width with 8 dots/mm resolution (58mm * 8dots/mm = 384 dots)
+                    left: 50, // No left padding
+                    // align: "CENTER"
+                }
+
+                // Print the image
+                await BluetoothEscposPrinter.printPic(fileStore, options)
+            }
 
             await BluetoothEscposPrinter.printerAlign(
                 BluetoothEscposPrinter.ALIGN.CENTER,
@@ -840,6 +863,7 @@ export const useBluetoothPrint = () => {
 
     async function rePrintWithoutGst(addedProducts: ShowBillData[], netTotal: number, totalDiscountAmount: number, cashAmount?: number, returnedAmt?: number, customerName?: string, customerPhone?: string, rcptNo?: number, paymentMode?: string) {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
+        const fileStore = fileStorage.getString("file-data")
 
         const shopName: string = loginStore?.company_name?.toString()
         const address: string = loginStore?.address?.toString()
@@ -861,6 +885,18 @@ export const useBluetoothPrint = () => {
             let columnWidthIfNameIsBig = [32]
 
             // let newColumnWidths: number[] = [9, 9, 6, 7]
+
+            if (fileStore?.length > 0) {
+                await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER)
+                const options = {
+                    width: 250, // Assuming 58mm paper width with 8 dots/mm resolution (58mm * 8dots/mm = 384 dots)
+                    left: 50, // No left padding
+                    // align: "CENTER"
+                }
+
+                // Print the image
+                await BluetoothEscposPrinter.printPic(fileStore, options)
+            }
 
             await BluetoothEscposPrinter.printerAlign(
                 BluetoothEscposPrinter.ALIGN.CENTER,
@@ -1201,6 +1237,7 @@ export const useBluetoothPrint = () => {
 
     async function rePrint(addedProducts: ShowBillData[], netTotal: number, totalDiscountAmount: number, cashAmount?: number, returnedAmt?: number, customerName?: string, customerPhone?: string, rcptNo?: number, paymentMode?: string) {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
+        const fileStore = fileStorage.getString("file-data")
 
         const shopName: string = loginStore?.company_name?.toString()
         const address: string = loginStore?.address?.toString()
@@ -1224,6 +1261,18 @@ export const useBluetoothPrint = () => {
             let columnWidthIfNameIsBig = [32]
 
             // let newColumnWidths: number[] = [9, 9, 6, 7]
+
+            if (fileStore?.length > 0) {
+                await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER)
+                const options = {
+                    width: 250, // Assuming 58mm paper width with 8 dots/mm resolution (58mm * 8dots/mm = 384 dots)
+                    left: 50, // No left padding
+                    // align: "CENTER"
+                }
+
+                // Print the image
+                await BluetoothEscposPrinter.printPic(fileStore, options)
+            }
 
             await BluetoothEscposPrinter.printerAlign(
                 BluetoothEscposPrinter.ALIGN.CENTER,
@@ -1693,13 +1742,17 @@ export const useBluetoothPrint = () => {
 
             // let newColumnWidths: number[] = [9, 9, 6, 7]
 
-            const options = {
-                width: 384, // Assuming 58mm paper width with 8 dots/mm resolution (58mm * 8dots/mm = 384 dots)
-                left: 0, // No left padding
-            };
+            if (fileStore?.length > 0) {
+                await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER)
+                const options = {
+                    width: 250, // Assuming 58mm paper width with 8 dots/mm resolution (58mm * 8dots/mm = 384 dots)
+                    left: 50, // No left padding
+                    // align: "CENTER"
+                }
 
-            // Print the image
-            await BluetoothEscposPrinter.printPic(fileStore, options)
+                // Print the image
+                await BluetoothEscposPrinter.printPic(fileStore, options)
+            }
 
             await BluetoothEscposPrinter.printerAlign(
                 BluetoothEscposPrinter.ALIGN.CENTER,
@@ -1906,6 +1959,7 @@ export const useBluetoothPrint = () => {
 
     async function printCollectionReport(collectionReport: CollectionReport[], fromDate: string, toDate: string) {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
+        const fileStore = fileStorage.getString("file-data")
 
         const shopName: string = loginStore?.company_name?.toString()
         const address: string = loginStore?.address?.toString()
@@ -1927,6 +1981,18 @@ export const useBluetoothPrint = () => {
             let columnWidthIfNameIsBig = [32]
 
             // let newColumnWidths: number[] = [9, 9, 6, 7]
+
+            if (fileStore?.length > 0) {
+                await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER)
+                const options = {
+                    width: 250, // Assuming 58mm paper width with 8 dots/mm resolution (58mm * 8dots/mm = 384 dots)
+                    left: 50, // No left padding
+                    // align: "CENTER"
+                }
+
+                // Print the image
+                await BluetoothEscposPrinter.printPic(fileStore, options)
+            }
 
             await BluetoothEscposPrinter.printerAlign(
                 BluetoothEscposPrinter.ALIGN.CENTER,
@@ -2087,6 +2153,7 @@ export const useBluetoothPrint = () => {
 
     async function printGstStatement(gstStatement: GstStatement[], fromDate: string, toDate: string) {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
+        const fileStore = fileStorage.getString("file-data")
 
         const shopName: string = loginStore?.company_name?.toString()
         const address: string = loginStore?.address?.toString()
@@ -2112,6 +2179,18 @@ export const useBluetoothPrint = () => {
             let columnWidthIfNameIsBig = [32]
 
             // let newColumnWidths: number[] = [9, 9, 6, 7]
+
+            if (fileStore?.length > 0) {
+                await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER)
+                const options = {
+                    width: 250, // Assuming 58mm paper width with 8 dots/mm resolution (58mm * 8dots/mm = 384 dots)
+                    left: 50, // No left padding
+                    // align: "CENTER"
+                }
+
+                // Print the image
+                await BluetoothEscposPrinter.printPic(fileStore, options)
+            }
 
             await BluetoothEscposPrinter.printerAlign(
                 BluetoothEscposPrinter.ALIGN.CENTER,
@@ -2277,6 +2356,7 @@ export const useBluetoothPrint = () => {
 
     async function printGstSummary(gstSummary: GstSummary[], fromDate: string, toDate: string) {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
+        const fileStore = fileStorage.getString("file-data")
 
         const shopName: string = loginStore?.company_name?.toString()
         const address: string = loginStore?.address?.toString()
@@ -2303,6 +2383,18 @@ export const useBluetoothPrint = () => {
             let columnWidthIfNameIsBig = [32]
 
             // let newColumnWidths: number[] = [9, 9, 6, 7]
+
+            if (fileStore?.length > 0) {
+                await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER)
+                const options = {
+                    width: 250, // Assuming 58mm paper width with 8 dots/mm resolution (58mm * 8dots/mm = 384 dots)
+                    left: 50, // No left padding
+                    // align: "CENTER"
+                }
+
+                // Print the image
+                await BluetoothEscposPrinter.printPic(fileStore, options)
+            }
 
             await BluetoothEscposPrinter.printerAlign(
                 BluetoothEscposPrinter.ALIGN.CENTER,

@@ -6,8 +6,8 @@ import { blurReport, blurReportDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
 import { fileStorage } from "../storage/appStorage"
 import { useState } from "react"
-import ButtonPaper from "../components/ButtonPaper";
-import normalize from "react-native-normalize";
+import ButtonPaper from "../components/ButtonPaper"
+import normalize from "react-native-normalize"
 
 function LogoUploadScreen() {
     const theme = usePaperColorScheme()
@@ -44,8 +44,7 @@ function LogoUploadScreen() {
                 // const fileSize = response?.assets[0]?.fileSize
 
                 setImgSrcUri(srcUri)
-                // setImageSource(source)
-                // console.log("aiuwerosdgogfuirsyildfufsdrfsdf", imageSource)
+
                 fileStorage.set("file-data", source?.toString())
                 fileStorage.set("file-uri", srcUri?.toString())
 
@@ -76,15 +75,16 @@ function LogoUploadScreen() {
                     </ButtonPaper>
                 </View>
 
-                <View style={{ padding: 20 }}>
-                    {/* {imgSrcUri && ( */}
-                    <Image
-                        style={styles.image}
-                        // source={{ uri: imgSrcUri }}
-                        source={{ uri: fileStorage.getString("file-uri") === undefined ? imgSrcUri : fileStorage.getString("file-uri") }}
-                    // resizeMode="contain"
-                    />
-                    {/* )} */}
+                <View style={{ padding: normalize(40) }}>
+                    <View style={{ borderWidth: 6, borderStyle: "dashed", borderRadius: normalize(50), width: '100%', borderColor: theme.colors.secondary }}>
+                        <Image
+                            style={styles.image}
+                            // source={{ uri: imgSrcUri }}
+                            source={{ uri: fileStorage?.getString("file-uri") === undefined ? imgSrcUri : fileStorage?.getString("file-uri") }}
+                            resizeMode="contain"
+                        />
+                    </View>
+
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -104,7 +104,8 @@ const styles = StyleSheet.create({
 
     image: {
         width: '100%',
-        height: normalize(300),
+        minHeight: normalize(200),
+        height: "auto",
         marginVertical: 10,
         borderWidth: 1
     },
