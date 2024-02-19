@@ -117,7 +117,7 @@ function SettingsScreen() {
           />
           <ReportButton
             text="Logo Upload"
-            color={theme.colors.tertiaryContainer}
+            color={theme.colors.primaryContainer}
             icon="emoticon-happy-outline"
             onPress={() => navigation.dispatch(
               CommonActions.navigate({
@@ -131,7 +131,7 @@ function SettingsScreen() {
             icon="billboard"
             onPress={() => console.log("Rprt Pressed!")}
           /> */}
-          <ReportButton
+          {/* <ReportButton
             text="Month Wise"
             color={theme.colors.pinkContainer}
             icon="billboard"
@@ -148,7 +148,7 @@ function SettingsScreen() {
             color={theme.colors.pinkContainer}
             icon="billboard"
             onPress={() => console.log("Rprt Pressed!")}
-          />
+          /> */}
           {/* <ReportButton
             text="GST Report"
             color={theme.colors.primaryContainer}
