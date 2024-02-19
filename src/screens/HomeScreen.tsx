@@ -5,10 +5,12 @@ import {
   View,
   ToastAndroid,
   RefreshControl,
+  Alert,
+  Linking,
 } from "react-native"
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import AnimatedFABPaper from "../components/AnimatedFABPaper"
-import { Button, List, Text } from "react-native-paper"
+import { Button, Dialog, List, Portal, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import HeaderImage from "../components/HeaderImage"
 import { flowerHome, flowerHomeDark } from "../resources/images"
@@ -28,30 +30,42 @@ import useShowBill from "../hooks/api/useShowBill"
 import AddedProductList from "../components/AddedProductList"
 import NetTotalForRePrints from "../components/NetTotalForRePrints"
 import { useBluetoothPrint } from "../hooks/printables/useBluetoothPrint"
+import useVersionCheck from "../hooks/api/useVersionCheck"
+import DeviceInfo from "react-native-device-info"
 
 function HomeScreen() {
+  const theme = usePaperColorScheme()
   const navigation = useNavigation()
   const isFocused = useIsFocused()
+
+  let version = DeviceInfo.getVersion()
 
   const { handleGetReceiptSettings, receiptSettings } = useContext(AppStore)
 
   const { fetchBillSummary } = useBillSummary()
   const { fetchRecentBills } = useRecentBills()
   const { fetchBill } = useShowBill()
+  const { fetchVersionInfo } = useVersionCheck()
   const { rePrint, rePrintWithoutGst } = useBluetoothPrint()
 
   const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
-  const theme = usePaperColorScheme()
   const [isExtended, setIsExtended] = useState<boolean>(() => true)
 
-  // const [addedProductsList, setAddedProductsList] = useState<ItemsData[]>(() => [])
   const [totalBills, setTotalBills] = useState<number | undefined>(() => undefined)
   const [amountCollected, setAmountCollected] = useState<number | undefined>(() => undefined)
   const [recentBills, setRecentBills] = useState<RecentBillsData[]>(() => [])
   const [billedSaleData, setBilledSaleData] = useState<ShowBillData[]>(() => [])
 
   const [refreshing, setRefreshing] = useState<boolean>(() => false)
+  const [updateUrl, setUpdateUrl] = useState<string>()
+
+  const [visible, setVisible] = useState<boolean>(() => false)
+  const hideDialog = () => setVisible(() => false)
+
+  const [visibleUpdatePortal, setVisibleUpdatePortal] = useState<boolean>(() => false)
+  const showDialogForAppUpdate = () => setVisibleUpdatePortal(true)
+  const hideDialogForAppUpdate = () => setVisibleUpdatePortal(false)
 
   let today = new Date()
   let year = today.getFullYear()
@@ -77,9 +91,6 @@ function HomeScreen() {
 
     setIsExtended(currentScrollPosition <= 0)
   }
-
-  const [visible, setVisible] = useState(() => false)
-  const hideDialog = () => setVisible(() => false)
 
   const onDialogFailure = () => {
     setVisible(!visible)
@@ -123,10 +134,26 @@ function HomeScreen() {
     setRecentBills(recentBillsData)
   }
 
+  const handleGetVersion = async () => {
+    await fetchVersionInfo().then((res) => {
+      if (res?.data[0]?.version_no !== version) {
+        showDialogForAppUpdate()
+        // Alert.alert("UPDATE FOUND!", "Please update your app.")
+      }
+      setUpdateUrl(res?.data[0]?.url)
+    })
+  }
+
   useEffect(() => {
     handleGetBillSummary()
     handleGetRecentBills()
+
+    handleGetVersion()
   }, [isFocused])
+
+  const updateApp = () => {
+    Linking.openURL(updateUrl)
+  }
 
   const handleGetBill = async (rcptNo: number) => {
     let bill = await fetchBill(rcptNo)
@@ -155,6 +182,19 @@ function HomeScreen() {
             Welcome Back, {loginStore.company_name}!
           </HeaderImage>
         </View>
+
+        <Portal>
+          <Dialog visible={visibleUpdatePortal} dismissable={false}>
+            <Dialog.Title>UPDATE FOUND!</Dialog.Title>
+            <Dialog.Content>
+              <Text variant="bodyMedium">Please update your app.</Text>
+            </Dialog.Content>
+            <Dialog.Actions>
+              {/* <Button onPress={hideDialog}>Cancel</Button> */}
+              <Button onPress={updateApp}>Download</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
 
         <View style={{ alignItems: "center" }}>
           <SurfacePaper

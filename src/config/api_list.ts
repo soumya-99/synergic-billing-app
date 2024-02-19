@@ -21,4 +21,5 @@ export const ADDRESSES = {
     EDIT_HEADER_FOOTER: `${BASE_URL}/api/edit_header_footer`,
     EDIT_ITEM: `${BASE_URL}/api/edit_items`,
     EDIT_RECEIPT_SETTINGS: `${BASE_URL}/api/edit_rcp_settings`,
+    APP_VERSION: `${BASE_URL}/api/app_version`,
 }

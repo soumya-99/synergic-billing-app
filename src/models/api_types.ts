@@ -278,3 +278,14 @@ export type ReceiptSettingsEditData = {
     "status": number
     "data": string
 }
+
+export type VersionCheck = {
+    "status": number
+    "data": VersionCheckData[]
+}
+
+export type VersionCheckData = {
+    "sl_no": number
+    "version_no": string
+    "url": string
+}
