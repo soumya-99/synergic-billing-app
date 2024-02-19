@@ -2313,12 +2313,12 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.LEFT,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                [`CGST: ${totalCGST?.toString()}`, `SGST: ${totalSGST?.toFixed(2)?.toString()}`],
+                [`CGST: ${totalCGST?.toFixed(2)?.toString()}`, `SGST: ${totalSGST?.toFixed(2)?.toString()}`],
                 {},
             )
             await BluetoothEscposPrinter.printText("\n", {})
 
-            await BluetoothEscposPrinter.printText(`Total Taxes: ${totalTaxes?.toString()}`, {})
+            await BluetoothEscposPrinter.printText(`Total Taxes: ${totalTaxes?.toFixed(2)?.toString()}`, {})
 
             await BluetoothEscposPrinter.printText("\n", {})
 
@@ -2518,7 +2518,7 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.LEFT,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                [`CGST: ${totalCGST?.toString()}`, `SGST: ${totalSGST?.toFixed(2)?.toString()}`],
+                [`CGST: ${totalCGST?.toFixed(2)?.toString()}`, `SGST: ${totalSGST?.toFixed(2)?.toString()}`],
                 {},
             )
             // await BluetoothEscposPrinter.printColumn(
@@ -2532,7 +2532,7 @@ export const useBluetoothPrint = () => {
             // )
             await BluetoothEscposPrinter.printText("\n", {})
             await BluetoothEscposPrinter.printText(
-                `Total Tax: ${totalTaxes?.toString()}`,
+                `Total Tax: ${totalTaxes?.toFixed(2)?.toString()}`,
                 { align: "center" },
             )
             await BluetoothEscposPrinter.printText("\n", {})
