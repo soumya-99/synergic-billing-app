@@ -24,30 +24,30 @@ export function gstFilterationAndTotalForRePrint(addedProducts: ShowBillData[]) 
     for (const product of addedProducts ?? []) {
         if (product.cgst_prtg === 5) {
             productsCGST_5.push(product)
-            totalCGST_5 += (((product.qty * product.price) - product.dis_pertg) * product.cgst_prtg) / 100
+            totalCGST_5 += (((product.qty * product.price)) * product.cgst_prtg) / 100
         } else if (product.cgst_prtg === 12) {
             productsCGST_12.push(product)
-            totalCGST_12 += (((product.qty * product.price) - product.dis_pertg) * product.cgst_prtg) / 100
+            totalCGST_12 += (((product.qty * product.price)) * product.cgst_prtg) / 100
         } else if (product.cgst_prtg === 18) {
             productsCGST_18.push(product)
-            totalCGST_18 += (((product.qty * product.price) - product.dis_pertg) * product.cgst_prtg) / 100
+            totalCGST_18 += (((product.qty * product.price)) * product.cgst_prtg) / 100
         } else if (product.cgst_prtg === 28) {
             productsCGST_28.push(product)
-            totalCGST_28 += (((product.qty * product.price) - product.dis_pertg) * product.cgst_prtg) / 100
+            totalCGST_28 += (((product.qty * product.price)) * product.cgst_prtg) / 100
         }
 
         if (product.sgst_prtg === 5) {
             productsSGST_5.push(product)
-            totalSGST_5 += (((product.qty * product.price) - product.dis_pertg) * product.sgst_prtg) / 100
+            totalSGST_5 += (((product.qty * product.price)) * product.sgst_prtg) / 100
         } else if (product.sgst_prtg === 12) {
             productsSGST_12.push(product)
-            totalSGST_12 += (((product.qty * product.price) - product.dis_pertg) * product.sgst_prtg) / 100
+            totalSGST_12 += (((product.qty * product.price)) * product.sgst_prtg) / 100
         } else if (product.sgst_prtg === 18) {
             productsSGST_18.push(product)
-            totalSGST_18 += (((product.qty * product.price) - product.dis_pertg) * product.sgst_prtg) / 100
+            totalSGST_18 += (((product.qty * product.price)) * product.sgst_prtg) / 100
         } else if (product.sgst_prtg === 28) {
             productsSGST_28.push(product)
-            totalSGST_28 += (((product.qty * product.price) - product.dis_pertg) * product.sgst_prtg) / 100
+            totalSGST_28 += (((product.qty * product.price)) * product.sgst_prtg) / 100
         }
     }
 

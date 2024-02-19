@@ -132,6 +132,7 @@ function HomeScreen() {
     let bill = await fetchBill(rcptNo)
 
     setBilledSaleData(bill?.data)
+    console.log("handleGetBill - HOMESCREEN - fetchBill", bill?.data)
   }
 
   const handleRecentBillListClick = (rcptNo: number) => {
@@ -248,6 +249,9 @@ function HomeScreen() {
           height={250}
           width={300}>
           {billedSaleData?.map((item, i) => {
+            console.log("billedSaleData - item.item_name", item.item_name)
+            console.log("billedSaleData - item.qty", item.qty)
+            console.log("billedSaleData - item.price", item.price)
             netTotal += item.price * item.qty
             totalDiscount += parseFloat(item?.discount_amt?.toFixed(2))
             return (
