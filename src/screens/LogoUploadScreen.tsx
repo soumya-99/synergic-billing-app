@@ -52,7 +52,11 @@ function LogoUploadScreen() {
                 console.log("ashdguasydguasdgufddstgdtgrgdfgdfgdffyasdasd", imgSrcUri)
             }
         })
+    }
 
+    const removeLogo = () => {
+        setImgSrcUri("")
+        fileStorage.clearAll()
     }
 
     return (
@@ -84,7 +88,12 @@ function LogoUploadScreen() {
                             resizeMode="contain"
                         />
                     </View>
+                </View>
 
+                <View style={{ paddingHorizontal: normalize(20) }}>
+                    <ButtonPaper icon="trash-can-outline" mode="text" onPress={removeLogo} textColor={theme.colors.error}>
+                        REMOVE
+                    </ButtonPaper>
                 </View>
             </ScrollView>
         </SafeAreaView>
