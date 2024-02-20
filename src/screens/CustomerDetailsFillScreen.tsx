@@ -96,7 +96,7 @@ const CustomerDetailsFillScreen = () => {
 
             receiptSettings?.gst_flag === "N"
                 ? printReceiptWithoutGst(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
-                : printReceipt(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber)
+                : printReceipt(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
             console.log("params?.added_products", params?.added_products)
         }
     }

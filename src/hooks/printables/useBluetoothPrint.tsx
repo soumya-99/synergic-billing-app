@@ -458,6 +458,28 @@ export const useBluetoothPrint = () => {
                     { align: "center" },
                 )
             }
+            if (paymentMode === "D") {
+                await BluetoothEscposPrinter.printText(
+                    `RECEIVED:       ${Math.round(parseFloat((netTotal - totalDiscountAmount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2)))} [CARD]`,
+                    { align: "center" },
+                )
+                await BluetoothEscposPrinter.printText("\n", {})
+                await BluetoothEscposPrinter.printText(
+                    "------------------------",
+                    { align: "center" },
+                )
+            }
+            if (paymentMode === "U") {
+                await BluetoothEscposPrinter.printText(
+                    `RECEIVED:       ${Math.round(parseFloat((netTotal - totalDiscountAmount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2)))} [UPI]`,
+                    { align: "center" },
+                )
+                await BluetoothEscposPrinter.printText("\n", {})
+                await BluetoothEscposPrinter.printText(
+                    "------------------------",
+                    { align: "center" },
+                )
+            }
             await BluetoothEscposPrinter.printText("\n", {})
 
 
