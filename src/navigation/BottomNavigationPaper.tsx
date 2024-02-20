@@ -11,8 +11,10 @@ function BottomNavigationPaper() {
   const theme = usePaperColorScheme()
   return (
     <Tab.Navigator
+      theme={theme}
       initialRouteName="Home"
       activeColor={theme.colors.primary}
+      inactiveColor={theme.colors.onSurface}
       barStyle={{ backgroundColor: theme.colors.surface }}>
       <Tab.Screen
         name="Home"

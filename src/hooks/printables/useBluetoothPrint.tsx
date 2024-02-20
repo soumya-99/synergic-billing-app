@@ -1265,7 +1265,7 @@ export const useBluetoothPrint = () => {
             if (fileStore?.length > 0) {
                 await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER)
                 const options = {
-                    width: 250, // Assuming 58mm paper width with 8 dots/mm resolution (58mm * 8dots/mm = 384 dots)
+                    width: 210, // Assuming 58mm paper width with 8 dots/mm resolution (58mm * 8dots/mm = 384 dots)
                     left: 50, // No left padding
                     // align: "CENTER"
                 }

@@ -165,7 +165,7 @@ function ProductsScreen() {
     addedProductsList.push(product)
     product["quantity"] = quantity
     if (discountState > 0)
-      product["discount"] = discountState!
+      product["discount"] = discountState
     setAddedProductsList([...addedProductsList])
     console.log(
       "==========ADDED PRODUCTS LIST==========",
@@ -301,7 +301,8 @@ function ProductsScreen() {
                 totalPrice += item?.price * item["quantity"]
 
                 receiptSettings?.discount_type === "A"
-                  ? totalDiscountedAmount += item["discount"]
+                  //@ts-ignore
+                  ? totalDiscountedAmount += parseFloat(item["discount"])
                   : totalDiscountedAmount += parseFloat((item?.price * item["quantity"] * item["discount"] / 100).toFixed(2))
                 console.log("totalDiscount", totalDiscountedAmount)
 

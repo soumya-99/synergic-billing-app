@@ -75,7 +75,7 @@ function ReportsScreen() {
               })
             )}
           />
-          <ReportButton
+          {/* <ReportButton
             text="Year Wise"
             color={theme.colors.orangeContainer}
             icon="billboard"
@@ -92,7 +92,7 @@ function ReportsScreen() {
             color={theme.colors.primaryContainer}
             icon="billboard"
             onPress={() => console.log("Rprt Pressed!")}
-          />
+          /> */}
         </ReportButtonsWrapper>
       </ScrollView>
     </SafeAreaView>

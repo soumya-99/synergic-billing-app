@@ -17,9 +17,7 @@ import ButtonPaper from "../components/ButtonPaper"
 import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from "react-native-normalize"
 import { CommonActions, useNavigation } from "@react-navigation/native"
 import navigationRoutes from "../routes/navigationRoutes"
-import useLogin from "../hooks/api/useLogin"
 import { AppStore } from "../context/AppContext"
-import { loginStorage } from "../storage/appStorage"
 
 function LoginScreen() {
   const navigation = useNavigation()
@@ -51,7 +49,7 @@ function LoginScreen() {
             <Text
               variant="displayMedium"
               style={[styles.loginHeaderText, { color: theme.colors.primary }]}>
-              Billing App
+              Easy Bill
             </Text>
           </View>
           <View
