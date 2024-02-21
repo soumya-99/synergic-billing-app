@@ -202,7 +202,7 @@ export type SaleReport = {
     "discount_amt": number
     "cgst_amt": number
     "sgst_amt": number
-    "rount_off": number
+    "round_off": number
     "net_amt": number
     "created_by": string
 }

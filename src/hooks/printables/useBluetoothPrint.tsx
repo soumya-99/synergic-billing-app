@@ -1757,7 +1757,7 @@ export const useBluetoothPrint = () => {
 
             let columnWidths = [11, 1, 18]
             let columnWidthsHeader = [8, 1, 21]
-            let columnWidthsProductsHeaderAndBody = [5, 4, 8, 6, 4, 4] // 1 in hand
+            let columnWidthsProductsHeaderAndBody = [5, 4, 7, 6, 6, 4] // 0 in hand
             // let columnWidthsProductsHeaderAndBody = [18, 3, 4, 3, 4]
             let columnWidthsTotals = [15, 15]
             let columnWidthIfNameIsBig = [32]
@@ -1842,18 +1842,35 @@ export const useBluetoothPrint = () => {
             await BluetoothEscposPrinter.printText("\n", {})
 
             await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER)
-            await BluetoothEscposPrinter.printColumn(
-                columnWidthsProductsHeaderAndBody,
-                [
-                    BluetoothEscposPrinter.ALIGN.LEFT,
-                    BluetoothEscposPrinter.ALIGN.LEFT,
-                    BluetoothEscposPrinter.ALIGN.LEFT,
-                    BluetoothEscposPrinter.ALIGN.RIGHT,
-                    BluetoothEscposPrinter.ALIGN.RIGHT,
-                    BluetoothEscposPrinter.ALIGN.RIGHT,
-                ],
-                ["RCPT", "QTY", "PRC", "DIS", "GST", "NET"],
-                {},
+
+            receiptSettings?.gst_flag === "Y" ? (
+                await BluetoothEscposPrinter.printColumn(
+                    columnWidthsProductsHeaderAndBody,
+                    [
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.RIGHT,
+                        BluetoothEscposPrinter.ALIGN.RIGHT,
+                        BluetoothEscposPrinter.ALIGN.RIGHT,
+                    ],
+                    ["RCPT", "QTY", "PRC", "DIS", "GST", "NET"],
+                    {},
+                )
+            ) : (
+                await BluetoothEscposPrinter.printColumn(
+                    columnWidthsProductsHeaderAndBody,
+                    [
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.RIGHT,
+                        BluetoothEscposPrinter.ALIGN.RIGHT,
+                        BluetoothEscposPrinter.ALIGN.RIGHT,
+                    ],
+                    ["RCPT", "QTY", "PRC", "DIS", "", "NET"],
+                    {},
+                )
             )
 
             await BluetoothEscposPrinter.printText(
@@ -1871,20 +1888,36 @@ export const useBluetoothPrint = () => {
                 totalPrice += item?.price
                 totalDiscount += item?.discount_amt
                 totalGSTs += totalGST
-                totalNet += item?.net_amt + item?.rount_off
+                totalNet += item?.net_amt + item?.round_off
 
-                await BluetoothEscposPrinter.printColumn(
-                    columnWidthsProductsHeaderAndBody,
-                    [
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                    ],
-                    [item?.receipt_no?.toString()?.substring(item?.receipt_no?.toString()?.length - 4), item?.no_of_items?.toString(), item?.price?.toFixed(2)?.toString(), item?.discount_amt?.toString(), totalGST?.toString(), (item?.net_amt + item?.rount_off)?.toString()],
-                    {},
+                receiptSettings?.gst_flag === "Y" ? (
+                    await BluetoothEscposPrinter.printColumn(
+                        columnWidthsProductsHeaderAndBody,
+                        [
+                            BluetoothEscposPrinter.ALIGN.LEFT,
+                            BluetoothEscposPrinter.ALIGN.LEFT,
+                            BluetoothEscposPrinter.ALIGN.LEFT,
+                            BluetoothEscposPrinter.ALIGN.RIGHT,
+                            BluetoothEscposPrinter.ALIGN.RIGHT,
+                            BluetoothEscposPrinter.ALIGN.RIGHT,
+                        ],
+                        [item?.receipt_no?.toString()?.substring(item?.receipt_no?.toString()?.length - 4), item?.no_of_items?.toString(), item?.price?.toFixed(2)?.toString(), item?.discount_amt?.toString(), totalGST?.toString(), (item?.net_amt + item?.round_off)?.toString()],
+                        {},
+                    )
+                ) : (
+                    await BluetoothEscposPrinter.printColumn(
+                        columnWidthsProductsHeaderAndBody,
+                        [
+                            BluetoothEscposPrinter.ALIGN.LEFT,
+                            BluetoothEscposPrinter.ALIGN.LEFT,
+                            BluetoothEscposPrinter.ALIGN.LEFT,
+                            BluetoothEscposPrinter.ALIGN.RIGHT,
+                            BluetoothEscposPrinter.ALIGN.RIGHT,
+                            BluetoothEscposPrinter.ALIGN.RIGHT,
+                        ],
+                        [item?.receipt_no?.toString()?.substring(item?.receipt_no?.toString()?.length - 4), item?.no_of_items?.toString(), item?.price?.toFixed(2)?.toString(), item?.discount_amt?.toString(), "", (item?.net_amt + item?.round_off)?.toString()],
+                        {},
+                    )
                 )
             }
 
@@ -1919,14 +1952,26 @@ export const useBluetoothPrint = () => {
                 [`QTY: ${totalQuantities.toString()}`, `PRICE: ${totalPrice?.toFixed(2)?.toString()}`],
                 {},
             )
-            await BluetoothEscposPrinter.printColumn(
-                columnWidthsTotals,
-                [
-                    BluetoothEscposPrinter.ALIGN.LEFT,
-                    BluetoothEscposPrinter.ALIGN.RIGHT,
-                ],
-                [`DISC: ${totalDiscount?.toString()}`, `GST: ${totalGSTs?.toFixed(2)?.toString()}`],
-                {},
+
+            receiptSettings?.gst_flag === "Y" ? (
+                await BluetoothEscposPrinter.printColumn(
+                    columnWidthsTotals,
+                    [
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.RIGHT,
+                    ],
+                    [`DISC: ${totalDiscount?.toString()}`, `GST: ${totalGSTs?.toFixed(2)?.toString()}`],
+                    {},
+                )
+            ) : (
+                await BluetoothEscposPrinter.printColumn(
+                    columnWidthIfNameIsBig,
+                    [
+                        BluetoothEscposPrinter.ALIGN.CENTER,
+                    ],
+                    [`DISC: ${totalDiscount?.toString()}`],
+                    {},
+                )
             )
 
             await BluetoothEscposPrinter.printText("\n", {})

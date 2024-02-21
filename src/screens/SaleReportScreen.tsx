@@ -36,8 +36,8 @@ function SaleReportScreen() {
   const formattedFromDate = formattedDate(fromDate)
   const formattedToDate = formattedDate(toDate)
 
-  const handleGetSaleReport = async (fromDate: string, toDate: string, companyId: number, branchId: number) => {
-    await fetchSaleReport(fromDate, toDate, companyId, branchId).then(res => {
+  const handleGetSaleReport = async (fromDate: string, toDate: string, companyId: number, branchId: number, userId: string) => {
+    await fetchSaleReport(fromDate, toDate, companyId, branchId, userId).then(res => {
       setSaleReport(res?.data)
       console.log("DDDDDDDDDDDDDDD", res?.data)
     }).catch(err => {
@@ -105,7 +105,7 @@ function SaleReportScreen() {
         </View>
 
         <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
-          <ButtonPaper onPress={() => handleGetSaleReport(formattedFromDate, formattedToDate, loginStore.comp_id, loginStore.br_id)} mode="contained-tonal" buttonColor={theme.colors.green} textColor={theme.colors.onGreen}>
+          <ButtonPaper onPress={() => handleGetSaleReport(formattedFromDate, formattedToDate, loginStore.comp_id, loginStore.br_id, loginStore?.user_id)} mode="contained-tonal" buttonColor={theme.colors.green} textColor={theme.colors.onGreen}>
             SUBMIT
           </ButtonPaper>
         </View>
@@ -137,14 +137,14 @@ function SaleReportScreen() {
                 {/* <DataTable.Cell>{item?.cust_name}</DataTable.Cell>
               <DataTable.Cell>{item?.phone_no}</DataTable.Cell> */}
                 {/* <DataTable.Cell>{new Date(item?.trn_date).toLocaleDateString("en-GB")}</DataTable.Cell> */}
-                <DataTable.Cell>{item?.receipt_no}</DataTable.Cell>
+                <DataTable.Cell>{item?.receipt_no?.toString()?.substring(item?.receipt_no?.toString()?.length - 4)}</DataTable.Cell>
                 <DataTable.Cell numeric>{item?.no_of_items}</DataTable.Cell>
                 <DataTable.Cell numeric>{item?.price}</DataTable.Cell>
                 {receiptSettings?.gst_flag === "Y" && (
                   <DataTable.Cell numeric>{totalGST}</DataTable.Cell>
                 )}
                 <DataTable.Cell numeric>{item?.discount_amt}</DataTable.Cell>
-                <DataTable.Cell numeric>{item?.net_amt + item?.rount_off}</DataTable.Cell>
+                <DataTable.Cell numeric>{item?.net_amt}</DataTable.Cell>
               </DataTable.Row>)
             })}
 

@@ -33,8 +33,8 @@ function CollectionReportScreen() {
     const formattedFromDate = formattedDate(fromDate)
     const formattedToDate = formattedDate(toDate)
 
-    const handleGetCollectionReport = async (fromDate: string, toDate: string, companyId: number, branchId: number) => {
-        await fetchCollectionReport(fromDate, toDate, companyId, branchId).then(res => {
+    const handleGetCollectionReport = async (fromDate: string, toDate: string, companyId: number, branchId: number, userId: string) => {
+        await fetchCollectionReport(fromDate, toDate, companyId, branchId, userId).then(res => {
             setCollectionReport(res?.data)
             console.log("XXXXXXXXXXXXXXXXX", res?.data)
         }).catch(err => {
@@ -102,7 +102,7 @@ function CollectionReportScreen() {
                 </View>
 
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
-                    <ButtonPaper onPress={() => handleGetCollectionReport(formattedFromDate, formattedToDate, loginStore.comp_id, loginStore.br_id)} mode="contained-tonal" buttonColor={theme.colors.green} textColor={theme.colors.onGreen}>
+                    <ButtonPaper onPress={() => handleGetCollectionReport(formattedFromDate, formattedToDate, loginStore.comp_id, loginStore.br_id, loginStore?.user_id)} mode="contained-tonal" buttonColor={theme.colors.green} textColor={theme.colors.onGreen}>
                         SUBMIT
                     </ButtonPaper>
                 </View>
