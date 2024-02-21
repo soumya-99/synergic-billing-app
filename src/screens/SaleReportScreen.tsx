@@ -54,6 +54,8 @@ function SaleReportScreen() {
     }
   }
 
+  let totalNetAmount: number = 0
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView keyboardShouldPersistTaps="handled">
@@ -132,6 +134,7 @@ function SaleReportScreen() {
               let totalGST: number = 0
 
               totalGST += item?.cgst_amt + item?.sgst_amt
+              totalNetAmount += item?.net_amt
 
               return (<DataTable.Row key={item?.receipt_no}>
                 {/* <DataTable.Cell>{item?.cust_name}</DataTable.Cell>
@@ -149,6 +152,9 @@ function SaleReportScreen() {
             })}
 
           </DataTable>
+          <View style={{ padding: normalize(10) }}>
+            <Text variant="labelMedium" style={{ color: theme.colors.green }}>TOTAL: {totalNetAmount}</Text>
+          </View>
         </SurfacePaper>
         <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
           <ButtonPaper icon={"cloud-print-outline"} onPress={() => handlePrint(saleReport, formattedFromDate, formattedToDate)} mode="contained-tonal">
