@@ -3,14 +3,15 @@ import { ADDRESSES } from "../../config/api_list"
 import { ItemReportData } from "../../models/api_types"
 
 export default function useItemReport() {
-    const fetchItemReport = async (fromDate: string, toDate: string, companyId: number, branchId: number, itemId: number) => {
+    const fetchItemReport = async (fromDate: string, toDate: string, companyId: number, branchId: number, itemId: number, userId: string) => {
         return new Promise<PromiseLike<ItemReportData>>((resolve, reject) => {
             axios.post(`${ADDRESSES.ITEM_REPORT}`, {
                 from_date: fromDate,
                 to_date: toDate,
                 comp_id: companyId,
                 br_id: branchId,
-                item_id: itemId
+                item_id: itemId,
+                user_id: userId,
             }).then(res => {
                 resolve(res.data)
             }).catch(err => {

@@ -69,8 +69,8 @@ function ItemReportScreen() {
         setSearch(() => "")
     }
 
-    const handleGetItemReport = async (fromDate: string, toDate: string, companyId: number, branchId: number, productId: number) => {
-        await fetchItemReport(fromDate, toDate, companyId, branchId, productId).then(res => {
+    const handleGetItemReport = async (fromDate: string, toDate: string, companyId: number, branchId: number, productId: number, userId: string) => {
+        await fetchItemReport(fromDate, toDate, companyId, branchId, productId, userId).then(res => {
             setItemReport(res?.data)
             console.log("XXXXXXXXXXXXXXXXX", res?.data)
         }).catch(err => {
@@ -165,7 +165,7 @@ function ItemReportScreen() {
                 </View>
 
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
-                    <ButtonPaper onPress={() => handleGetItemReport(formattedFromDate, formattedToDate, loginStore.comp_id, loginStore.br_id, productId)} mode="contained-tonal" buttonColor={theme.colors.green} textColor={theme.colors.onGreen}>
+                    <ButtonPaper onPress={() => handleGetItemReport(formattedFromDate, formattedToDate, loginStore.comp_id, loginStore.br_id, productId, loginStore?.user_id)} mode="contained-tonal" buttonColor={theme.colors.green} textColor={theme.colors.onGreen}>
                         SUBMIT
                     </ButtonPaper>
                 </View>
