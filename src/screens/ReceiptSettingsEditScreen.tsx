@@ -139,7 +139,7 @@ export default function ReceiptSettingsEditScreen() {
                 </View>
                 <View style={{ paddingHorizontal: normalize(20), paddingVertical: normalize(10) }}>
                     {loginStore?.user_type === "M" ? (
-                        <ButtonPaper mode="elevated" onPress={handleReceiptSettingsUpdate}>
+                        <ButtonPaper icon="cloud-upload-outline" mode="contained" onPress={handleReceiptSettingsUpdate}>
                             UPDATE
                         </ButtonPaper>
                     ) : (

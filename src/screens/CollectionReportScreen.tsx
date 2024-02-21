@@ -51,6 +51,9 @@ function CollectionReportScreen() {
         }
     }
 
+    let totalSummary: number = 0
+    let totalBills: number = 0
+
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
             <ScrollView keyboardShouldPersistTaps="handled">
@@ -114,20 +117,28 @@ function CollectionReportScreen() {
                         <DataTable.Header>
                             <DataTable.Title>Created By</DataTable.Title>
                             <DataTable.Title>Pay Mode</DataTable.Title>
+                            <DataTable.Title numeric>No. of RCPTs</DataTable.Title>
                             <DataTable.Title numeric>Net Amount</DataTable.Title>
                         </DataTable.Header>
 
                         {collectionReport?.map((item, i) => {
+                            totalSummary += item?.net_amt
+                            totalBills += item?.no_of_bills
+
                             return (
                                 <DataTable.Row key={i}>
-                                    <DataTable.Cell>{item?.created_by}</DataTable.Cell>
+                                    <DataTable.Cell>{item?.user_name}</DataTable.Cell>
                                     <DataTable.Cell>{item?.pay_mode === "C" ? "Cash" : item?.pay_mode === "U" ? "UPI" : item?.pay_mode === "D" ? "Card" : ""}</DataTable.Cell>
+                                    <DataTable.Cell numeric>{item?.no_of_bills}</DataTable.Cell>
                                     <DataTable.Cell numeric>{item?.net_amt}</DataTable.Cell>
                                 </DataTable.Row>
                             )
                         })}
 
                     </DataTable>
+                    <View style={{ padding: normalize(10) }}>
+                        <Text variant="labelMedium" style={{ color: theme.colors.orange }}>TOTAL SUMMARY: {totalBills} Bills ₹{totalSummary}</Text>
+                    </View>
                 </SurfacePaper>
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
                     <ButtonPaper icon={"cloud-print-outline"} onPress={() => handlePrint(collectionReport, formattedFromDate, formattedToDate)} mode="contained-tonal">

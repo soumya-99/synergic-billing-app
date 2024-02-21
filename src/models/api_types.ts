@@ -235,6 +235,8 @@ export type CollectionReport = {
     "created_by": string,
     "pay_mode": "C" | "U" | "D"
     "net_amt": number
+    "user_name": string
+    "no_of_bills": number
 }
 
 export type GstStatementData = {
