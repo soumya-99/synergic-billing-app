@@ -7,18 +7,21 @@ import { DataTable, Text } from "react-native-paper"
 import useSaleReport from "../hooks/api/useSaleReport"
 import DatePicker from "react-native-date-picker"
 import ButtonPaper from "../components/ButtonPaper"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import normalize from "react-native-normalize"
 import { formattedDate } from "../utils/dateFormatter"
 import { loginStorage } from "../storage/appStorage"
 import { SaleReport } from "../models/api_types"
 import SurfacePaper from "../components/SurfacePaper"
 import { useBluetoothPrint } from "../hooks/printables/useBluetoothPrint"
+import { AppStore } from "../context/AppContext"
 
 function SaleReportScreen() {
   const theme = usePaperColorScheme()
 
   const loginStore = JSON.parse(loginStorage.getString("login-data"))
+
+  const { receiptSettings } = useContext(AppStore)
 
   const { fetchSaleReport } = useSaleReport()
   const { printSaleReport } = useBluetoothPrint()
@@ -118,7 +121,9 @@ function SaleReportScreen() {
               <DataTable.Title>Rcpt. No.</DataTable.Title>
               <DataTable.Title numeric>Qty.</DataTable.Title>
               <DataTable.Title numeric>Price</DataTable.Title>
-              <DataTable.Title numeric>GST</DataTable.Title>
+              {receiptSettings?.gst_flag === "Y" && (
+                <DataTable.Title numeric>GST</DataTable.Title>
+              )}
               <DataTable.Title numeric>Dis.</DataTable.Title>
               <DataTable.Title numeric>Total Amt.</DataTable.Title>
             </DataTable.Header>
@@ -135,7 +140,9 @@ function SaleReportScreen() {
                 <DataTable.Cell>{item?.receipt_no}</DataTable.Cell>
                 <DataTable.Cell numeric>{item?.no_of_items}</DataTable.Cell>
                 <DataTable.Cell numeric>{item?.price}</DataTable.Cell>
-                <DataTable.Cell numeric>{totalGST}</DataTable.Cell>
+                {receiptSettings?.gst_flag === "Y" && (
+                  <DataTable.Cell numeric>{totalGST}</DataTable.Cell>
+                )}
                 <DataTable.Cell numeric>{item?.discount_amt}</DataTable.Cell>
                 <DataTable.Cell numeric>{item?.net_amt + item?.rount_off}</DataTable.Cell>
               </DataTable.Row>)
