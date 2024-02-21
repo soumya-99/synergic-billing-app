@@ -90,6 +90,7 @@ export default function ReceiptSettingsEditScreen() {
                                 <MenuPaper menuArrOfObjects={receiptTypeArr} />
                             )
                         }}
+                        descriptionStyle={{ color: theme.colors.primary }}
                     />
                     <Divider />
                     <List.Item
@@ -101,6 +102,7 @@ export default function ReceiptSettingsEditScreen() {
                                 <MenuPaper menuArrOfObjects={gstFlagArr} />
                             )
                         }}
+                        descriptionStyle={{ color: gstFlag === "Y" ? theme.colors.green : theme.colors.error }}
                     />
                     <Divider />
                     <List.Item
@@ -112,6 +114,7 @@ export default function ReceiptSettingsEditScreen() {
                                 <MenuPaper menuArrOfObjects={customerInfoArr} />
                             )
                         }}
+                        descriptionStyle={{ color: customerInfo === "Y" ? theme.colors.green : theme.colors.error }}
                     />
                     <Divider />
                     <List.Item
@@ -123,6 +126,7 @@ export default function ReceiptSettingsEditScreen() {
                                 <MenuPaper menuArrOfObjects={payModeArr} />
                             )
                         }}
+                        descriptionStyle={{ color: payMode === "Y" ? theme.colors.green : theme.colors.error }}
                     />
                     <Divider />
                     <List.Item
@@ -134,6 +138,7 @@ export default function ReceiptSettingsEditScreen() {
                                 <MenuPaper menuArrOfObjects={discountTypeArr} />
                             )
                         }}
+                        descriptionStyle={{ color: theme.colors.primary }}
                     />
                     <Divider />
                 </View>

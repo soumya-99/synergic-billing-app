@@ -10,6 +10,8 @@ import useCreatePin from '../hooks/api/useCreatePin'
 import { CommonActions, useNavigation, useRoute } from '@react-navigation/native'
 import { clearStates } from '../utils/clearStates'
 import navigationRoutes from '../routes/navigationRoutes'
+import HeaderImage from '../components/HeaderImage'
+import { productHeader, productHeaderDark } from '../resources/images'
 
 const CreatePinScreen = () => {
     const navigation = useNavigation()
@@ -54,16 +56,27 @@ const CreatePinScreen = () => {
                         minHeight: SCREEN_HEIGHT,
                         height: 'auto'
                     }}>
-                    <View style={{ padding: normalize(20) }}>
+                    {/* <View style={{ padding: normalize(20) }}>
                         <Text variant='displayMedium' style={{ color: theme.colors.onPrimary, textAlign: 'center' }}>Create Pin</Text>
+                    </View> */}
+
+                    <View style={{ alignItems: "center" }}>
+                        <HeaderImage
+                            isBackEnabled
+                            imgLight={productHeader}
+                            imgDark={productHeaderDark}
+                            borderRadius={30}
+                            blur={10}>
+                            Create Pin
+                        </HeaderImage>
                     </View>
 
                     <View style={{ justifyContent: 'center' }}>
-                        <View style={{ padding: normalize(20), marginVertical: SCREEN_HEIGHT / 20 }}>
-                            <InputPaper label='Enter New PIN' value={pin} onChangeText={(pin: string) => setPin(pin)} keyboardType='number-pad' leftIcon='security' maxLength={4} secureTextEntry />
+                        <View style={{ padding: normalize(5), marginVertical: SCREEN_HEIGHT / 20, paddingHorizontal: normalize(30), gap: 5 }}>
+                            <InputPaper label='Enter New PIN' value={pin} onChangeText={(pin: string) => setPin(pin)} keyboardType='number-pad' leftIcon='security' maxLength={4} secureTextEntry autoFocus />
                             <InputPaper label='Re-Enter PIN' value={confirmPin} onChangeText={(confirmPin: string) => setConfirmPin(confirmPin)} keyboardType='number-pad' leftIcon='security' maxLength={4} secureTextEntry />
                         </View>
-                        <View style={{ padding: normalize(20) }}>
+                        <View style={{ paddingHorizontal: normalize(30) }}>
                             <ButtonPaper
                                 mode="contained"
                                 buttonColor={theme.colors.secondaryContainer}

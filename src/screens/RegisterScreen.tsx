@@ -11,6 +11,8 @@ import useVerifyActive from '../hooks/api/useVerifyActive'
 import useFetchOtp from '../hooks/api/useOtp'
 import { CommonActions, useNavigation } from '@react-navigation/native'
 import navigationRoutes from '../routes/navigationRoutes'
+import HeaderImage from '../components/HeaderImage'
+import { productHeader, productHeaderDark } from '../resources/images'
 
 const RegisterScreen = () => {
     const navigation = useNavigation()
@@ -92,15 +94,26 @@ const RegisterScreen = () => {
                         minHeight: SCREEN_HEIGHT,
                         height: 'auto'
                     }}>
-                    <View style={{ padding: normalize(20) }}>
+                    {/* <View style={{ padding: normalize(20) }}>
                         <Text variant='displayMedium' style={{ color: theme.colors.onPrimary, textAlign: 'center' }}>Register</Text>
+                    </View> */}
+
+                    <View style={{ alignItems: "center" }}>
+                        <HeaderImage
+                            isBackEnabled
+                            imgLight={productHeader}
+                            imgDark={productHeaderDark}
+                            borderRadius={30}
+                            blur={10}>
+                            Register
+                        </HeaderImage>
                     </View>
 
                     {!next && <View style={{ justifyContent: 'center' }}>
-                        <View style={{ padding: normalize(20) }}>
+                        <View style={{ padding: normalize(20), paddingHorizontal: normalize(30) }}>
                             <InputPaper label='Mobile Number' value={mobileNo} onChangeText={(mob: string) => setMobileNo(mob)} keyboardType='number-pad' leftIcon='account-arrow-up' autoFocus />
                         </View>
-                        <View style={{ padding: normalize(20) }}>
+                        <View style={{ padding: normalize(20), paddingHorizontal: normalize(30) }}>
                             <ButtonPaper
                                 mode="contained"
                                 buttonColor={theme.colors.secondaryContainer}
@@ -114,7 +127,7 @@ const RegisterScreen = () => {
 
                     {next && <View style={{ justifyContent: 'center' }}>
                         <View style={{ padding: normalize(20) }}>
-                            <InputPaper label='OTP' value={otp} onChangeText={(otp: string) => setOtp(otp)} keyboardType='number-pad' leftIcon='account-arrow-up' maxLength={4} />
+                            <InputPaper label='OTP' value={otp} onChangeText={(otp: string) => setOtp(otp)} keyboardType='number-pad' leftIcon='account-arrow-up' maxLength={4} autoFocus />
                         </View>
                         <View style={{ padding: normalize(20) }}>
                             <ButtonPaper
