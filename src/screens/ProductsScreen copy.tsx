@@ -67,20 +67,17 @@ function ProductsScreen() {
   }
 
   const onChangeDiscountState = (discount: number) => {
-    // if (receiptSettings?.discount_type === "P") {
-    //   if (discount > 100) {
-    //     ToastAndroid.show("Discount cannot be greater than 100%.", ToastAndroid.SHORT)
-    //     setDiscountState(product?.discount)
-    //   }
-    // } else {
-    //   if ((product.price * product.quantity) > discount) {
-    //     setDiscountState(discount)
-    //   } else {
-    //     ToastAndroid.show("Give valid Discount Amount.", ToastAndroid.SHORT)
-    //     setDiscountState(product?.discount)
-    //   }
-    // }
-    setDiscountState(discount)
+    if (receiptSettings?.discount_type === "P") {
+      if (discount > 100) {
+        ToastAndroid.show("Discount cannot be greater than 100%.", ToastAndroid.SHORT)
+      }
+    } else {
+      if ((product.price * product.quantity) > discount) {
+        setDiscountState(discount)
+      } else {
+        ToastAndroid.show("Give valid Discount Amount.", ToastAndroid.SHORT)
+      }
+    }
   }
 
   const productDetails = (item: ItemsData) => {
@@ -259,7 +256,7 @@ function ProductsScreen() {
             <View style={{ width: "50%" }}>
               <InputPaper
                 label={receiptSettings?.discount_type === "A" ? "Discount" : "Discount (%)"}
-                onChangeText={onChangeDiscountState}
+                onChangeText={(discount: number) => setDiscountState(discount)}
                 value={discountState}
                 keyboardType="numeric"
                 mode="outlined"

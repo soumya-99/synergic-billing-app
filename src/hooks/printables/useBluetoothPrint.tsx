@@ -493,11 +493,11 @@ export const useBluetoothPrint = () => {
             await BluetoothEscposPrinter.printText("\n", {})
 
 
-            await BluetoothEscposPrinter.printText(
-                "THANK YOU, VISIT AGAIN!",
-                { align: "center" },
-            )
-            await BluetoothEscposPrinter.printText("\n", {})
+            // await BluetoothEscposPrinter.printText(
+            //     "THANK YOU, VISIT AGAIN!",
+            //     { align: "center" },
+            // )
+            // await BluetoothEscposPrinter.printText("\n", {})
 
             await BluetoothEscposPrinter.printText(
                 "------X------",
@@ -867,11 +867,11 @@ export const useBluetoothPrint = () => {
             await BluetoothEscposPrinter.printText("\n", {})
 
 
-            await BluetoothEscposPrinter.printText(
-                "THANK YOU, VISIT AGAIN!",
-                { align: "center" },
-            )
-            await BluetoothEscposPrinter.printText("\n", {})
+            // await BluetoothEscposPrinter.printText(
+            //     "THANK YOU, VISIT AGAIN!",
+            //     { align: "center" },
+            // )
+            // await BluetoothEscposPrinter.printText("\n", {})
 
             await BluetoothEscposPrinter.printText(
                 "------X------",
@@ -1241,11 +1241,11 @@ export const useBluetoothPrint = () => {
             await BluetoothEscposPrinter.printText("\n", {})
 
 
-            await BluetoothEscposPrinter.printText(
-                "THANK YOU, VISIT AGAIN!",
-                { align: "center" },
-            )
-            await BluetoothEscposPrinter.printText("\n", {})
+            // await BluetoothEscposPrinter.printText(
+            //     "THANK YOU, VISIT AGAIN!",
+            //     { align: "center" },
+            // )
+            // await BluetoothEscposPrinter.printText("\n", {})
 
             await BluetoothEscposPrinter.printText(
                 "------X------",
@@ -1719,11 +1719,11 @@ export const useBluetoothPrint = () => {
             await BluetoothEscposPrinter.printText("\n", {})
 
 
-            await BluetoothEscposPrinter.printText(
-                "THANK YOU, VISIT AGAIN!",
-                { align: "center" },
-            )
-            await BluetoothEscposPrinter.printText("\n", {})
+            // await BluetoothEscposPrinter.printText(
+            //     "THANK YOU, VISIT AGAIN!",
+            //     { align: "center" },
+            // )
+            // await BluetoothEscposPrinter.printText("\n", {})
 
             await BluetoothEscposPrinter.printText(
                 "------X------",
