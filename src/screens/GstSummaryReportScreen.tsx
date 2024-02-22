@@ -35,8 +35,8 @@ function GstSummaryReportScreen() {
     const formattedFromDate = formattedDate(fromDate)
     const formattedToDate = formattedDate(toDate)
 
-    const handleGetSummaryReport = async (fromDate: string, toDate: string, companyId: number, branchId: number) => {
-        await fetchGstSummary(fromDate, toDate, companyId, branchId).then(res => {
+    const handleGetSummaryReport = async (fromDate: string, toDate: string, companyId: number, branchId: number, userId: string) => {
+        await fetchGstSummary(fromDate, toDate, companyId, branchId, userId).then(res => {
             setGstStatement(res?.data)
             console.log("LLLLLLLLLLLLLLLL", res?.data)
         }).catch(err => {
@@ -104,7 +104,7 @@ function GstSummaryReportScreen() {
                 </View>
 
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
-                    <ButtonPaper onPress={() => handleGetSummaryReport(formattedFromDate, formattedToDate, loginStore.comp_id, loginStore.br_id)} mode="contained-tonal" buttonColor={theme.colors.green} textColor={theme.colors.onGreen}>
+                    <ButtonPaper onPress={() => handleGetSummaryReport(formattedFromDate, formattedToDate, loginStore.comp_id, loginStore.br_id, loginStore?.user_id)} mode="contained-tonal" buttonColor={theme.colors.green} textColor={theme.colors.onGreen}>
                         SUBMIT
                     </ButtonPaper>
                 </View>

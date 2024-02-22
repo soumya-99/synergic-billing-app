@@ -44,7 +44,11 @@ const CustomerDetailsFillScreen = () => {
     const [isDisabled, setIsDisabled] = useState(() => false)
 
     useEffect(() => {
-        setFinalCashAmount(() => (cashAmount !== undefined ? cashAmount - Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) : 0))
+        if (receiptSettings?.gst_flag === "Y") {
+            setFinalCashAmount(() => (cashAmount !== undefined ? cashAmount - Math.round(parseFloat((params?.net_total - params?.total_discount + totalGST).toFixed(2))) : 0))
+        } else {
+            setFinalCashAmount(() => (cashAmount !== undefined ? cashAmount - Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) : 0))
+        }
     }, [cashAmount])
 
     const onChangeCustomerMobileNumber = (mobile: string) => {
