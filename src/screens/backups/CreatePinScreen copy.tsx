@@ -13,7 +13,6 @@ import { clearStates } from '../utils/clearStates'
 import navigationRoutes from '../routes/navigationRoutes'
 import HeaderImage from '../components/HeaderImage'
 import { productHeader, productHeaderDark } from '../resources/images'
-import SurfacePaper from '../components/SurfacePaper'
 
 const CreatePinScreen = () => {
     const navigation = useNavigation()
@@ -74,10 +73,9 @@ const CreatePinScreen = () => {
                     </View>
 
                     <View style={{ justifyContent: 'center' }}>
-                        <View style={{ marginVertical: SCREEN_HEIGHT / 25, paddingHorizontal: normalize(0), gap: 10, alignSelf: "center" }}>
-                            <View style={{ backgroundColor: theme.colors.background, height: SCREEN_HEIGHT / 20, justifyContent: "center", alignItems: "center", borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
-                                <Text variant="labelLarge" style={{ textAlign: "center" }}>New Pin</Text>
-                            </View>
+                        <View style={{ padding: normalize(5), marginVertical: SCREEN_HEIGHT / 20, paddingHorizontal: normalize(30), gap: 10, alignSelf: "center" }}>
+                            {/* <InputPaper label='Enter New PIN' value={pin} onChangeText={(pin: string) => setPin(pin)} keyboardType='number-pad' leftIcon='security' maxLength={4} secureTextEntry autoFocus /> */}
+
                             <SmoothPinCodeInput
                                 autoFocus={true}
                                 // placeholder="🙈"
@@ -98,27 +96,23 @@ const CreatePinScreen = () => {
                                 maskDelay={1000}
                                 password={true}
                                 cellStyle={{
-                                    borderBottomWidth: 2,
+                                    borderWidth: 1,
+                                    borderRadius: 5,
                                     borderColor: theme.colors.onPrimary,
-
-                                    // borderBottomWidth: 2,
-                                    // borderLeftWidth: 2,
-                                    // borderRightWidth: 2,
-                                    // borderBottomLeftRadius: normalize(10),
-                                    // borderBottomRightRadius: normalize(10),
-                                    // borderColor: theme.colors.onPrimary,
                                 }}
-                                // cellStyle={{
-                                //     borderWidth: 1,
-                                //     borderRadius: 5,
-                                //     borderColor: theme.colors.onPrimary,
-                                // }}
                                 cellStyleFocused={null}
                                 value={pin}
                                 onTextChange={(pin: string) => setPin(pin)}
+                            // onBackspace={() => {
+                            //   console.warn("hello")
+                            // }}
                             />
 
+                            {/* <InputPaper label='Re-Enter PIN' value={confirmPin} onChangeText={(confirmPin: string) => setConfirmPin(confirmPin)} keyboardType='number-pad' leftIcon='security' maxLength={4} secureTextEntry /> */}
+
+
                             <SmoothPinCodeInput
+                                autoFocus={true}
                                 // placeholder="🙈"
                                 placeholder="◌"
                                 textStyle={{
@@ -137,27 +131,17 @@ const CreatePinScreen = () => {
                                 maskDelay={1000}
                                 password={true}
                                 cellStyle={{
-                                    borderBottomWidth: 2,
+                                    borderWidth: 1,
+                                    borderRadius: 5,
                                     borderColor: theme.colors.onPrimary,
-
-                                    // borderTopWidth: 2,
-                                    // borderLeftWidth: 2,
-                                    // borderRightWidth: 2,
-                                    // borderTopLeftRadius: normalize(10),
-                                    // borderTopRightRadius: normalize(10),
                                 }}
-                                // cellStyle={{
-                                //     borderWidth: 1,
-                                //     borderRadius: 5,
-                                //     borderColor: theme.colors.onPrimary,
-                                // }}
                                 cellStyleFocused={null}
                                 value={confirmPin}
                                 onTextChange={(confirmPin: string) => setConfirmPin(confirmPin)}
+                            // onBackspace={() => {
+                            //   console.warn("hello")
+                            // }}
                             />
-                            <View style={{ backgroundColor: theme.colors.background, height: SCREEN_HEIGHT / 20, justifyContent: "center", alignItems: "center", borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}>
-                                <Text variant="labelLarge" style={{ textAlign: "center" }}>Confirm Pin</Text>
-                            </View>
                         </View>
                         <View style={{ paddingHorizontal: normalize(30) }}>
                             <ButtonPaper
@@ -172,7 +156,7 @@ const CreatePinScreen = () => {
                     </View>
                 </LinearGradient>
             </ScrollView>
-        </SafeAreaView >
+        </SafeAreaView>
     )
 }
 
