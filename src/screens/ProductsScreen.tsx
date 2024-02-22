@@ -66,22 +66,22 @@ function ProductsScreen() {
     if (query === "") setFilteredItems(() => [])
   }
 
-  const onChangeDiscountState = (discount: number) => {
-    // if (receiptSettings?.discount_type === "P") {
-    //   if (discount > 100) {
-    //     ToastAndroid.show("Discount cannot be greater than 100%.", ToastAndroid.SHORT)
-    //     setDiscountState(product?.discount)
-    //   }
-    // } else {
-    //   if ((product.price * product.quantity) > discount) {
-    //     setDiscountState(discount)
-    //   } else {
-    //     ToastAndroid.show("Give valid Discount Amount.", ToastAndroid.SHORT)
-    //     setDiscountState(product?.discount)
-    //   }
-    // }
-    setDiscountState(discount)
-  }
+  // const onChangeDiscountState = (discount: number) => {
+  //   // if (receiptSettings?.discount_type === "P") {
+  //   //   if (discount > 100) {
+  //   //     ToastAndroid.show("Discount cannot be greater than 100%.", ToastAndroid.SHORT)
+  //   //     setDiscountState(product?.discount)
+  //   //   }
+  //   // } else {
+  //   //   if ((product.price * product.quantity) > discount) {
+  //   //     setDiscountState(discount)
+  //   //   } else {
+  //   //     ToastAndroid.show("Give valid Discount Amount.", ToastAndroid.SHORT)
+  //   //     setDiscountState(product?.discount)
+  //   //   }
+  //   // }
+  //   setDiscountState(discount)
+  // }
 
   const productDetails = (item: ItemsData) => {
     setProduct(item)
@@ -117,64 +117,101 @@ function ProductsScreen() {
     let isFoundDuplicate = false
     setEditState(false)
 
-    if (typeof quantity !== "undefined" && quantity !== 0) {
-      console.log("OK PRODUCT: ", product?.item_name)
+    console.log("OK PRODUCT: ", product?.item_name)
 
-      for (let item of addedProductsList) {
-        if (item?.id === product?.id) {
-          ToastAndroid.show("Item already exists. Please edit from the list.", ToastAndroid.LONG)
-          isFoundDuplicate = true
-          break
-        }
+    for (let item of addedProductsList) {
+      if (item?.id === product?.id) {
+        ToastAndroid.show("Item already exists. Please edit from the list.", ToastAndroid.LONG)
+        isFoundDuplicate = true
+        break
       }
-
-      if (!isFoundDuplicate) {
-        addProducts()
-
-        discountState > 0 ? setDiscountState(() => discountState) : setDiscountState(() => product?.discount)
-
-        clearStates([setSearch], () => "")
-        setQuantity(() => undefined)
-        setDiscountState(() => 0)
-        setVisible(!visible)
-        setFilteredItems(() => [])
-      }
-
-      console.log("asiurweagsaygeutseygfsdytfgsydtfse", quantity)
-    } else {
-      ToastAndroid.show(
-        "Try adding some items.",
-        ToastAndroid.SHORT,
-      )
     }
-  }
 
-  const onDialogUpdate = (product: ItemsData) => {
-    setEditState(false)
-    if (quantity > 0) {
-      console.log("OK PRODUCT UPDATE: ", product?.item_name)
-
-      let filteredSingleProductArray = addedProductsList?.filter((item, index) => (
-        item?.id === product?.id
-      ))
-
-      filteredSingleProductArray[0]["quantity"] = quantity
-      filteredSingleProductArray[0]["discount"] = discountState
+    if (!isFoundDuplicate) {
+      addProducts()
 
       discountState > 0 ? setDiscountState(() => discountState) : setDiscountState(() => product?.discount)
-
-      setProduct(filteredSingleProductArray[0])
 
       clearStates([setSearch], () => "")
       setQuantity(() => undefined)
       setDiscountState(() => 0)
       setVisible(!visible)
       setFilteredItems(() => [])
+    }
+    console.log("asiurweagsaygeutseygfsdytfgsydtfse", quantity)
+  }
+
+  const onDialogSuccessChange = () => {
+    if (quantity > 0) {
+      if (receiptSettings?.discount_type === "P") {
+        if (discountState > 100) {
+          ToastAndroid.show("Discount cannot be greater than 100%.", ToastAndroid.SHORT)
+          return
+        } else {
+          onDialogSuccecss()
+        }
+      } else {
+        if ((product.price * quantity) >= discountState) {
+          onDialogSuccecss()
+        } else {
+          ToastAndroid.show("Give valid Discount Amount.", ToastAndroid.SHORT)
+          return
+        }
+      }
     } else {
       ToastAndroid.show(
         "Try adding some items.",
         ToastAndroid.SHORT,
       )
+      return
+    }
+  }
+
+  const onDialogUpdate = (product: ItemsData) => {
+    setEditState(false)
+    console.log("OK PRODUCT UPDATE: ", product?.item_name)
+
+    let filteredSingleProductArray = addedProductsList?.filter((item, index) => (
+      item?.id === product?.id
+    ))
+
+    filteredSingleProductArray[0]["quantity"] = quantity
+    filteredSingleProductArray[0]["discount"] = discountState
+
+    discountState > 0 ? setDiscountState(() => discountState) : setDiscountState(() => product?.discount)
+
+    setProduct(filteredSingleProductArray[0])
+
+    clearStates([setSearch], () => "")
+    setQuantity(() => undefined)
+    setDiscountState(() => 0)
+    setVisible(!visible)
+    setFilteredItems(() => [])
+  }
+
+  const onDialogUpdateChange = (product: ItemsData) => {
+    if (quantity > 0) {
+      if (receiptSettings?.discount_type === "P") {
+        if (discountState > 100) {
+          ToastAndroid.show("Discount cannot be greater than 100%.", ToastAndroid.SHORT)
+          return
+        } else {
+          onDialogUpdate(product)
+        }
+      } else {
+        if ((product.price * quantity) >= discountState) {
+          onDialogUpdate(product)
+        } else {
+          ToastAndroid.show("Give valid Discount Amount.", ToastAndroid.SHORT)
+          return
+        }
+      }
+    } else {
+      ToastAndroid.show(
+        "Try adding some items.",
+        ToastAndroid.SHORT,
+      )
+      return
     }
   }
 
@@ -200,7 +237,7 @@ function ProductsScreen() {
         titleStyle={styles.title}
         btnSuccess={!editState ? "ADD" : "UPDATE"}
         onFailure={onDialogFailure}
-        onSuccess={!editState ? onDialogSuccecss : () => onDialogUpdate(product)}>
+        onSuccess={!editState ? onDialogSuccessChange : () => onDialogUpdateChange(product)}>
         <View style={styles.modalContainer}>
           <View style={{ alignItems: "center" }}>
             <View>
@@ -259,7 +296,7 @@ function ProductsScreen() {
             <View style={{ width: "50%" }}>
               <InputPaper
                 label={receiptSettings?.discount_type === "A" ? "Discount" : "Discount (%)"}
-                onChangeText={onChangeDiscountState}
+                onChangeText={(dis: number) => setDiscountState(dis)}
                 value={discountState}
                 keyboardType="numeric"
                 mode="outlined"
