@@ -123,7 +123,7 @@ function GstStatementReportScreen() {
                         {gstStatement.map((item, i) => {
                             return (
                                 <DataTable.Row key={i}>
-                                    <DataTable.Cell>{item?.receipt_no}</DataTable.Cell>
+                                    <DataTable.Cell>{item?.receipt_no?.toString()?.substring(item?.receipt_no?.toString()?.length - 4)}</DataTable.Cell>
                                     <DataTable.Cell numeric>{item?.cgst_amt}</DataTable.Cell>
                                     <DataTable.Cell numeric>{item?.sgst_amt}</DataTable.Cell>
                                     <DataTable.Cell numeric>{item?.total_tax}</DataTable.Cell>
