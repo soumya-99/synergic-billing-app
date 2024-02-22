@@ -21,18 +21,21 @@ const AppContext = ({ children }) => {
   const { fetchItems } = useItems()
 
   const handleLogin = async (loginText: string, passwordText: string) => {
-    let loginData = await login(loginText, passwordText)
-    console.log("loginData", loginData)
+    await login(loginText, passwordText).then(loginData => {
+      console.log("loginData", loginData)
 
-    if (loginData?.suc === 0) {
-      Alert.alert("Error", "Login credentials are wrong! Please try again.")
-      setIsLogin(false)
-      return
-    }
-    if (loginData?.suc === 1) {
-      loginStorage.set("login-data", JSON.stringify(loginData?.msg));
-    }
-    setIsLogin(true)
+      if (loginData?.suc === 0) {
+        Alert.alert("Error", "Login credentials are wrong! Please try again.")
+        setIsLogin(false)
+        return
+      }
+      if (loginData?.suc === 1) {
+        loginStorage.set("login-data", JSON.stringify(loginData?.msg));
+      }
+      setIsLogin(true)
+    }).catch(err => {
+      ToastAndroid.show("No internet or Some error on server.", ToastAndroid.SHORT)
+    })
   }
 
   const isLoggedIn = () => {
