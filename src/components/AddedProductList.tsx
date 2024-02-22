@@ -53,7 +53,7 @@ export default function AddedProductList({
               {quantity}x{unitPrice}={unitPrice * quantity}
             </Text> */}
             <Text>
-              ₹{unitPrice * quantity}
+              ₹{(unitPrice * quantity)?.toFixed(2)}
             </Text>
           </View>
         </View>
