@@ -45,6 +45,12 @@ const CustomerDetailsFillScreen = () => {
         setFinalCashAmount(() => (cashAmount !== undefined ? cashAmount - Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) : 0))
     }, [cashAmount])
 
+    const onChangeCustomerMobileNumber = (mobile: string) => {
+        if (/^\d*$/.test(mobile)) {
+            setCustomerMobileNumber(mobile)
+        }
+    }
+
     const handleSendSaleData = async () => {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
         const branchId = loginStore.br_id
@@ -148,9 +154,9 @@ const CustomerDetailsFillScreen = () => {
 
                     {receiptSettings?.cust_inf === "Y" && (<View style={{ justifyContent: 'center' }}>
                         <View style={{ padding: normalize(20), marginVertical: SCREEN_HEIGHT / 100 }}>
-                            <InputPaper label='Enter Name (Optional)' value={customerName} onChangeText={(confirmPin: string) => setCustomerName(confirmPin)} keyboardType='default' leftIcon='account-circle-outline' maxLength={15} customStyle={{ marginBottom: normalize(10) }} />
+                            <InputPaper label='Enter Name (Optional)' value={customerName} onChangeText={(customerName: string) => setCustomerName(customerName)} keyboardType='default' leftIcon='account-circle-outline' maxLength={15} customStyle={{ marginBottom: normalize(10) }} />
 
-                            <InputPaper label='Enter Mobile (Optional)' value={customerMobileNumber} onChangeText={(pin: string) => setCustomerMobileNumber(pin)} keyboardType='number-pad' leftIcon='card-account-phone-outline' maxLength={10} />
+                            <InputPaper label='Enter Mobile (Optional)' value={customerMobileNumber} onChangeText={onChangeCustomerMobileNumber} keyboardType='number-pad' leftIcon='card-account-phone-outline' maxLength={10} />
                         </View>
                     </View>)}
 
