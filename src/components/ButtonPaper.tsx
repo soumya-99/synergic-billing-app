@@ -11,6 +11,7 @@ type ButtonPaperProps = {
   textColor?: string
   style?: {}
   disabled?: boolean
+  loading?: boolean
 }
 
 const ButtonPaper = ({
@@ -21,9 +22,11 @@ const ButtonPaper = ({
   buttonColor,
   textColor,
   style,
-  disabled
+  disabled,
+  loading
 }: PropsWithChildren<ButtonPaperProps>) => (
   <Button
+    loading={loading}
     disabled={disabled}
     icon={icon}
     mode={mode}

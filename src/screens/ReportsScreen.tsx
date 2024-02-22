@@ -7,10 +7,14 @@ import ReportButton from "../components/ReportButton"
 import ReportButtonsWrapper from "../components/ReportButtonsWrapper"
 import { CommonActions, useNavigation } from "@react-navigation/native"
 import navigationRoutes from "../routes/navigationRoutes"
+import { useContext } from "react"
+import { AppStore } from "../context/AppContext"
 
 function ReportsScreen() {
   const navigation = useNavigation()
   const theme = usePaperColorScheme()
+
+  const { receiptSettings } = useContext(AppStore)
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -55,26 +59,31 @@ function ReportsScreen() {
               })
             )}
           />
-          <ReportButton
-            text="GST Statement"
-            color={theme.colors.primaryContainer}
-            icon="billboard"
-            onPress={() => navigation.dispatch(
-              CommonActions.navigate({
-                name: navigationRoutes.gstStatementReportScreen,
-              })
-            )}
-          />
-          <ReportButton
-            text="GST Summary"
-            color={theme.colors.pinkContainer}
-            icon="billboard"
-            onPress={() => navigation.dispatch(
-              CommonActions.navigate({
-                name: navigationRoutes.gstSummaryReportScreen,
-              })
-            )}
-          />
+          {receiptSettings?.gst_flag === "Y" && (
+            <ReportButton
+              text="GST Statement"
+              color={theme.colors.primaryContainer}
+              icon="billboard"
+              onPress={() => navigation.dispatch(
+                CommonActions.navigate({
+                  name: navigationRoutes.gstStatementReportScreen,
+                })
+              )}
+            />
+          )}
+
+          {receiptSettings?.gst_flag === "Y" && (
+            <ReportButton
+              text="GST Summary"
+              color={theme.colors.pinkContainer}
+              icon="billboard"
+              onPress={() => navigation.dispatch(
+                CommonActions.navigate({
+                  name: navigationRoutes.gstSummaryReportScreen,
+                })
+              )}
+            />
+          )}
           {/* <ReportButton
             text="Year Wise"
             color={theme.colors.orangeContainer}

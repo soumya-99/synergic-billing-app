@@ -40,6 +40,8 @@ const CustomerDetailsFillScreen = () => {
     let receiptNumber: number | undefined = undefined
 
     const [checked, setChecked] = useState<string>(() => "C")
+    const [isLoading, setIsLoading] = useState(() => false)
+    const [isDisabled, setIsDisabled] = useState(() => false)
 
     useEffect(() => {
         setFinalCashAmount(() => (cashAmount !== undefined ? cashAmount - Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) : 0))
@@ -83,10 +85,12 @@ const CustomerDetailsFillScreen = () => {
 
     const handlePrintReceipt = async () => {
         if (checked === "C") {
-            if (cashAmount === undefined) {
+            if (cashAmount === undefined || cashAmount === 0 || finalCashAmount < 0) {
                 ToastAndroid.show("Add valid cash amount.", ToastAndroid.SHORT)
                 return
             } else {
+                setIsDisabled(true)
+                setIsLoading(true)
                 await handleSendSaleData()
                 console.log("Sending data and printing receipts...")
 
@@ -94,8 +98,12 @@ const CustomerDetailsFillScreen = () => {
                     ? printReceiptWithoutGst(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
                     : printReceipt(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
                 console.log("params?.added_products", params?.added_products)
+                setIsLoading(false)
+                setIsDisabled(false)
             }
         } else {
+            setIsDisabled(true)
+            setIsLoading(true)
             console.log("wquetwqagyrfasfkcbh,usdrgfyszgydfzguzxd")
             await handleSendSaleData()
             console.log("Sending data and printing receipts...")
@@ -104,6 +112,8 @@ const CustomerDetailsFillScreen = () => {
                 ? printReceiptWithoutGst(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
                 : printReceipt(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
             console.log("params?.added_products", params?.added_products)
+            setIsLoading(false)
+            setIsDisabled(false)
         }
     }
 
@@ -203,7 +213,9 @@ const CustomerDetailsFillScreen = () => {
                             buttonColor={theme.colors.primary}
                             textColor={theme.colors.primaryContainer}
                             onPress={handlePrintReceipt}
-                            icon="cloud-print-outline">
+                            icon="cloud-print-outline"
+                            loading={isLoading}
+                            disabled={isDisabled}>
                             PRINT
                         </ButtonPaper>
                     </View>
