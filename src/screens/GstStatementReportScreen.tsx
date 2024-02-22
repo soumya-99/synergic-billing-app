@@ -51,6 +51,8 @@ function GstStatementReportScreen() {
         }
     }
 
+    let totalTax = 0
+
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
             <ScrollView keyboardShouldPersistTaps="handled">
@@ -121,6 +123,7 @@ function GstStatementReportScreen() {
                         </DataTable.Header>
 
                         {gstStatement.map((item, i) => {
+                            totalTax += item?.total_tax
                             return (
                                 <DataTable.Row key={i}>
                                     <DataTable.Cell>{item?.receipt_no?.toString()?.substring(item?.receipt_no?.toString()?.length - 4)}</DataTable.Cell>
@@ -134,6 +137,9 @@ function GstStatementReportScreen() {
                         })}
 
                     </DataTable>
+                    <View style={{ padding: normalize(10) }}>
+                        <Text variant="labelMedium" style={{ color: theme.colors.primary }}>TOTAL TAX: ₹{totalTax}</Text>
+                    </View>
                 </SurfacePaper>
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
                     <ButtonPaper icon={"cloud-print-outline"} onPress={() => handlePrint(gstStatement, formattedFromDate, formattedToDate)} mode="contained-tonal">
