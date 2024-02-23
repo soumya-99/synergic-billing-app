@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import React, { useState } from 'react'
-import { Button, Divider, Menu } from 'react-native-paper'
+import { Button, Menu } from 'react-native-paper'
 
 type MenuPaperTypes = {
     menuArrOfObjects: { icon: string, title: string, func: () => void }[]

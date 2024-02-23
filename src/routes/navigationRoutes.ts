@@ -1,8 +1,8 @@
-// type NavigationRoutesTypes = {
-//   [key: string]: string
-// }
+type NavigationRoutesTypes = {
+  [key: string]: string
+}
 
-const navigationRoutes = {
+const navigationRoutes: NavigationRoutesTypes = {
   login: "Login",
   register: "Register",
   createPinScreen: "CreatePinScreen",

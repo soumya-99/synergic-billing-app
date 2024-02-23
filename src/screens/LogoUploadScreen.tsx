@@ -8,15 +8,17 @@ import { fileStorage } from "../storage/appStorage"
 import { useState } from "react"
 import ButtonPaper from "../components/ButtonPaper"
 import normalize from "react-native-normalize"
+import { Button, Dialog, Portal, Text } from "react-native-paper";
 
 function LogoUploadScreen() {
     const theme = usePaperColorScheme()
-    // const fileStore = fileStorage.getString("file-data")
 
-    // fileStorage.set("file-data", JSON.stringify(loginData?.msg))
-
-    // const [imageSource, setImageSource] = useState<string>()
     const [imgSrcUri, setImgSrcUri] = useState<string>()
+
+    const [visible, setVisible] = useState(() => false)
+
+    const showDialog = () => setVisible(true)
+    const hideDialog = () => setVisible(false)
 
     const selectLogo = () => {
         const options: ImageLibraryOptions = {
@@ -57,6 +59,7 @@ function LogoUploadScreen() {
     const removeLogo = () => {
         setImgSrcUri("")
         fileStorage.clearAll()
+        hideDialog()
     }
 
     return (
@@ -72,6 +75,19 @@ function LogoUploadScreen() {
                         Logo Upload
                     </HeaderImage>
                 </View>
+
+                <Portal>
+                    <Dialog visible={visible} onDismiss={hideDialog}>
+                        <Dialog.Title>Remove Logo</Dialog.Title>
+                        <Dialog.Content>
+                            <Text variant="bodyMedium">Are you sure you want to remove logo?</Text>
+                        </Dialog.Content>
+                        <Dialog.Actions>
+                            <Button onPress={hideDialog} textColor={theme.colors.green}>NO</Button>
+                            <Button onPress={removeLogo} textColor={theme.colors.error}>YES</Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                </Portal>
 
                 <View style={{ padding: normalize(20) }}>
                     <ButtonPaper mode="contained" onPress={selectLogo}>
@@ -91,7 +107,7 @@ function LogoUploadScreen() {
                 </View>
 
                 <View style={{ paddingHorizontal: normalize(20) }}>
-                    <ButtonPaper icon="trash-can-outline" mode="text" onPress={removeLogo} textColor={theme.colors.error}>
+                    <ButtonPaper icon="trash-can-outline" mode="text" onPress={showDialog} textColor={theme.colors.error}>
                         REMOVE
                     </ButtonPaper>
                 </View>
