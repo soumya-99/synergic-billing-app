@@ -90,12 +90,12 @@ function SettingsScreen() {
             onPress={() => console.log("Rprt Pressed!")}
           /> */}
           <ReportButton
-            text="Edit Item"
+            text="Manage Products"
             color={theme.colors.tertiaryContainer}
             icon="circle-edit-outline"
             onPress={() => navigation.dispatch(
               CommonActions.navigate({
-                name: navigationRoutes.itemEditScreen,
+                name: navigationRoutes.manageProductsScreen,
               })
             )}
           />
@@ -118,7 +118,8 @@ function SettingsScreen() {
           <ReportButton
             text="Logo Upload"
             color={theme.colors.primaryContainer}
-            icon="emoticon-happy-outline"
+            // icon="emoticon-happy-outline"
+            icon="alien-outline"
             onPress={() => navigation.dispatch(
               CommonActions.navigate({
                 name: navigationRoutes.logoUploadScreen,

@@ -138,7 +138,7 @@ function HomeScreen() {
 
   const handleGetVersion = async () => {
     await fetchVersionInfo().then((res) => {
-      if (res?.data[0]?.version_no !== version) {
+      if (parseFloat(res?.data[0]?.version_no) > parseFloat(version)) {
         showDialogForAppUpdate()
         // Alert.alert("UPDATE FOUND!", "Please update your app.")
       }

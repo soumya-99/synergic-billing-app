@@ -5,7 +5,7 @@ import MasterChooseScreen from "../screens/MasterChooseScreen"
 import ItemMasterScreen from "../screens/ItemMasterScreen"
 import PrintMain from "../screens/printer_connect_screens/PrintMain"
 import HeaderFooterScreen from "../screens/HeaderFooterScreen"
-import ItemEditScreen from "../screens/ItemEditScreen"
+import ManageProductsScreen from "../screens/ManageProductsScreen"
 import ReceiptSettingsEditScreen from "../screens/ReceiptSettingsEditScreen"
 import LogoUploadScreen from "../screens/LogoUploadScreen"
 
@@ -31,8 +31,8 @@ export default function SettingsNavigation() {
         component={HeaderFooterScreen}
       />
       <Stack.Screen
-        name={navigationRoutes.itemEditScreen}
-        component={ItemEditScreen}
+        name={navigationRoutes.manageProductsScreen}
+        component={ManageProductsScreen}
       />
       <Stack.Screen
         name={navigationRoutes.receiptSettingsEditScreen}
