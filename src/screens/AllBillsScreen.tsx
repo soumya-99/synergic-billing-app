@@ -164,7 +164,7 @@ function AllBillsScreen() {
             <List.Item
               key={i}
               title={`Bill ${item?.receipt_no}`}
-              description={`₹${item?.amount}`}
+              description={`₹${item?.net_amt}`}
               onPress={() => handleBillListClick(item?.receipt_no)}
               left={props => <List.Icon {...props} icon="basket" />}
             // right={props => (
