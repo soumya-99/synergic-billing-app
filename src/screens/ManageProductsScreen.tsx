@@ -22,7 +22,7 @@ export default function ManageProductsScreen() {
     const theme = usePaperColorScheme()
     const isFocused = useIsFocused()
 
-    const { items, handleGetItems } = useContext(AppStore)
+    const { items, handleGetItems, receiptSettings } = useContext(AppStore)
 
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
@@ -176,10 +176,16 @@ export default function ManageProductsScreen() {
                 btnSuccess="SAVE"
                 onFailure={onDialogFailure}
                 onSuccess={onDialogSuccecss}>
-                <View style={{ justifyContent: "space-between", minHeight: SCREEN_HEIGHT / 4, height: "auto" }}>
+                <View style={{ justifyContent: "space-between", minHeight: SCREEN_HEIGHT / 3.2, height: "auto" }}>
                     <View style={{ alignItems: "center" }}>
                         <View>
                             <Text variant="titleLarge">Edit Item</Text>
+                        </View>
+                    </View>
+
+                    <View style={{ alignItems: "center" }}>
+                        <View>
+                            <Text variant="titleLarge">{product?.item_name}</Text>
                         </View>
                     </View>
 
@@ -191,7 +197,7 @@ export default function ManageProductsScreen() {
                             gap: 5,
                         }}>
                         <View style={{ width: "50%" }}>
-                            <Text variant="labelMedium">Item ID {product?.item_id}</Text>
+                            <Text variant="labelMedium">Item ID. {product?.item_id}</Text>
                         </View>
                     </View>
 
@@ -228,24 +234,29 @@ export default function ManageProductsScreen() {
                             alignItems: "center",
                             gap: 5,
                         }}>
-                        <View style={{ width: "50%" }}>
-                            <InputPaper
-                                label="CGST (%)"
-                                onChangeText={(txt: number) => setCGST(txt)}
-                                value={CGST}
-                                keyboardType="numeric"
-                                mode="outlined"
-                            />
-                        </View>
-                        <View style={{ width: "50%" }}>
-                            <InputPaper
-                                label="SGST (%)"
-                                onChangeText={(txt: number) => setSGST(txt)}
-                                value={SGST}
-                                keyboardType="numeric"
-                                mode="outlined"
-                            />
-                        </View>
+                        {receiptSettings?.gst_flag === "Y" && (
+                            <View style={{ width: "50%" }}>
+                                <InputPaper
+                                    label="CGST (%)"
+                                    onChangeText={(txt: number) => setCGST(txt)}
+                                    value={CGST}
+                                    keyboardType="numeric"
+                                    mode="outlined"
+                                />
+                            </View>
+                        )}
+
+                        {receiptSettings?.gst_flag === "Y" && (
+                            <View style={{ width: "50%" }}>
+                                <InputPaper
+                                    label="SGST (%)"
+                                    onChangeText={(txt: number) => setSGST(txt)}
+                                    value={SGST}
+                                    keyboardType="numeric"
+                                    mode="outlined"
+                                />
+                            </View>
+                        )}
                     </View>
                 </View>
             </DialogBox>
@@ -288,7 +299,7 @@ export default function ManageProductsScreen() {
                                 label="HSN Code"
                                 onChangeText={(txt: string) => setHsnCode(txt)}
                                 value={hsnCode}
-                                keyboardType="default"
+                                keyboardType="numeric"
                                 autoFocus
                                 mode="outlined"
                             />
@@ -350,24 +361,29 @@ export default function ManageProductsScreen() {
                             alignItems: "center",
                             gap: 5,
                         }}>
-                        <View style={{ width: "50%" }}>
-                            <InputPaper
-                                label="CGST (%)"
-                                onChangeText={(txt: number) => setCGST(txt)}
-                                value={CGST}
-                                keyboardType="numeric"
-                                mode="outlined"
-                            />
-                        </View>
-                        <View style={{ width: "50%" }}>
-                            <InputPaper
-                                label="SGST (%)"
-                                onChangeText={(txt: number) => setSGST(txt)}
-                                value={SGST}
-                                keyboardType="numeric"
-                                mode="outlined"
-                            />
-                        </View>
+                        {receiptSettings?.gst_flag === "Y" && (
+                            <View style={{ width: "50%" }}>
+                                <InputPaper
+                                    label="CGST (%)"
+                                    onChangeText={(txt: number) => setCGST(txt)}
+                                    value={CGST}
+                                    keyboardType="numeric"
+                                    mode="outlined"
+                                />
+                            </View>
+                        )}
+
+                        {receiptSettings?.gst_flag === "Y" && (
+                            <View style={{ width: "50%" }}>
+                                <InputPaper
+                                    label="SGST (%)"
+                                    onChangeText={(txt: number) => setSGST(txt)}
+                                    value={SGST}
+                                    keyboardType="numeric"
+                                    mode="outlined"
+                                />
+                            </View>
+                        )}
                     </View>
                 </View>
             </DialogBox>
