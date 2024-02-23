@@ -291,3 +291,19 @@ export type VersionCheckData = {
     "version_no": string
     "url": string
 }
+
+export type AddItemCredentials = {
+    com_id: number
+    hsn_code: string
+    item_name: string
+    created_by: string
+    price: number
+    discount: number
+    cgst: number
+    sgst: number
+}
+
+export type AddedItemResponse = {
+    "status": number
+    "data": string
+}

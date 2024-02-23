@@ -11,12 +11,13 @@ import { usePaperColorScheme } from "../theme/theme"
 import DialogBox from "../components/DialogBox"
 import InputPaper from "../components/InputPaper"
 import { clearStates } from "../utils/clearStates"
-import { ItemsData } from "../models/api_types"
+import { AddItemCredentials, ItemsData } from "../models/api_types"
 import { loginStorage } from "../storage/appStorage"
 import { useIsFocused } from "@react-navigation/native"
 import useEditItem from "../hooks/api/useEditItem"
 import { AppStore } from "../context/AppContext"
 import AnimatedFABPaper from "../components/AnimatedFABPaper"
+import useAddItem from "../hooks/api/useAddItem"
 
 export default function ManageProductsScreen() {
     const theme = usePaperColorScheme()
@@ -27,6 +28,7 @@ export default function ManageProductsScreen() {
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
     const { editItem } = useEditItem()
+    const { sendAddedItem } = useAddItem()
 
     const [visible, setVisible] = useState(() => false)
     const hideDialog = () => setVisible(() => false)
@@ -40,6 +42,16 @@ export default function ManageProductsScreen() {
 
     const [isExtended, setIsExtended] = useState(() => true)
 
+    const [product, setProduct] = useState<ItemsData>()
+
+    const [price, setPrice] = useState<number>(() => product?.price)
+    const [discount, setDiscount] = useState<number>(() => product?.discount || 0)
+    const [CGST, setCGST] = useState<number>(() => product?.cgst || 0)
+    const [SGST, setSGST] = useState<number>(() => product?.sgst || 0)
+
+    const [hsnCode, setHsnCode] = useState<string>(() => "")
+    const [productName, setProductName] = useState<string>(() => "")
+
     const onScroll = ({ nativeEvent }) => {
         const currentScrollPosition = Math.floor(nativeEvent?.contentOffset?.y) ?? 0
         setIsExtended(currentScrollPosition <= 0)
@@ -52,20 +64,6 @@ export default function ManageProductsScreen() {
         setFilteredItems(filtered)
         if (query === "") setFilteredItems(() => [])
     }
-
-    const [product, setProduct] = useState<ItemsData>()
-
-    const [price, setPrice] = useState<number>(() => product?.price)
-    const [discount, setDiscount] = useState<number>(() => product?.discount || 0)
-    const [CGST, setCGST] = useState<number>(() => product?.cgst || 0)
-    const [SGST, setSGST] = useState<number>(() => product?.sgst || 0)
-
-    const [hsnCode, setHsnCode] = useState<string>(() => "")
-    const [productName, setProductName] = useState<string>(() => "")
-    const [mrp, setMrp] = useState<number>(() => undefined)
-    // const [discount, setDiscount] = useState(() => "")
-    // const [CGST, setCGST] = useState<string>(() => "")
-    // const [SGST, setSGST] = useState<string>(() => "")
 
     const handleUpdateProductDetails = async () => {
         await editItem(loginStore?.comp_id, product?.item_id, price, discount, CGST, SGST, loginStore?.user_name).then(res => {
@@ -84,11 +82,10 @@ export default function ManageProductsScreen() {
 
     const onDialogSuccecss = () => {
         handleUpdateProductDetails().then(() => {
-            clearStates([setSearch, setPrice, setDiscount, setCGST, setSGST], () => "")
+            clearStates([setSearch, setDiscount, setCGST, setSGST], () => "")
+            setPrice(() => undefined)
             setVisible(!visible)
             setFilteredItems(() => [])
-
-            ToastAndroid.show("Product Updated Successfully.", ToastAndroid.SHORT)
         }).catch(err => {
             ToastAndroid.show("An error occurred while updating product", ToastAndroid.SHORT)
         })
@@ -96,16 +93,39 @@ export default function ManageProductsScreen() {
 
     const onDialogFailureAdd = () => {
         clearStates([setDiscount, setCGST, setSGST], () => 0)
-        clearStates([setHsnCode, setProductName], () => "")
-        setMrp(() => undefined)
-        setSearch(() => "")
+        clearStates([setSearch, setHsnCode, setProductName], () => "")
+        setPrice(() => undefined)
         setVisibleAdd(!visibleAdd)
     }
 
     const onDialogSuccecssAdd = () => {
-        clearStates([setSearch, setHsnCode, setProductName, setMrp, setDiscount, setCGST, setSGST], () => "")
-        setVisibleAdd(!visibleAdd)
-        // setFilteredItems(() => [])
+        handleAddProduct().then(() => {
+            clearStates([setHsnCode, setProductName], () => "")
+            clearStates([setDiscount, setCGST, setSGST], () => 0)
+            setPrice(() => undefined)
+            setVisibleAdd(!visibleAdd)
+        }).catch(err => {
+            ToastAndroid.show("Something went wrong on server.", ToastAndroid.SHORT)
+        })
+    }
+
+    const handleAddProduct = async () => {
+        let addedProductObject: AddItemCredentials = {
+            com_id: loginStore?.comp_id,
+            hsn_code: hsnCode,
+            item_name: productName,
+            created_by: loginStore?.user_name,
+            price: price,
+            discount: discount,
+            cgst: CGST,
+            sgst: SGST
+        }
+
+        await sendAddedItem(addedProductObject).then(res => {
+            ToastAndroid.show("Product has been added.", ToastAndroid.SHORT)
+        }).catch(err => {
+            ToastAndroid.show("Something went wrong on server", ToastAndroid.SHORT)
+        })
     }
 
     const handleProductPressed = (item: ItemsData) => {
@@ -308,11 +328,12 @@ export default function ManageProductsScreen() {
 
                     <View style={{ width: "100%" }}>
                         <InputPaper
-                            label="Item Name"
+                            label="Product Name"
                             onChangeText={(txt: string) => setProductName(txt)}
                             value={productName}
                             keyboardType="default"
                             mode="outlined"
+                            maxLength={30}
                         />
                     </View>
 
@@ -336,8 +357,8 @@ export default function ManageProductsScreen() {
                         <View style={{ width: "50%" }}>
                             <InputPaper
                                 label="M.R.P."
-                                onChangeText={(txt: number) => setMrp(txt)}
-                                value={mrp}
+                                onChangeText={(txt: number) => setPrice(txt)}
+                                value={price}
                                 keyboardType="numeric"
                                 mode="outlined"
                             />
