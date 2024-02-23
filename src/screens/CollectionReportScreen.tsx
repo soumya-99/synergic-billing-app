@@ -46,7 +46,7 @@ function CollectionReportScreen() {
         if (collectionReport.length !== 0) {
             printCollectionReport(collectionReport, fromDate, toDate)
         } else {
-            ToastAndroid.show("Something went wrong in Collection Report!", ToastAndroid.SHORT)
+            ToastAndroid.show("No Collection Report Found!", ToastAndroid.SHORT)
             return
         }
     }
@@ -137,7 +137,7 @@ function CollectionReportScreen() {
 
                     </DataTable>
                     <View style={{ padding: normalize(10) }}>
-                        <Text variant="labelMedium" style={{ color: theme.colors.orange }}>TOTAL SUMMARY: {totalBills} Bills ₹{totalSummary}</Text>
+                        <Text variant="labelMedium" style={{ color: theme.colors.orange }}>TOTAL SUMMARY: {totalBills} Bills ₹{totalSummary?.toFixed(2)}</Text>
                     </View>
                 </SurfacePaper>
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>

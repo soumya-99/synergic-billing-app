@@ -46,7 +46,7 @@ function GstStatementReportScreen() {
         if (gstStatementReport.length !== 0) {
             printGstStatement(gstStatementReport, fromDate, toDate)
         } else {
-            ToastAndroid.show("Something went wrong in GST Statement Report!", ToastAndroid.SHORT)
+            ToastAndroid.show("No GST Statement Report Found!", ToastAndroid.SHORT)
             return
         }
     }
@@ -138,7 +138,7 @@ function GstStatementReportScreen() {
 
                     </DataTable>
                     <View style={{ padding: normalize(10) }}>
-                        <Text variant="labelMedium" style={{ color: theme.colors.primary }}>TOTAL TAX: ₹{totalTax}</Text>
+                        <Text variant="labelMedium" style={{ color: theme.colors.primary }}>TOTAL TAX: ₹{totalTax?.toFixed(2)}</Text>
                     </View>
                 </SurfacePaper>
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>

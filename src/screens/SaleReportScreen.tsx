@@ -49,7 +49,7 @@ function SaleReportScreen() {
     if (saleReport.length !== 0) {
       printSaleReport(saleReport, fromDate, toDate)
     } else {
-      ToastAndroid.show("Something went wrong in Sale Report!", ToastAndroid.SHORT)
+      ToastAndroid.show("No Sale Report Found!", ToastAndroid.SHORT)
       return
     }
   }
@@ -153,7 +153,7 @@ function SaleReportScreen() {
 
           </DataTable>
           <View style={{ padding: normalize(10) }}>
-            <Text variant="labelMedium" style={{ color: theme.colors.green }}>TOTAL: {totalNetAmount}</Text>
+            <Text variant="labelMedium" style={{ color: theme.colors.green }}>TOTAL: {totalNetAmount?.toFixed(2)}</Text>
           </View>
         </SurfacePaper>
         <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>

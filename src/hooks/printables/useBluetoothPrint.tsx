@@ -5,6 +5,7 @@ import { AppStore } from "../../context/AppContext"
 import { CollectionReport, GstStatement, GstSummary, ItemReport, ItemsData, SaleReport, ShowBillData } from "../../models/api_types"
 import { gstFilterationAndTotals } from "../../utils/gstFilterTotal"
 import { gstFilterationAndTotalForRePrint } from "../../utils/gstFilterTotalForRePrint"
+import { ToastAndroid } from "react-native"
 
 export const useBluetoothPrint = () => {
     const { receiptSettings } = useContext(AppStore)
@@ -2216,7 +2217,9 @@ export const useBluetoothPrint = () => {
         }
     }
 
-    async function printItemReport(saleReport: ItemReport[]) { }
+    async function printItemReport(saleReport: ItemReport[]) {
+        ToastAndroid.show("Printing Item Reports will be added in some days.", ToastAndroid.SHORT)
+    }
 
     async function printGstStatement(gstStatement: GstStatement[], fromDate: string, toDate: string) {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))

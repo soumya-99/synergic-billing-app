@@ -82,7 +82,7 @@ function ItemReportScreen() {
         if (itemReport.length !== 0) {
             printItemReport(itemReport)
         } else {
-            ToastAndroid.show("Something went wrong in Item Report!", ToastAndroid.SHORT)
+            ToastAndroid.show("No Report Found!", ToastAndroid.SHORT)
             return
         }
     }
@@ -197,7 +197,7 @@ function ItemReportScreen() {
                     </DataTable>
                 </SurfacePaper>
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
-                    <ButtonPaper icon={"cloud-print-outline"} onPress={() => console.log("sagfsdffasd")} mode="contained-tonal">
+                    <ButtonPaper icon={"cloud-print-outline"} onPress={() => handlePrint(itemReport)} mode="contained-tonal">
                         PRINT
                     </ButtonPaper>
                 </View>

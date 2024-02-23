@@ -25,7 +25,7 @@ function GstSummaryReportScreen() {
     const { fetchGstSummary } = useGstSummaryReport()
     const { printGstSummary } = useBluetoothPrint()
 
-    const [gstStatement, setGstStatement] = useState<GstSummary[]>(() => [])
+    const [gstSummary, setGstSummary] = useState<GstSummary[]>(() => [])
 
     const [fromDate, setFromDate] = useState(() => new Date())
     const [toDate, setToDate] = useState(() => new Date())
@@ -37,7 +37,7 @@ function GstSummaryReportScreen() {
 
     const handleGetSummaryReport = async (fromDate: string, toDate: string, companyId: number, branchId: number, userId: string) => {
         await fetchGstSummary(fromDate, toDate, companyId, branchId, userId).then(res => {
-            setGstStatement(res?.data)
+            setGstSummary(res?.data)
             console.log("LLLLLLLLLLLLLLLL", res?.data)
         }).catch(err => {
             ToastAndroid.show("Error fetching GST summary report.", ToastAndroid.SHORT)
@@ -48,7 +48,7 @@ function GstSummaryReportScreen() {
         if (gstSummaryReport.length !== 0) {
             printGstSummary(gstSummaryReport, fromDate, toDate)
         } else {
-            ToastAndroid.show("Something went wrong in GST Summary Report!", ToastAndroid.SHORT)
+            ToastAndroid.show("No GST Summary Report Found!", ToastAndroid.SHORT)
             return
         }
     }
@@ -122,7 +122,7 @@ function GstSummaryReportScreen() {
                             <DataTable.Title numeric>Total Tax</DataTable.Title>
                         </DataTable.Header>
 
-                        {gstStatement.map((item, i) => {
+                        {gstSummary.map((item, i) => {
                             totalTax += item?.total_tax
                             return (
                                 <DataTable.Row key={i}>
@@ -136,11 +136,11 @@ function GstSummaryReportScreen() {
 
                     </DataTable>
                     <View style={{ padding: normalize(10) }}>
-                        <Text variant="labelMedium" style={{ color: theme.colors.pink }}>TOTAL TAX: ₹{totalTax}</Text>
+                        <Text variant="labelMedium" style={{ color: theme.colors.pink }}>TOTAL TAX: ₹{totalTax?.toFixed(2)}</Text>
                     </View>
                 </SurfacePaper>
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
-                    <ButtonPaper icon={"cloud-print-outline"} onPress={() => handlePrint(gstStatement, formattedFromDate, formattedToDate)} mode="contained-tonal">
+                    <ButtonPaper icon={"cloud-print-outline"} onPress={() => handlePrint(gstSummary, formattedFromDate, formattedToDate)} mode="contained-tonal">
                         PRINT
                     </ButtonPaper>
                 </View>
