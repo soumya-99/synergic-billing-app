@@ -280,15 +280,17 @@ export default function ManageProductsScreen() {
                     </View>
                 </View>
             </DialogBox>
-            <AnimatedFABPaper
-                icon="basket-plus-outline"
-                label="Add Product"
-                onPress={() => setVisibleAdd(!visibleAdd)}
-                extended={isExtended}
-                animateFrom="right"
-                iconMode="dynamic"
-                customStyle={styles.fabStyle}
-            />
+            {loginStore?.user_type === "M" && (
+                <AnimatedFABPaper
+                    icon="basket-plus-outline"
+                    label="Add Product"
+                    onPress={() => setVisibleAdd(!visibleAdd)}
+                    extended={isExtended}
+                    animateFrom="right"
+                    iconMode="dynamic"
+                    customStyle={styles.fabStyle}
+                />
+            )}
             <DialogBox
                 iconSize={40}
                 visible={visibleAdd}

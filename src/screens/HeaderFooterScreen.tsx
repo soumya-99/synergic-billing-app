@@ -16,6 +16,7 @@ import { useIsFocused } from "@react-navigation/native"
 
 export default function HeaderFooterScreen() {
     const isFocused = useIsFocused()
+    const theme = usePaperColorScheme()
 
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
     const { receiptSettings, handleGetReceiptSettings } = useContext(AppStore)
@@ -27,7 +28,6 @@ export default function HeaderFooterScreen() {
         setIsExtended(currentScrollPosition <= 0)
     }
 
-    const theme = usePaperColorScheme()
 
     const [visible, setVisible] = useState(() => false)
     const hideDialog = () => setVisible(() => false)
@@ -91,8 +91,8 @@ export default function HeaderFooterScreen() {
                             <Text variant="displaySmall" style={{ color: theme.colors.onOrangeContainer }}>HEADERS</Text>
                         </View>
                         <View>
-                            <Text variant="titleLarge" style={styles.textStyle}>1. {receiptSettings?.header1}</Text>
-                            <Text variant="titleLarge" style={styles.textStyle}>2. {receiptSettings?.header2}</Text>
+                            <Text variant="titleLarge" style={[styles.textStyle, { borderColor: theme.colors.onOrangeContainer }]}>1. {receiptSettings?.header1}</Text>
+                            <Text variant="titleLarge" style={[styles.textStyle, { borderColor: theme.colors.onOrangeContainer }]}>2. {receiptSettings?.header2}</Text>
                         </View>
                     </View>
                     <View style={{ alignItems: "flex-start" }}>
@@ -100,8 +100,8 @@ export default function HeaderFooterScreen() {
                             <Text variant="displaySmall" style={{ color: theme.colors.onOrangeContainer }}>FOOTERS</Text>
                         </View>
                         <View>
-                            <Text variant="titleLarge" style={styles.textStyle}>1. {receiptSettings?.footer1}</Text>
-                            <Text variant="titleLarge" style={styles.textStyle}>2. {receiptSettings?.footer2}</Text>
+                            <Text variant="titleLarge" style={[styles.textStyle, { borderColor: theme.colors.onOrangeContainer }]}>1. {receiptSettings?.footer1}</Text>
+                            <Text variant="titleLarge" style={[styles.textStyle, { borderColor: theme.colors.onOrangeContainer }]}>2. {receiptSettings?.footer2}</Text>
                         </View>
                     </View>
                 </View>
