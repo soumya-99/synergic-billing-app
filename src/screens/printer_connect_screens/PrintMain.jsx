@@ -20,8 +20,12 @@ import ItemList from "./ItemList"
 import SamplePrint from "./SamplePrint"
 import HeaderImage from "../../components/HeaderImage"
 import { flowerSetting, flowerSettingDark } from "../../resources/images"
+import { usePaperColorScheme } from "../../theme/theme"
+import ButtonPaper from "../../components/ButtonPaper"
 
 const PrintMain = () => {
+  const theme = usePaperColorScheme()
+
   const [pairedDevices, setPairedDevices] = useState([])
   const [foundDs, setFoundDs] = useState([])
   const [bleOpend, setBleOpend] = useState(false)
@@ -308,7 +312,8 @@ const PrintMain = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView>
         <View style={{ alignItems: "center" }}>
           <HeaderImage
@@ -328,11 +333,16 @@ const PrintMain = () => {
           </Text>
         </View>
         {!bleOpend && (
-          <Text style={styles.bluetoothInfo}>
+          <Text
+            style={[
+              styles.bluetoothInfo,
+              { color: theme.colors.onBackground },
+            ]}>
             Please activate your bluetooth
           </Text>
         )}
-        <Text style={styles.sectionTitle}>
+        <Text
+          style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
           Printer connected to the application:
         </Text>
         {boundAddress.length > 0 && (
@@ -344,18 +354,20 @@ const PrintMain = () => {
               unPair(boundAddress)
             }}
             actionText="Unpair"
-            color="#E9493F"
+            color={theme.colors.primary}
           />
         )}
         {boundAddress.length < 1 && (
-          <Text style={styles.printerInfo}>
+          <Text
+            style={[styles.printerInfo, { color: theme.colors.onBackground }]}>
             There is no printer connected yet
           </Text>
         )}
-        <Text style={styles.sectionTitle}>
+        <Text
+          style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
           Bluetooth connected to this phone:
         </Text>
-        <Text style={styles.sectionSub}>
+        <Text style={[styles.sectionSub, { color: theme.colors.onBackground }]}>
           (If not, pair it from your bluetooth)
         </Text>
         {loading ? <ActivityIndicator animating={true} /> : null}
@@ -375,7 +387,10 @@ const PrintMain = () => {
           })}
         </View>
         <SamplePrint />
-        <Button onPress={() => scanBluetoothDevice()} title="Scan / Connect" />
+        <ButtonPaper onPress={() => scanBluetoothDevice()} mode="contained">
+          Scan / Connect
+        </ButtonPaper>
+        {/* <Button onPress={() => scanBluetoothDevice()} title="Scan / Connect" /> */}
         <View style={{ height: 100 }} />
       </ScrollView>
     </SafeAreaView>
@@ -406,14 +421,12 @@ const styles = StyleSheet.create({
   bluetoothInfo: {
     textAlign: "center",
     fontSize: 16,
-    color: "#FFC806",
     marginBottom: 20,
   },
   sectionTitle: { fontWeight: "bold", fontSize: 18, marginBottom: 12 },
   printerInfo: {
     textAlign: "center",
     fontSize: 16,
-    color: "#E9493F",
     marginBottom: 20,
   },
   sectionSub: { fontSize: 15, marginBottom: 5 },

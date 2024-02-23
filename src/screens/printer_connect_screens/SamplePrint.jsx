@@ -2,6 +2,8 @@ import React from "react"
 import { Button, StyleSheet, Text, View } from "react-native"
 import { BluetoothEscposPrinter } from "react-native-bluetooth-escpos-printer"
 import { hsdLogo } from "./dummy-logo"
+import ButtonPaper from "../../components/ButtonPaper"
+import { usePaperColorScheme } from "../../theme/theme"
 
 async function printreciept() {
   const columnWidths = [24, 24]
@@ -24,7 +26,10 @@ async function printreciept() {
     await BluetoothEscposPrinter.printerAlign(
       BluetoothEscposPrinter.ALIGN.CENTER,
     )
-    await BluetoothEscposPrinter.printText("Synergic Softek Solutions Pvt. Ltd.", { align: "center" })
+    await BluetoothEscposPrinter.printText(
+      "Synergic Softek Solutions Pvt. Ltd.",
+      { align: "center" },
+    )
     await BluetoothEscposPrinter.printText("\r\n", {})
 
     await BluetoothEscposPrinter.printText(
@@ -148,12 +153,19 @@ async function printreciept() {
 }
 
 const SamplePrint = () => {
+  const theme = usePaperColorScheme()
   return (
     <View>
       <Text>Sample Print Instruction</Text>
 
       <View style={styles.btn}>
-        <Button title="Test Printer" onPress={printreciept} />
+        {/* <Button title="Test Printer" onPress={printreciept} /> */}
+        <ButtonPaper
+          onPress={printreciept}
+          mode="contained"
+          buttonColor={theme.colors.secondary}>
+          Test Printer
+        </ButtonPaper>
       </View>
     </View>
   )
