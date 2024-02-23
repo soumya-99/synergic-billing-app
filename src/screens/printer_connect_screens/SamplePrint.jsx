@@ -156,8 +156,6 @@ const SamplePrint = () => {
   const theme = usePaperColorScheme()
   return (
     <View>
-      <Text>Sample Print Instruction</Text>
-
       <View style={styles.btn}>
         {/* <Button title="Test Printer" onPress={printreciept} /> */}
         <ButtonPaper
