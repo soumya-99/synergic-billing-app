@@ -10,7 +10,7 @@ import { Searchbar, Text } from "react-native-paper"
 import HeaderImage from "../components/HeaderImage"
 import { productHeader, productHeaderDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import DialogBox from "../components/DialogBox"
 import { CommonActions, useIsFocused, useNavigation } from "@react-navigation/native"
 import InputPaper from "../components/InputPaper"
@@ -32,6 +32,8 @@ function ProductsScreen() {
   const theme = usePaperColorScheme()
 
   const { receiptSettings, items, handleGetItems } = useContext(AppStore)
+
+  const searchProductRef = useRef(null)
 
   const [visible, setVisible] = useState(() => false)
   const hideDialog = () => setVisible(() => false)
@@ -65,23 +67,6 @@ function ProductsScreen() {
     setFilteredItems(filtered)
     if (query === "") setFilteredItems(() => [])
   }
-
-  // const onChangeDiscountState = (discount: number) => {
-  //   // if (receiptSettings?.discount_type === "P") {
-  //   //   if (discount > 100) {
-  //   //     ToastAndroid.show("Discount cannot be greater than 100%.", ToastAndroid.SHORT)
-  //   //     setDiscountState(product?.discount)
-  //   //   }
-  //   // } else {
-  //   //   if ((product.price * product.quantity) > discount) {
-  //   //     setDiscountState(discount)
-  //   //   } else {
-  //   //     ToastAndroid.show("Give valid Discount Amount.", ToastAndroid.SHORT)
-  //   //     setDiscountState(product?.discount)
-  //   //   }
-  //   // }
-  //   setDiscountState(discount)
-  // }
 
   const productDetails = (item: ItemsData) => {
     setProduct(item)
@@ -139,32 +124,29 @@ function ProductsScreen() {
       setFilteredItems(() => [])
     }
     console.log("asiurweagsaygeutseygfsdytfgsydtfse", quantity)
+
+    if (searchProductRef.current) {
+      searchProductRef.current.focus()
+    }
   }
 
   const onDialogSuccessChange = () => {
-    if (quantity > 0) {
-      if (receiptSettings?.discount_type === "P") {
-        if (discountState > 100) {
-          ToastAndroid.show("Discount cannot be greater than 100%.", ToastAndroid.SHORT)
-          return
-        } else {
-          onDialogSuccecss()
-        }
-      } else {
-        if ((product.price * quantity) >= discountState) {
-          onDialogSuccecss()
-        } else {
-          ToastAndroid.show("Give valid Discount Amount.", ToastAndroid.SHORT)
-          return
-        }
-      }
-    } else {
-      ToastAndroid.show(
-        "Try adding some items.",
-        ToastAndroid.SHORT,
-      )
+    if (quantity <= 0 || typeof quantity === "undefined" || quantity.toString() === "NaN") {
+      ToastAndroid.show("Try adding some items.", ToastAndroid.SHORT)
       return
     }
+
+    if (receiptSettings?.discount_type === "P") {
+      if (discountState > 100) {
+        ToastAndroid.show("Discount cannot be greater than 100%.", ToastAndroid.SHORT)
+        return
+      }
+    } else if (product.price * quantity < discountState) {
+      ToastAndroid.show("Give valid Discount Amount.", ToastAndroid.SHORT)
+      return
+    }
+
+    onDialogSuccecss()
   }
 
   const onDialogUpdate = (product: ItemsData) => {
@@ -190,29 +172,22 @@ function ProductsScreen() {
   }
 
   const onDialogUpdateChange = (product: ItemsData) => {
-    if (quantity > 0) {
-      if (receiptSettings?.discount_type === "P") {
-        if (discountState > 100) {
-          ToastAndroid.show("Discount cannot be greater than 100%.", ToastAndroid.SHORT)
-          return
-        } else {
-          onDialogUpdate(product)
-        }
-      } else {
-        if ((product.price * quantity) >= discountState) {
-          onDialogUpdate(product)
-        } else {
-          ToastAndroid.show("Give valid Discount Amount.", ToastAndroid.SHORT)
-          return
-        }
-      }
-    } else {
-      ToastAndroid.show(
-        "Try adding some items.",
-        ToastAndroid.SHORT,
-      )
+    if (quantity <= 0 || typeof quantity === "undefined" || quantity.toString() === "NaN") {
+      ToastAndroid.show("Try adding some items.", ToastAndroid.SHORT)
       return
     }
+
+    if (receiptSettings?.discount_type === "P" && discountState > 100) {
+      ToastAndroid.show("Discount cannot be greater than 100%.", ToastAndroid.SHORT);
+      return
+    }
+
+    if (receiptSettings?.discount_type === "P" || product.price * quantity >= discountState) {
+      onDialogUpdate(product)
+      return
+    }
+
+    ToastAndroid.show("Give valid Discount Amount.", ToastAndroid.SHORT)
   }
 
   const addProducts = () => {
@@ -324,6 +299,7 @@ function ProductsScreen() {
 
         <View style={{ padding: normalize(20) }}>
           <Searchbar
+            ref={searchProductRef}
             placeholder="Search Products"
             onChangeText={onChangeSearch}
             value={search}
