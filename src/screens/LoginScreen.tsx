@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState, useRef } from "react"
 import {
   View,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   PermissionsAndroid,
   Platform,
+  ToastAndroid,
 } from "react-native"
 import { withTheme, Text } from "react-native-paper"
 import SmoothPinCodeInput from "react-native-smooth-pincode-input"
@@ -30,6 +31,8 @@ function LoginScreen() {
   const theme = usePaperColorScheme()
   const colorScheme = useColorScheme()
 
+  const nextButtonRef = useRef(null)
+
   const [loginText, setLoginText] = useState<string>(() => "")
   const [passwordText, setPasswordText] = useState<string>(() => "")
   const [next, setNext] = useState<boolean>(() => false)
@@ -37,9 +40,14 @@ function LoginScreen() {
   const openPhoneHintModal = async () => {
     if (Platform.OS === 'android') {
       try {
-        const phoneNumber = await SmsRetriever.requestPhoneNumber()
-        console.log(phoneNumber, 'PhoneNumber')
-        setLoginText(phoneNumber?.slice(3, 13))
+        await SmsRetriever.requestPhoneNumber().then(phoneNumber => {
+          console.log(phoneNumber, 'PhoneNumber')
+          setLoginText(phoneNumber?.slice(3, 13))
+        }).then(() => {
+          setNext(true)
+        }).catch(err => {
+          ToastAndroid.show("Put Your Phone Number.", ToastAndroid.SHORT)
+        })
       } catch (error) {
         console.log(JSON.stringify(error))
       }
