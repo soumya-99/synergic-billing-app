@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import {
   View,
   StyleSheet,
@@ -8,6 +8,8 @@ import {
   ImageBackground,
   useColorScheme,
   TouchableOpacity,
+  PermissionsAndroid,
+  Platform,
 } from "react-native"
 import { withTheme, Text } from "react-native-paper"
 import SmoothPinCodeInput from "react-native-smooth-pincode-input"
@@ -16,6 +18,7 @@ import InputPaper from "../components/InputPaper"
 import ButtonPaper from "../components/ButtonPaper"
 import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from "react-native-normalize"
 import { CommonActions, useNavigation } from "@react-navigation/native"
+import SmsRetriever from 'react-native-sms-retriever'
 import navigationRoutes from "../routes/navigationRoutes"
 import { AppStore } from "../context/AppContext"
 
@@ -30,6 +33,22 @@ function LoginScreen() {
   const [loginText, setLoginText] = useState<string>(() => "")
   const [passwordText, setPasswordText] = useState<string>(() => "")
   const [next, setNext] = useState<boolean>(() => false)
+
+  const openPhoneHintModal = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const phoneNumber = await SmsRetriever.requestPhoneNumber()
+        console.log(phoneNumber, 'PhoneNumber')
+        setLoginText(phoneNumber?.slice(3, 13))
+      } catch (error) {
+        console.log(JSON.stringify(error))
+      }
+    }
+  }
+
+  useEffect(() => {
+    openPhoneHintModal()
+  }, [])
 
   return (
     <SafeAreaView>
