@@ -270,7 +270,7 @@ function ProductsScreen() {
             </View>
             <View style={{ width: "50%" }}>
               <InputPaper
-                label={receiptSettings?.discount_type === "A" ? "Discount" : "Discount (%)"}
+                label={receiptSettings?.discount_type === "A" ? "Discount (₹)" : "Discount (%)"}
                 onChangeText={(dis: number) => setDiscountState(dis)}
                 value={discountState}
                 keyboardType="numeric"
