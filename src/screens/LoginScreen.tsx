@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useRef } from "react"
+import { useContext, useEffect, useState } from "react"
 import {
   View,
   StyleSheet,
@@ -30,8 +30,6 @@ function LoginScreen() {
 
   const theme = usePaperColorScheme()
   const colorScheme = useColorScheme()
-
-  const nextButtonRef = useRef(null)
 
   const [loginText, setLoginText] = useState<string>(() => "")
   const [passwordText, setPasswordText] = useState<string>(() => "")
