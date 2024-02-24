@@ -150,7 +150,7 @@ export default function ReceiptSettingsEditScreen() {
                     <List.Item
                         title="Price Type"
                         description={priceType === "A" ? "Automatic" : priceType === "M" ? "Manual Edit" : "Error Occurred!"}
-                        left={props => <List.Icon {...props} icon="cash-minus" />}
+                        left={props => <List.Icon {...props} icon="cash-lock-open" />}
                         right={props => {
                             return (
                                 <MenuPaper menuArrOfObjects={priceAutoManualArr} />
