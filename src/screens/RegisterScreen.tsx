@@ -131,7 +131,7 @@ const RegisterScreen = () => {
                                 mode="contained"
                                 buttonColor={theme.colors.secondaryContainer}
                                 textColor={theme.colors.onSecondaryContainer}
-                                onPress={handleRegister}
+                                onPress={() => handleRegister(mobileNo)}
                                 icon="arrow-right">
                                 NEXT
                             </ButtonPaper>
