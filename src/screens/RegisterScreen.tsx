@@ -1,10 +1,9 @@
-import { Alert, SafeAreaView, ScrollView, StyleSheet, ToastAndroid, View } from 'react-native'
-import { Text } from "react-native-paper"
+import { Alert, Platform, SafeAreaView, ScrollView, StyleSheet, ToastAndroid, View } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from 'react-native-normalize'
 import { usePaperColorScheme } from '../theme/theme'
 import InputPaper from '../components/InputPaper'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SmoothPinCodeInput from "react-native-smooth-pincode-input"
 import ButtonPaper from '../components/ButtonPaper'
 import useRegister from '../hooks/api/useRegister'
@@ -14,6 +13,7 @@ import { CommonActions, useNavigation } from '@react-navigation/native'
 import navigationRoutes from '../routes/navigationRoutes'
 import HeaderImage from '../components/HeaderImage'
 import { productHeader, productHeaderDark } from '../resources/images'
+import SmsRetrieverModule from 'react-native-sms-retriever'
 
 const RegisterScreen = () => {
     const navigation = useNavigation()
@@ -29,7 +29,22 @@ const RegisterScreen = () => {
     const { verifyActive } = useVerifyActive()
     const { getOtp } = useFetchOtp()
 
-    const handleRegister = async () => {
+    const openPhoneHintModal = async () => {
+        if (Platform.OS === 'android') {
+            try {
+                const phoneNumber = await SmsRetrieverModule.requestPhoneNumber()
+                console.log(phoneNumber, 'PhoneNumber')
+                const formattedPhoneNumber = phoneNumber?.slice(3, 13)
+                setMobileNo(formattedPhoneNumber)
+                handleRegister(formattedPhoneNumber)
+            } catch (error) {
+                console.log(JSON.stringify(error))
+                ToastAndroid.show("Put Your Phone Number.", ToastAndroid.SHORT)
+            }
+        }
+    }
+
+    const handleRegister = async (mobileNo: string) => {
         try {
             const registerResponse = await register(mobileNo)
             console.log("registeredData", registerResponse)
@@ -79,6 +94,10 @@ const RegisterScreen = () => {
             return
         }
     }
+
+    useEffect(() => {
+        openPhoneHintModal()
+    }, [])
 
     return (
         <SafeAreaView>
