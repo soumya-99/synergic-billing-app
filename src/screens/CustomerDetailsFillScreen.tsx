@@ -87,49 +87,6 @@ const CustomerDetailsFillScreen = () => {
         })
     }
 
-    // const handlePrintReceipt = async () => {
-    //     if (checked === "C") {
-    //         if (cashAmount === undefined || cashAmount === 0 || finalCashAmount < 0) {
-    //             ToastAndroid.show("Add valid cash amount.", ToastAndroid.SHORT)
-    //             return
-    //         } else {
-    //             if (customerMobileNumber.length === 0) {
-    //                 ToastAndroid.show("Customer mobile is mandetory.", ToastAndroid.SHORT)
-    //                 return
-    //             } else {
-    //                 setIsDisabled(true)
-    //                 setIsLoading(true)
-    //                 await handleSendSaleData()
-    //                 console.log("Sending data and printing receipts...")
-
-    //                 receiptSettings?.gst_flag === "N"
-    //                     ? printReceiptWithoutGst(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
-    //                     : printReceipt(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
-    //                 console.log("params?.added_products", params?.added_products)
-    //                 setIsLoading(false)
-    //                 setIsDisabled(false)
-    //             }
-    //         }
-    //     } else {
-    //         if (customerMobileNumber.length === 0) {
-    //             ToastAndroid.show("Customer mobile is mandetory.", ToastAndroid.SHORT)
-    //             return
-    //         } else {
-    //             setIsDisabled(true)
-    //             setIsLoading(true)
-    //             await handleSendSaleData()
-    //             console.log("Sending data and printing receipts...")
-
-    //             receiptSettings?.gst_flag === "N"
-    //                 ? printReceiptWithoutGst(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
-    //                 : printReceipt(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
-    //             console.log("params?.added_products", params?.added_products)
-    //             setIsLoading(false)
-    //             setIsDisabled(false)
-    //         }
-    //     }
-    // }
-
     const handlePrintReceipt = async () => {
         if (checked === "C" && (cashAmount === undefined || cashAmount === 0 || finalCashAmount < 0)) {
             ToastAndroid.show("Add valid cash amount.", ToastAndroid.SHORT)
