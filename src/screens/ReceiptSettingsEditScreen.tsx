@@ -28,6 +28,7 @@ export default function ReceiptSettingsEditScreen() {
     const [customerInfo, setCustomerInfo] = useState<"Y" | "N">(() => receiptSettings?.cust_inf)
     const [payMode, setPayMode] = useState<"Y" | "N">(() => receiptSettings?.pay_mode)
     const [discountType, setDiscountType] = useState<"P" | "A">(() => receiptSettings?.discount_type)
+    const [priceType, setPriceType] = useState<"A" | "M">(() => "A")
 
     let receiptTypeArr = [
         { icon: "cloud-print-outline", title: "Print", func: () => setRcptType("P") },
@@ -53,6 +54,11 @@ export default function ReceiptSettingsEditScreen() {
     let discountTypeArr = [
         { icon: "percent-outline", title: "Percentage", func: () => setDiscountType("P") },
         { icon: "cash", title: "Amount", func: () => setDiscountType("A") },
+    ]
+
+    let priceAutoManualArr = [
+        { icon: "auto-fix", title: "Auto", func: () => setPriceType("A") },
+        { icon: "database-edit-outline", title: "Manual", func: () => setPriceType("M") },
     ]
 
     const handleReceiptSettingsUpdate = async () => {
@@ -139,6 +145,18 @@ export default function ReceiptSettingsEditScreen() {
                             )
                         }}
                         descriptionStyle={{ color: theme.colors.primary }}
+                    />
+                    <Divider />
+                    <List.Item
+                        title="Price Type"
+                        description={priceType === "A" ? "Automatic" : priceType === "M" ? "Manual Edit" : "Error Occurred!"}
+                        left={props => <List.Icon {...props} icon="cash-minus" />}
+                        right={props => {
+                            return (
+                                <MenuPaper menuArrOfObjects={priceAutoManualArr} />
+                            )
+                        }}
+                        descriptionStyle={{ color: priceType === "A" ? theme.colors.primary : theme.colors.orange }}
                     />
                     <Divider />
                 </View>
