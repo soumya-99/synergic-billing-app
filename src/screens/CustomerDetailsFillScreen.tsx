@@ -87,38 +87,74 @@ const CustomerDetailsFillScreen = () => {
         })
     }
 
+    // const handlePrintReceipt = async () => {
+    //     if (checked === "C") {
+    //         if (cashAmount === undefined || cashAmount === 0 || finalCashAmount < 0) {
+    //             ToastAndroid.show("Add valid cash amount.", ToastAndroid.SHORT)
+    //             return
+    //         } else {
+    //             if (customerMobileNumber.length === 0) {
+    //                 ToastAndroid.show("Customer mobile is mandetory.", ToastAndroid.SHORT)
+    //                 return
+    //             } else {
+    //                 setIsDisabled(true)
+    //                 setIsLoading(true)
+    //                 await handleSendSaleData()
+    //                 console.log("Sending data and printing receipts...")
+
+    //                 receiptSettings?.gst_flag === "N"
+    //                     ? printReceiptWithoutGst(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
+    //                     : printReceipt(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
+    //                 console.log("params?.added_products", params?.added_products)
+    //                 setIsLoading(false)
+    //                 setIsDisabled(false)
+    //             }
+    //         }
+    //     } else {
+    //         if (customerMobileNumber.length === 0) {
+    //             ToastAndroid.show("Customer mobile is mandetory.", ToastAndroid.SHORT)
+    //             return
+    //         } else {
+    //             setIsDisabled(true)
+    //             setIsLoading(true)
+    //             await handleSendSaleData()
+    //             console.log("Sending data and printing receipts...")
+
+    //             receiptSettings?.gst_flag === "N"
+    //                 ? printReceiptWithoutGst(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
+    //                 : printReceipt(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
+    //             console.log("params?.added_products", params?.added_products)
+    //             setIsLoading(false)
+    //             setIsDisabled(false)
+    //         }
+    //     }
+    // }
+
     const handlePrintReceipt = async () => {
-        if (checked === "C") {
-            if (cashAmount === undefined || cashAmount === 0 || finalCashAmount < 0) {
-                ToastAndroid.show("Add valid cash amount.", ToastAndroid.SHORT)
-                return
-            } else {
-                setIsDisabled(true)
-                setIsLoading(true)
-                await handleSendSaleData()
-                console.log("Sending data and printing receipts...")
-
-                receiptSettings?.gst_flag === "N"
-                    ? printReceiptWithoutGst(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
-                    : printReceipt(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
-                console.log("params?.added_products", params?.added_products)
-                setIsLoading(false)
-                setIsDisabled(false)
-            }
-        } else {
-            setIsDisabled(true)
-            setIsLoading(true)
-            console.log("wquetwqagyrfasfkcbh,usdrgfyszgydfzguzxd")
-            await handleSendSaleData()
-            console.log("Sending data and printing receipts...")
-
-            receiptSettings?.gst_flag === "N"
-                ? printReceiptWithoutGst(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
-                : printReceipt(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
-            console.log("params?.added_products", params?.added_products)
-            setIsLoading(false)
-            setIsDisabled(false)
+        if (checked === "C" && (cashAmount === undefined || cashAmount === 0 || finalCashAmount < 0)) {
+            ToastAndroid.show("Add valid cash amount.", ToastAndroid.SHORT)
+            return
         }
+
+        if (customerMobileNumber.length === 0) {
+            ToastAndroid.show("Customer mobile is mandatory.", ToastAndroid.SHORT)
+            return
+        }
+
+        setIsDisabled(true)
+        setIsLoading(true)
+        await handleSendSaleData()
+        console.log("Sending data and printing receipts...")
+
+        const receiptFunction = receiptSettings?.gst_flag === "N"
+            ? printReceiptWithoutGst
+            : printReceipt
+
+        receiptFunction(params?.added_products, params?.net_total, params?.total_discount as number, cashAmount, finalCashAmount, customerName, customerMobileNumber, receiptNumber, checked)
+
+        console.log("params?.added_products", params?.added_products)
+        setIsLoading(false)
+        setIsDisabled(false)
     }
 
     return (
@@ -166,13 +202,15 @@ const CustomerDetailsFillScreen = () => {
                         />
                     </View>
 
-                    {receiptSettings?.cust_inf === "Y" && (<View style={{ justifyContent: 'center' }}>
-                        <View style={{ padding: normalize(20), marginVertical: SCREEN_HEIGHT / 100 }}>
-                            <InputPaper label='Enter Name (Optional)' value={customerName} onChangeText={(customerName: string) => setCustomerName(customerName)} keyboardType='default' leftIcon='account-circle-outline' maxLength={15} customStyle={{ marginBottom: normalize(10) }} />
+                    {receiptSettings?.cust_inf === "Y" && (
+                        <View style={{ justifyContent: 'center' }}>
+                            <View style={{ padding: normalize(20), marginVertical: SCREEN_HEIGHT / 100 }}>
+                                <InputPaper label='Enter Name (Optional)' value={customerName} onChangeText={(customerName: string) => setCustomerName(customerName)} keyboardType='default' leftIcon='account-circle-outline' maxLength={15} customStyle={{ marginBottom: normalize(10) }} />
 
-                            <InputPaper label='Enter Mobile (Optional)' value={customerMobileNumber} onChangeText={onChangeCustomerMobileNumber} keyboardType='number-pad' leftIcon='card-account-phone-outline' maxLength={10} />
+                                <InputPaper label='Enter Mobile' value={customerMobileNumber} onChangeText={onChangeCustomerMobileNumber} keyboardType='number-pad' leftIcon='card-account-phone-outline' maxLength={10} />
+                            </View>
                         </View>
-                    </View>)}
+                    )}
 
                     {receiptSettings?.pay_mode === "Y" && (
                         <View style={{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", marginRight: normalize(10), marginTop: normalize(20) }}>
