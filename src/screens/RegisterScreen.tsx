@@ -30,39 +30,35 @@ const RegisterScreen = () => {
     const { getOtp } = useFetchOtp()
 
     const handleRegister = async () => {
-        await register(mobileNo).then(async res => {
-            console.log("registeredData", res)
+        try {
+            const registerResponse = await register(mobileNo)
+            console.log("registeredData", registerResponse)
 
-            if (res?.status === 0) {
+            if (registerResponse?.status === 0) {
                 Alert.alert("Message", "Mobile No is not Registered.")
                 setMobileNo("")
                 return
             }
-            else if (res?.status === 1) {
-                await verifyActive(mobileNo).then(async res => {
-                    console.log("verifyActiveData", res)
 
-                    if (res?.status === -1) {
-                        Alert.alert("Message", "Mobile No is already in use.")
-                        setMobileNo("")
-                        return
-                    } else {
-                        await getOtp(mobileNo).then(res => {
-                            console.log("otpData", res)
+            if (registerResponse?.status === 1) {
+                const verifyResponse = await verifyActive(mobileNo)
+                console.log("verifyActiveData", verifyResponse)
 
-                            setFetchedOtp(res?.data)
-                            setNext(!next)
-                        }).catch(err => {
-                            ToastAndroid.show("Some error on server.", ToastAndroid.SHORT)
-                        })
-                    }
-                }).catch(err => {
-                    ToastAndroid.show("Some error on server.", ToastAndroid.SHORT)
-                })
+                if (verifyResponse?.status === -1) {
+                    Alert.alert("Message", "Mobile No is already in use.")
+                    setMobileNo("")
+                    return
+                }
+
+                const otpResponse = await getOtp(mobileNo)
+                console.log("otpData", otpResponse)
+
+                setFetchedOtp(otpResponse?.data)
+                setNext(!next)
             }
-        }).catch(err => {
+        } catch (error) {
             ToastAndroid.show("Some error on server.", ToastAndroid.SHORT)
-        })
+        }
     }
 
     const handleOtpMatch = () => {
@@ -95,9 +91,6 @@ const RegisterScreen = () => {
                         minHeight: SCREEN_HEIGHT,
                         height: 'auto'
                     }}>
-                    {/* <View style={{ padding: normalize(20) }}>
-                        <Text variant='displayMedium' style={{ color: theme.colors.onPrimary, textAlign: 'center' }}>Register</Text>
-                    </View> */}
 
                     <View style={{ alignItems: "center" }}>
                         <HeaderImage
