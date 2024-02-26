@@ -159,15 +159,15 @@ const CustomerDetailsFillScreen = () => {
                         />
                     </View>
 
-                    {receiptSettings?.cust_inf === "Y" && (
-                        <View style={{ justifyContent: 'center' }}>
-                            <View style={{ padding: normalize(20), marginVertical: SCREEN_HEIGHT / 100 }}>
+                    <View style={{ justifyContent: 'center' }}>
+                        <View style={{ padding: normalize(20), marginVertical: SCREEN_HEIGHT / 100 }}>
+                            {receiptSettings?.cust_inf === "Y" && (
                                 <InputPaper label='Enter Name (Optional)' value={customerName} onChangeText={(customerName: string) => setCustomerName(customerName)} keyboardType='default' leftIcon='account-circle-outline' maxLength={15} customStyle={{ marginBottom: normalize(10) }} />
+                            )}
 
-                                <InputPaper label='Enter Mobile' value={customerMobileNumber} onChangeText={onChangeCustomerMobileNumber} keyboardType='number-pad' leftIcon='card-account-phone-outline' maxLength={10} />
-                            </View>
+                            <InputPaper label='Enter Mobile' value={customerMobileNumber} onChangeText={onChangeCustomerMobileNumber} keyboardType='number-pad' leftIcon='card-account-phone-outline' maxLength={10} />
                         </View>
-                    )}
+                    </View>
 
                     {receiptSettings?.pay_mode === "Y" && (
                         <View style={{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", marginRight: normalize(10), marginTop: normalize(20) }}>
