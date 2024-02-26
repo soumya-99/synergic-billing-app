@@ -1,8 +1,8 @@
-type NavigationRoutesTypes = {
-  [key: string]: string
-}
+// type NavigationRoutesTypes = {
+//   [key: string]: string
+// }
 
-const navigationRoutes: NavigationRoutesTypes = {
+const navigationRoutes = {
   login: "Login",
   register: "Register",
   createPinScreen: "CreatePinScreen",
@@ -28,6 +28,8 @@ const navigationRoutes: NavigationRoutesTypes = {
   manageProductsScreen: "ManageProductsScreen",
   receiptSettingsEditScreen: "ReceiptSettingsEditScreen",
   logoUploadScreen: "LogoUploadScreen",
+  changePinScreen: "changePinScreen",
+  forgotPinScreen: "ForgotPinScreen",
 }
 
 export default navigationRoutes

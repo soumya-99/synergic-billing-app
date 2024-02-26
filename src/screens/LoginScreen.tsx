@@ -12,7 +12,7 @@ import {
   Platform,
   ToastAndroid,
 } from "react-native"
-import { withTheme, Text } from "react-native-paper"
+import { withTheme, Text, TouchableRipple } from "react-native-paper"
 import SmoothPinCodeInput from "react-native-smooth-pincode-input"
 import { usePaperColorScheme } from "../theme/theme"
 import InputPaper from "../components/InputPaper"
@@ -334,28 +334,52 @@ function LoginScreen() {
                     flexDirection: "row",
                     gap: 15,
                   }}>
-                  <View>
-                    <ButtonPaper
-                      mode="contained"
-                      buttonColor={theme.colors.error}
-                      textColor={theme.colors.onError}
-                      onPress={() => {
-                        setNext(!next)
-                      }}
-                      style={{ width: normalize(100) }}
-                      icon="arrow-left">
-                      BACK
-                    </ButtonPaper>
-                  </View>
-                  <View>
-                    <ButtonPaper
-                      mode="contained"
-                      onPress={() => handleLogin(loginText, passwordText)}
-                      icon="login"
-                      style={{ width: normalize(190) }}>
-                      LOGIN
-                    </ButtonPaper>
-                  </View>
+                  {/* <View> */}
+                  <ButtonPaper
+                    mode="contained"
+                    buttonColor={theme.colors.error}
+                    textColor={theme.colors.onError}
+                    onPress={() => {
+                      setNext(!next)
+                    }}
+                    style={{ width: normalize(100) }}
+                    icon="arrow-left">
+                    BACK
+                  </ButtonPaper>
+                  {/* </View> */}
+                  {/* <View> */}
+                  <ButtonPaper
+                    mode="contained"
+                    onPress={() => handleLogin(loginText, passwordText)}
+                    icon="login"
+                    style={{ width: normalize(190) }}>
+                    LOGIN
+                  </ButtonPaper>
+                  {/* </View> */}
+                </View>
+
+                <View style={{ justifyContent: "space-around", flexDirection: "row", marginVertical: normalize(20), alignItems: "center" }}>
+                  <TouchableRipple onPress={
+                    () => (navigation.dispatch(
+                      CommonActions.navigate({
+                        name: navigationRoutes.changePinScreen,
+                      }))
+                    )
+                  }>
+                    <Text variant="labelSmall" style={[styles.forgotOrResetText, { color: theme.colors.green }]}>Change Pin</Text>
+                  </TouchableRipple>
+
+                  <Text variant="labelSmall" style={styles.forgotOrResetText}>—OR—</Text>
+
+                  <TouchableRipple onPress={
+                    () => (navigation.dispatch(
+                      CommonActions.navigate({
+                        name: navigationRoutes.forgotPinScreen,
+                      }))
+                    )
+                  }>
+                    <Text variant="labelSmall" style={[styles.forgotOrResetText, { color: theme.colors.error }]}>Forgot Pin?</Text>
+                  </TouchableRipple>
                 </View>
               </View>
             )}
@@ -384,6 +408,11 @@ const styles = StyleSheet.create({
 
   loginHeaderText: {
     fontWeight: "500",
+  },
+
+  forgotOrResetText: {
+    textTransform: "uppercase",
+    textAlign: "center"
   },
 
   // textFields: {

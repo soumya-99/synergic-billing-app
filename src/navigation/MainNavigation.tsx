@@ -7,6 +7,8 @@ import { NavigationContainer } from "@react-navigation/native"
 import BottomNavigationPaper from "./BottomNavigationPaper"
 import RegisterScreen from "../screens/RegisterScreen"
 import CreatePinScreen from "../screens/CreatePinScreen"
+import ChangePinScreen from "../screens/ChangePinScreen"
+import ForgotPinScreen from "../screens/ForgotPinScreen"
 
 export default function MainNavigation() {
   const Stack = createNativeStackNavigator()
@@ -45,6 +47,14 @@ export default function MainNavigation() {
               <Stack.Screen
                 name={navigationRoutes.createPinScreen}
                 component={CreatePinScreen}
+              />
+              <Stack.Screen
+                name={navigationRoutes.changePinScreen}
+                component={ChangePinScreen}
+              />
+              <Stack.Screen
+                name={navigationRoutes.forgotPinScreen}
+                component={ForgotPinScreen}
               />
               {/* <Stack.Screen
                 name={mainNavigationRoutes.forgotPasscode}
