@@ -121,6 +121,11 @@ export default function ManageProductsScreen() {
             sgst: SGST
         }
 
+        if (hsnCode.length === 0 || productName.length === 0) {
+            ToastAndroid.show("Add Product Name and HSN Code", ToastAndroid.SHORT)
+            return
+        }
+
         await sendAddedItem(addedProductObject).then(res => {
             ToastAndroid.show("Product has been added.", ToastAndroid.SHORT)
         }).catch(err => {
