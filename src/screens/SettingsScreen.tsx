@@ -74,6 +74,17 @@ function SettingsScreen() {
               )}
           /> */}
           <ReportButton
+            text="My Profile"
+            color={theme.colors.pinkContainer}
+            icon="account-circle-outline"
+            onPress={() =>
+              navigation.dispatch(
+                CommonActions.navigate({
+                  name: navigationRoutes.profileScreen,
+                })
+              )}
+          />
+          <ReportButton
             text="Header/Footer"
             color={theme.colors.orangeContainer}
             icon="table-headers-eye"

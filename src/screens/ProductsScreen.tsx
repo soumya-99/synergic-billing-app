@@ -191,7 +191,8 @@ function ProductsScreen() {
   }
 
   const addProducts = () => {
-    addedProductsList.push(product)
+    // addedProductsList.push(product)
+    addedProductsList.unshift(product)
     product["quantity"] = quantity
     if (discountState > 0)
       product["discount"] = discountState

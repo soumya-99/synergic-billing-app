@@ -30,6 +30,7 @@ const navigationRoutes = {
   logoUploadScreen: "LogoUploadScreen",
   changePinScreen: "changePinScreen",
   forgotPinScreen: "ForgotPinScreen",
+  profileScreen: "ProfileScreen",
 }
 
 export default navigationRoutes

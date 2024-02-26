@@ -8,6 +8,7 @@ import HeaderFooterScreen from "../screens/HeaderFooterScreen"
 import ManageProductsScreen from "../screens/ManageProductsScreen"
 import ReceiptSettingsEditScreen from "../screens/ReceiptSettingsEditScreen"
 import LogoUploadScreen from "../screens/LogoUploadScreen"
+import ProfileScreen from "../screens/ProfileScreen"
 
 export default function SettingsNavigation() {
   const Stack = createNativeStackNavigator()
@@ -45,6 +46,10 @@ export default function SettingsNavigation() {
       <Stack.Screen
         name={navigationRoutes.printMain}
         component={PrintMain}
+      />
+      <Stack.Screen
+        name={navigationRoutes.profileScreen}
+        component={ProfileScreen}
       />
     </Stack.Navigator>
   )
