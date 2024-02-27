@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, StyleSheet, ToastAndroid, View } from 'react-native'
+import { Alert, SafeAreaView, ScrollView, StyleSheet, ToastAndroid, View } from 'react-native'
 import { Text } from "react-native-paper"
 import LinearGradient from 'react-native-linear-gradient'
 import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from 'react-native-normalize'
@@ -28,10 +28,16 @@ const ForgotPinScreen = () => {
     const handleForgotPin = () => {
         if (mobileNo.length > 0) {
             setNext(true)
+            Alert.alert("Your OTP is", FETCHED_OTP)
         }
     }
 
     const handleSubmit = () => {
+        if (otp !== FETCHED_OTP) {
+            ToastAndroid.show("Pin is invalid! Re-enter Pin.", ToastAndroid.SHORT)
+            setOtp("")
+            return
+        }
         ToastAndroid.show("Pin Changed Successfully!", ToastAndroid.SHORT)
         navigation.dispatch(
             CommonActions.navigate(navigationRoutes.login)

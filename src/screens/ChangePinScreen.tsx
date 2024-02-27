@@ -181,7 +181,7 @@ const ChangePinScreen = () => {
                                 buttonColor={theme.colors.secondaryContainer}
                                 textColor={theme.colors.onSecondaryContainer}
                                 onPress={handleChangePin}
-                                icon="arrow-right">
+                                icon="security">
                                 CHANGE PIN
                             </ButtonPaper>
                         </View>

@@ -22,6 +22,8 @@ const RegisterScreen = () => {
     const [mobileNo, setMobileNo] = useState<string>(() => "")
     const [otp, setOtp] = useState<string>(() => "")
     const [next, setNext] = useState<boolean>(() => false)
+    const [otpSent, setOtpSent] = useState<boolean>(() => false)
+    const [timer, setTimer] = useState<number>(() => 30)
 
     const [fetchedOtp, setFetchedOtp] = useState<string>(() => "")
 
@@ -64,16 +66,23 @@ const RegisterScreen = () => {
                     setMobileNo("")
                     return
                 }
-
-                const otpResponse = await getOtp(mobileNo)
-                console.log("otpData", otpResponse)
-
-                setFetchedOtp(otpResponse?.data)
-                setNext(!next)
+                handleFetchOtp().then(() => {
+                    setNext(!next)
+                })
             }
         } catch (error) {
             ToastAndroid.show("Some error on server.", ToastAndroid.SHORT)
         }
+    }
+
+    const handleFetchOtp = async () => {
+        const otpResponse = await getOtp(mobileNo)
+        console.log("otpData", otpResponse)
+
+        Alert.alert("Your OTP is", otpResponse?.data)
+        setFetchedOtp(otpResponse?.data)
+
+        setOtpSent(true)
     }
 
     const handleOtpMatch = () => {
@@ -89,7 +98,7 @@ const RegisterScreen = () => {
             )
         } else {
             console.log("WRONG OTP!!!")
-
+            setOtp("")
             Alert.alert("Error", "OTP doesn't match.")
             return
         }
@@ -98,6 +107,29 @@ const RegisterScreen = () => {
     useEffect(() => {
         openPhoneHintModal()
     }, [])
+
+    useEffect(() => {
+        let interval: NodeJS.Timeout
+        if (otpSent) {
+            interval = setInterval(() => {
+                setTimer(prevTimer => {
+                    if (prevTimer === 0) {
+                        clearInterval(interval)
+                        setOtpSent(false)
+                        return 30 // Reset the timer to 30 seconds
+                    } else {
+                        return prevTimer - 1
+                    }
+                })
+            }, 1000)
+        }
+        return () => clearInterval(interval)
+    }, [otpSent])
+
+    const handleResendOtp = () => {
+        handleFetchOtp()
+        setTimer(30) // Reset the timer
+    }
 
     return (
         <SafeAreaView>
@@ -174,7 +206,7 @@ const RegisterScreen = () => {
                             // }}
                             />
                         </View>
-                        <View style={{ padding: normalize(20) }}>
+                        <View style={{ padding: normalize(25) }}>
                             <ButtonPaper
                                 mode="contained"
                                 buttonColor={theme.colors.secondaryContainer}
@@ -182,6 +214,17 @@ const RegisterScreen = () => {
                                 onPress={handleOtpMatch}
                                 icon="arrow-right">
                                 NEXT
+                            </ButtonPaper>
+                        </View>
+                        <View style={{ paddingHorizontal: normalize(30) }}>
+                            <ButtonPaper
+                                mode="text"
+                                // buttonColor={theme.colors.secondaryContainer}
+                                textColor={theme.colors.onPrimary}
+                                onPress={handleResendOtp}
+                                icon="update"
+                                disabled={otpSent && timer !== 0}>
+                                {otpSent ? `OTP Sent (${timer}s)` : "Resend OTP"}
                             </ButtonPaper>
                         </View>
                     </View>}

@@ -45,8 +45,6 @@ const CreatePinScreen = () => {
         )
     }
 
-
-
     return (
         <SafeAreaView>
             <ScrollView keyboardShouldPersistTaps='handled'>

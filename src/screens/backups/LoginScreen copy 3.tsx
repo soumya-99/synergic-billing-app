@@ -77,9 +77,36 @@ function LoginScreen() {
               Easy Bill
             </Text>
           </View>
+          {/* <View
+            style={{
+              position: "absolute",
+              width: 90,
+              height: 150,
+              backgroundColor: "limegreen",
+              borderRadius: 10,
+              transform: [{ rotate: "45deg" }],
+              top: 20,
+              right: 260,
+              opacity: 0.5,
+            }}></View>
+          <View
+            style={{
+              position: "absolute",
+              width: 90,
+              height: 150,
+              backgroundColor: "dodgerblue",
+              borderRadius: 30,
+              transform: [{ rotate: "-65deg" }],
+              top: 300,
+              left: 260,
+              opacity: 0.5,
+            }}></View> */}
 
           <View
             style={{
+              // flexDirection: "column",
+              // justifyContent: "center",
+              // alignItems: "center",
               alignSelf: "center",
               paddingVertical: normalize(30)
             }}>
@@ -88,6 +115,128 @@ function LoginScreen() {
               style={{ height: 200, width: 200, borderRadius: 30 }}
             />
           </View>
+
+          {/* {!next && (
+            <View
+              style={{
+                padding: normalize(40),
+                width: "100%",
+                flex: 1,
+                flexDirection: "column",
+                gap: 20,
+              }}>
+              <View>
+                <InputPaper
+                  value={loginText}
+                  label={"Mobile Number"}
+                  onChangeText={(text: string) => setLoginText(text)}
+                  // customStyle={{ marginBottom: 20 }}
+                  leftIcon="account-circle-outline"
+                  keyboardType="phone-pad"
+                  autoFocus
+                />
+              </View>
+              <View>
+                <ButtonPaper
+                  mode="contained"
+                  onPress={() => {
+                    if (loginText !== "") setNext(!next)
+                  }}
+                  icon="arrow-right">
+                  NEXT
+                </ButtonPaper>
+              </View>
+
+              <View style={{ justifyContent: 'space-around', alignItems: 'center' }}>
+                <Text style={{ color: theme.colors.primary }}>Don't have an account?</Text>
+                <TouchableOpacity onPress={() => (navigation.dispatch(
+                  CommonActions.navigate({
+                    name: navigationRoutes.register,
+                  }))
+                )}>
+                  <Text style={{ textTransform: 'uppercase', color: theme.colors.green, textDecorationLine: 'underline' }}>Create new account</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )} */}
+
+          {/* {next && (
+            <View
+              style={{
+                padding: normalize(40),
+                width: "100%",
+                // flex: 1,
+                flexDirection: "column",
+                gap: 20,
+              }}>
+              <View style={{ alignSelf: "center" }}>
+                <SmoothPinCodeInput
+                  autoFocus={true}
+                  // placeholder="🙈"
+                  placeholder="◌"
+                  textStyle={{
+                    fontSize: 20,
+                    color: theme.colors.onPrimary
+                  }}
+                  mask={
+                    <View
+                      style={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: normalize(30),
+                        backgroundColor: theme.colors.onPrimaryContainer,
+                      }}></View>
+                  }
+                  maskDelay={1000}
+                  password={true}
+                  cellStyle={{
+                    borderWidth: 1,
+                    borderRadius: 5,
+                    borderColor: theme.colors.onPrimary,
+                  }}
+                  cellStyleFocused={null}
+                  value={passwordText}
+                  onTextChange={(text: string) => setPasswordText(text)}
+                />
+              </View>
+              <View
+                style={{
+                  // margin: 20,
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexDirection: "row",
+                  gap: 15,
+                }}>
+                <View>
+                  <ButtonPaper
+                    mode="contained"
+                    buttonColor={theme.colors.error}
+                    textColor={theme.colors.onError}
+                    onPress={() => {
+                      setNext(!next)
+                    }}
+                    style={{ width: normalize(100) }}
+                    icon="arrow-left">
+                    BACK
+                  </ButtonPaper>
+                </View>
+                <View>
+                  <ButtonPaper
+                    mode="contained"
+                    onPress={() => handleLogin(loginText, passwordText)}
+                    icon="login"
+                    style={{ width: normalize(190) }}>
+                    LOGIN
+                  </ButtonPaper>
+                </View>
+              </View>
+            </View>
+          )} */}
+          {/* <<View>
+            <Text style={{ fontFamily: "ProductSans-Regular", fontSize: 10 }}>
+              Powered by, Synergic Softek Solutions Pvt. Ltd.
+            </Text>
+          </View>> */}
 
           <View style={{ backgroundColor: theme.colors.surface, height: SCREEN_HEIGHT / 1.95, borderTopLeftRadius: 30, borderTopRightRadius: 30 }}>
             {!next && (
@@ -265,4 +414,11 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     textAlign: "center"
   },
+
+  // textFields: {
+  //   flex: 1,
+  //   margin: normalize(20),
+  //   height: "45%",
+  //   justifyContent: "flex-end",
+  // },
 })
