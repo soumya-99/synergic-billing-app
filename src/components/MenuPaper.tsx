@@ -18,7 +18,7 @@ export default function MenuPaper({ menuArrOfObjects }: MenuPaperTypes) {
         <Menu
             visible={visible}
             onDismiss={closeMenu}
-            anchor={<Button onPress={openMenu} disabled={loginStore?.user_type !== "M"}>Options</Button>}>
+            anchor={<Button icon="chevron-down-circle-outline" onPress={openMenu} disabled={loginStore?.user_type !== "M"}>Options</Button>}>
 
             {menuArrOfObjects?.map((item, i) => (
                 <Menu.Item

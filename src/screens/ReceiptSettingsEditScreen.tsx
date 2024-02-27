@@ -28,6 +28,7 @@ export default function ReceiptSettingsEditScreen() {
     const [customerInfo, setCustomerInfo] = useState<"Y" | "N">(() => receiptSettings?.cust_inf)
     const [payMode, setPayMode] = useState<"Y" | "N">(() => receiptSettings?.pay_mode)
     const [discountType, setDiscountType] = useState<"P" | "A">(() => receiptSettings?.discount_type)
+    const [discountSwitch, setDiscountSwitch] = useState<"Y" | "N">(() => "Y")
     const [priceType, setPriceType] = useState<"A" | "M">(() => "A")
 
     let receiptTypeArr = [
@@ -49,6 +50,11 @@ export default function ReceiptSettingsEditScreen() {
     let payModeArr = [
         { icon: "check-outline", title: "Allow", func: () => setPayMode("Y") },
         { icon: "cancel", title: "Deny", func: () => setPayMode("N") },
+    ]
+
+    let discountSwitchArr = [
+        { icon: "check-outline", title: "Allow", func: () => setDiscountSwitch("Y") },
+        { icon: "cancel", title: "Deny", func: () => setDiscountSwitch("N") },
     ]
 
     let discountTypeArr = [
@@ -133,6 +139,18 @@ export default function ReceiptSettingsEditScreen() {
                             )
                         }}
                         descriptionStyle={{ color: payMode === "Y" ? theme.colors.green : theme.colors.error }}
+                    />
+                    <Divider />
+                    <List.Item
+                        title="Discount Switch"
+                        description={discountSwitch === "Y" ? "Allowed" : discountSwitch === "N" ? "Denied" : "Error Occurred!"}
+                        left={props => <List.Icon {...props} icon="label-percent-outline" />}
+                        right={props => {
+                            return (
+                                <MenuPaper menuArrOfObjects={discountSwitchArr} />
+                            )
+                        }}
+                        descriptionStyle={{ color: discountSwitch === "Y" ? theme.colors.green : theme.colors.error }}
                     />
                     <Divider />
                     <List.Item
