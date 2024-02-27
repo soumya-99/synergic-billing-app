@@ -112,7 +112,7 @@ export default function ReceiptSettingsEditScreen() {
                     />
                     <Divider />
                     <List.Item
-                        title="Customer Information"
+                        title="Customer Name"
                         description={customerInfo === "Y" ? "Allowed" : customerInfo === "N" ? "Denied" : "Error Occurred!"}
                         left={props => <List.Icon {...props} icon="account-circle-outline" />}
                         right={props => {
