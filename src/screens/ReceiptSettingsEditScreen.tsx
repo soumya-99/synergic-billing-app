@@ -29,7 +29,7 @@ export default function ReceiptSettingsEditScreen() {
     const [payMode, setPayMode] = useState<"Y" | "N">(() => receiptSettings?.pay_mode)
     const [discountFlag, setDiscountFlag] = useState<"Y" | "N">(() => receiptSettings?.discount_flag)
     const [discountType, setDiscountType] = useState<"P" | "A">(() => receiptSettings?.discount_type)
-    const [priceType, setPriceType] = useState<"A" | "M">(() => "A")
+    const [priceType, setPriceType] = useState<"A" | "M">(() => receiptSettings?.price_type)
 
     let receiptTypeArr = [
         { icon: "cloud-print-outline", title: "Print", func: () => setRcptType("P") },

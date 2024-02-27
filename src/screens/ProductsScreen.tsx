@@ -251,13 +251,15 @@ function ProductsScreen() {
               flexDirection: "row",
               marginHorizontal: SCREEN_WIDTH / 10
             }}>
-            {/* <View>
-              <Text variant="labelMedium">UNIT PRICE:</Text>
-            </View> */}
             {receiptSettings?.price_type === "A" ? (
-              <View>
-                <Text variant="labelMedium">₹{product?.price}</Text>
-              </View>
+              <>
+                <View>
+                  <Text variant="labelMedium">UNIT PRICE:</Text>
+                </View>
+                <View>
+                  <Text variant="labelMedium">₹{product?.price}</Text>
+                </View>
+              </>
             ) : (
               <View style={{ width: "100%" }}>
                 <InputPaper
