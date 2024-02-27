@@ -9,7 +9,9 @@ export default function useEditReceiptSettings() {
         gstFlag: "Y" | "N",
         custInfo: "Y" | "N",
         payMode: "Y" | "N",
+        discountFlag: "Y" | "N",
         discountType: "P" | "A",
+        priceType: "A" | "M",
         createdBy: string,
         modifiedBy: string
     ) => {
@@ -20,7 +22,9 @@ export default function useEditReceiptSettings() {
                 gst_flag: gstFlag,
                 cust_inf: custInfo,
                 pay_mode: payMode,
+                discount_flag: discountFlag,
                 discount_type: discountType,
+                price_type: priceType,
                 created_by: createdBy,
                 modified_by: modifiedBy
             }).then(res => {

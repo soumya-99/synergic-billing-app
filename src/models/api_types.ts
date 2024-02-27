@@ -53,6 +53,7 @@ export type ReceiptSettingsData = {
     gst_flag: "N" | "Y"
     cust_inf: "Y" | "N"
     pay_mode: "Y" | "N"
+    discount_flag: "Y" | "N"
     discount_type: "P" | "A"
     created_by: string
     created_at: string

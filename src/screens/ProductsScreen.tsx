@@ -48,6 +48,7 @@ function ProductsScreen() {
 
   const [quantity, setQuantity] = useState<number>()
   const [discountState, setDiscountState] = useState<number>(() => 0)
+  const [price, setPrice] = useState<number>(() => product?.price)
 
   const [addedProductsList, setAddedProductsList] = useState<
     ItemsData[]
@@ -72,6 +73,7 @@ function ProductsScreen() {
     setProduct(item)
 
     setDiscountState(item?.discount)
+    setPrice(item?.price)
     setVisible(!visible)
   }
 
@@ -81,6 +83,7 @@ function ProductsScreen() {
     setProduct(item)
     setQuantity(item?.quantity)
     setDiscountState(item?.discount)
+    setPrice(item?.price)
     setVisible(!visible)
   }
 
@@ -116,10 +119,11 @@ function ProductsScreen() {
       addProducts()
 
       discountState > 0 ? setDiscountState(() => discountState) : setDiscountState(() => product?.discount)
+      price > 0 ? setPrice(() => price) : setPrice(() => product?.price)
 
       clearStates([setSearch], () => "")
       setQuantity(() => undefined)
-      setDiscountState(() => 0)
+      clearStates([setPrice, setDiscountState], () => 0)
       setVisible(!visible)
       setFilteredItems(() => [])
     }
@@ -159,14 +163,16 @@ function ProductsScreen() {
 
     filteredSingleProductArray[0]["quantity"] = quantity
     filteredSingleProductArray[0]["discount"] = discountState
+    filteredSingleProductArray[0]["price"] = price
 
     discountState > 0 ? setDiscountState(() => discountState) : setDiscountState(() => product?.discount)
+    price > 0 ? setPrice(() => price) : setPrice(() => product?.price)
 
     setProduct(filteredSingleProductArray[0])
 
     clearStates([setSearch], () => "")
     setQuantity(() => undefined)
-    setDiscountState(() => 0)
+    clearStates([setPrice, setDiscountState], () => 0)
     setVisible(!visible)
     setFilteredItems(() => [])
   }
@@ -196,6 +202,8 @@ function ProductsScreen() {
     product["quantity"] = quantity
     if (discountState > 0)
       product["discount"] = discountState
+    if (price > 0)
+      product["price"] = price
     setAddedProductsList([...addedProductsList])
     console.log(
       "==========ADDED PRODUCTS LIST==========",
@@ -243,12 +251,25 @@ function ProductsScreen() {
               flexDirection: "row",
               marginHorizontal: SCREEN_WIDTH / 10
             }}>
-            <View>
+            {/* <View>
               <Text variant="labelMedium">UNIT PRICE:</Text>
-            </View>
-            <View>
-              <Text variant="labelMedium">₹{product?.price}</Text>
-            </View>
+            </View> */}
+            {receiptSettings?.price_type === "A" ? (
+              <View>
+                <Text variant="labelMedium">₹{product?.price}</Text>
+              </View>
+            ) : (
+              <View style={{ width: "100%" }}>
+                <InputPaper
+                  label="Unit Price"
+                  onChangeText={(txt: number) => setPrice(txt)}
+                  value={price}
+                  keyboardType="numeric"
+                  autoFocus={true}
+                  mode="outlined"
+                />
+              </View>
+            )}
           </View>
 
           {/* <View></View> */}
@@ -259,7 +280,7 @@ function ProductsScreen() {
               alignItems: "center",
               gap: 5,
             }}>
-            <View style={{ width: "50%" }}>
+            <View style={receiptSettings?.discount_flag === "Y" ? { width: "50%" } : { width: "100%" }}>
               <InputPaper
                 label="Quantity"
                 onChangeText={(txt: number) => setQuantity(txt)}
@@ -269,15 +290,17 @@ function ProductsScreen() {
                 mode="outlined"
               />
             </View>
-            <View style={{ width: "50%" }}>
-              <InputPaper
-                label={receiptSettings?.discount_type === "A" ? "Discount (₹)" : "Discount (%)"}
-                onChangeText={(dis: number) => setDiscountState(dis)}
-                value={discountState}
-                keyboardType="numeric"
-                mode="outlined"
-              />
-            </View>
+            {receiptSettings?.discount_flag === "Y" && (
+              <View style={{ width: "50%" }}>
+                <InputPaper
+                  label={receiptSettings?.discount_type === "A" ? "Discount (₹)" : "Discount (%)"}
+                  onChangeText={(dis: number) => setDiscountState(dis)}
+                  value={discountState}
+                  keyboardType="numeric"
+                  mode="outlined"
+                />
+              </View>
+            )}
           </View>
           {editState && <View>
             <ButtonPaper mode="text" textColor={theme.colors.purple} icon="trash-can-outline" onPress={() => handleOnDelete(product)}>
@@ -342,7 +365,7 @@ function ProductsScreen() {
                     key={item?.id}
                     itemName={item?.item_name}
                     quantity={item["quantity"]}
-                    unitPrice={item?.price}
+                    unitPrice={item["price"]}
                     discount={item["discount"]}
                     onPress={() => productEditAndDelete(item)}
                   />

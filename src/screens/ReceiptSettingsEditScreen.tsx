@@ -27,8 +27,8 @@ export default function ReceiptSettingsEditScreen() {
     const [gstFlag, setGstFlag] = useState<"Y" | "N">(() => receiptSettings?.gst_flag)
     const [customerInfo, setCustomerInfo] = useState<"Y" | "N">(() => receiptSettings?.cust_inf)
     const [payMode, setPayMode] = useState<"Y" | "N">(() => receiptSettings?.pay_mode)
+    const [discountFlag, setDiscountFlag] = useState<"Y" | "N">(() => receiptSettings?.discount_flag)
     const [discountType, setDiscountType] = useState<"P" | "A">(() => receiptSettings?.discount_type)
-    const [discountSwitch, setDiscountSwitch] = useState<"Y" | "N">(() => "Y")
     const [priceType, setPriceType] = useState<"A" | "M">(() => "A")
 
     let receiptTypeArr = [
@@ -53,8 +53,8 @@ export default function ReceiptSettingsEditScreen() {
     ]
 
     let discountSwitchArr = [
-        { icon: "check-outline", title: "Allow", func: () => setDiscountSwitch("Y") },
-        { icon: "cancel", title: "Deny", func: () => setDiscountSwitch("N") },
+        { icon: "check-outline", title: "Allow", func: () => setDiscountFlag("Y") },
+        { icon: "cancel", title: "Deny", func: () => setDiscountFlag("N") },
     ]
 
     let discountTypeArr = [
@@ -68,7 +68,7 @@ export default function ReceiptSettingsEditScreen() {
     ]
 
     const handleReceiptSettingsUpdate = async () => {
-        await editReceiptSettings(loginStore?.comp_id, rcptType, gstFlag, customerInfo, payMode, discountType, loginStore?.user_name, loginStore?.user_name)
+        await editReceiptSettings(loginStore?.comp_id, rcptType, gstFlag, customerInfo, payMode, discountFlag, discountType, priceType, loginStore?.user_name, loginStore?.user_name)
             .then(res => {
                 ToastAndroid.show("Receipt Settings Updated!", ToastAndroid.SHORT)
                 handleGetReceiptSettings()
@@ -143,14 +143,14 @@ export default function ReceiptSettingsEditScreen() {
                     <Divider />
                     <List.Item
                         title="Discount Switch"
-                        description={discountSwitch === "Y" ? "Allowed" : discountSwitch === "N" ? "Denied" : "Error Occurred!"}
+                        description={discountFlag === "Y" ? "Allowed" : discountFlag === "N" ? "Denied" : "Error Occurred!"}
                         left={props => <List.Icon {...props} icon="label-percent-outline" />}
                         right={props => {
                             return (
                                 <MenuPaper menuArrOfObjects={discountSwitchArr} />
                             )
                         }}
-                        descriptionStyle={{ color: discountSwitch === "Y" ? theme.colors.green : theme.colors.error }}
+                        descriptionStyle={{ color: discountFlag === "Y" ? theme.colors.green : theme.colors.error }}
                     />
                     <Divider />
                     <List.Item
