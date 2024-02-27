@@ -19,12 +19,18 @@ export const usePaperColorScheme = () => {
       fontFamily: "ProductSans-Medium",
       fontSize: 15,
     },
-
     titleLarge: {
       fontFamily: "ProductSans-Bold",
       fontSize: 20,
     },
-
+    bodyMedium: {
+      fontFamily: "ProductSans-Medium",
+      fontSize: 18,
+    },
+    bodyLarge: {
+      fontFamily: "ProductSans-Medium",
+      fontSize: 17,
+    },
     displayMedium: {
       fontFamily: "ProductSans-Medium",
       fontSize: 40,

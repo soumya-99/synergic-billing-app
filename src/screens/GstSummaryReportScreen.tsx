@@ -116,7 +116,7 @@ function GstSummaryReportScreen() {
                     <DataTable>
 
                         <DataTable.Header>
-                            <DataTable.Title numeric>CGST (%)</DataTable.Title>
+                            <DataTable.Title>CGST (%)</DataTable.Title>
                             <DataTable.Title numeric>CGST Amt.</DataTable.Title>
                             <DataTable.Title numeric>SGST Amt.</DataTable.Title>
                             <DataTable.Title numeric>Total Tax</DataTable.Title>
@@ -126,7 +126,7 @@ function GstSummaryReportScreen() {
                             totalTax += item?.total_tax
                             return (
                                 <DataTable.Row key={i}>
-                                    <DataTable.Cell numeric>{item?.cgst_prtg}</DataTable.Cell>
+                                    <DataTable.Cell>{item?.cgst_prtg}</DataTable.Cell>
                                     <DataTable.Cell numeric>{item?.cgst_amt}</DataTable.Cell>
                                     <DataTable.Cell numeric>{item?.sgst_amt}</DataTable.Cell>
                                     <DataTable.Cell numeric>{item?.total_tax}</DataTable.Cell>

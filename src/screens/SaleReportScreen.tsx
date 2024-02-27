@@ -155,7 +155,7 @@ function SaleReportScreen() {
 
           </DataTable>
           <View style={{ padding: normalize(10) }}>
-            <Text variant="labelMedium" style={{ color: theme.colors.green }}>QUANTITY: {totalQty}  TOTAL: {totalNetAmount?.toFixed(2)}</Text>
+            <Text variant="labelMedium" style={{ color: theme.colors.green }}>QUANTITY: {totalQty}  TOTAL: ₹{totalNetAmount?.toFixed(2)}</Text>
           </View>
         </SurfacePaper>
         <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>

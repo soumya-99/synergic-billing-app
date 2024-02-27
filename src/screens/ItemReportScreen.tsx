@@ -34,6 +34,7 @@ function ItemReportScreen() {
     const [filteredItems, setFilteredItems] = useState<ItemsData[]>(() => [])
     const [items, setItems] = useState<ItemsData[]>(() => [])
     const [productId, setProductId] = useState<number>(() => undefined)
+    const [itemName, setItemName] = useState<string>(() => "")
 
     const [itemReport, setItemReport] = useState<ItemReport[]>(() => [])
 
@@ -66,6 +67,7 @@ function ItemReportScreen() {
 
     const productDetails = (item: ItemsData) => {
         setProductId(item?.item_id)
+        setItemName(item?.item_name)
         setSearch(() => "")
     }
 
@@ -86,6 +88,9 @@ function ItemReportScreen() {
             return
         }
     }
+
+    let totalNetAmount: number = 0
+    let totalQty: number = 0
 
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -172,10 +177,13 @@ function ItemReportScreen() {
 
 
                 <SurfacePaper backgroundColor={theme.colors.surface}>
+                    <View style={{ padding: normalize(10) }}>
+                        <Text variant="bodyMedium">{itemName}</Text>
+                    </View>
                     <DataTable>
 
                         <DataTable.Header>
-                            <DataTable.Title>Item</DataTable.Title>
+                            <DataTable.Title>Rcpt. No.</DataTable.Title>
                             <DataTable.Title>Pay Mode</DataTable.Title>
                             <DataTable.Title numeric>Qty.</DataTable.Title>
                             <DataTable.Title numeric>Price</DataTable.Title>
@@ -183,9 +191,12 @@ function ItemReportScreen() {
                         </DataTable.Header>
 
                         {itemReport.map((item, i) => {
+                            totalNetAmount += item?.amount
+                            totalQty += item?.qty
+
                             return (
                                 <DataTable.Row key={i}>
-                                    <DataTable.Cell>{item?.item_name}</DataTable.Cell>
+                                    <DataTable.Cell>{item?.receipt_no?.toString()?.substring(item?.receipt_no?.toString()?.length - 4)}</DataTable.Cell>
                                     <DataTable.Cell>{item?.pay_mode === "C" ? "Cash" : item?.pay_mode === "U" ? "UPI" : item?.pay_mode === "D" ? "Card" : ""}</DataTable.Cell>
                                     <DataTable.Cell numeric>{item?.qty}</DataTable.Cell>
                                     <DataTable.Cell numeric>{item?.price}</DataTable.Cell>
@@ -195,6 +206,9 @@ function ItemReportScreen() {
                         })}
 
                     </DataTable>
+                    <View style={{ padding: normalize(10) }}>
+                        <Text variant="labelMedium" style={{ color: theme.colors.purple }}>QUANTITY: {totalQty}  TOTAL: ₹{totalNetAmount?.toFixed(2)}</Text>
+                    </View>
                 </SurfacePaper>
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
                     <ButtonPaper icon={"cloud-print-outline"} onPress={() => handlePrint(itemReport)} mode="contained-tonal">
