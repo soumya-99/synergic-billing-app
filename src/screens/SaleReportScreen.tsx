@@ -55,6 +55,7 @@ function SaleReportScreen() {
   }
 
   let totalNetAmount: number = 0
+  let totalQty: number = 0
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -135,6 +136,7 @@ function SaleReportScreen() {
 
               totalGST += item?.cgst_amt + item?.sgst_amt
               totalNetAmount += item?.net_amt
+              totalQty += item?.no_of_items
 
               return (<DataTable.Row key={item?.receipt_no}>
                 {/* <DataTable.Cell>{item?.cust_name}</DataTable.Cell>
@@ -153,7 +155,7 @@ function SaleReportScreen() {
 
           </DataTable>
           <View style={{ padding: normalize(10) }}>
-            <Text variant="labelMedium" style={{ color: theme.colors.green }}>TOTAL: {totalNetAmount?.toFixed(2)}</Text>
+            <Text variant="labelMedium" style={{ color: theme.colors.green }}>QUANTITY: {totalQty}  TOTAL: {totalNetAmount?.toFixed(2)}</Text>
           </View>
         </SurfacePaper>
         <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
