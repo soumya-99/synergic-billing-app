@@ -428,7 +428,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     justifyContent: "space-between",
-    minHeight: SCREEN_HEIGHT / 4,
+    minHeight: SCREEN_HEIGHT / 3.5,
     height: "auto"
   }
 })
