@@ -72,6 +72,14 @@ function ItemReportScreen() {
     }
 
     const handleGetItemReport = async (fromDate: string, toDate: string, companyId: number, branchId: number, productId: number, userId: string) => {
+        if (fromDate > toDate) {
+            ToastAndroid.show("From date must be lower than To date.", ToastAndroid.SHORT)
+            return
+        }
+        if (search.length === 0) {
+            ToastAndroid.show("Try searching for a product.", ToastAndroid.SHORT)
+            return
+        }
         await fetchItemReport(fromDate, toDate, companyId, branchId, productId, userId).then(res => {
             setItemReport(res?.data)
             console.log("XXXXXXXXXXXXXXXXX", res?.data)

@@ -34,6 +34,10 @@ function GstStatementReportScreen() {
     const formattedToDate = formattedDate(toDate)
 
     const handleGetGstReport = async (fromDate: string, toDate: string, companyId: number, branchId: number, userId: string) => {
+        if (fromDate > toDate) {
+            ToastAndroid.show("From date must be lower than To date.", ToastAndroid.SHORT)
+            return
+        }
         await fetchGstStatement(fromDate, toDate, companyId, branchId, userId).then(res => {
             setGstStatement(res?.data)
             console.log("WWWWWWWWWWWWWW", res?.data)

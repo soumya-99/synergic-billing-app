@@ -34,6 +34,10 @@ function CollectionReportScreen() {
     const formattedToDate = formattedDate(toDate)
 
     const handleGetCollectionReport = async (fromDate: string, toDate: string, companyId: number, branchId: number, userId: string) => {
+        if (fromDate > toDate) {
+            ToastAndroid.show("From date must be lower than To date.", ToastAndroid.SHORT)
+            return
+        }
         await fetchCollectionReport(fromDate, toDate, companyId, branchId, userId).then(res => {
             setCollectionReport(res?.data)
             console.log("XXXXXXXXXXXXXXXXX", res?.data)
