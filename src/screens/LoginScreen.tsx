@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import {
   View,
   StyleSheet,
@@ -22,6 +22,8 @@ import { CommonActions, useNavigation } from "@react-navigation/native"
 import SmsRetriever from 'react-native-sms-retriever'
 import navigationRoutes from "../routes/navigationRoutes"
 import { AppStore } from "../context/AppContext"
+import LinearGradient from "react-native-linear-gradient"
+import SvgShape1 from "../components/SvgShape1"
 
 function LoginScreen() {
   const navigation = useNavigation()
@@ -58,27 +60,28 @@ function LoginScreen() {
 
   return (
     <SafeAreaView>
-      <ScrollView keyboardShouldPersistTaps="handled">
-        <ImageBackground
-          blurRadius={10}
-          source={
-            colorScheme === "dark"
-              ? require("../resources/images/flower-2_dark.png")
-              : require("../resources/images/flower-2.png")
-          }
-          style={[
-            styles.loginWrapper,
-            { backgroundColor: theme.colors.background },
-          ]}>
-          <View style={styles.loginHeader}>
+      {/* <ScrollView keyboardShouldPersistTaps="handled"> */}
+      <ImageBackground
+        resizeMode="cover"
+        blurRadius={10}
+        source={
+          colorScheme === "dark"
+            ? require("../resources/images/flower-2_dark.png")
+            : require("../resources/images/flower-2.png")
+        }
+        style={[
+          styles.loginWrapper,
+          { backgroundColor: theme.colors.background },
+        ]}>
+        {/* <View style={styles.loginHeader}>
             <Text
               variant="displayMedium"
               style={[styles.loginHeaderText, { color: theme.colors.primary }]}>
               Easy Bill
             </Text>
-          </View>
+          </View> */}
 
-          <View
+        {/* <View
             style={{
               alignSelf: "center",
               paddingVertical: normalize(30)
@@ -87,15 +90,19 @@ function LoginScreen() {
               source={require("../resources/images/billingapplogo.jpg")}
               style={{ height: 200, width: 200, borderRadius: 30 }}
             />
-          </View>
+          </View> */}
 
-          <View style={{ backgroundColor: theme.colors.surface, height: SCREEN_HEIGHT / 1.95, borderTopLeftRadius: 30, borderTopRightRadius: 30 }}>
+        <LinearGradient start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={[theme.colors.onPrimary, theme.colors.primaryContainer]} style={{ height: SCREEN_HEIGHT / 1.95, borderTopLeftRadius: 40, borderTopRightRadius: 40, justifyContent: "space-between" }}>
+          <View style={{ padding: normalize(10), alignSelf: "center", }}>
+            <Text variant="displaySmall" style={{ padding: normalize(10), alignSelf: "center", borderWidth: 1, borderStyle: "dotted", borderRadius: 20, paddingHorizontal: "20%", borderColor: theme.colors.primary }}>Easy Bill</Text>
+          </View>
+          {/* <SvgShape1 /> */}
+          <View>
             {!next && (
               <View
                 style={{
                   padding: normalize(40),
                   width: "100%",
-                  flex: 1,
                   flexDirection: "column",
                   gap: 20,
                 }}>
@@ -139,7 +146,6 @@ function LoginScreen() {
                 style={{
                   padding: normalize(40),
                   width: "100%",
-                  // flex: 1,
                   flexDirection: "column",
                   gap: 20,
                 }}>
@@ -203,25 +209,13 @@ function LoginScreen() {
                     mode="contained"
                     onPress={() => handleLogin(loginText, passwordText)}
                     icon="login"
-                    style={{ width: normalize(190) }}>
+                    style={{ paddingLeft: normalize(30), justifyContent: 'center', alignItems: 'center', }}>
                     LOGIN
                   </ButtonPaper>
                   {/* </View> */}
                 </View>
 
-                <View style={{ justifyContent: "space-around", flexDirection: "row", marginVertical: normalize(20), alignItems: "center" }}>
-                  <TouchableRipple onPress={
-                    () => (navigation.dispatch(
-                      CommonActions.navigate({
-                        name: navigationRoutes.changePinScreen,
-                      }))
-                    )
-                  }>
-                    <Text variant="labelSmall" style={[styles.forgotOrResetText, { color: theme.colors.green }]}>Change Pin</Text>
-                  </TouchableRipple>
-
-                  <Text variant="labelSmall" style={styles.forgotOrResetText}>—OR—</Text>
-
+                <View style={{ justifyContent: "space-around", flexDirection: "row", marginVertical: normalize(10), alignItems: "center" }}>
                   <TouchableRipple onPress={
                     () => (navigation.dispatch(
                       CommonActions.navigate({
@@ -235,9 +229,12 @@ function LoginScreen() {
               </View>
             )}
           </View>
-          <Text style={{ textAlign: "center", justifyContent: "flex-end", backgroundColor: theme.colors.surface, color: theme.colors.secondary, padding: normalize(5) }}>Powered by, Synergic Softek Solutions Pvt. Ltd.</Text>
-        </ImageBackground>
-      </ScrollView>
+          <View>
+            <Text style={{ textAlign: "center", justifyContent: "flex-end", backgroundColor: theme.colors.surface, color: theme.colors.secondary, padding: normalize(5) }}>Powered by, Synergic Softek Solutions Pvt. Ltd.</Text>
+          </View>
+        </LinearGradient>
+      </ImageBackground>
+      {/* </ScrollView> */}
     </SafeAreaView>
   )
 }
@@ -246,9 +243,10 @@ export default withTheme(LoginScreen)
 
 const styles = StyleSheet.create({
   loginWrapper: {
-    // minHeight: SCREEN_HEIGHT,
-    // height: SCREEN_HEIGHT,
-    // flex: 1
+    height: SCREEN_HEIGHT,
+    justifyContent: "center",
+    padding: normalize(20, "width"),
+    width: SCREEN_WIDTH
   },
 
   loginHeader: {

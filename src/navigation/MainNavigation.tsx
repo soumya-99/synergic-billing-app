@@ -49,10 +49,6 @@ export default function MainNavigation() {
                 component={CreatePinScreen}
               />
               <Stack.Screen
-                name={navigationRoutes.changePinScreen}
-                component={ChangePinScreen}
-              />
-              <Stack.Screen
                 name={navigationRoutes.forgotPinScreen}
                 component={ForgotPinScreen}
               />

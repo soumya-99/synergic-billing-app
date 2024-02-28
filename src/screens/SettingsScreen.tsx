@@ -137,12 +137,18 @@ function SettingsScreen() {
               })
             )}
           />
-          {/* <ReportButton
-            text="Duplicate Receipt"
-            color={theme.colors.primaryContainer}
-            icon="billboard"
-            onPress={() => console.log("Rprt Pressed!")}
-          /> */}
+          <ReportButton
+            text="Change Pin"
+            color={theme.colors.pinkContainer}
+            icon="security-network"
+            onPress={
+              () => (navigation.dispatch(
+                CommonActions.navigate({
+                  name: navigationRoutes.changePinScreen,
+                }))
+              )
+            }
+          />
           {/* <ReportButton
             text="Month Wise"
             color={theme.colors.pinkContainer}

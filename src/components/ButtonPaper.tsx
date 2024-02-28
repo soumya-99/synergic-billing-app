@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react"
-import { Button } from "react-native-paper"
+import { Button, Text } from "react-native-paper"
 import { IconSource } from "react-native-paper/lib/typescript/components/Icon"
 
 type ButtonPaperProps = {
