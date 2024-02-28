@@ -92,16 +92,24 @@ function LoginScreen() {
             />
           </View> */}
 
-        <LinearGradient start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={[theme.colors.onPrimary, theme.colors.primaryContainer]} style={{ height: SCREEN_HEIGHT / 1.95, borderTopLeftRadius: 40, borderTopRightRadius: 40, justifyContent: "space-between" }}>
-          <View style={{ padding: normalize(20), alignSelf: "center", }}>
-            <Text variant="displaySmall" style={{ padding: normalize(10), alignSelf: "center", borderWidth: 2, borderStyle: "dashed", borderRadius: 20, paddingHorizontal: "20%", borderColor: theme.colors.primary }}>Easy Bill</Text>
+        <LinearGradient start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={[theme.colors.onPrimary, theme.colors.primaryContainer]} style={{ height: SCREEN_HEIGHT / 1.80, borderTopLeftRadius: 40, borderTopRightRadius: 40, justifyContent: "space-between" }}>
+          <View style={{ alignSelf: "center", }}>
+            {/* <Text variant="displaySmall" style={{ alignSelf: "center", borderWidth: 2, borderStyle: "dashed", borderRadius: 20, paddingHorizontal: "20%", borderColor: theme.colors.primary }}>Easy Bill</Text> */}
           </View>
-          {/* <SvgShape1 /> */}
+          <View
+            style={{
+              alignSelf: "center",
+            }}>
+            <Image
+              source={require("../resources/images/logo_3.png")}
+              style={{ height: 477 / 4, width: 384 / 4 }}
+            />
+          </View>
           <View>
             {!next && (
               <View
                 style={{
-                  padding: normalize(40),
+                  paddingHorizontal: normalize(40),
                   width: "100%",
                   flexDirection: "column",
                   gap: 20,
@@ -144,7 +152,7 @@ function LoginScreen() {
             {next && (
               <View
                 style={{
-                  padding: normalize(40),
+                  paddingHorizontal: normalize(40),
                   width: "100%",
                   flexDirection: "column",
                   gap: 20,
