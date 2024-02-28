@@ -93,8 +93,8 @@ function LoginScreen() {
           </View> */}
 
         <LinearGradient start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={[theme.colors.onPrimary, theme.colors.primaryContainer]} style={{ height: SCREEN_HEIGHT / 1.95, borderTopLeftRadius: 40, borderTopRightRadius: 40, justifyContent: "space-between" }}>
-          <View style={{ padding: normalize(10), alignSelf: "center", }}>
-            <Text variant="displaySmall" style={{ padding: normalize(10), alignSelf: "center", borderWidth: 1, borderStyle: "dotted", borderRadius: 20, paddingHorizontal: "20%", borderColor: theme.colors.primary }}>Easy Bill</Text>
+          <View style={{ padding: normalize(20), alignSelf: "center", }}>
+            <Text variant="displaySmall" style={{ padding: normalize(10), alignSelf: "center", borderWidth: 2, borderStyle: "dashed", borderRadius: 20, paddingHorizontal: "20%", borderColor: theme.colors.primary }}>Easy Bill</Text>
           </View>
           {/* <SvgShape1 /> */}
           <View>
