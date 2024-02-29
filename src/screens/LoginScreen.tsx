@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import {
   View,
   StyleSheet,
@@ -23,7 +23,7 @@ import SmsRetriever from 'react-native-sms-retriever'
 import navigationRoutes from "../routes/navigationRoutes"
 import { AppStore } from "../context/AppContext"
 import LinearGradient from "react-native-linear-gradient"
-import SvgShape1 from "../components/SvgShape1"
+import { logo, logoDark, flower2, flower2Dark } from "../resources/images"
 
 function LoginScreen() {
   const navigation = useNavigation()
@@ -66,43 +66,21 @@ function LoginScreen() {
         blurRadius={10}
         source={
           colorScheme === "dark"
-            ? require("../resources/images/flower-2_dark.png")
-            : require("../resources/images/flower-2.png")
+            ? flower2Dark
+            : flower2
         }
         style={[
           styles.loginWrapper,
           { backgroundColor: theme.colors.background },
         ]}>
-        {/* <View style={styles.loginHeader}>
-            <Text
-              variant="displayMedium"
-              style={[styles.loginHeaderText, { color: theme.colors.primary }]}>
-              Easy Bill
-            </Text>
-          </View> */}
-
-        {/* <View
-            style={{
-              alignSelf: "center",
-              paddingVertical: normalize(30)
-            }}>
-            <Image
-              source={require("../resources/images/billingapplogo.jpg")}
-              style={{ height: 200, width: 200, borderRadius: 30 }}
-            />
-          </View> */}
-
-        <LinearGradient start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={[theme.colors.onPrimary, theme.colors.primaryContainer]} style={{ height: SCREEN_HEIGHT / 1.80, borderTopLeftRadius: 40, borderTopRightRadius: 40, justifyContent: "space-between" }}>
-          <View style={{ alignSelf: "center", }}>
-            {/* <Text variant="displaySmall" style={{ alignSelf: "center", borderWidth: 2, borderStyle: "dashed", borderRadius: 20, paddingHorizontal: "20%", borderColor: theme.colors.primary }}>Easy Bill</Text> */}
-          </View>
+        <LinearGradient start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={[theme.colors.onPrimary, theme.colors.primaryContainer]} style={styles.containerBox}>
           <View
             style={{
               alignSelf: "center",
             }}>
             <Image
-              source={require("../resources/images/logo_3.png")}
-              style={{ height: 477 / 4, width: 384 / 4 }}
+              source={colorScheme === "dark" ? logoDark : logo}
+              style={{ height: 477 / 4.5, width: 384 / 4.5 }}
             />
           </View>
           <View>
@@ -143,7 +121,13 @@ function LoginScreen() {
                       name: navigationRoutes.register,
                     }))
                   )}>
-                    <Text style={{ textTransform: 'uppercase', color: theme.colors.green, textDecorationLine: 'underline' }}>Create new account</Text>
+                    <Text style={{
+                      textTransform: 'uppercase',
+                      color: theme.colors.green,
+                      textDecorationLine: 'underline'
+                    }}>
+                      Create new account
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -199,7 +183,6 @@ function LoginScreen() {
                     flexDirection: "row",
                     gap: 15,
                   }}>
-                  {/* <View> */}
                   <ButtonPaper
                     mode="contained"
                     buttonColor={theme.colors.error}
@@ -211,19 +194,25 @@ function LoginScreen() {
                     icon="arrow-left">
                     BACK
                   </ButtonPaper>
-                  {/* </View> */}
-                  {/* <View> */}
                   <ButtonPaper
                     mode="contained"
                     onPress={() => handleLogin(loginText, passwordText)}
                     icon="login"
-                    style={{ paddingLeft: normalize(30), justifyContent: 'center', alignItems: 'center', }}>
+                    style={{
+                      paddingLeft: normalize(30),
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
                     LOGIN
                   </ButtonPaper>
-                  {/* </View> */}
                 </View>
 
-                <View style={{ justifyContent: "space-around", flexDirection: "row", marginVertical: normalize(10), alignItems: "center" }}>
+                <View style={{
+                  justifyContent: "space-around",
+                  flexDirection: "row",
+                  marginVertical: normalize(10),
+                  alignItems: "center"
+                }}>
                   <TouchableRipple onPress={
                     () => (navigation.dispatch(
                       CommonActions.navigate({
@@ -238,7 +227,15 @@ function LoginScreen() {
             )}
           </View>
           <View>
-            <Text style={{ textAlign: "center", justifyContent: "flex-end", backgroundColor: theme.colors.surface, color: theme.colors.secondary, padding: normalize(5) }}>Powered by, Synergic Softek Solutions Pvt. Ltd.</Text>
+            <Text style={{
+              textAlign: "center",
+              justifyContent: "flex-end",
+              backgroundColor: theme.colors.surface,
+              color: theme.colors.onSurface,
+              padding: normalize(5)
+            }}>
+              Powered by, Synergic Softek Solutions Pvt. Ltd.
+            </Text>
           </View>
         </LinearGradient>
       </ImageBackground>
@@ -257,14 +254,12 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH
   },
 
-  loginHeader: {
-    paddingTop: normalize(20),
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  loginHeaderText: {
-    fontWeight: "500",
+  containerBox: {
+    paddingTop: normalize(30),
+    height: SCREEN_HEIGHT / 1.80,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    justifyContent: "space-between"
   },
 
   forgotOrResetText: {
