@@ -81,6 +81,10 @@ export default function ManageProductsScreen() {
     }
 
     const onDialogSuccecss = () => {
+        if (price <= 0) {
+            ToastAndroid.show("Try adding some price.", ToastAndroid.SHORT)
+            return
+        }
         handleUpdateProductDetails().then(() => {
             clearStates([setSearch, setDiscount, setCGST, setSGST], () => "")
             setPrice(() => undefined)
