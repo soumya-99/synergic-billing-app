@@ -296,7 +296,7 @@ export default RegisterScreen
 
 const styles = StyleSheet.create({
     containerBox: {
-        paddingVertical: normalize(40),
+        // paddingVertical: normalize(40),
         paddingTop: normalize(50),
         height: SCREEN_HEIGHT / 1.80,
         borderTopLeftRadius: 40,

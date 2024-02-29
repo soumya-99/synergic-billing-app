@@ -200,7 +200,7 @@ const CreatePinScreen = () => {
                                                 textColor={theme.colors.onSecondaryContainer}
                                                 onPress={handleCreatePin}
                                                 icon="security">
-                                                CREATE PIN
+                                                CREATE ACCOUNT
                                             </ButtonPaper>
                                         </View>
                                     </View>
