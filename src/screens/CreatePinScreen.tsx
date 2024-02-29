@@ -3,7 +3,6 @@ import { Text } from "react-native-paper"
 import LinearGradient from 'react-native-linear-gradient'
 import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from 'react-native-normalize'
 import { usePaperColorScheme } from '../theme/theme'
-import InputPaper from '../components/InputPaper'
 import { useState } from 'react'
 import SmoothPinCodeInput from "react-native-smooth-pincode-input"
 import ButtonPaper from '../components/ButtonPaper'
@@ -13,7 +12,6 @@ import { clearStates } from '../utils/clearStates'
 import navigationRoutes from '../routes/navigationRoutes'
 import HeaderImage from '../components/HeaderImage'
 import { logo, logoDark, productHeader, productHeaderDark } from '../resources/images'
-import SurfacePaper from '../components/SurfacePaper'
 
 const CreatePinScreen = () => {
     const navigation = useNavigation()
@@ -78,7 +76,7 @@ const CreatePinScreen = () => {
                     </View>
 
 
-                    <View style={{ padding: normalize(20, "width") }}>
+                    <View style={{ padding: normalize(25, "width") }}>
                         <LinearGradient start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={[theme.colors.onPrimary, theme.colors.primaryContainer]} style={styles.containerBox}>
                             <View
                                 style={{

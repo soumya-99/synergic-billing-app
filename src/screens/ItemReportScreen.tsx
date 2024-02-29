@@ -76,7 +76,7 @@ function ItemReportScreen() {
             ToastAndroid.show("From date must be lower than To date.", ToastAndroid.SHORT)
             return
         }
-        if (search.length === 0) {
+        if (itemName.length === 0) {
             ToastAndroid.show("Try searching for a product.", ToastAndroid.SHORT)
             return
         }
