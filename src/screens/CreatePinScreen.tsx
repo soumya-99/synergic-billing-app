@@ -40,6 +40,7 @@ const CreatePinScreen = () => {
             Alert.alert("Error", "PIN is not matching! Re-Enter PIN.")
 
             clearStates([setPin, setConfirmPin], () => "")
+            setNext(!next)
             return
         }
         let createPinData = await createPin(confirmPin, mobile_no)
@@ -160,6 +161,7 @@ const CreatePinScreen = () => {
                                         }}>
                                         <View style={{ alignSelf: "center" }}>
                                             <SmoothPinCodeInput
+                                                autoFocus={true}
                                                 // placeholder="🙈"
                                                 placeholder="◌"
                                                 textStyle={{
