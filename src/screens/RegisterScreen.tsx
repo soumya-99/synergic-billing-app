@@ -155,7 +155,7 @@ const RegisterScreen = () => {
                             {!next ? "Register" : "Your OTP"}
                         </HeaderImage>
                     </View>
-                    <View style={{ padding: normalize(20, "width"), }}>
+                    <View style={{ padding: normalize(20, "width") }}>
                         <LinearGradient start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={[theme.colors.onPrimary, theme.colors.primaryContainer]} style={styles.containerBox}>
                             <View
                                 style={{

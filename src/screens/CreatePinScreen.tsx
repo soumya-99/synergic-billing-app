@@ -1,4 +1,4 @@
-import { Alert, SafeAreaView, ScrollView, StyleSheet, ToastAndroid, View } from 'react-native'
+import { Alert, Image, SafeAreaView, ScrollView, StyleSheet, ToastAndroid, View, useColorScheme } from 'react-native'
 import { Text } from "react-native-paper"
 import LinearGradient from 'react-native-linear-gradient'
 import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from 'react-native-normalize'
@@ -12,7 +12,7 @@ import { CommonActions, useNavigation, useRoute } from '@react-navigation/native
 import { clearStates } from '../utils/clearStates'
 import navigationRoutes from '../routes/navigationRoutes'
 import HeaderImage from '../components/HeaderImage'
-import { productHeader, productHeaderDark } from '../resources/images'
+import { logo, logoDark, productHeader, productHeaderDark } from '../resources/images'
 import SurfacePaper from '../components/SurfacePaper'
 
 const CreatePinScreen = () => {
@@ -21,11 +21,21 @@ const CreatePinScreen = () => {
     const { mobile_no } = params as { mobile_no: string }
 
     const theme = usePaperColorScheme()
+    const colorScheme = useColorScheme()
 
     const { createPin } = useCreatePin()
 
+    const [next, setNext] = useState<boolean>(() => false)
     const [pin, setPin] = useState<string>(() => "")
     const [confirmPin, setConfirmPin] = useState<string>(() => "")
+
+    const handleNextPin = () => {
+        if (pin.length === 0) {
+            ToastAndroid.show("Enter valid PIN.", ToastAndroid.SHORT)
+            return
+        }
+        setNext(!next)
+    }
 
     const handleCreatePin = async () => {
         if (pin !== confirmPin) {
@@ -67,102 +77,149 @@ const CreatePinScreen = () => {
                         </HeaderImage>
                     </View>
 
-                    <View style={{ justifyContent: 'center' }}>
-                        <View style={{ marginVertical: SCREEN_HEIGHT / 25, paddingHorizontal: normalize(0), gap: 10, alignSelf: "center" }}>
-                            <View style={{ backgroundColor: theme.colors.background, height: SCREEN_HEIGHT / 20, justifyContent: "center", alignItems: "center", borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
-                                <Text variant="labelLarge" style={{ textAlign: "center" }}>New Pin</Text>
+
+                    <View style={{ padding: normalize(20, "width") }}>
+                        <LinearGradient start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={[theme.colors.onPrimary, theme.colors.primaryContainer]} style={styles.containerBox}>
+                            <View
+                                style={{
+                                    alignSelf: "center",
+                                }}>
+                                <Image
+                                    source={colorScheme === "dark" ? logoDark : logo}
+                                    style={{ height: 477 / 4.5, width: 384 / 4.5 }}
+                                />
                             </View>
-                            <SmoothPinCodeInput
-                                autoFocus={true}
-                                // placeholder="🙈"
-                                placeholder="◌"
-                                textStyle={{
-                                    fontSize: 20,
-                                    color: theme.colors.onPrimary
-                                }}
-                                mask={
+
+                            {!next && (
+                                <View style={[styles.pinTextContainer, { backgroundColor: theme.colors.secondaryContainer }]}>
+                                    <Text variant="headlineMedium" style={{ textAlign: "center" }}>New Pin</Text>
+                                </View>
+                            )}
+                            {next && (
+                                <View style={[styles.pinTextContainer, { backgroundColor: theme.colors.secondaryContainer }]}>
+                                    <Text variant="headlineMedium" style={{ textAlign: "center" }}>Confirm Pin</Text>
+                                </View>
+                            )}
+
+                            <View>
+                                {!next && (
                                     <View
                                         style={{
-                                            width: 10,
-                                            height: 10,
-                                            borderRadius: normalize(30),
-                                            backgroundColor: theme.colors.onPrimaryContainer,
-                                        }}></View>
-                                }
-                                maskDelay={1000}
-                                password={true}
-                                cellStyle={{
-                                    borderBottomWidth: 2,
-                                    borderColor: theme.colors.onPrimary,
+                                            paddingHorizontal: normalize(40),
+                                            width: "100%",
+                                            flexDirection: "column",
+                                            gap: 20,
+                                        }}>
+                                        <View style={{ alignSelf: "center" }}>
+                                            <SmoothPinCodeInput
+                                                autoFocus={true}
+                                                // placeholder="🙈"
+                                                placeholder="◌"
+                                                textStyle={{
+                                                    fontSize: 20,
+                                                    color: theme.colors.primary
+                                                }}
+                                                mask={
+                                                    <View
+                                                        style={{
+                                                            width: 10,
+                                                            height: 10,
+                                                            borderRadius: normalize(30),
+                                                            backgroundColor: theme.colors.primary,
+                                                        }}></View>
+                                                }
+                                                maskDelay={1000}
+                                                password={true}
+                                                cellStyle={{
+                                                    borderWidth: 1,
+                                                    borderRadius: 5,
+                                                    borderColor: theme.colors.primary,
+                                                }}
+                                                cellStyleFocused={null}
+                                                value={pin}
+                                                onTextChange={(pin: string) => setPin(pin)}
+                                            />
+                                        </View>
+                                        <View>
+                                            <ButtonPaper
+                                                mode="contained"
+                                                buttonColor={theme.colors.tertiary}
+                                                onPress={handleNextPin}
+                                                icon="arrow-right">
+                                                NEXT
+                                            </ButtonPaper>
+                                        </View>
+                                    </View>
+                                )}
 
-                                    // borderBottomWidth: 2,
-                                    // borderLeftWidth: 2,
-                                    // borderRightWidth: 2,
-                                    // borderBottomLeftRadius: normalize(10),
-                                    // borderBottomRightRadius: normalize(10),
-                                    // borderColor: theme.colors.onPrimary,
-                                }}
-                                // cellStyle={{
-                                //     borderWidth: 1,
-                                //     borderRadius: 5,
-                                //     borderColor: theme.colors.onPrimary,
-                                // }}
-                                cellStyleFocused={null}
-                                value={pin}
-                                onTextChange={(pin: string) => setPin(pin)}
-                            />
-
-                            <SmoothPinCodeInput
-                                // placeholder="🙈"
-                                placeholder="◌"
-                                textStyle={{
-                                    fontSize: 20,
-                                    color: theme.colors.onPrimary
-                                }}
-                                mask={
+                                {next && (
                                     <View
                                         style={{
-                                            width: 10,
-                                            height: 10,
-                                            borderRadius: normalize(30),
-                                            backgroundColor: theme.colors.onPrimaryContainer,
-                                        }}></View>
-                                }
-                                maskDelay={1000}
-                                password={true}
-                                cellStyle={{
-                                    borderBottomWidth: 2,
-                                    borderColor: theme.colors.onPrimary,
-
-                                    // borderTopWidth: 2,
-                                    // borderLeftWidth: 2,
-                                    // borderRightWidth: 2,
-                                    // borderTopLeftRadius: normalize(10),
-                                    // borderTopRightRadius: normalize(10),
-                                }}
-                                // cellStyle={{
-                                //     borderWidth: 1,
-                                //     borderRadius: 5,
-                                //     borderColor: theme.colors.onPrimary,
-                                // }}
-                                cellStyleFocused={null}
-                                value={confirmPin}
-                                onTextChange={(confirmPin: string) => setConfirmPin(confirmPin)}
-                            />
-                            <View style={{ backgroundColor: theme.colors.background, height: SCREEN_HEIGHT / 20, justifyContent: "center", alignItems: "center", borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}>
-                                <Text variant="labelLarge" style={{ textAlign: "center" }}>Confirm Pin</Text>
+                                            paddingHorizontal: normalize(40),
+                                            width: "100%",
+                                            flexDirection: "column",
+                                            gap: 20,
+                                        }}>
+                                        <View style={{ alignSelf: "center" }}>
+                                            <SmoothPinCodeInput
+                                                // placeholder="🙈"
+                                                placeholder="◌"
+                                                textStyle={{
+                                                    fontSize: 20,
+                                                    color: theme.colors.primary
+                                                }}
+                                                mask={
+                                                    <View
+                                                        style={{
+                                                            width: 10,
+                                                            height: 10,
+                                                            borderRadius: normalize(30),
+                                                            backgroundColor: theme.colors.primary,
+                                                        }}></View>
+                                                }
+                                                maskDelay={1000}
+                                                password={true}
+                                                cellStyle={{
+                                                    borderWidth: 1,
+                                                    borderRadius: 5,
+                                                    borderColor: theme.colors.primary,
+                                                }}
+                                                cellStyleFocused={null}
+                                                value={confirmPin}
+                                                onTextChange={(confirmPin: string) => setConfirmPin(confirmPin)}
+                                            />
+                                        </View>
+                                        <View
+                                            style={{
+                                                // margin: 20,
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
+                                                gap: 15,
+                                            }}>
+                                            <ButtonPaper
+                                                mode="contained"
+                                                buttonColor={theme.colors.secondaryContainer}
+                                                textColor={theme.colors.onSecondaryContainer}
+                                                onPress={handleCreatePin}
+                                                icon="security">
+                                                CREATE PIN
+                                            </ButtonPaper>
+                                        </View>
+                                    </View>
+                                )}
                             </View>
-                        </View>
-                        <View style={{ paddingHorizontal: normalize(30) }}>
-                            <ButtonPaper
-                                mode="contained"
-                                buttonColor={theme.colors.secondaryContainer}
-                                textColor={theme.colors.onSecondaryContainer}
-                                onPress={handleCreatePin}
-                                icon="arrow-right">
-                                JOIN
-                            </ButtonPaper>
-                        </View>
+                            <View>
+                                <Text style={{
+                                    textAlign: "center",
+                                    justifyContent: "flex-end",
+                                    backgroundColor: theme.colors.surface,
+                                    color: theme.colors.onSurface,
+                                    padding: normalize(5)
+                                }}>
+                                    Powered by, Synergic Softek Solutions Pvt. Ltd.
+                                </Text>
+                            </View>
+                        </LinearGradient>
                     </View>
                 </LinearGradient>
             </ScrollView>
@@ -172,4 +229,22 @@ const CreatePinScreen = () => {
 
 export default CreatePinScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    containerBox: {
+        paddingTop: normalize(50),
+        height: SCREEN_HEIGHT / 1.80,
+        borderTopLeftRadius: 40,
+        borderTopRightRadius: 40,
+        justifyContent: "space-between"
+    },
+
+    pinTextContainer: {
+        height: normalize(50),
+        width: "90%",
+        alignSelf: "center",
+        justifyContent: "center",
+        alignItems: "center",
+        borderTopLeftRadius: normalize(20),
+        borderBottomRightRadius: normalize(20)
+    }
+})
