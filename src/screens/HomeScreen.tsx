@@ -110,8 +110,28 @@ function HomeScreen() {
   const handleRePrintReceipt = () => {
     if (billedSaleData.length > 0) {
       receiptSettings?.gst_flag === "N"
-        ? rePrintWithoutGst(billedSaleData, netTotal, totalDiscount, billedSaleData[0]?.received_amt, (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - Math.round(parseFloat((netTotal - totalDiscount).toFixed(2))) : 0), billedSaleData[0]?.cust_name, billedSaleData[0]?.phone_no, billedSaleData[0]?.receipt_no, billedSaleData[0]?.pay_mode)
-        : rePrint(billedSaleData, netTotal, totalDiscount, billedSaleData[0]?.received_amt, (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - Math.round(parseFloat((netTotal - totalDiscount).toFixed(2))) : 0), billedSaleData[0]?.cust_name, billedSaleData[0]?.phone_no, billedSaleData[0]?.receipt_no, billedSaleData[0]?.pay_mode)
+        ? rePrintWithoutGst(
+          billedSaleData,
+          netTotal,
+          totalDiscount,
+          billedSaleData[0]?.received_amt,
+          (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - Math.round(parseFloat((netTotal - totalDiscount).toFixed(2))) : 0),
+          billedSaleData[0]?.cust_name,
+          billedSaleData[0]?.phone_no,
+          billedSaleData[0]?.receipt_no,
+          billedSaleData[0]?.pay_mode
+        )
+        : rePrint(
+          billedSaleData,
+          netTotal,
+          totalDiscount,
+          billedSaleData[0]?.received_amt,
+          (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - Math.round(parseFloat((netTotal - totalDiscount).toFixed(2))) : 0),
+          billedSaleData[0]?.cust_name,
+          billedSaleData[0]?.phone_no,
+          billedSaleData[0]?.receipt_no,
+          billedSaleData[0]?.pay_mode
+        )
     } else {
       ToastAndroid.show("Something went wrong!", ToastAndroid.SHORT)
       return
@@ -119,7 +139,12 @@ function HomeScreen() {
   }
 
   const handleGetBillSummary = async () => {
-    await fetchBillSummary(formattedDate, loginStore.comp_id, loginStore.br_id, loginStore.user_id).then(res => {
+    await fetchBillSummary(
+      formattedDate,
+      loginStore.comp_id,
+      loginStore.br_id,
+      loginStore.user_id
+    ).then(res => {
       setTotalBills(res?.data[0]?.total_bills)
       setAmountCollected(res?.data[0]?.amount_collected)
     }).catch(err => {
@@ -129,7 +154,12 @@ function HomeScreen() {
   }
 
   const handleGetRecentBills = async () => {
-    await fetchRecentBills(formattedDate, loginStore.comp_id, loginStore.br_id, loginStore.user_id).then(res => {
+    await fetchRecentBills(
+      formattedDate,
+      loginStore.comp_id,
+      loginStore.br_id,
+      loginStore.user_id
+    ).then(res => {
       setRecentBills(res)
     }).catch(err => {
       ToastAndroid.show("Error during fetching recent bills.", ToastAndroid.SHORT)
@@ -205,12 +235,13 @@ function HomeScreen() {
         <View style={{ alignItems: "center" }}>
           <SurfacePaper
             smallWidthEnabled
-            borderRadiusEnabled
+            borderRadiusEnabled={false}
             paddingEnabled
             // heading="Summary"
-            elevation={2}
-            backgroundColor={theme.colors.surfaceVariant}>
-            <View style={{ width: "100%", padding: 15 }}>
+            elevation={1}
+            backgroundColor={theme.colors.surfaceVariant}
+            style={{ borderTopRightRadius: normalize(30), borderTopLeftRadius: normalize(30) }}>
+            <View style={{ width: "100%", padding: normalize(15) }}>
               <View
                 style={{
                   flexDirection: "row",
@@ -240,12 +271,13 @@ function HomeScreen() {
 
           <SurfacePaper
             smallWidthEnabled
-            borderRadiusEnabled
+            borderRadiusEnabled={false}
             paddingEnabled
             isBorderEnabled
             heading="Recent Bills"
-            elevation={2}
-            backgroundColor={theme.colors.pinkContainer}>
+            elevation={1}
+            backgroundColor={theme.colors.tertiaryContainer}
+            style={{ borderBottomLeftRadius: normalize(30), borderBottomRightRadius: normalize(30) }}>
             <View style={{ width: "100%" }}>
               {recentBills?.map((item, i) => (
                 <List.Item
@@ -276,9 +308,6 @@ function HomeScreen() {
           </SurfacePaper>
         </View>
 
-        {/* {[...new Array(100).keys()].map((_, i) => (
-          <Text key={i}>{i}</Text>
-        ))} */}
       </ScrollView>
       <DialogBox
         iconSize={40}
@@ -313,15 +342,6 @@ function HomeScreen() {
             )
           })}
         </ScrollableListContainer>
-        {/* <NetTotalButton
-          width={300}
-          backgroundColor={theme.colors.orangeContainer}
-          // addedProductsList={billedSaleData}
-          netTotal={netTotal}
-          textColor={theme.colors.onGreenContainer}
-          totalDiscount={totalDiscount}
-          disabled
-        /> */}
         <NetTotalForRePrints
           width={300}
           backgroundColor={theme.colors.orangeContainer}

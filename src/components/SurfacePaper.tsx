@@ -14,6 +14,7 @@ type SurfacePaperProps = {
   paddingEnabled?: boolean
   borderRadiusEnabled?: boolean
   smallWidthEnabled?: boolean
+  style?: {}
 }
 
 export default function SurfacePaper({
@@ -24,12 +25,22 @@ export default function SurfacePaper({
   isBorderEnabled,
   paddingEnabled,
   borderRadiusEnabled,
-  smallWidthEnabled
+  smallWidthEnabled,
+  style
 }: PropsWithChildren<SurfacePaperProps>) {
   const theme = usePaperColorScheme()
   return (
     <Surface
-      style={[styles.bill, { backgroundColor: backgroundColor, padding: paddingEnabled ? 10 : 0, borderRadius: borderRadiusEnabled ? 30 : 0, width: smallWidthEnabled ? SCREEN_WIDTH / 1.16 : SCREEN_WIDTH / 1.05 }]}
+      style={[
+        styles.bill,
+        {
+          backgroundColor: backgroundColor,
+          padding: paddingEnabled ? 5 : 0,
+          borderRadius: borderRadiusEnabled ? 30 : 0,
+          width: smallWidthEnabled ? SCREEN_WIDTH / 1.16 : SCREEN_WIDTH / 1.05
+        },
+        { ...style }
+      ]}
       elevation={elevation}>
       {heading && (
         <Text
@@ -47,10 +58,10 @@ export default function SurfacePaper({
         <View
           style={{
             width: "100%",
-            borderStyle: "dashed",
-            borderWidth: 0.5,
+            borderStyle: "dotted",
+            borderWidth: 1,
             // marginBottom: 5,
-            borderColor: theme.colors.primary,
+            borderColor: theme.colors.onTertiaryContainer,
           }}></View>
       )}
       {children}
@@ -62,11 +73,8 @@ const styles = StyleSheet.create({
   bill: {
     alignSelf: "center",
     margin: 10,
-    // padding: 10,
-    // minHeight: 200,
     height: "auto",
     maxHeight: "auto",
-    // borderRadius: 30,
     alignItems: "center",
   },
 })

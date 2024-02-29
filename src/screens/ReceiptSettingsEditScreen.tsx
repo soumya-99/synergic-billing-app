@@ -106,7 +106,7 @@ export default function ReceiptSettingsEditScreen() {
                     />
                     <Divider />
                     <List.Item
-                        title="GST Flag"
+                        title="GST Switch"
                         description={gstFlag === "Y" ? "Allowed" : gstFlag === "N" ? "Denied" : "Error Occurred!"}
                         left={props => <List.Icon {...props} icon="account-cash-outline" />}
                         right={props => {
