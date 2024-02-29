@@ -1,4 +1,4 @@
-import { Alert, Platform, SafeAreaView, ScrollView, StyleSheet, ToastAndroid, View } from 'react-native'
+import { Alert, Image, Platform, SafeAreaView, ScrollView, StyleSheet, ToastAndroid, View, useColorScheme } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from 'react-native-normalize'
 import { usePaperColorScheme } from '../theme/theme'
@@ -12,12 +12,14 @@ import useFetchOtp from '../hooks/api/useOtp'
 import { CommonActions, useNavigation } from '@react-navigation/native'
 import navigationRoutes from '../routes/navigationRoutes'
 import HeaderImage from '../components/HeaderImage'
-import { productHeader, productHeaderDark } from '../resources/images'
+import { logo, logoDark, productHeader, productHeaderDark } from '../resources/images'
 import SmsRetrieverModule from 'react-native-sms-retriever'
+import { Text } from 'react-native-paper'
 
 const RegisterScreen = () => {
     const navigation = useNavigation()
     const theme = usePaperColorScheme()
+    const colorScheme = useColorScheme()
 
     const [mobileNo, setMobileNo] = useState<string>(() => "")
     const [otp, setOtp] = useState<string>(() => "")
@@ -153,87 +155,151 @@ const RegisterScreen = () => {
                             {!next ? "Register" : "Your OTP"}
                         </HeaderImage>
                     </View>
-
-                    {!next && <View style={{ justifyContent: 'center' }}>
-                        <View style={{ padding: normalize(20), paddingHorizontal: normalize(30) }}>
-                            <InputPaper label='Mobile Number' value={mobileNo} onChangeText={(mob: string) => setMobileNo(mob)} keyboardType='number-pad' leftIcon='account-arrow-up' autoFocus />
-                        </View>
-                        <View style={{ padding: normalize(20), paddingHorizontal: normalize(30) }}>
-                            <ButtonPaper
-                                mode="contained"
-                                buttonColor={theme.colors.secondaryContainer}
-                                textColor={theme.colors.onSecondaryContainer}
-                                onPress={() => handleRegister(mobileNo)}
-                                icon="arrow-right">
-                                NEXT
-                            </ButtonPaper>
-                        </View>
-                    </View>}
-
-                    {next && <View style={{ justifyContent: 'center' }}>
-                        <View style={{ padding: normalize(20), alignSelf: "center" }}>
-                            {/* <InputPaper label='OTP' value={otp} onChangeText={(otp: string) => setOtp(otp)} keyboardType='number-pad' leftIcon='account-arrow-up' maxLength={4} autoFocus /> */}
-
-                            <SmoothPinCodeInput
-                                autoFocus={true}
-                                // placeholder="🙈"
-                                placeholder="◌"
-                                textStyle={{
-                                    fontSize: 20,
-                                    color: theme.colors.onPrimary
-                                }}
-                                mask={
+                    <View style={{ padding: normalize(20, "width"), }}>
+                        <LinearGradient start={{ x: 0, y: 1 }} end={{ x: 0, y: 0 }} colors={[theme.colors.onPrimary, theme.colors.primaryContainer]} style={styles.containerBox}>
+                            <View
+                                style={{
+                                    alignSelf: "center",
+                                }}>
+                                <Image
+                                    source={colorScheme === "dark" ? logoDark : logo}
+                                    style={{ height: 477 / 4.5, width: 384 / 4.5 }}
+                                />
+                            </View>
+                            <View>
+                                {!next && (
                                     <View
                                         style={{
-                                            width: 10,
-                                            height: 10,
-                                            borderRadius: normalize(30),
-                                            backgroundColor: theme.colors.onPrimaryContainer,
-                                        }}></View>
-                                }
-                                maskDelay={1000}
-                                password={true}
-                                cellStyle={{
-                                    borderWidth: 1,
-                                    borderRadius: 5,
-                                    borderColor: theme.colors.onPrimary,
-                                }}
-                                cellStyleFocused={null}
-                                value={otp}
-                                onTextChange={(otp: string) => setOtp(otp)}
-                            // onBackspace={() => {
-                            //   console.warn("hello")
-                            // }}
-                            />
-                        </View>
-                        <View style={{ padding: normalize(25) }}>
-                            <ButtonPaper
-                                mode="contained"
-                                buttonColor={theme.colors.secondaryContainer}
-                                textColor={theme.colors.onSecondaryContainer}
-                                onPress={handleOtpMatch}
-                                icon="arrow-right">
-                                NEXT
-                            </ButtonPaper>
-                        </View>
-                        <View style={{ paddingHorizontal: normalize(30) }}>
-                            <ButtonPaper
-                                mode="text"
-                                // buttonColor={theme.colors.secondaryContainer}
-                                textColor={theme.colors.onPrimary}
-                                onPress={handleResendOtp}
-                                icon="update"
-                                disabled={otpSent && timer !== 0}>
-                                {otpSent ? `OTP Sent (${timer}s)` : "Resend OTP"}
-                            </ButtonPaper>
-                        </View>
-                    </View>}
+                                            paddingHorizontal: normalize(40),
+                                            width: "100%",
+                                            flexDirection: "column",
+                                            gap: 20,
+                                        }}>
+                                        <View>
+                                            <InputPaper
+                                                label='Mobile Number'
+                                                value={mobileNo}
+                                                onChangeText={(mob: string) => setMobileNo(mob)}
+                                                // customStyle={{ marginBottom: 20 }}
+                                                leftIcon="account-circle-outline"
+                                                keyboardType="phone-pad"
+                                                autoFocus
+                                            />
+                                        </View>
+                                        <View>
+                                            <ButtonPaper
+                                                mode="contained"
+                                                buttonColor={theme.colors.tertiary}
+                                                onPress={() => handleRegister(mobileNo)}
+                                                icon="arrow-right">
+                                                NEXT
+                                            </ButtonPaper>
+                                        </View>
+                                    </View>
+                                )}
+
+                                {next && (
+                                    <View
+                                        style={{
+                                            paddingHorizontal: normalize(40),
+                                            width: "100%",
+                                            flexDirection: "column",
+                                            gap: 20,
+                                        }}>
+                                        <View style={{ alignSelf: "center" }}>
+                                            <SmoothPinCodeInput
+                                                autoFocus={true}
+                                                // placeholder="🙈"
+                                                placeholder={<Text style={{
+                                                    fontSize: normalize(25),
+                                                    color: theme.colors.onSurface,
+                                                    textAlign: "center",
+                                                }}>◌</Text>}
+                                                textStyle={{
+                                                    fontSize: 20,
+                                                    color: theme.colors.primary
+                                                }}
+                                                mask={
+                                                    <View
+                                                        style={{
+                                                            width: 10,
+                                                            height: 10,
+                                                            borderRadius: normalize(30),
+                                                            backgroundColor: theme.colors.onPrimaryContainer,
+                                                        }}></View>
+                                                }
+                                                maskDelay={1000}
+                                                password={true}
+                                                cellStyle={{
+                                                    borderWidth: 1,
+                                                    borderRadius: 5,
+                                                    borderColor: theme.colors.secondary,
+                                                }}
+                                                cellStyleFocused={null}
+                                                value={otp}
+                                                onTextChange={(otp: string) => setOtp(otp)}
+                                            />
+                                        </View>
+                                        <View
+                                            style={{
+                                                // margin: 20,
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
+                                                gap: 15,
+                                            }}>
+                                            {/* <View style={{ padding: normalize(25) }}> */}
+                                            <ButtonPaper
+                                                mode="contained"
+                                                buttonColor={theme.colors.tertiary}
+                                                textColor={theme.colors.onTertiary}
+                                                onPress={handleOtpMatch}
+                                                icon="arrow-right">
+                                                NEXT
+                                            </ButtonPaper>
+
+                                            <ButtonPaper
+                                                mode="text"
+                                                // buttonColor={theme.colors.secondaryContainer}
+                                                textColor={theme.colors.primary}
+                                                onPress={handleResendOtp}
+                                                icon="update"
+                                                disabled={otpSent && timer !== 0}>
+                                                {otpSent ? `OTP Sent (${timer}s)` : "Resend OTP"}
+                                            </ButtonPaper>
+                                            {/* </View> */}
+                                        </View>
+                                    </View>
+                                )}
+                            </View>
+                            <View>
+                                <Text style={{
+                                    textAlign: "center",
+                                    justifyContent: "flex-end",
+                                    backgroundColor: theme.colors.surface,
+                                    color: theme.colors.onSurface,
+                                    padding: normalize(5)
+                                }}>
+                                    Powered by, Synergic Softek Solutions Pvt. Ltd.
+                                </Text>
+                            </View>
+                        </LinearGradient>
+                    </View>
+
                 </LinearGradient>
+
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
 
 export default RegisterScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    containerBox: {
+        paddingTop: normalize(50),
+        height: SCREEN_HEIGHT / 1.80,
+        borderTopLeftRadius: 40,
+        borderTopRightRadius: 40,
+        justifyContent: "space-between"
+    },
+})
