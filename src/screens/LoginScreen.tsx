@@ -24,6 +24,7 @@ import navigationRoutes from "../routes/navigationRoutes"
 import { AppStore } from "../context/AppContext"
 import LinearGradient from "react-native-linear-gradient"
 import { logo, logoDark, flower2, flower2Dark } from "../resources/images"
+import { loginStorage } from "../storage/appStorage"
 
 function LoginScreen() {
   const navigation = useNavigation()
@@ -55,7 +56,9 @@ function LoginScreen() {
   }
 
   useEffect(() => {
-    openPhoneHintModal()
+    if (!loginStorage.contains("login-data")) {
+      openPhoneHintModal()
+    }
   }, [])
 
   return (
