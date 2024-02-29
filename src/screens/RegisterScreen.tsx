@@ -41,7 +41,7 @@ const RegisterScreen = () => {
                 handleRegister(formattedPhoneNumber)
             } catch (error) {
                 console.log(JSON.stringify(error))
-                ToastAndroid.show("Put Your Phone Number.", ToastAndroid.SHORT)
+                // ToastAndroid.show("Put Your Phone Number.", ToastAndroid.SHORT)
             }
         }
     }

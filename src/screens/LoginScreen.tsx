@@ -46,7 +46,7 @@ function LoginScreen() {
         }).then(() => {
           setNext(true)
         }).catch(err => {
-          ToastAndroid.show("Put Your Phone Number.", ToastAndroid.SHORT)
+          // ToastAndroid.show("Put Your Phone Number.", ToastAndroid.SHORT)
         })
       } catch (error) {
         console.log(JSON.stringify(error))
