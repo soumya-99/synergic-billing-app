@@ -31,6 +31,7 @@ import NetTotalForRePrints from "../components/NetTotalForRePrints"
 import { useBluetoothPrint } from "../hooks/printables/useBluetoothPrint"
 import useVersionCheck from "../hooks/api/useVersionCheck"
 import DeviceInfo from "react-native-device-info"
+import ButtonPaper from "../components/ButtonPaper"
 
 function HomeScreen() {
   const theme = usePaperColorScheme()
@@ -55,6 +56,7 @@ function HomeScreen() {
   const [amountCollected, setAmountCollected] = useState<number | undefined>(() => undefined)
   const [recentBills, setRecentBills] = useState<RecentBillsData[]>(() => [])
   const [billedSaleData, setBilledSaleData] = useState<ShowBillData[]>(() => [])
+  const [currentReceiptNo, setCurrentReceiptNo] = useState<number | undefined>(() => undefined)
 
   const [refreshing, setRefreshing] = useState<boolean>(() => false)
   const [updateUrl, setUpdateUrl] = useState<string>()
@@ -201,6 +203,16 @@ function HomeScreen() {
   const handleRecentBillListClick = (rcptNo: number) => {
     setVisible(!visible)
     handleGetBill(rcptNo)
+    setCurrentReceiptNo(rcptNo)
+  }
+
+  const handleCancelBill = (rcptNo: number) => {
+    Alert.alert("Cancelling Bill", `Are you sure you want to cancel this bill? Receipt No: ${rcptNo}`, [
+      { text: "BACK", onPress: () => console.log("NOOOOOO") },
+      { text: "CANCEL BILL", onPress: () => console.log("YESSSSSS") },
+    ],
+      { cancelable: false },
+    )
   }
 
   return (
@@ -307,10 +319,10 @@ function HomeScreen() {
             </View>
           </SurfacePaper>
         </View>
-
       </ScrollView>
+
       <DialogBox
-        iconSize={40}
+        iconSize={30}
         visible={visible}
         hide={hideDialog}
         titleStyle={styles.title}
@@ -318,7 +330,8 @@ function HomeScreen() {
         onFailure={onDialogFailure}
         onSuccess={onDialogSuccecss}
         title="Print Bill"
-        icon="printer-outline">
+      // icon="printer-outline"
+      >
         <ScrollableListContainer
           backgroundColor={theme.colors.surfaceVariant}
           height={250}
@@ -351,6 +364,11 @@ function HomeScreen() {
           totalDiscount={totalDiscount}
           disabled
         />
+        <View style={{ paddingTop: normalize(10) }}>
+          <ButtonPaper icon="cancel" mode="contained-tonal" onPress={() => handleCancelBill(currentReceiptNo)} buttonColor={theme.colors.error} textColor={theme.colors.onError}>
+            CANCEL BILL
+          </ButtonPaper>
+        </View>
       </DialogBox>
       <AnimatedFABPaper
         icon="plus"
@@ -366,7 +384,7 @@ function HomeScreen() {
         iconMode="dynamic"
         customStyle={styles.fabStyle}
       />
-    </SafeAreaView>
+    </SafeAreaView >
   )
 }
 

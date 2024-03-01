@@ -30,6 +30,7 @@ export default function ReceiptSettingsEditScreen() {
     const [discountFlag, setDiscountFlag] = useState<"Y" | "N">(() => receiptSettings?.discount_flag)
     const [discountType, setDiscountType] = useState<"P" | "A">(() => receiptSettings?.discount_type)
     const [priceType, setPriceType] = useState<"A" | "M">(() => receiptSettings?.price_type)
+    const [cancelBillFlag, setCancelBillFlag] = useState<"Y" | "N">(() => "Y")
 
     let receiptTypeArr = [
         { icon: "cloud-print-outline", title: "Print", func: () => setRcptType("P") },
@@ -65,6 +66,11 @@ export default function ReceiptSettingsEditScreen() {
     let priceAutoManualArr = [
         { icon: "auto-fix", title: "Auto", func: () => setPriceType("A") },
         { icon: "database-edit-outline", title: "Manual", func: () => setPriceType("M") },
+    ]
+
+    let cancelBillSwitchArr = [
+        { icon: "check-outline", title: "Allow", func: () => setCancelBillFlag("Y") },
+        { icon: "cancel", title: "Deny", func: () => setCancelBillFlag("N") },
     ]
 
     const handleReceiptSettingsUpdate = async () => {
@@ -106,7 +112,7 @@ export default function ReceiptSettingsEditScreen() {
                     />
                     <Divider />
                     <List.Item
-                        title="GST Switch"
+                        title="GST"
                         description={gstFlag === "Y" ? "Allowed" : gstFlag === "N" ? "Denied" : "Error Occurred!"}
                         left={props => <List.Icon {...props} icon="account-cash-outline" />}
                         right={props => {
@@ -142,7 +148,7 @@ export default function ReceiptSettingsEditScreen() {
                     />
                     <Divider />
                     <List.Item
-                        title="Discount Switch"
+                        title="Discount"
                         description={discountFlag === "Y" ? "Allowed" : discountFlag === "N" ? "Denied" : "Error Occurred!"}
                         left={props => <List.Icon {...props} icon="label-percent-outline" />}
                         right={props => {
@@ -175,6 +181,18 @@ export default function ReceiptSettingsEditScreen() {
                             )
                         }}
                         descriptionStyle={{ color: priceType === "A" ? theme.colors.primary : theme.colors.orange }}
+                    />
+                    <Divider />
+                    <List.Item
+                        title="Cancel Bill"
+                        description={cancelBillFlag === "Y" ? "Allowed" : cancelBillFlag === "N" ? "Denied" : "Error Occurred!"}
+                        left={props => <List.Icon {...props} icon="cancel" />}
+                        right={props => {
+                            return (
+                                <MenuPaper menuArrOfObjects={cancelBillSwitchArr} />
+                            )
+                        }}
+                        descriptionStyle={{ color: cancelBillFlag === "Y" ? theme.colors.green : theme.colors.error }}
                     />
                     <Divider />
                 </View>

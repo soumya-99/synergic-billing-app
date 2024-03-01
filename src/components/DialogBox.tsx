@@ -13,6 +13,7 @@ type DialogBoxProps = {
   icon?: string
   iconSize?: number
   titleStyle?: {}
+  buttonSuccessIcon?: string
 }
 
 export default function DialogBox({
@@ -27,6 +28,7 @@ export default function DialogBox({
   onFailure,
   onSuccess,
   hide,
+  buttonSuccessIcon
 }: PropsWithChildren<DialogBoxProps>) {
   const theme = usePaperColorScheme()
 
