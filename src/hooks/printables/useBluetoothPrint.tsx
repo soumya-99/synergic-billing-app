@@ -1961,7 +1961,7 @@ export const useBluetoothPrint = () => {
                         BluetoothEscposPrinter.ALIGN.LEFT,
                         BluetoothEscposPrinter.ALIGN.RIGHT,
                     ],
-                    [`DISC: ${totalDiscount?.toString()}`, `GST: ${totalGSTs?.toFixed(2)?.toString()}`],
+                    [`DISC: ${totalDiscount?.toFixed(2)?.toString()}`, `GST: ${totalGSTs?.toFixed(2)?.toString()}`],
                     {},
                 )
             ) : (
@@ -1970,7 +1970,7 @@ export const useBluetoothPrint = () => {
                     [
                         BluetoothEscposPrinter.ALIGN.CENTER,
                     ],
-                    [`DISC: ${totalDiscount?.toString()}`],
+                    [`DISC: ${totalDiscount?.toFixed(2)?.toString()}`],
                     {},
                 )
             )
@@ -2217,7 +2217,7 @@ export const useBluetoothPrint = () => {
         }
     }
 
-    async function printItemReport(saleReport: ItemReport[]) {
+    async function printItemReport(saleReport: ItemReport[], fromDate: string, toDate: string) {
         ToastAndroid.show("Printing Item Reports will be added in some days.", ToastAndroid.SHORT)
     }
 

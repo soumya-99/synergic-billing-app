@@ -207,7 +207,7 @@ function HomeScreen() {
   }
 
   const handleCancelBill = (rcptNo: number) => {
-    Alert.alert("Cancelling Bill", `Are you sure you want to cancel this bill? Receipt No: ${rcptNo}`, [
+    Alert.alert("Cancelling Bill", `Are you sure you want to cancel this bill?`, [
       { text: "BACK", onPress: () => console.log("NOOOOOO") },
       { text: "CANCEL BILL", onPress: () => console.log("YESSSSSS") },
     ],

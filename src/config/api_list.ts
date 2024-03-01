@@ -23,4 +23,5 @@ export const ADDRESSES = {
     ADD_ITEM: `${BASE_URL}/api/add_items`,
     EDIT_RECEIPT_SETTINGS: `${BASE_URL}/api/edit_rcp_settings`,
     APP_VERSION: `${BASE_URL}/api/app_version`,
+    CANCEL_BILL: `${BASE_URL}/api/---`,
 }
