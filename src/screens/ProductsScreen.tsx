@@ -183,6 +183,11 @@ function ProductsScreen() {
       return
     }
 
+    if (price <= 0 || typeof price === "undefined" || price.toString() === "NaN") {
+      ToastAndroid.show("Try adding valid price.", ToastAndroid.SHORT)
+      return
+    }
+
     if (receiptSettings?.discount_type === "P" && discountState > 100) {
       ToastAndroid.show("Discount cannot be greater than 100%.", ToastAndroid.SHORT);
       return
