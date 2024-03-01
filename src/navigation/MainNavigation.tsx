@@ -7,11 +7,14 @@ import { NavigationContainer } from "@react-navigation/native"
 import BottomNavigationPaper from "./BottomNavigationPaper"
 import RegisterScreen from "../screens/RegisterScreen"
 import CreatePinScreen from "../screens/CreatePinScreen"
-import ChangePinScreen from "../screens/ChangePinScreen"
 import ForgotPinScreen from "../screens/ForgotPinScreen"
+import NoInternetScreen from "../screens/NoInternetScreen"
+import { useNetInfo } from "@react-native-community/netinfo"
 
 export default function MainNavigation() {
   const Stack = createNativeStackNavigator()
+  const { isConnected } = useNetInfo()
+  console.log("NET INFOOOOOOO", isConnected)
 
   const { isLogin } = useContext(AppStore)
 
@@ -19,13 +22,15 @@ export default function MainNavigation() {
     <>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false, animation: "simple_push" }}>
+
           {isLogin ? (
-            <>
-              <Stack.Screen
-                name={navigationRoutes.bottomNavigationPaper}
-                component={BottomNavigationPaper}
-              />
-              {/* <Stack.Screen
+            isConnected ?
+              <>
+                <Stack.Screen
+                  name={navigationRoutes.bottomNavigationPaper}
+                  component={BottomNavigationPaper}
+                />
+                {/* <Stack.Screen
                 name={navigationRoutes.homeNavigation}
                 component={HomeNavigation}
               />
@@ -33,30 +38,35 @@ export default function MainNavigation() {
                 name={navigationRoutes.settingsNavigation}
                 component={SettingsNavigation}
               /> */}
-            </>
+              </>
+              : <Stack.Screen
+                name={navigationRoutes.noInternetScreen}
+                component={NoInternetScreen}
+              />
           ) : (
-            <>
-              <Stack.Screen
-                name={navigationRoutes.login}
-                component={LoginScreen}
+            isConnected ?
+              <>
+                <Stack.Screen
+                  name={navigationRoutes.login}
+                  component={LoginScreen}
+                />
+                <Stack.Screen
+                  name={navigationRoutes.register}
+                  component={RegisterScreen}
+                />
+                <Stack.Screen
+                  name={navigationRoutes.createPinScreen}
+                  component={CreatePinScreen}
+                />
+                <Stack.Screen
+                  name={navigationRoutes.forgotPinScreen}
+                  component={ForgotPinScreen}
+                />
+              </>
+              : <Stack.Screen
+                name={navigationRoutes.noInternetScreen}
+                component={NoInternetScreen}
               />
-              <Stack.Screen
-                name={navigationRoutes.register}
-                component={RegisterScreen}
-              />
-              <Stack.Screen
-                name={navigationRoutes.createPinScreen}
-                component={CreatePinScreen}
-              />
-              <Stack.Screen
-                name={navigationRoutes.forgotPinScreen}
-                component={ForgotPinScreen}
-              />
-              {/* <Stack.Screen
-                name={mainNavigationRoutes.forgotPasscode}
-                component={ForgotPasscode}
-              /> */}
-            </>
           )}
         </Stack.Navigator>
       </NavigationContainer>

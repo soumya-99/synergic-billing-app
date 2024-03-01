@@ -10,7 +10,7 @@ import useItems from "../hooks/api/useItems"
 export const AppStore = createContext(null)
 
 const AppContext = ({ children }) => {
-  const appState = useRef(AppState.currentState);
+  const appState = useRef(AppState.currentState)
 
   const [isLogin, setIsLogin] = useState<boolean>(() => false)
   const [receiptSettings, setReceiptSettings] = useState<ReceiptSettingsData>()

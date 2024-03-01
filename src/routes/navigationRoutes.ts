@@ -31,6 +31,7 @@ const navigationRoutes = {
   changePinScreen: "changePinScreen",
   forgotPinScreen: "ForgotPinScreen",
   profileScreen: "ProfileScreen",
+  noInternetScreen: "NoInternetScreen",
 }
 
 export default navigationRoutes
