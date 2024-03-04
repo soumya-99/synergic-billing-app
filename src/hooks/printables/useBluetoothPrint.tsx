@@ -6,9 +6,11 @@ import { CollectionReport, GstStatement, GstSummary, ItemReport, ItemsData, Sale
 import { gstFilterationAndTotals } from "../../utils/gstFilterTotal"
 import { gstFilterationAndTotalForRePrint } from "../../utils/gstFilterTotalForRePrint"
 import { ToastAndroid } from "react-native"
+import useCalculations from "../useCalculations"
 
 export const useBluetoothPrint = () => {
     const { receiptSettings } = useContext(AppStore)
+    const { netTotalWithGSTCalculate, roundingOffWithGSTCalculate, grandTotalWithGSTCalculate, roundingOffCalculate, grandTotalCalculate, netTotalCalculate } = useCalculations()
 
     async function printReceipt(addedProducts: ItemsData[], netTotal: number, totalDiscountAmount: number, cashAmount?: number, returnedAmt?: number, customerName?: string, customerPhone?: string, rcptNo?: number, paymentMode?: string) {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
@@ -21,7 +23,7 @@ export const useBluetoothPrint = () => {
         const shopEmail: string = loginStore?.email_id?.toString()
         const cashier: string = loginStore?.user_name?.toString()
 
-        let { totalCGST_5, totalCGST_12, totalCGST_18, totalCGST_28, totalSGST_5, totalSGST_12, totalSGST_18, totalSGST_28 } = gstFilterationAndTotals(addedProducts)
+        let { totalCGST_5, totalCGST_12, totalCGST_18, totalCGST_28, totalSGST_5, totalSGST_12, totalSGST_18, totalSGST_28, totalGST } = gstFilterationAndTotals(addedProducts)
 
         let totalQuantities: number = 0
         let totalAmountAfterDiscount: number = 0
@@ -396,7 +398,7 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["TOTAL GST", ":", (totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2).toString()],
+                ["TOTAL GST", ":", (totalGST).toFixed(2).toString()],
                 {},
             )
 
@@ -407,7 +409,8 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["TOTAL", ":", `${(netTotal - totalDiscountAmount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2)}`],
+                // ["TOTAL", ":", `${(netTotal - totalDiscountAmount + totalGST).toFixed(2)}`],
+                ["TOTAL", ":", `${netTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
                 {},
             )
             await BluetoothEscposPrinter.printColumn(
@@ -417,7 +420,8 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["ROUND OFF", ":", `${(Math.round(parseFloat((netTotal - totalDiscountAmount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2))) - parseFloat((netTotal - totalDiscountAmount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2))).toFixed(2)}`],
+                // ["ROUND OFF", ":", `${(Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))) - parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))).toFixed(2)}`],
+                ["ROUND OFF", ":", `${roundingOffWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
                 {},
             )
             await BluetoothEscposPrinter.printColumn(
@@ -427,7 +431,8 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2)))}`],
+                // ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2)))}`],
+                ["NET AMT", ":", `${grandTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
                 {},
             )
 
@@ -460,8 +465,12 @@ export const useBluetoothPrint = () => {
                 )
             }
             if (paymentMode === "D") {
+                // await BluetoothEscposPrinter.printText(
+                //     `RECEIVED:       ${Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2)))} [CARD]`,
+                //     { align: "center" },
+                // )
                 await BluetoothEscposPrinter.printText(
-                    `RECEIVED:       ${Math.round(parseFloat((netTotal - totalDiscountAmount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2)))} [CARD]`,
+                    `RECEIVED:       ${grandTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)} [CARD]`,
                     { align: "center" },
                 )
                 await BluetoothEscposPrinter.printText("\n", {})
@@ -472,7 +481,7 @@ export const useBluetoothPrint = () => {
             }
             if (paymentMode === "U") {
                 await BluetoothEscposPrinter.printText(
-                    `RECEIVED:       ${Math.round(parseFloat((netTotal - totalDiscountAmount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2)))} [UPI]`,
+                    `RECEIVED:       ${grandTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)} [UPI]`,
                     { align: "center" },
                 )
                 await BluetoothEscposPrinter.printText("\n", {})
@@ -813,7 +822,8 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["ROUND OFF", ":", `${(Math.round(parseFloat((netTotal - totalDiscountAmount).toFixed(2))) - parseFloat((netTotal - totalDiscountAmount).toFixed(2))).toFixed(2)}`],
+                // ["ROUND OFF", ":", `${(Math.round(parseFloat((netTotal - totalDiscountAmount).toFixed(2))) - parseFloat((netTotal - totalDiscountAmount).toFixed(2))).toFixed(2)}`],
+                ["ROUND OFF", ":", `${roundingOffCalculate(netTotal, totalDiscountAmount)}`],
                 {},
             )
             await BluetoothEscposPrinter.printColumn(
@@ -823,7 +833,8 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount).toFixed(2)))}`],
+                // ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount).toFixed(2)))}`],
+                ["NET AMT", ":", `${grandTotalCalculate(netTotal, totalDiscountAmount)}`],
                 {},
             )
 
@@ -1101,7 +1112,9 @@ export const useBluetoothPrint = () => {
             for (const item of addedProducts) {
                 //@ts-ignore
                 totalQuantities += parseInt(item?.qty)
-                receiptSettings?.discount_type === "P"
+                let discountType: "P" | "A" = addedProducts[0]?.discount_type
+
+                discountType === "P"
                     ? totalAmountAfterDiscount += ((item?.price * item?.qty) - ((item?.price * item?.qty * item?.discount_amt) / 100))
                     : totalAmountAfterDiscount += ((item?.price * item?.qty) - item?.discount_amt)
 
@@ -1177,7 +1190,8 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["TOTAL", ":", `${(netTotal - totalDiscountAmount).toFixed(2)}`],
+                // ["TOTAL", ":", `${(netTotal - totalDiscountAmount).toFixed(2)}`],
+                ["TOTAL", ":", `${netTotalCalculate(netTotal, totalDiscountAmount)}`],
                 {},
             )
             await BluetoothEscposPrinter.printColumn(
@@ -1187,7 +1201,8 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["ROUND OFF", ":", `${(Math.round(parseFloat((netTotal - totalDiscountAmount).toFixed(2))) - parseFloat((netTotal - totalDiscountAmount).toFixed(2))).toFixed(2)}`],
+                // ["ROUND OFF", ":", `${(Math.round(parseFloat((netTotal - totalDiscountAmount).toFixed(2))) - parseFloat((netTotal - totalDiscountAmount).toFixed(2))).toFixed(2)}`],
+                ["ROUND OFF", ":", `${roundingOffCalculate(netTotal, totalDiscountAmount)}`],
                 {},
             )
             await BluetoothEscposPrinter.printColumn(
@@ -1197,7 +1212,8 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount).toFixed(2)))}`],
+                // ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount).toFixed(2)))}`],
+                ["NET AMT", ":", `${grandTotalCalculate(netTotal, totalDiscountAmount)}`],
                 {},
             )
 
@@ -1269,7 +1285,7 @@ export const useBluetoothPrint = () => {
         const shopEmail: string = loginStore?.email_id?.toString()
         const cashier: string = loginStore?.user_name?.toString()
 
-        let { totalCGST_5, totalCGST_12, totalCGST_18, totalCGST_28, totalSGST_5, totalSGST_12, totalSGST_18, totalSGST_28 } = gstFilterationAndTotalForRePrint(addedProducts)
+        let { totalCGST_5, totalCGST_12, totalCGST_18, totalCGST_28, totalSGST_5, totalSGST_12, totalSGST_18, totalSGST_28, totalGST } = gstFilterationAndTotalForRePrint(addedProducts)
 
         let totalQuantities: number = 0
         let totalAmountAfterDiscount: number = 0
@@ -1477,7 +1493,9 @@ export const useBluetoothPrint = () => {
             for (const item of addedProducts) {
                 //@ts-ignore
                 totalQuantities += parseInt(item?.qty)
-                receiptSettings?.discount_type === "P"
+                let discountType: "P" | "A" = addedProducts[0]?.discount_type
+
+                discountType === "P"
                     ? totalAmountAfterDiscount += ((item?.price * item?.qty) - ((item?.price * item?.qty * item?.dis_pertg) / 100))
                     : totalAmountAfterDiscount += ((item?.price * item?.qty) - item?.discount_amt)
 
@@ -1644,7 +1662,7 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["TOTAL GST", ":", (totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2).toString()],
+                ["TOTAL GST", ":", (totalGST).toFixed(2).toString()],
                 {},
             )
 
@@ -1655,7 +1673,8 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["TOTAL", ":", `${(netTotal - totalDiscountAmount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2)}`],
+                // ["TOTAL", ":", `${(netTotal - totalDiscountAmount + totalGST).toFixed(2)}`],
+                ["TOTAL", ":", `${netTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
                 {},
             )
             await BluetoothEscposPrinter.printColumn(
@@ -1665,7 +1684,8 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["ROUND OFF", ":", `${(Math.round(parseFloat((netTotal - totalDiscountAmount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2))) - parseFloat((netTotal - totalDiscountAmount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2))).toFixed(2)}`],
+                // ["ROUND OFF", ":", `${(Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))) - parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))).toFixed(2)}`],
+                ["ROUND OFF", ":", `${roundingOffWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
                 {},
             )
             await BluetoothEscposPrinter.printColumn(
@@ -1675,7 +1695,8 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount + totalCGST_5 + totalSGST_5 + totalCGST_12 + totalSGST_12 + totalCGST_18 + totalSGST_18 + totalCGST_28 + totalSGST_28).toFixed(2)))}`],
+                // ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2)))}`],
+                ["NET AMT", ":", `${grandTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
                 {},
             )
 
