@@ -1,12 +1,12 @@
 import axios from "axios"
 import { ADDRESSES } from "../../config/api_list"
-import { } from "../../models/api_types"
+import { CANCEL_BILL_RESPONSE } from "../../models/api_types"
 
 export default function useCancelBill() {
-    const cancelBill = async (receiptNo: number, userId: number) => {
-        return new Promise<any>((resolve, reject) => {
+    const cancelBill = async (receiptNo: number, userId: string) => {
+        return new Promise<CANCEL_BILL_RESPONSE>((resolve, reject) => {
             axios.post(`${ADDRESSES.CANCEL_BILL}`, {
-                rcpt_no: receiptNo,
+                receipt_no: receiptNo,
                 user_id: userId,
             }).then(res => {
                 resolve(res.data)

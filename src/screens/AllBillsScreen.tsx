@@ -25,6 +25,8 @@ import useShowBill from "../hooks/api/useShowBill"
 import { useBluetoothPrint } from "../hooks/printables/useBluetoothPrint"
 import { AppStore } from "../context/AppContext"
 import NetTotalForRePrints from "../components/NetTotalForRePrints"
+import { Alert } from "react-native"
+import useCancelBill from "../hooks/api/useCancelBill"
 
 function AllBillsScreen() {
   const theme = usePaperColorScheme()
@@ -41,6 +43,7 @@ function AllBillsScreen() {
   const [toDate, setToDate] = useState(() => new Date())
   const [openFromDate, setOpenFromDate] = useState(() => false)
   const [openToDate, setOpenToDate] = useState(() => false)
+  const [currentReceiptNo, setCurrentReceiptNo] = useState<number | undefined>(() => undefined)
 
   const formattedFromDate = formattedDate(fromDate)
   const formattedToDate = formattedDate(toDate)
@@ -50,6 +53,7 @@ function AllBillsScreen() {
 
   const { fetchSearchedBills } = useSearchBills()
   const { fetchBill } = useShowBill()
+  const { cancelBill } = useCancelBill()
 
   const { rePrint, rePrintWithoutGst } = useBluetoothPrint()
 
@@ -64,6 +68,7 @@ function AllBillsScreen() {
   const handleBillListClick = (rcptNo: number) => {
     setVisible(!visible)
     handleGetBill(rcptNo)
+    setCurrentReceiptNo(rcptNo)
   }
 
   const onDialogFailure = () => {
@@ -95,7 +100,30 @@ function AllBillsScreen() {
 
   const handleGetBillsByDate = async (fromDate: string, toDate: string) => {
     let billResponseData = await fetchSearchedBills(fromDate, toDate, loginStore.comp_id, loginStore.br_id, loginStore.user_id)
+    console.log("$$$$$$$$$########", billResponseData)
+    // console.log("$$$$$$$$$######## loginStore.comp_id", loginStore.comp_id)
+    // console.log("$$$$$$$$$######## loginStore.br_id", loginStore.br_id)
+    // console.log("$$$$$$$$$######## loginStore.user_id", loginStore.user_id)
     setBillsArray(billResponseData?.data)
+  }
+
+  const handleCancellingBill = async (rcptNo: number) => {
+    let res = await cancelBill(rcptNo, loginStore.user_id)
+
+    if (res?.status === 1) {
+      ToastAndroid.show(res?.data, ToastAndroid.SHORT)
+      setVisible(!visible)
+    }
+    return
+  }
+
+  const handleCancelBill = (rcptNo: number) => {
+    Alert.alert("Cancelling Bill", `Are you sure you want to cancel this bill?`, [
+      { text: "BACK", onPress: () => ToastAndroid.show("Operation cancelled by user.", ToastAndroid.SHORT) },
+      { text: "CANCEL BILL", onPress: () => handleCancellingBill(rcptNo) },
+    ],
+      { cancelable: false },
+    )
   }
 
   let netTotal = 0
@@ -204,6 +232,11 @@ function AllBillsScreen() {
             )
           })}
         </ScrollableListContainer>
+        <View style={{ paddingTop: normalize(10) }}>
+          <ButtonPaper icon="cancel" mode="contained-tonal" onPress={() => handleCancelBill(currentReceiptNo)} buttonColor={theme.colors.error} textColor={theme.colors.onError}>
+            CANCEL BILL
+          </ButtonPaper>
+        </View>
         <NetTotalForRePrints
           width={300}
           backgroundColor={theme.colors.orangeContainer}

@@ -32,6 +32,7 @@ import { useBluetoothPrint } from "../hooks/printables/useBluetoothPrint"
 import useVersionCheck from "../hooks/api/useVersionCheck"
 import DeviceInfo from "react-native-device-info"
 import ButtonPaper from "../components/ButtonPaper"
+import useCancelBill from "../hooks/api/useCancelBill"
 
 function HomeScreen() {
   const theme = usePaperColorScheme()
@@ -47,6 +48,7 @@ function HomeScreen() {
   const { fetchBill } = useShowBill()
   const { fetchVersionInfo } = useVersionCheck()
   const { rePrint, rePrintWithoutGst } = useBluetoothPrint()
+  const { cancelBill } = useCancelBill()
 
   const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
@@ -206,10 +208,22 @@ function HomeScreen() {
     setCurrentReceiptNo(rcptNo)
   }
 
+  const handleCancellingBill = async (rcptNo: number) => {
+    let res = await cancelBill(rcptNo, loginStore.user_id)
+
+    if (res?.status === 1) {
+      ToastAndroid.show(res?.data, ToastAndroid.SHORT)
+      setVisible(!visible)
+    }
+    handleGetBillSummary()
+    handleGetRecentBills()
+    return
+  }
+
   const handleCancelBill = (rcptNo: number) => {
     Alert.alert("Cancelling Bill", `Are you sure you want to cancel this bill?`, [
       { text: "BACK", onPress: () => console.log("NOOOOOO") },
-      { text: "CANCEL BILL", onPress: () => console.log("YESSSSSS") },
+      { text: "CANCEL BILL", onPress: () => handleCancellingBill(rcptNo) },
     ],
       { cancelable: false },
     )

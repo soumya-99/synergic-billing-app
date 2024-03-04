@@ -308,3 +308,8 @@ export type AddedItemResponse = {
     "status": number
     "data": string
 }
+
+export type CANCEL_BILL_RESPONSE = {
+    "status": number
+    "data": string
+}
