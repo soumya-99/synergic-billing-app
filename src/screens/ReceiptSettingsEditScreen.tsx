@@ -68,10 +68,10 @@ export default function ReceiptSettingsEditScreen() {
         { icon: "database-edit-outline", title: "Manual", func: () => setPriceType("M") },
     ]
 
-    let cancelBillSwitchArr = [
-        { icon: "check-outline", title: "Allow", func: () => setCancelBillFlag("Y") },
-        { icon: "cancel", title: "Deny", func: () => setCancelBillFlag("N") },
-    ]
+    // let cancelBillSwitchArr = [
+    //     { icon: "check-outline", title: "Allow", func: () => setCancelBillFlag("Y") },
+    //     { icon: "cancel", title: "Deny", func: () => setCancelBillFlag("N") },
+    // ]
 
     const handleReceiptSettingsUpdate = async () => {
         await editReceiptSettings(loginStore?.comp_id, rcptType, gstFlag, customerInfo, payMode, discountFlag, discountType, priceType, loginStore?.user_name, loginStore?.user_name)
@@ -183,7 +183,7 @@ export default function ReceiptSettingsEditScreen() {
                         descriptionStyle={{ color: priceType === "A" ? theme.colors.primary : theme.colors.orange }}
                     />
                     <Divider />
-                    <List.Item
+                    {/* <List.Item
                         title="Cancel Bill"
                         description={cancelBillFlag === "Y" ? "Allowed" : cancelBillFlag === "N" ? "Denied" : "Error Occurred!"}
                         left={props => <List.Icon {...props} icon="cancel" />}
@@ -194,7 +194,7 @@ export default function ReceiptSettingsEditScreen() {
                         }}
                         descriptionStyle={{ color: cancelBillFlag === "Y" ? theme.colors.green : theme.colors.error }}
                     />
-                    <Divider />
+                    <Divider /> */}
                 </View>
                 <View style={{ paddingHorizontal: normalize(20), paddingVertical: normalize(10) }}>
                     {loginStore?.user_type === "M" ? (
