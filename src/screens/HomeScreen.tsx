@@ -59,6 +59,7 @@ function HomeScreen() {
   const [recentBills, setRecentBills] = useState<RecentBillsData[]>(() => [])
   const [billedSaleData, setBilledSaleData] = useState<ShowBillData[]>(() => [])
   const [currentReceiptNo, setCurrentReceiptNo] = useState<number | undefined>(() => undefined)
+  const [gstFlag, setGstFlag] = useState<"Y" | "N">()
 
   const [refreshing, setRefreshing] = useState<boolean>(() => false)
   const [updateUrl, setUpdateUrl] = useState<string>()
@@ -113,7 +114,7 @@ function HomeScreen() {
 
   const handleRePrintReceipt = () => {
     if (billedSaleData.length > 0) {
-      receiptSettings?.gst_flag === "N"
+      gstFlag === "N"
         ? rePrintWithoutGst(
           billedSaleData,
           netTotal,
@@ -206,6 +207,7 @@ function HomeScreen() {
     setVisible(!visible)
     handleGetBill(rcptNo)
     setCurrentReceiptNo(rcptNo)
+    setGstFlag(billedSaleData[0]?.gst_flag)
   }
 
   const handleCancellingBill = async (rcptNo: number) => {

@@ -44,6 +44,8 @@ function AllBillsScreen() {
   const [openFromDate, setOpenFromDate] = useState(() => false)
   const [openToDate, setOpenToDate] = useState(() => false)
   const [currentReceiptNo, setCurrentReceiptNo] = useState<number | undefined>(() => undefined)
+  const [gstFlag, setGstFlag] = useState<"Y" | "N">()
+  const [discountType, setDiscountType] = useState<"P" | "A">()
 
   const formattedFromDate = formattedDate(fromDate)
   const formattedToDate = formattedDate(toDate)
@@ -69,6 +71,7 @@ function AllBillsScreen() {
     setVisible(!visible)
     handleGetBill(rcptNo)
     setCurrentReceiptNo(rcptNo)
+    setGstFlag(billedSaleData[0]?.gst_flag)
   }
 
   const onDialogFailure = () => {
@@ -89,7 +92,7 @@ function AllBillsScreen() {
 
   const handleRePrintReceipt = () => {
     if (billedSaleData.length > 0) {
-      receiptSettings?.gst_flag === "N"
+      gstFlag === "N"
         ? rePrintWithoutGst(billedSaleData, netTotal, totalDiscount, billedSaleData[0]?.received_amt, (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - Math.round(parseFloat((netTotal - totalDiscount).toFixed(2))) : 0), billedSaleData[0]?.cust_name, billedSaleData[0]?.phone_no, billedSaleData[0]?.receipt_no, billedSaleData[0]?.pay_mode)
         : rePrint(billedSaleData, netTotal, totalDiscount, billedSaleData[0]?.received_amt, (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - Math.round(parseFloat((netTotal - totalDiscount).toFixed(2))) : 0), billedSaleData[0]?.cust_name, billedSaleData[0]?.phone_no, billedSaleData[0]?.receipt_no, billedSaleData[0]?.pay_mode)
     } else {
@@ -219,6 +222,10 @@ function AllBillsScreen() {
           {billedSaleData.map((item, i) => {
             netTotal += item.price * item.qty
             totalDiscount += parseFloat(item?.discount_amt?.toFixed(2))
+
+            // setDiscountType(item?.discount_type)
+            // setGstFlag(item?.gst_flag)
+
             return (
               <AddedProductList
                 disabled
