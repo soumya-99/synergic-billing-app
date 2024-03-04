@@ -364,6 +364,8 @@ function HomeScreen() {
                 // unit={item.unit}
                 unitPrice={item.price}
                 discount={receiptSettings?.discount_type === "P" ? item?.dis_pertg : item?.discount_amt}
+                discountType={item?.discount_type}
+                gstFlag={item?.gst_flag}
                 key={i}
               />
             )

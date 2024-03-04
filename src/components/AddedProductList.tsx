@@ -14,6 +14,8 @@ type AddedProductListProps = {
   discount?: number
   unit?: string
   disabled?: boolean
+  gstFlag?: "Y" | "N"
+  discountType?: "P" | "A"
 }
 
 export default function AddedProductList({
@@ -24,8 +26,13 @@ export default function AddedProductList({
   discount,
   unit,
   disabled,
+  gstFlag: propGstFlag,
+  discountType: propDiscountType
 }: AddedProductListProps) {
   const { receiptSettings } = useContext(AppStore)
+
+  const gstFlag = propGstFlag || receiptSettings?.gst_flag
+  const discountType = propDiscountType || receiptSettings?.discount_type
 
   return (
     // receiptSettings?.gst_flag === "N" ? (
@@ -62,7 +69,7 @@ export default function AddedProductList({
             flexDirection: "row",
             justifyContent: "space-between",
           }}>
-          {receiptSettings?.discount_type === "A" ? (
+          {discountType === "A" ? (
             <View>
               <Text>Discount</Text>
             </View>
@@ -71,7 +78,7 @@ export default function AddedProductList({
               <Text>Discount ({discount}%)</Text>
             </View>
           )}
-          {receiptSettings?.discount_type === "A" ? (
+          {discountType === "A" ? (
             <View>
               <Text>₹{discount}</Text>
             </View>
@@ -91,7 +98,7 @@ export default function AddedProductList({
               QTY: {quantity} {unit}
             </Text>
           </View>
-          {receiptSettings?.discount_type === "A" ? (
+          {discountType === "A" ? (
             <View>
               <Text>TOTAL: ₹{(unitPrice * quantity - discount).toFixed(2)}</Text>
             </View>

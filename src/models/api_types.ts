@@ -126,6 +126,8 @@ export type RecentBillsData = {
     "created_dt": string
     "modified_by": null
     "modified_dt": null
+    "gst_flag": "Y" | "N",
+    "discount_type": "P" | "A",
 }
 
 export type ShowBillResponseData = {
@@ -160,6 +162,8 @@ export type ShowBillData = {
     "pay_dtls": string
     "cust_name": string
     "phone_no": string
+    "gst_flag"?: "Y" | "N",
+    "discount_type"?: "P" | "A",
 }
 
 export type SearchBillsData = {

@@ -45,6 +45,7 @@ export default function NetTotalForRePrints({
         grandTotalWithGSTCalculate
     } = useCalculations()
 
+    // addedProductsList?.filter((item, i) => item.discount)
     let { totalCGST_5, totalCGST_12, totalCGST_18, totalCGST_28, totalSGST_5, totalSGST_12, totalSGST_18, totalSGST_28, totalGST } = gstFilterationAndTotalForRePrint(addedProductsList)
 
     let gstFlag = addedProductsList[0]?.gst_flag

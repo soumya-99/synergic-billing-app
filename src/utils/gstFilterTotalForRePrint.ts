@@ -21,6 +21,8 @@ export function gstFilterationAndTotalForRePrint(addedProducts: ShowBillData[]) 
     let totalSGST_18: number = 0
     let totalSGST_28: number = 0
 
+    let totalGST: number = 0
+
     for (const product of addedProducts ?? []) {
         if (product.cgst_prtg === 5) {
             productsCGST_5.push(product)
@@ -51,6 +53,15 @@ export function gstFilterationAndTotalForRePrint(addedProducts: ShowBillData[]) 
         }
     }
 
+    totalGST = totalCGST_5
+        + totalCGST_12
+        + totalCGST_18
+        + totalCGST_28
+        + totalSGST_5
+        + totalSGST_12
+        + totalSGST_18
+        + totalSGST_28
+
     return {
         productsCGST_5,
         productsCGST_12,
@@ -67,6 +78,7 @@ export function gstFilterationAndTotalForRePrint(addedProducts: ShowBillData[]) 
         totalSGST_5,
         totalSGST_12,
         totalSGST_18,
-        totalSGST_28
+        totalSGST_28,
+        totalGST
     }
 }
