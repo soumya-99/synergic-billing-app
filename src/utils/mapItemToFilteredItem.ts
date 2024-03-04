@@ -1,7 +1,20 @@
 import { ItemsData, ReceiptSettingsData } from "../models/api_types"
 import { FilteredItem } from "../models/custom_types"
 
-export function mapItemToFilteredItem(item: ItemsData, receiptSettings: ReceiptSettingsData, branchId: string, params: any, checked: string, cashAmount: number, customerName: string, customerMobileNumber: string, createdBy: string, totalGST: number): FilteredItem {
+export function mapItemToFilteredItem(
+    item: ItemsData,
+    receiptSettings: ReceiptSettingsData,
+    branchId: string,
+    params: any,
+    checked: string,
+    cashAmount: number,
+    customerName: string,
+    customerMobileNumber: string,
+    createdBy: string,
+    totalGST: number,
+    gstFlag: "Y" | "N",
+    discountType: "P" | "A"
+): FilteredItem {
     const { cgst, sgst, com_id, discount, item_id, quantity, price } = item
 
     const cgstAmt = receiptSettings?.gst_flag === "N" ? 0 : (price * quantity * cgst / 100)
@@ -40,5 +53,7 @@ export function mapItemToFilteredItem(item: ItemsData, receiptSettings: ReceiptS
         dis_pertg: receiptSettings?.discount_type === "P" ? discount : 0,
         cgst_prtg: receiptSettings?.gst_flag === "Y" ? cgst : 0,
         sgst_prtg: receiptSettings?.gst_flag === "Y" ? sgst : 0,
+        gst_flag: gstFlag,
+        discount_type: discountType
     }
 }

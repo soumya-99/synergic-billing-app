@@ -65,7 +65,7 @@ const CustomerDetailsFillScreen = () => {
         let filteredData: FilteredItem[]
 
         filteredData = (params?.added_products).map(item =>
-            mapItemToFilteredItem(item, receiptSettings, branchId, params, checked, cashAmount, customerName, customerMobileNumber, createdBy, totalGST)
+            mapItemToFilteredItem(item, receiptSettings, branchId, params, checked, cashAmount, customerName, customerMobileNumber, createdBy, totalGST, receiptSettings?.gst_flag, receiptSettings?.discount_type)
         )
 
         console.log("filteredData - handleSendSaleData", filteredData)
