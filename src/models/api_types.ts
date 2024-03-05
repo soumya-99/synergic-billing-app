@@ -313,6 +313,16 @@ export type AddedItemResponse = {
     "data": string
 }
 
+export type AddUnitCredentials = {
+    unit_name: string
+    created_by: string
+}
+
+export type AddedUnitResponse = {
+    "status": number
+    "data": string
+}
+
 export type CANCEL_BILL_RESPONSE = {
     "status": number
     "data": string

@@ -110,12 +110,16 @@ function SettingsScreen() {
               })
             )}
           />
-          {/* <ReportButton
-            text="Operaotr Wise"
-            color={theme.colors.tertiaryContainer}
-            icon="billboard"
-            onPress={() => console.log("Rprt Pressed!")}
-          /> */}
+          <ReportButton
+            text="Manage Units"
+            color={theme.colors.tealContainer}
+            icon="weight-kilogram"
+            onPress={() => navigation.dispatch(
+              CommonActions.navigate({
+                name: navigationRoutes.manageUnitsScreen,
+              })
+            )}
+          />
           <ReportButton
             text="Receipt Settings"
             color={theme.colors.primaryContainer}

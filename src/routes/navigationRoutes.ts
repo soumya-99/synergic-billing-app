@@ -26,6 +26,7 @@ const navigationRoutes = {
   gstSummaryReportScreen: "GstSummaryReportScreen",
   headerFooterScreen: "HeaderFooterScreen",
   manageProductsScreen: "ManageProductsScreen",
+  manageUnitsScreen: "ManageUnitsScreen",
   receiptSettingsEditScreen: "ReceiptSettingsEditScreen",
   logoUploadScreen: "LogoUploadScreen",
   changePinScreen: "changePinScreen",
