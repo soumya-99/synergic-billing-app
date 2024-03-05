@@ -12,6 +12,7 @@ import { AppStore } from "../context/AppContext"
 import MenuPaper from "../components/MenuPaper"
 import ButtonPaper from "../components/ButtonPaper"
 import useEditReceiptSettings from "../hooks/api/useEditReceiptSettings"
+import { ReceiptSettingsEditCredentials } from "../models/api_types"
 
 export default function ReceiptSettingsEditScreen() {
     const theme = usePaperColorScheme()
@@ -30,7 +31,8 @@ export default function ReceiptSettingsEditScreen() {
     const [discountFlag, setDiscountFlag] = useState<"Y" | "N">(() => receiptSettings?.discount_flag)
     const [discountType, setDiscountType] = useState<"P" | "A">(() => receiptSettings?.discount_type)
     const [priceType, setPriceType] = useState<"A" | "M">(() => receiptSettings?.price_type)
-    const [cancelBillFlag, setCancelBillFlag] = useState<"Y" | "N">(() => "Y")
+    // const [cancelBillFlag, setCancelBillFlag] = useState<"Y" | "N">(() => "Y")
+    const [unitFlag, setUnitFlag] = useState<"Y" | "N">(receiptSettings?.unit_flag)
 
     let receiptTypeArr = [
         { icon: "cloud-print-outline", title: "Print", func: () => setRcptType("P") },
@@ -73,8 +75,27 @@ export default function ReceiptSettingsEditScreen() {
     //     { icon: "cancel", title: "Deny", func: () => setCancelBillFlag("N") },
     // ]
 
+    let unitSwitchArr = [
+        { icon: "check-outline", title: "Allow", func: () => setUnitFlag("Y") },
+        { icon: "cancel", title: "Deny", func: () => setUnitFlag("N") },
+    ]
+
     const handleReceiptSettingsUpdate = async () => {
-        await editReceiptSettings(loginStore?.comp_id, rcptType, gstFlag, customerInfo, payMode, discountFlag, discountType, priceType, loginStore?.user_name, loginStore?.user_name)
+        let editedReceiptSettings: ReceiptSettingsEditCredentials = {
+            comp_id: loginStore?.comp_id,
+            rcpt_type: rcptType,
+            gst_flag: gstFlag,
+            cust_inf: customerInfo,
+            pay_mode: payMode,
+            discount_flag: discountFlag,
+            discount_type: discountType,
+            price_type: priceType,
+            created_by: loginStore?.user_name,
+            modified_by: loginStore?.user_name,
+            unit_flag: unitFlag
+        }
+
+        await editReceiptSettings(editedReceiptSettings)
             .then(res => {
                 ToastAndroid.show("Receipt Settings Updated!", ToastAndroid.SHORT)
                 handleGetReceiptSettings()
@@ -121,6 +142,18 @@ export default function ReceiptSettingsEditScreen() {
                             )
                         }}
                         descriptionStyle={{ color: gstFlag === "Y" ? theme.colors.green : theme.colors.error }}
+                    />
+                    <Divider />
+                    <List.Item
+                        title="Unit"
+                        description={unitFlag === "Y" ? "Allowed" : unitFlag === "N" ? "Denied" : "Error Occurred!"}
+                        left={props => <List.Icon {...props} icon="weight-kilogram" />}
+                        right={props => {
+                            return (
+                                <MenuPaper menuArrOfObjects={unitSwitchArr} />
+                            )
+                        }}
+                        descriptionStyle={{ color: unitFlag === "Y" ? theme.colors.green : theme.colors.error }}
                     />
                     <Divider />
                     <List.Item

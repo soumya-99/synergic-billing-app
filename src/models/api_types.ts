@@ -51,6 +51,7 @@ export type ReceiptSettingsData = {
     comp_id: number
     rcpt_type: "B" | "S" | "P"
     gst_flag: "N" | "Y"
+    unit_flag: "Y" | "N"
     cust_inf: "Y" | "N"
     pay_mode: "Y" | "N"
     discount_flag: "Y" | "N"
@@ -67,6 +68,20 @@ export type ReceiptSettingsData = {
     on_off_flag3: "Y" | "N"
     footer2: string
     on_off_flag4: "Y" | "N"
+}
+
+export type ReceiptSettingsEditCredentials = {
+    comp_id: number
+    rcpt_type: "P" | "S" | "B"
+    gst_flag: "Y" | "N"
+    unit_flag?: "Y" | "N"
+    cust_inf: "Y" | "N"
+    pay_mode: "Y" | "N"
+    discount_flag: "Y" | "N"
+    discount_type: "P" | "A"
+    price_type: "A" | "M"
+    created_by: string
+    modified_by: string
 }
 
 export type ItemsData = {
