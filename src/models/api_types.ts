@@ -290,6 +290,17 @@ export type ItemEditData = {
     "data": string
 }
 
+export type UnitEditCredentials = {
+    "sl_no": number
+    "unit_name": string
+    "modified_by": string
+}
+
+export type UnitEditResponse = {
+    "status": number
+    "data": string
+}
+
 export type ReceiptSettingsEditData = {
     "status": number
     "data": string

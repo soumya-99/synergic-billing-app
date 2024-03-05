@@ -11,12 +11,13 @@ import { usePaperColorScheme } from "../theme/theme"
 import DialogBox from "../components/DialogBox"
 import InputPaper from "../components/InputPaper"
 import { clearStates } from "../utils/clearStates"
-import { AddUnitCredentials, UnitData } from "../models/api_types"
+import { AddUnitCredentials, UnitData, UnitEditCredentials } from "../models/api_types"
 import { loginStorage } from "../storage/appStorage"
 import { useIsFocused } from "@react-navigation/native"
 import { AppStore } from "../context/AppContext"
 import AnimatedFABPaper from "../components/AnimatedFABPaper"
 import useAddUnit from "../hooks/api/useAddUnit"
+import useEditUnit from "../hooks/api/useEditUnit"
 
 export default function ManageUnitsScreen() {
     const theme = usePaperColorScheme()
@@ -26,6 +27,7 @@ export default function ManageUnitsScreen() {
 
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
+    const { editUnit } = useEditUnit()
     const { sendAddedUnit } = useAddUnit()
 
     const [visible, setVisible] = useState(() => false)
@@ -41,6 +43,7 @@ export default function ManageUnitsScreen() {
     const [isExtended, setIsExtended] = useState(() => true)
 
     const [unit, setUnit] = useState<string>(() => "")
+    const [unitId, setUnitId] = useState<number>(() => undefined)
     const [unitName, setUnitName] = useState<string>(() => "")
 
     const onScroll = ({ nativeEvent }) => {
@@ -56,16 +59,23 @@ export default function ManageUnitsScreen() {
         if (query === "") setFilteredUnits(() => [])
     }
 
-    const handleUpdateProductDetails = async () => {
-        // await editItem(loginStore?.comp_id, product?.item_id, unit, discount, CGST, SGST, loginStore?.user_name).then(res => {
-        //     ToastAndroid.show("Product updated successfully.", ToastAndroid.SHORT)
-        // }).catch(err => {
-        //     ToastAndroid.show("Error while updating product details.", ToastAndroid.SHORT)
-        // })
+    const handleUpdateUnitDetails = async () => {
+        let editUnitCreds: UnitEditCredentials = {
+            sl_no: unitId,
+            unit_name: unit,
+            modified_by: loginStore?.user_name
+        }
+
+        await editUnit(editUnitCreds).then(res => {
+            ToastAndroid.show("Unit updated successfully.", ToastAndroid.SHORT)
+        }).catch(err => {
+            ToastAndroid.show("Error while updating unit.", ToastAndroid.SHORT)
+        })
     }
 
     const onDialogFailure = () => {
         clearStates([setUnit, setSearch], () => "")
+        setUnitId(() => undefined)
         setVisible(!visible)
     }
 
@@ -74,8 +84,9 @@ export default function ManageUnitsScreen() {
             ToastAndroid.show("Try adding some unit.", ToastAndroid.SHORT)
             return
         }
-        handleUpdateProductDetails().then(() => {
+        handleUpdateUnitDetails().then(() => {
             clearStates([setSearch, setUnit], () => "")
+            setUnitId(() => undefined)
             setVisible(!visible)
             setFilteredUnits(() => [])
         }).catch(err => {
@@ -119,6 +130,7 @@ export default function ManageUnitsScreen() {
 
     const handleUnitPressed = (unit: UnitData) => {
         setUnit(unit?.unit_name)
+        setUnitId(unit?.sl_no)
         setVisible(!visible)
     }
 
@@ -194,6 +206,7 @@ export default function ManageUnitsScreen() {
                         }}>
                         <View style={{ width: "100%" }}>
                             <InputPaper
+                                autoFocus
                                 label="Unit"
                                 onChangeText={(txt: string) => setUnit(txt)}
                                 value={unit}
