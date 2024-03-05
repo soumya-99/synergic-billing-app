@@ -27,6 +27,7 @@ import { AppStore } from "../context/AppContext"
 import NetTotalForRePrints from "../components/NetTotalForRePrints"
 import { Alert } from "react-native"
 import useCancelBill from "../hooks/api/useCancelBill"
+import useCalculations from "../hooks/useCalculations"
 
 function AllBillsScreen() {
   const theme = usePaperColorScheme()
@@ -56,6 +57,7 @@ function AllBillsScreen() {
   const { fetchSearchedBills } = useSearchBills()
   const { fetchBill } = useShowBill()
   const { cancelBill } = useCancelBill()
+  const { grandTotalCalculate } = useCalculations()
 
   const { rePrint, rePrintWithoutGst } = useBluetoothPrint()
 
@@ -93,8 +95,28 @@ function AllBillsScreen() {
   const handleRePrintReceipt = () => {
     if (billedSaleData.length > 0) {
       gstFlag === "N"
-        ? rePrintWithoutGst(billedSaleData, netTotal, totalDiscount, billedSaleData[0]?.received_amt, (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - Math.round(parseFloat((netTotal - totalDiscount).toFixed(2))) : 0), billedSaleData[0]?.cust_name, billedSaleData[0]?.phone_no, billedSaleData[0]?.receipt_no, billedSaleData[0]?.pay_mode)
-        : rePrint(billedSaleData, netTotal, totalDiscount, billedSaleData[0]?.received_amt, (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - Math.round(parseFloat((netTotal - totalDiscount).toFixed(2))) : 0), billedSaleData[0]?.cust_name, billedSaleData[0]?.phone_no, billedSaleData[0]?.receipt_no, billedSaleData[0]?.pay_mode)
+        ? rePrintWithoutGst(
+          billedSaleData,
+          netTotal,
+          totalDiscount,
+          billedSaleData[0]?.received_amt,
+          (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - grandTotalCalculate(netTotal, totalDiscount) : 0),
+          billedSaleData[0]?.cust_name,
+          billedSaleData[0]?.phone_no,
+          billedSaleData[0]?.receipt_no,
+          billedSaleData[0]?.pay_mode
+        )
+        : rePrint(
+          billedSaleData,
+          netTotal,
+          totalDiscount,
+          billedSaleData[0]?.received_amt,
+          (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - grandTotalCalculate(netTotal, totalDiscount) : 0),
+          billedSaleData[0]?.cust_name,
+          billedSaleData[0]?.phone_no,
+          billedSaleData[0]?.receipt_no,
+          billedSaleData[0]?.pay_mode
+        )
     } else {
       ToastAndroid.show("Something went wrong!", ToastAndroid.SHORT)
       return

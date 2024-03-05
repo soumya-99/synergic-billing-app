@@ -33,6 +33,7 @@ import useVersionCheck from "../hooks/api/useVersionCheck"
 import DeviceInfo from "react-native-device-info"
 import ButtonPaper from "../components/ButtonPaper"
 import useCancelBill from "../hooks/api/useCancelBill"
+import useCalculations from "../hooks/useCalculations"
 
 function HomeScreen() {
   const theme = usePaperColorScheme()
@@ -49,6 +50,7 @@ function HomeScreen() {
   const { fetchVersionInfo } = useVersionCheck()
   const { rePrint, rePrintWithoutGst } = useBluetoothPrint()
   const { cancelBill } = useCancelBill()
+  const { grandTotalCalculate } = useCalculations()
 
   const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
@@ -120,7 +122,7 @@ function HomeScreen() {
           netTotal,
           totalDiscount,
           billedSaleData[0]?.received_amt,
-          (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - Math.round(parseFloat((netTotal - totalDiscount).toFixed(2))) : 0),
+          (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - grandTotalCalculate(netTotal, totalDiscount) : 0),
           billedSaleData[0]?.cust_name,
           billedSaleData[0]?.phone_no,
           billedSaleData[0]?.receipt_no,
@@ -131,7 +133,7 @@ function HomeScreen() {
           netTotal,
           totalDiscount,
           billedSaleData[0]?.received_amt,
-          (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - Math.round(parseFloat((netTotal - totalDiscount).toFixed(2))) : 0),
+          (billedSaleData[0]?.received_amt !== undefined ? billedSaleData[0]?.received_amt - grandTotalCalculate(netTotal, totalDiscount) : 0),
           billedSaleData[0]?.cust_name,
           billedSaleData[0]?.phone_no,
           billedSaleData[0]?.receipt_no,
