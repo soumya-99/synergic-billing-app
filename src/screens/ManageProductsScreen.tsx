@@ -241,7 +241,7 @@ export default function ManageProductsScreen() {
                 <View style={{ justifyContent: "space-between", minHeight: SCREEN_HEIGHT / 3.2, height: "auto" }}>
                     <View style={{ alignItems: "center" }}>
                         <View>
-                            <Text variant="titleLarge">Edit Item</Text>
+                            <Text variant="titleLarge">Edit Product</Text>
                         </View>
                     </View>
 
