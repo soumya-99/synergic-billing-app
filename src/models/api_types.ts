@@ -326,6 +326,8 @@ export type AddItemCredentials = {
     discount: number
     cgst: number
     sgst: number
+    unit_id?: number
+    unit_name?: string
 }
 
 export type AddedItemResponse = {

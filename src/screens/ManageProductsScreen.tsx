@@ -18,12 +18,13 @@ import useEditItem from "../hooks/api/useEditItem"
 import { AppStore } from "../context/AppContext"
 import AnimatedFABPaper from "../components/AnimatedFABPaper"
 import useAddItem from "../hooks/api/useAddItem"
+import MenuPaper from "../components/MenuPaper"
 
 export default function ManageProductsScreen() {
     const theme = usePaperColorScheme()
     const isFocused = useIsFocused()
 
-    const { items, handleGetItems, receiptSettings } = useContext(AppStore)
+    const { items, handleGetItems, units, handleGetUnits, receiptSettings } = useContext(AppStore)
 
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
@@ -52,6 +53,22 @@ export default function ManageProductsScreen() {
     const [hsnCode, setHsnCode] = useState<string>(() => "")
     const [productName, setProductName] = useState<string>(() => "")
 
+    const [unitName, setUnitName] = useState<string>(() => "")
+    const [unitId, setUnitId] = useState<number>(() => undefined)
+
+    let unitMenuArr = []
+    for (const unit of units) {
+        unitMenuArr.push({
+            title: unit?.unit_name,
+            func: () => handleSetUnitNameAndId(unit?.unit_name, unit?.sl_no)
+        })
+    }
+
+    const handleSetUnitNameAndId = (unitName: string, unitId: number) => {
+        setUnitName(unitName)
+        setUnitId(unitId)
+    }
+
     const onScroll = ({ nativeEvent }) => {
         const currentScrollPosition = Math.floor(nativeEvent?.contentOffset?.y) ?? 0
         setIsExtended(currentScrollPosition <= 0)
@@ -76,7 +93,7 @@ export default function ManageProductsScreen() {
     const onDialogFailure = () => {
         clearStates([setDiscount, setCGST, setSGST], () => 0)
         setPrice(() => undefined)
-        setSearch(() => "")
+        clearStates([setSearch, setUnitName], () => "")
         setVisible(!visible)
     }
 
@@ -86,8 +103,8 @@ export default function ManageProductsScreen() {
             return
         }
         handleUpdateProductDetails().then(() => {
-            clearStates([setSearch, setDiscount, setCGST, setSGST], () => "")
-            setPrice(() => undefined)
+            clearStates([setSearch, setDiscount, setCGST, setSGST, setUnitName], () => "")
+            clearStates([setPrice, setUnitId], () => undefined)
             setVisible(!visible)
             setFilteredItems(() => [])
         }).catch(err => {
@@ -97,16 +114,16 @@ export default function ManageProductsScreen() {
 
     const onDialogFailureAdd = () => {
         clearStates([setDiscount, setCGST, setSGST], () => 0)
-        clearStates([setSearch, setHsnCode, setProductName], () => "")
-        setPrice(() => undefined)
+        clearStates([setSearch, setHsnCode, setProductName, setUnitName], () => "")
+        clearStates([setPrice, setUnitId], () => undefined)
         setVisibleAdd(!visibleAdd)
     }
 
     const onDialogSuccecssAdd = () => {
         handleAddProduct().then(() => {
-            clearStates([setHsnCode, setProductName], () => "")
+            clearStates([setHsnCode, setProductName, setUnitName], () => "")
             clearStates([setDiscount, setCGST, setSGST], () => 0)
-            setPrice(() => undefined)
+            clearStates([setPrice, setUnitId], () => undefined)
             setVisibleAdd(!visibleAdd)
         }).catch(err => {
             ToastAndroid.show("Something went wrong on server.", ToastAndroid.SHORT)
@@ -122,7 +139,9 @@ export default function ManageProductsScreen() {
             price: price,
             discount: discount,
             cgst: CGST,
-            sgst: SGST
+            sgst: SGST,
+            unit_name: unitName,
+            unit_id: unitId
         }
 
         if (hsnCode.length === 0 || productName.length === 0) {
@@ -150,6 +169,7 @@ export default function ManageProductsScreen() {
 
     useEffect(() => {
         handleGetItems()
+        handleGetUnits()
     }, [isFocused])
 
     return (
@@ -337,15 +357,34 @@ export default function ManageProductsScreen() {
                         </View>
                     </View>
 
-                    <View style={{ width: "100%" }}>
-                        <InputPaper
-                            label="Product Name"
-                            onChangeText={(txt: string) => setProductName(txt)}
-                            value={productName}
-                            keyboardType="default"
-                            mode="outlined"
-                            maxLength={30}
-                        />
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            gap: 5,
+                        }}>
+                        <View style={{ width: "70%" }}>
+                            <InputPaper
+                                label="Product Name"
+                                onChangeText={(txt: string) => setProductName(txt)}
+                                value={productName}
+                                keyboardType="default"
+                                mode="outlined"
+                                maxLength={30}
+                            />
+                        </View>
+                        <View style={{ width: "30%", alignItems: "center", justifyContent: "center" }}>
+                            {/* <InputPaper
+                                label="Product Name"
+                                onChangeText={(txt: string) => setProductName(txt)}
+                                value={productName}
+                                keyboardType="default"
+                                mode="outlined"
+                                maxLength={30}
+                            /> */}
+                            <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} />
+                        </View>
                     </View>
 
                     <View
