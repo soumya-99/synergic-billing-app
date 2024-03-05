@@ -1,7 +1,7 @@
 import { View, ScrollView, StyleSheet, PixelRatio, ToastAndroid } from "react-native"
 import React, { useContext, useEffect, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { List, Searchbar, Text } from "react-native-paper"
+import { Searchbar, Text } from "react-native-paper"
 import normalize, { SCREEN_HEIGHT } from "react-native-normalize"
 import HeaderImage from "../components/HeaderImage"
 import { flowerHome, flowerHomeDark } from "../resources/images"
@@ -11,25 +11,21 @@ import { usePaperColorScheme } from "../theme/theme"
 import DialogBox from "../components/DialogBox"
 import InputPaper from "../components/InputPaper"
 import { clearStates } from "../utils/clearStates"
-import { AddItemCredentials, AddUnitCredentials, ItemsData } from "../models/api_types"
+import { AddUnitCredentials, UnitData } from "../models/api_types"
 import { loginStorage } from "../storage/appStorage"
 import { useIsFocused } from "@react-navigation/native"
-import useEditItem from "../hooks/api/useEditItem"
 import { AppStore } from "../context/AppContext"
 import AnimatedFABPaper from "../components/AnimatedFABPaper"
-import useAddItem from "../hooks/api/useAddItem"
 import useAddUnit from "../hooks/api/useAddUnit"
 
 export default function ManageUnitsScreen() {
     const theme = usePaperColorScheme()
     const isFocused = useIsFocused()
 
-    const { items, handleGetItems, receiptSettings } = useContext(AppStore)
+    const { units, handleGetUnits, receiptSettings } = useContext(AppStore)
 
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
-    const { editItem } = useEditItem()
-    const { sendAddedItem } = useAddItem()
     const { sendAddedUnit } = useAddUnit()
 
     const [visible, setVisible] = useState(() => false)
@@ -38,17 +34,13 @@ export default function ManageUnitsScreen() {
     const hideDialogAdd = () => setVisibleAdd(() => false)
 
     const [search, setSearch] = useState<string>(() => "")
-    const [filteredItems, setFilteredItems] = useState<ItemsData[]>(
+    const [filteredUnits, setFilteredUnits] = useState<UnitData[]>(
         () => [],
     )
 
     const [isExtended, setIsExtended] = useState(() => true)
 
-    const [product, setProduct] = useState<ItemsData>()
-
-    // const [unit, setUnit] = useState<string>(() => product?.price)
     const [unit, setUnit] = useState<string>(() => "")
-
     const [unitName, setUnitName] = useState<string>(() => "")
 
     const onScroll = ({ nativeEvent }) => {
@@ -59,38 +51,35 @@ export default function ManageUnitsScreen() {
     const onChangeSearch = (query: string) => {
         setSearch(query)
 
-        const filtered = items.filter((item: ItemsData) => item?.item_name?.includes(query))
-        setFilteredItems(filtered)
-        if (query === "") setFilteredItems(() => [])
+        const filtered = units.filter((unit: UnitData) => unit?.unit_name?.includes(query))
+        setFilteredUnits(filtered)
+        if (query === "") setFilteredUnits(() => [])
     }
 
     const handleUpdateProductDetails = async () => {
-        await editItem(loginStore?.comp_id, product?.item_id, unit, discount, CGST, SGST, loginStore?.user_name).then(res => {
-            ToastAndroid.show("Product updated successfully.", ToastAndroid.SHORT)
-        }).catch(err => {
-            ToastAndroid.show("Error while updating product details.", ToastAndroid.SHORT)
-        })
+        // await editItem(loginStore?.comp_id, product?.item_id, unit, discount, CGST, SGST, loginStore?.user_name).then(res => {
+        //     ToastAndroid.show("Product updated successfully.", ToastAndroid.SHORT)
+        // }).catch(err => {
+        //     ToastAndroid.show("Error while updating product details.", ToastAndroid.SHORT)
+        // })
     }
 
     const onDialogFailure = () => {
-        clearStates([setDiscount, setCGST, setSGST], () => 0)
-        setUnit(() => undefined)
-        setSearch(() => "")
+        clearStates([setUnit, setSearch], () => "")
         setVisible(!visible)
     }
 
     const onDialogSuccecss = () => {
-        if (unit <= 0) {
-            ToastAndroid.show("Try adding some price.", ToastAndroid.SHORT)
+        if (unit.length === 0) {
+            ToastAndroid.show("Try adding some unit.", ToastAndroid.SHORT)
             return
         }
         handleUpdateProductDetails().then(() => {
-            clearStates([setSearch, setDiscount, setCGST, setSGST], () => "")
-            setUnit(() => undefined)
+            clearStates([setSearch, setUnit], () => "")
             setVisible(!visible)
-            setFilteredItems(() => [])
+            setFilteredUnits(() => [])
         }).catch(err => {
-            ToastAndroid.show("An error occurred while updating product", ToastAndroid.SHORT)
+            ToastAndroid.show("An error occurred while updating unit.", ToastAndroid.SHORT)
         })
     }
 
@@ -128,16 +117,13 @@ export default function ManageUnitsScreen() {
         })
     }
 
-    const handleProductPressed = (item: ItemsData) => {
-        setProduct(item)
-
-        setUnit("handleProductPressed")
-
+    const handleUnitPressed = (unit: UnitData) => {
+        setUnit(unit?.unit_name)
         setVisible(!visible)
     }
 
     useEffect(() => {
-        handleGetItems()
+        handleGetUnits()
     }, [isFocused])
 
     return (
@@ -173,12 +159,11 @@ export default function ManageUnitsScreen() {
                     {search && (
                         <ScrollableListContainer
                             backgroundColor={theme.colors.surfaceVariant}>
-                            {filteredItems.map(item => (
+                            {filteredUnits.map(unit => (
                                 <ProductListSuggestion
-                                    key={item.id}
-                                    itemName={item.item_name}
-                                    onPress={() => handleProductPressed(item)}
-                                    unitPrice={item.price}
+                                    key={unit.sl_no}
+                                    itemName={unit.unit_name}
+                                    onPress={() => handleUnitPressed(unit)}
                                 />
                             ))}
                         </ScrollableListContainer>

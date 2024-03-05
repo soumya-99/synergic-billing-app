@@ -4,7 +4,7 @@ import { AddUnitCredentials, AddedUnitResponse } from "../../models/api_types"
 
 export default function useAddUnit() {
     const sendAddedUnit = async (addedUnit: AddUnitCredentials) => {
-        return new Promise<AddedUnitResponse>((resolve, reject) => {
+        return new Promise<PromiseLike<AddedUnitResponse>>((resolve, reject) => {
             axios.post(`${ADDRESSES.ADD_UNIT}`, addedUnit).then(res => {
                 resolve(res.data)
             }).catch(err => {

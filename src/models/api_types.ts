@@ -89,6 +89,15 @@ export type ItemsData = {
     quantity?: number
 }
 
+export type UnitData = {
+    "sl_no": number,
+    "unit_name": string,
+    "created_by": string,
+    "created_at": string,
+    "modified_by": null,
+    "modified_at": null
+}
+
 export type SaleInsertData = {
     status: number
     data: {

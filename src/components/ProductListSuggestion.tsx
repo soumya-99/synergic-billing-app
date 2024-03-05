@@ -3,7 +3,7 @@ import { usePaperColorScheme } from "../theme/theme"
 
 type ProductListSuggestionProps = {
   itemName: string
-  unitPrice: number
+  unitPrice?: number
   onPress?: () => void
   id?: number | string
   itemDesc?: string
@@ -24,7 +24,7 @@ export default function ProductListSuggestion({
         description={itemDesc}
         onPress={onPress}
         left={props => <List.Icon {...props} icon="basket" />}
-        right={props => (
+        right={unitPrice && (props => (
           <Badge
             {...props}
             style={{
@@ -33,7 +33,7 @@ export default function ProductListSuggestion({
             }}>
             {`${unitPrice}/-`}
           </Badge>
-        )}
+        ))}
       />
       <Divider />
     </>

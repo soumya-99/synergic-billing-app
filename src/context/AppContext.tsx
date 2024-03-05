@@ -4,8 +4,9 @@ import { loginStorage } from "../storage/appStorage"
 import { fileStorage } from "../storage/appStorage"
 import useReceiptSettings from "../hooks/api/useReceiptSettings"
 import useLogin from "../hooks/api/useLogin"
-import { ItemsData, ReceiptSettingsData } from "../models/api_types"
+import { ItemsData, ReceiptSettingsData, UnitData } from "../models/api_types"
 import useItems from "../hooks/api/useItems"
+import useUnits from "../hooks/api/useUnits"
 
 export const AppStore = createContext(null)
 
@@ -15,10 +16,12 @@ const AppContext = ({ children }) => {
   const [isLogin, setIsLogin] = useState<boolean>(() => false)
   const [receiptSettings, setReceiptSettings] = useState<ReceiptSettingsData>()
   const [items, setItems] = useState<ItemsData[]>(() => [])
+  const [units, setUnits] = useState<UnitData[]>(() => [])
 
   const { login } = useLogin()
   const { fetchReceiptSettings } = useReceiptSettings()
   const { fetchItems } = useItems()
+  const { fetchUnits } = useUnits()
 
   const handleLogin = async (loginText: string, passwordText: string) => {
     await login(loginText, passwordText).then(loginData => {
@@ -75,6 +78,13 @@ const AppContext = ({ children }) => {
     setItems(itemsData)
   }
 
+  const handleGetUnits = async () => {
+    let unitsData = await fetchUnits()
+    console.log("unitsData", unitsData)
+
+    setUnits(unitsData)
+  }
+
   useEffect(() => {
     if (isLogin) {
       handleGetReceiptSettings()
@@ -88,7 +98,7 @@ const AppContext = ({ children }) => {
   }
 
   return (
-    <AppStore.Provider value={{ isLogin, handleLogin, handleLogout, receiptSettings, handleGetReceiptSettings, items, handleGetItems }}>
+    <AppStore.Provider value={{ isLogin, handleLogin, handleLogout, receiptSettings, handleGetReceiptSettings, items, handleGetItems, units, handleGetUnits }}>
       {children}
     </AppStore.Provider>
   )
