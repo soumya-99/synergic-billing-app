@@ -75,7 +75,6 @@ export type ItemsData = {
     hsn_code: string
     item_name: string
     description: string
-    unit_id: number
     container_id: number
     created_by: string
     created_dt: string
@@ -86,6 +85,8 @@ export type ItemsData = {
     discount: number
     cgst: number
     sgst: number
+    unit_id?: number
+    unit_name?: string
     quantity?: number
 }
 
@@ -283,6 +284,18 @@ export type GstSummary = {
 export type HeaderFooterData = {
     "status": number
     "data": string
+}
+
+export type ItemEditRequestCredentials = {
+    com_id: number
+    item_id: number
+    price: number
+    discount: number
+    cgst: number
+    sgst: number
+    modified_by: string
+    unit_id?: number
+    unit_name?: string
 }
 
 export type ItemEditData = {

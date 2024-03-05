@@ -11,7 +11,7 @@ import { usePaperColorScheme } from "../theme/theme"
 import DialogBox from "../components/DialogBox"
 import InputPaper from "../components/InputPaper"
 import { clearStates } from "../utils/clearStates"
-import { AddItemCredentials, ItemsData } from "../models/api_types"
+import { AddItemCredentials, ItemEditRequestCredentials, ItemsData } from "../models/api_types"
 import { loginStorage } from "../storage/appStorage"
 import { useIsFocused } from "@react-navigation/native"
 import useEditItem from "../hooks/api/useEditItem"
@@ -83,7 +83,19 @@ export default function ManageProductsScreen() {
     }
 
     const handleUpdateProductDetails = async () => {
-        await editItem(loginStore?.comp_id, product?.item_id, price, discount, CGST, SGST, loginStore?.user_name).then(res => {
+        let editedItemObject: ItemEditRequestCredentials = {
+            com_id: loginStore?.comp_id,
+            item_id: product?.item_id,
+            price: price,
+            discount: discount,
+            cgst: CGST,
+            sgst: SGST,
+            modified_by: loginStore?.user_name,
+            unit_id: unitId,
+            unit_name: unitName
+        }
+
+        await editItem(editedItemObject).then(res => {
             ToastAndroid.show("Product updated successfully.", ToastAndroid.SHORT)
         }).catch(err => {
             ToastAndroid.show("Error while updating product details.", ToastAndroid.SHORT)
@@ -92,7 +104,7 @@ export default function ManageProductsScreen() {
 
     const onDialogFailure = () => {
         clearStates([setDiscount, setCGST, setSGST], () => 0)
-        setPrice(() => undefined)
+        clearStates([setPrice, setUnitId], () => undefined)
         clearStates([setSearch, setUnitName], () => "")
         setVisible(!visible)
     }
@@ -163,6 +175,7 @@ export default function ManageProductsScreen() {
         setDiscount(item?.discount)
         setCGST(item?.cgst)
         setSGST(item?.sgst)
+        handleSetUnitNameAndId(item?.unit_name, item?.unit_id)
 
         setVisible(!visible)
     }
@@ -247,6 +260,9 @@ export default function ManageProductsScreen() {
                         }}>
                         <View style={{ width: "50%" }}>
                             <Text variant="labelMedium">Item ID. {product?.item_id}</Text>
+                        </View>
+                        <View style={{ width: "50%" }}>
+                            <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} />
                         </View>
                     </View>
 
