@@ -262,7 +262,7 @@ export default function ManageProductsScreen() {
                             <Text variant="labelMedium">Item ID. {product?.item_id}</Text>
                         </View>
                         <View style={{ width: "50%" }}>
-                            <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} />
+                            {receiptSettings?.unit_flag === "Y" ? <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} /> : <Text variant="labelSmall">Unit Off</Text>}
                         </View>
                     </View>
 
@@ -399,7 +399,7 @@ export default function ManageProductsScreen() {
                                 mode="outlined"
                                 maxLength={30}
                             /> */}
-                            <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} />
+                            {receiptSettings?.unit_flag === "Y" ? <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} /> : <Text variant="labelSmall">Unit Off</Text>}
                         </View>
                     </View>
 

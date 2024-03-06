@@ -61,6 +61,7 @@ export default function ManageUnitsScreen() {
 
     const handleUpdateUnitDetails = async () => {
         let editUnitCreds: UnitEditCredentials = {
+            comp_id: loginStore?.comp_id,
             sl_no: unitId,
             unit_name: unit,
             modified_by: loginStore?.user_name
@@ -112,6 +113,7 @@ export default function ManageUnitsScreen() {
 
     const handleAddUnit = async () => {
         let addedUnitObject: AddUnitCredentials = {
+            comp_id: loginStore?.comp_id,
             unit_name: unitName,
             created_by: loginStore?.user_name
         }

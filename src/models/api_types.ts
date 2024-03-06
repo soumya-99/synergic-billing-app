@@ -319,6 +319,7 @@ export type ItemEditData = {
 }
 
 export type UnitEditCredentials = {
+    "comp_id": number,
     "sl_no": number
     "unit_name": string
     "modified_by": string
@@ -364,6 +365,7 @@ export type AddedItemResponse = {
 }
 
 export type AddUnitCredentials = {
+    comp_id: number
     unit_name: string
     created_by: string
 }

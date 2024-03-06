@@ -79,7 +79,10 @@ const AppContext = ({ children }) => {
   }
 
   const handleGetUnits = async () => {
-    let unitsData = await fetchUnits()
+    const loginStore = JSON.parse(loginStorage.getString("login-data"))
+    const companyId = loginStore.comp_id
+
+    let unitsData = await fetchUnits(companyId)
     console.log("unitsData", unitsData)
 
     setUnits(unitsData)
