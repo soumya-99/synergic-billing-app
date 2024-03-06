@@ -54,14 +54,14 @@ const CustomerDetailsFillScreen = () => {
         if (receiptSettings?.discount_type === "P") {
             //@ts-ignore
             filteredData = (params?.added_products as ItemsData[]).map(item => {
-                const { cgst, sgst, com_id, discount, item_id, quantity, price } = item
+                const { cgst, sgst, comp_id, discount, item_id, quantity, price } = item
 
                 return {
                     cgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
                     sgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
                     tcgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
                     tsgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
-                    comp_id: com_id,
+                    comp_id: comp_id,
                     discount_amt: (((price * quantity * discount) / 100).toFixed(2)),
                     item_id: item_id,
                     qty: quantity,
@@ -89,14 +89,14 @@ const CustomerDetailsFillScreen = () => {
         } else {
             //@ts-ignore
             filteredData = (params?.added_products as ItemsData[]).map(item => {
-                const { cgst, sgst, com_id, discount, item_id, quantity, price } = item
+                const { cgst, sgst, comp_id, discount, item_id, quantity, price } = item
 
                 return {
                     cgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
                     sgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
                     tcgst_amt: receiptSettings?.gst_flag === "N" ? 0 : cgst,
                     tsgst_amt: receiptSettings?.gst_flag === "N" ? 0 : sgst,
-                    comp_id: com_id,
+                    comp_id: comp_id,
                     discount_amt: (discount).toFixed(2),
                     item_id: item_id,
                     qty: quantity,

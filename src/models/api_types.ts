@@ -86,7 +86,7 @@ export type ReceiptSettingsEditCredentials = {
 
 export type ItemsData = {
     id: number
-    com_id: number
+    comp_id: number
     hsn_code: string
     item_name: string
     description: string
@@ -303,7 +303,7 @@ export type HeaderFooterData = {
 }
 
 export type ItemEditRequestCredentials = {
-    com_id: number
+    comp_id: number
     item_id: number
     price: number
     discount: number
@@ -348,7 +348,7 @@ export type VersionCheckData = {
 }
 
 export type AddItemCredentials = {
-    com_id: number
+    comp_id: number
     hsn_code: string
     item_name: string
     created_by: string

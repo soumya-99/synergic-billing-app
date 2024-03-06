@@ -14,7 +14,7 @@ import { ItemEditData, ItemEditRequestCredentials } from "../../models/api_types
 //     ) => {
 //         return new Promise<PromiseLike<ItemEditData>>((resolve, reject) => {
 //             axios.post(`${ADDRESSES.EDIT_ITEM}`, {
-//                 com_id: companyId,
+//                 comp_id: companyId,
 //                 item_id: itemId,
 //                 price: price,
 //                 discount: discount,

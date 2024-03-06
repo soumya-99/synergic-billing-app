@@ -15,7 +15,7 @@ export function mapItemToFilteredItem(
     gstFlag: "Y" | "N",
     discountType: "P" | "A"
 ): FilteredItem {
-    const { cgst, sgst, com_id, discount, item_id, quantity, price } = item
+    const { cgst, sgst, comp_id, discount, item_id, quantity, price } = item
 
     const cgstAmt = receiptSettings?.gst_flag === "N" ? 0 : (price * quantity * cgst / 100)
     const sgstAmt = receiptSettings?.gst_flag === "N" ? 0 : (price * quantity * sgst / 100)
@@ -33,7 +33,7 @@ export function mapItemToFilteredItem(
     return {
         cgst_amt: cgstAmt,
         sgst_amt: sgstAmt,
-        comp_id: com_id,
+        comp_id: comp_id,
         discount_amt: discountAmt,
         item_id: item_id,
         qty: quantity,

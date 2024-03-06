@@ -84,7 +84,7 @@ export default function ManageProductsScreen() {
 
     const handleUpdateProductDetails = async () => {
         let editedItemObject: ItemEditRequestCredentials = {
-            com_id: loginStore?.comp_id,
+            comp_id: loginStore?.comp_id,
             item_id: product?.item_id,
             price: price,
             discount: discount,
@@ -144,7 +144,7 @@ export default function ManageProductsScreen() {
 
     const handleAddProduct = async () => {
         let addedProductObject: AddItemCredentials = {
-            com_id: loginStore?.comp_id,
+            comp_id: loginStore?.comp_id,
             hsn_code: hsnCode,
             item_name: productName,
             created_by: loginStore?.user_name,
