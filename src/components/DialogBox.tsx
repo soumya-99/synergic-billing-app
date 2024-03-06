@@ -14,6 +14,7 @@ type DialogBoxProps = {
   iconSize?: number
   titleStyle?: {}
   buttonSuccessIcon?: string
+  dismissable?: boolean
 }
 
 export default function DialogBox({
@@ -28,13 +29,13 @@ export default function DialogBox({
   onFailure,
   onSuccess,
   hide,
-  buttonSuccessIcon
+  dismissable = false
 }: PropsWithChildren<DialogBoxProps>) {
   const theme = usePaperColorScheme()
 
   return (
     <Portal>
-      <Dialog visible={visible} onDismiss={hide} theme={theme}>
+      <Dialog visible={visible} onDismiss={hide} theme={theme} dismissable={dismissable}>
         {icon && <Dialog.Icon icon={icon} size={iconSize} />}
         {title && <Dialog.Title style={titleStyle}>{title}</Dialog.Title>}
         <Dialog.Content>{children}</Dialog.Content>
