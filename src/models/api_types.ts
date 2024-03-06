@@ -330,3 +330,14 @@ export type AddUnitCredentials = {
     unit_name: string
     created_by: string
 }
+
+export type StockSearchCredentials = {
+    comp_id: number
+    br_id: number
+    // created_by: number
+    item_id: number
+}
+
+export type StockSearchResponse = {
+    stock: number
+}

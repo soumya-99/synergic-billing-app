@@ -11,6 +11,7 @@ import LogoUploadScreen from "../screens/LogoUploadScreen"
 import ProfileScreen from "../screens/ProfileScreen"
 import ChangePinScreen from "../screens/ChangePinScreen"
 import ManageUnitsScreen from "../screens/ManageUnitsScreen"
+import InventoryScreen from "../screens/InventoryScreen"
 
 export default function SettingsNavigation() {
   const Stack = createNativeStackNavigator()
@@ -40,6 +41,10 @@ export default function SettingsNavigation() {
       <Stack.Screen
         name={navigationRoutes.manageUnitsScreen}
         component={ManageUnitsScreen}
+      />
+      <Stack.Screen
+        name={navigationRoutes.inventoryScreen}
+        component={InventoryScreen}
       />
       <Stack.Screen
         name={navigationRoutes.receiptSettingsEditScreen}

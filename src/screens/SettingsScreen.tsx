@@ -119,6 +119,16 @@ function SettingsScreen() {
             )}
           />
           <ReportButton
+            text="Inventory"
+            color={theme.colors.purpleContainer}
+            icon="archive-outline"
+            onPress={() => navigation.dispatch(
+              CommonActions.navigate({
+                name: navigationRoutes.inventoryScreen,
+              })
+            )}
+          />
+          <ReportButton
             text="Receipt Settings"
             color={theme.colors.primaryContainer}
             icon="card-bulleted-settings-outline"

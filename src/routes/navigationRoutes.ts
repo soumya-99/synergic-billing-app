@@ -27,6 +27,7 @@ const navigationRoutes = {
   headerFooterScreen: "HeaderFooterScreen",
   manageProductsScreen: "ManageProductsScreen",
   manageUnitsScreen: "ManageUnitsScreen",
+  inventoryScreen: "InventoryScreen",
   receiptSettingsEditScreen: "ReceiptSettingsEditScreen",
   logoUploadScreen: "LogoUploadScreen",
   changePinScreen: "changePinScreen",
