@@ -12,6 +12,7 @@ import { usePaperColorScheme } from "../theme/theme"
 import { CommonActions, useNavigation } from "@react-navigation/native"
 import navigationRoutes from "../routes/navigationRoutes"
 import { Button, Dialog, Portal, Text } from "react-native-paper"
+import DialogBox from "../components/DialogBox"
 
 function SettingsScreen() {
   const navigation = useNavigation()
@@ -41,19 +42,16 @@ function SettingsScreen() {
             Settings
           </HeaderImage>
         </View>
-
-        <Portal>
-          <Dialog visible={visible} onDismiss={hideDialog}>
-            <Dialog.Title>Logging Out</Dialog.Title>
-            <Dialog.Content>
-              <Text variant="bodyMedium">Are you sure you want to log out?</Text>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={hideDialog}>Cancel</Button>
-              <Button onPress={loggingOut}>Yes</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
+        <DialogBox
+          visible={visible}
+          hide={hideDialog}
+          onFailure={hideDialog}
+          onSuccess={loggingOut}
+          title="Logging Out"
+          btnSuccess="YES"
+        >
+          <Text variant="bodyMedium">Are you sure you want to log out?</Text>
+        </DialogBox>
 
         <View style={{ padding: 20 }}>
           <ButtonPaper icon="logout" mode="text" onPress={showDialog}>
