@@ -239,7 +239,7 @@ function ProductsScreen() {
               justifyContent: "space-between",
               alignItems: "center",
               flexDirection: "row",
-              marginHorizontal: SCREEN_WIDTH / 10
+              // marginHorizontal: SCREEN_WIDTH / 10
             }}>
             <View>
               <Text variant="labelMedium">PRODUCT ID:</Text>
@@ -254,7 +254,7 @@ function ProductsScreen() {
               justifyContent: "space-between",
               alignItems: "center",
               flexDirection: "row",
-              marginHorizontal: SCREEN_WIDTH / 10
+              // marginHorizontal: SCREEN_WIDTH / 10
             }}>
             {receiptSettings?.price_type === "A" ? (
               <>
@@ -289,7 +289,7 @@ function ProductsScreen() {
             }}>
             <View style={receiptSettings?.discount_flag === "Y" ? { width: "50%" } : { width: "100%" }}>
               <InputPaper
-                label="Quantity"
+                label={`Quantity (${product?.unit_name || ""})`}
                 onChangeText={(txt: number) => setQuantity(txt)}
                 value={quantity}
                 keyboardType="numeric"
@@ -374,6 +374,7 @@ function ProductsScreen() {
                     quantity={item["quantity"]}
                     unitPrice={item["price"]}
                     discount={item["discount"]}
+                    unit={item["unit_name"]}
                     onPress={() => productEditAndDelete(item)}
                   />
                 )
@@ -433,7 +434,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     justifyContent: "space-between",
-    minHeight: SCREEN_HEIGHT / 3.5,
+    minHeight: normalize(190),
     height: "auto"
   }
 })
