@@ -1,10 +1,10 @@
 import axios from "axios"
 import { ADDRESSES } from "../../config/api_list"
-import { OtpData } from "../../models/api_types"
+import { BasicResponse } from "../../models/api_types"
 
 export default function useFetchOtp() {
     const getOtp = async (phoneNumber: string) => {
-        return new Promise<OtpData>((resolve, reject) => {
+        return new Promise<BasicResponse>((resolve, reject) => {
             axios.post(`${ADDRESSES.OTP}/${phoneNumber}`, {}, {}).then(res => {
                 resolve(res.data)
             }).catch(err => {

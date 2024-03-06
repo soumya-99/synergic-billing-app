@@ -3,6 +3,26 @@ export type BasicResponse = {
     data: string
 }
 
+// export type RegisterData = {
+//     status: number
+//     data: string
+// }
+
+// export type VerifyActiveData = {
+//     status: number
+//     data: string
+// }
+
+// export type OtpData = {
+//     status: number
+//     data: string
+// }
+
+// export type CreatePinData = {
+//     status: number
+//     data: string
+// }
+
 export type LoginData = {
     suc: 0 | 1
     msg: {
@@ -282,6 +302,11 @@ export type GstSummary = {
     "total_tax": number
 }
 
+// export type HeaderFooterData = {
+//     "status": number
+//     "data": string
+// }
+
 export type ItemEditRequestCredentials = {
     comp_id: number
     item_id: number
@@ -294,12 +319,27 @@ export type ItemEditRequestCredentials = {
     unit_name?: string
 }
 
+// export type ItemEditData = {
+//     "status": number
+//     "data": string
+// }
+
 export type UnitEditCredentials = {
     "comp_id": number
     "sl_no": number
     "unit_name": string
     "modified_by": string
 }
+
+// export type UnitEditResponse = {
+//     "status": number
+//     "data": string
+// }
+
+// export type ReceiptSettingsEditData = {
+//     "status": number
+//     "data": string
+// }
 
 export type VersionCheck = {
     "status": number
@@ -325,8 +365,23 @@ export type AddItemCredentials = {
     unit_name?: string
 }
 
+// export type AddedItemResponse = {
+//     "status": number
+//     "data": string
+// }
+
 export type AddUnitCredentials = {
     comp_id: number
     unit_name: string
     created_by: string
 }
+
+// export type AddedUnitResponse = {
+//     "status": number
+//     "data": string
+// }
+
+// export type CANCEL_BILL_RESPONSE = {
+//     "status": number
+//     "data": string
+// }

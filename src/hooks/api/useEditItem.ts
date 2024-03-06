@@ -1,6 +1,6 @@
 import axios from "axios"
 import { ADDRESSES } from "../../config/api_list"
-import { ItemEditData, ItemEditRequestCredentials } from "../../models/api_types"
+import { BasicResponse, ItemEditRequestCredentials } from "../../models/api_types"
 
 // export default function useEditItem() {
 //     const editItem = async (
@@ -12,7 +12,7 @@ import { ItemEditData, ItemEditRequestCredentials } from "../../models/api_types
 //         sgst: number,
 //         modifiedBy: string
 //     ) => {
-//         return new Promise<PromiseLike<ItemEditData>>((resolve, reject) => {
+//         return new Promise<PromiseLike<BasicResponse>>((resolve, reject) => {
 //             axios.post(`${ADDRESSES.EDIT_ITEM}`, {
 //                 comp_id: companyId,
 //                 item_id: itemId,
@@ -33,7 +33,7 @@ import { ItemEditData, ItemEditRequestCredentials } from "../../models/api_types
 
 export default function useEditItem() {
     const editItem = async (editedItem: ItemEditRequestCredentials) => {
-        return new Promise<PromiseLike<ItemEditData>>((resolve, reject) => {
+        return new Promise<PromiseLike<BasicResponse>>((resolve, reject) => {
             axios.post(`${ADDRESSES.EDIT_ITEM}`, editedItem).then(res => {
                 resolve(res.data)
             }).catch(err => {

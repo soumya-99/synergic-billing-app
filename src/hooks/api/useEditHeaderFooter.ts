@@ -1,12 +1,12 @@
 import axios from "axios"
 import { ADDRESSES } from "../../config/api_list"
-import { HeaderFooterData } from "../../models/api_types"
+import { BasicResponse } from "../../models/api_types"
 
 export default function useEditHeaderFooter() {
     const editHeaderFooter = async (
         companyId: number, header1: string, header2: string, footer1: string, footer2: string, flag1: string, flag2: string, flag3: string, flag4: string, createdBy: string
     ) => {
-        return new Promise<PromiseLike<HeaderFooterData>>((resolve, reject) => {
+        return new Promise<PromiseLike<BasicResponse>>((resolve, reject) => {
             axios.post(`${ADDRESSES.EDIT_HEADER_FOOTER}`, {
                 comp_id: companyId,
                 header1: header1,
