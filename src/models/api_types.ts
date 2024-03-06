@@ -291,7 +291,7 @@ export type ItemEditRequestCredentials = {
     sgst: number
     modified_by: string
     unit_id?: number
-    unit_name?: string
+    // unit_name?: string
 }
 
 export type UnitEditCredentials = {
@@ -322,7 +322,7 @@ export type AddItemCredentials = {
     cgst: number
     sgst: number
     unit_id?: number
-    unit_name?: string
+    // unit_name?: string
 }
 
 export type AddUnitCredentials = {

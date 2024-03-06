@@ -53,7 +53,7 @@ export default function ManageProductsScreen() {
     const [hsnCode, setHsnCode] = useState<string>(() => "")
     const [productName, setProductName] = useState<string>(() => "")
 
-    const [unitName, setUnitName] = useState<string>(() => "")
+    const [unitName, setUnitName] = useState<string>(() => "") // not sent to api (adding product)
     const [unitId, setUnitId] = useState<number>(() => undefined)
 
     let unitMenuArr = []
@@ -92,7 +92,7 @@ export default function ManageProductsScreen() {
             sgst: SGST,
             modified_by: loginStore?.user_name,
             unit_id: unitId,
-            unit_name: unitName
+            // unit_name: unitName
         }
 
         await editItem(editedItemObject).then(res => {
@@ -152,7 +152,7 @@ export default function ManageProductsScreen() {
             discount: discount,
             cgst: CGST,
             sgst: SGST,
-            unit_name: unitName,
+            // unit_name: unitName,
             unit_id: unitId
         }
 
