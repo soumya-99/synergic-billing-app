@@ -256,6 +256,21 @@ function ProductsScreen() {
               flexDirection: "row",
               // marginHorizontal: SCREEN_WIDTH / 10
             }}>
+            <View>
+              <Text variant="labelMedium">UNIT:</Text>
+            </View>
+            <View>
+              <Text variant="labelMedium">{product?.unit_name || ""}</Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexDirection: "row",
+              // marginHorizontal: SCREEN_WIDTH / 10
+            }}>
             {receiptSettings?.price_type === "A" ? (
               <>
                 <View>
