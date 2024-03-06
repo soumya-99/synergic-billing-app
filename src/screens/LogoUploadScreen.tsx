@@ -9,6 +9,7 @@ import { useState } from "react"
 import ButtonPaper from "../components/ButtonPaper"
 import normalize from "react-native-normalize"
 import { Button, Dialog, Portal, Text } from "react-native-paper";
+import DialogBox from "../components/DialogBox";
 
 function LogoUploadScreen() {
     const theme = usePaperColorScheme()
@@ -76,18 +77,16 @@ function LogoUploadScreen() {
                     </HeaderImage>
                 </View>
 
-                <Portal>
-                    <Dialog visible={visible} onDismiss={hideDialog}>
-                        <Dialog.Title>Remove Logo</Dialog.Title>
-                        <Dialog.Content>
-                            <Text variant="bodyMedium">Are you sure you want to remove logo?</Text>
-                        </Dialog.Content>
-                        <Dialog.Actions>
-                            <Button onPress={hideDialog} textColor={theme.colors.green}>NO</Button>
-                            <Button onPress={removeLogo} textColor={theme.colors.error}>YES</Button>
-                        </Dialog.Actions>
-                    </Dialog>
-                </Portal>
+                <DialogBox
+                    visible={visible}
+                    hide={hideDialog}
+                    onFailure={hideDialog}
+                    onSuccess={removeLogo}
+                    title="Remove Logo"
+                    btnSuccess="REMOVE"
+                >
+                    <Text variant="bodyMedium">Are you sure you want to remove logo?</Text>
+                </DialogBox>
 
                 <View style={{ padding: normalize(20) }}>
                     <ButtonPaper mode="contained" onPress={selectLogo}>
