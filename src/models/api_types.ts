@@ -41,7 +41,7 @@ export type LoginData = {
         modified_by: string | null
         modified_dt: string | null
         location: number
-        logo: string,
+        logo: string
         web_portal: "N"
         contact_person: string
     } | ""
@@ -106,11 +106,12 @@ export type ItemsData = {
 }
 
 export type UnitData = {
-    "sl_no": number,
-    "unit_name": string,
-    "created_by": string,
-    "created_at": string,
-    "modified_by": null,
+    "sl_no": number
+    "comp_id": number
+    "unit_name": string
+    "created_by": string
+    "created_at": string
+    "modified_by": null
     "modified_at": null
 }
 
@@ -151,8 +152,8 @@ export type RecentBillsData = {
     "created_dt": string
     "modified_by": null
     "modified_dt": null
-    "gst_flag": "Y" | "N",
-    "discount_type": "P" | "A",
+    "gst_flag": "Y" | "N"
+    "discount_type": "P" | "A"
 }
 
 export type ShowBillResponseData = {
@@ -187,12 +188,12 @@ export type ShowBillData = {
     "pay_dtls": string
     "cust_name": string
     "phone_no": string
-    "gst_flag"?: "Y" | "N",
-    "discount_type"?: "P" | "A",
+    "gst_flag"?: "Y" | "N"
+    "discount_type"?: "P" | "A"
 }
 
 export type SearchBillsData = {
-    "status": 1,
+    "status": 1
     "data": SearchedBills[]
 }
 
@@ -257,12 +258,12 @@ export type ItemReport = {
 }
 
 export type CollectionReportData = {
-    "status": number,
+    "status": number
     "data": CollectionReport[]
 }
 
 export type CollectionReport = {
-    "created_by": string,
+    "created_by": string
     "pay_mode": "C" | "U" | "D"
     "net_amt": number
     "user_name": string
@@ -319,7 +320,7 @@ export type ItemEditData = {
 }
 
 export type UnitEditCredentials = {
-    "comp_id": number,
+    "comp_id": number
     "sl_no": number
     "unit_name": string
     "modified_by": string
