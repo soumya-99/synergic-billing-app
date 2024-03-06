@@ -262,7 +262,10 @@ export default function ManageProductsScreen() {
                             <Text variant="labelMedium">Item ID. {product?.item_id}</Text>
                         </View>
                         <View style={{ width: "50%" }}>
-                            {receiptSettings?.unit_flag === "Y" ? <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} /> : <Text variant="labelSmall">Unit Off</Text>}
+                            {
+                                receiptSettings?.unit_flag === "Y"
+                                && <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} />
+                            }
                         </View>
                     </View>
 
@@ -358,10 +361,14 @@ export default function ManageProductsScreen() {
                             alignItems: "center",
                             gap: 5,
                         }}>
-                        <View style={{ width: "50%" }}>
+                        {/* <View style={{ width: "50%" }}>
                             <Text variant="labelMedium">Sl No.</Text>
-                        </View>
-                        <View style={{ width: "50%" }}>
+                        </View> */}
+                        <View style={
+                            receiptSettings?.unit_flag === "Y"
+                                ? { width: "50%" }
+                                : { width: "100%" }
+                        }>
                             <InputPaper
                                 label="HSN Code"
                                 onChangeText={(txt: string) => setHsnCode(txt)}
@@ -371,6 +378,12 @@ export default function ManageProductsScreen() {
                                 mode="outlined"
                             />
                         </View>
+                        {
+                            receiptSettings?.unit_flag === "Y"
+                            && <View style={{ width: "50%", alignItems: "center", justifyContent: "center" }}>
+                                {receiptSettings?.unit_flag === "Y" ? <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} /> : <Text variant="labelSmall">Unit Off</Text>}
+                            </View>
+                        }
                     </View>
 
                     <View
@@ -380,7 +393,7 @@ export default function ManageProductsScreen() {
                             alignItems: "center",
                             gap: 5,
                         }}>
-                        <View style={{ width: "70%" }}>
+                        <View style={{ width: "100%" }}>
                             <InputPaper
                                 label="Product Name"
                                 onChangeText={(txt: string) => setProductName(txt)}
@@ -390,17 +403,7 @@ export default function ManageProductsScreen() {
                                 maxLength={30}
                             />
                         </View>
-                        <View style={{ width: "30%", alignItems: "center", justifyContent: "center" }}>
-                            {/* <InputPaper
-                                label="Product Name"
-                                onChangeText={(txt: string) => setProductName(txt)}
-                                value={productName}
-                                keyboardType="default"
-                                mode="outlined"
-                                maxLength={30}
-                            /> */}
-                            {receiptSettings?.unit_flag === "Y" ? <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} /> : <Text variant="labelSmall">Unit Off</Text>}
-                        </View>
+
                     </View>
 
                     <View
