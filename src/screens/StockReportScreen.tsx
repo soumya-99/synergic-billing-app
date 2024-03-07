@@ -148,11 +148,8 @@ function StockReportScreen() {
                     <DataTable>
 
                         <DataTable.Header>
-                            <DataTable.Title>Rcpt. No.</DataTable.Title>
-                            <DataTable.Title>Pay Mode</DataTable.Title>
-                            <DataTable.Title numeric>Qty.</DataTable.Title>
-                            <DataTable.Title numeric>Price</DataTable.Title>
-                            <DataTable.Title numeric>Amount</DataTable.Title>
+                            <DataTable.Title>Product</DataTable.Title>
+                            <DataTable.Title numeric>Stock</DataTable.Title>
                         </DataTable.Header>
 
                         {itemReport.map((item, i) => {

@@ -323,6 +323,7 @@ export type AddItemCredentials = {
     sgst: number
     unit_id?: number
     // unit_name?: string
+    br_id: number,
 }
 
 export type AddUnitCredentials = {

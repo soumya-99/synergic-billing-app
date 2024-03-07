@@ -153,7 +153,8 @@ export default function ManageProductsScreen() {
             cgst: CGST,
             sgst: SGST,
             // unit_name: unitName,
-            unit_id: unitId
+            unit_id: unitId,
+            br_id: loginStore?.br_id
         }
 
         if (hsnCode.length === 0 || productName.length === 0) {
