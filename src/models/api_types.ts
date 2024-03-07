@@ -350,3 +350,18 @@ export type StockUpdateCredentials = {
     user_id: string
     added_stock: number
 }
+
+export type StockReportCredentials = {
+    comp_id: number
+    br_id: number
+}
+
+export type StockReportResponse = {
+    item_id: number
+    item_name: string,
+    stock: number
+    created_by: string
+    created_dt: null
+    modified_by: string
+    modified_dt: string
+}

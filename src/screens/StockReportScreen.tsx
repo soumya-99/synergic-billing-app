@@ -8,7 +8,7 @@ import ButtonPaper from "../components/ButtonPaper"
 import { useEffect, useState } from "react"
 import normalize from "react-native-normalize"
 import { loginStorage } from "../storage/appStorage"
-import { ItemReport, ItemsData } from "../models/api_types"
+import { ItemReport, ItemsData, StockReportCredentials, StockReportResponse } from "../models/api_types"
 import SurfacePaper from "../components/SurfacePaper"
 import { useBluetoothPrint } from "../hooks/printables/useBluetoothPrint"
 import useItemReport from "../hooks/api/useItemReport"
@@ -16,6 +16,7 @@ import { useIsFocused } from "@react-navigation/native"
 import useItems from "../hooks/api/useItems"
 import ScrollableListContainer from "../components/ScrollableListContainer"
 import ProductListSuggestion from "../components/ProductListSuggestion"
+import useStockReport from "../hooks/api/useStockReport"
 
 function StockReportScreen() {
     const isFocused = useIsFocused()
@@ -24,8 +25,7 @@ function StockReportScreen() {
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
     const { fetchItems } = useItems()
-    const { fetchItemReport } = useItemReport()
-    const { printItemReport } = useBluetoothPrint()
+    const { fetchStockReport } = useStockReport()
 
     const [search, setSearch] = useState<string>(() => "")
     const [filteredItems, setFilteredItems] = useState<ItemsData[]>(() => [])
@@ -33,7 +33,7 @@ function StockReportScreen() {
     const [productId, setProductId] = useState<number>(() => undefined)
     const [itemName, setItemName] = useState<string>(() => "")
 
-    const [itemReport, setItemReport] = useState<ItemReport[]>(() => [])
+    const [stockReport, setStockReport] = useState<StockReportResponse[]>(() => [])
 
     const handleGetItems = async () => {
         const companyId = loginStore.comp_id
@@ -60,20 +60,21 @@ function StockReportScreen() {
         setSearch(() => "")
     }
 
-    const handleGetItemReport = async (fromDate: string, toDate: string, companyId: number, branchId: number, productId: number, userId: string) => {
-        if (fromDate > toDate) {
-            ToastAndroid.show("From date must be lower than To date.", ToastAndroid.SHORT)
-            return
+    const handleGetStockReport = async () => {
+        // if (itemName.length === 0) {
+        //     ToastAndroid.show("Try searching for a product.", ToastAndroid.SHORT)
+        //     return
+        // }
+
+        let stockReportCredsObject: StockReportCredentials = {
+            br_id: loginStore?.br_id,
+            comp_id: loginStore?.comp_id
         }
-        if (itemName.length === 0) {
-            ToastAndroid.show("Try searching for a product.", ToastAndroid.SHORT)
-            return
-        }
-        await fetchItemReport(fromDate, toDate, companyId, branchId, productId, userId).then(res => {
-            setItemReport(res?.data)
-            console.log("XXXXXXXXXXXXXXXXX", res?.data)
+        await fetchStockReport(stockReportCredsObject).then(res => {
+            setStockReport(res)
+            console.log("XXXXXXXXXXXXXXXXX", res)
         }).catch(err => {
-            ToastAndroid.show("Error fetching item report.", ToastAndroid.SHORT)
+            ToastAndroid.show("Error fetching stock report.", ToastAndroid.SHORT)
         })
     }
 
@@ -86,7 +87,7 @@ function StockReportScreen() {
         }
     }
 
-    let totalNetAmount: number = 0
+    let totalGrossStock: number = 0
     let totalQty: number = 0
 
     return (
@@ -132,7 +133,7 @@ function StockReportScreen() {
 
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
                     <ButtonPaper
-                        onPress={() => console.log("handleGetItemReport(formattedFromDate, formattedToDate, loginStore.comp_id, loginStore.br_id, productId, loginStore?.user_id)")}
+                        onPress={handleGetStockReport}
                         mode="contained-tonal"
                         buttonColor={theme.colors.green}
                         textColor={theme.colors.onGreen}>
@@ -142,9 +143,6 @@ function StockReportScreen() {
 
 
                 <SurfacePaper backgroundColor={theme.colors.surface}>
-                    <View style={{ padding: normalize(10) }}>
-                        <Text variant="bodyMedium">{itemName}</Text>
-                    </View>
                     <DataTable>
 
                         <DataTable.Header>
@@ -152,28 +150,26 @@ function StockReportScreen() {
                             <DataTable.Title numeric>Stock</DataTable.Title>
                         </DataTable.Header>
 
-                        {itemReport.map((item, i) => {
-                            totalNetAmount += item?.amount
-                            totalQty += item?.qty
+                        {stockReport.map((item, i) => {
+                            // totalNetAmount += item?.amount
+                            totalQty += 1
+                            totalGrossStock += item?.stock
 
                             return (
                                 <DataTable.Row key={i}>
-                                    <DataTable.Cell>{item?.receipt_no?.toString()?.substring(item?.receipt_no?.toString()?.length - 4)}</DataTable.Cell>
-                                    <DataTable.Cell>{item?.pay_mode === "C" ? "Cash" : item?.pay_mode === "U" ? "UPI" : item?.pay_mode === "D" ? "Card" : ""}</DataTable.Cell>
-                                    <DataTable.Cell numeric>{item?.qty}</DataTable.Cell>
-                                    <DataTable.Cell numeric>{item?.price}</DataTable.Cell>
-                                    <DataTable.Cell numeric>{item?.amount}</DataTable.Cell>
+                                    <DataTable.Cell>{item?.item_name}</DataTable.Cell>
+                                    <DataTable.Cell numeric>{item?.stock}</DataTable.Cell>
                                 </DataTable.Row>
                             )
                         })}
 
                     </DataTable>
                     <View style={{ padding: normalize(10) }}>
-                        <Text variant="labelMedium" style={{ color: theme.colors.purple }}>QUANTITY: {totalQty}  TOTAL: ₹{totalNetAmount?.toFixed(2)}</Text>
+                        <Text variant="labelMedium" style={{ color: theme.colors.purple }}>QUANTITY: {totalQty}  TOTAL STOCK: {totalGrossStock}</Text>
                     </View>
                 </SurfacePaper>
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
-                    <ButtonPaper icon={"cloud-print-outline"} onPress={() => handlePrint(itemReport, itemName)} mode="contained-tonal">
+                    <ButtonPaper icon={"cloud-print-outline"} onPress={() => console.log("handlePrint(stockReport, itemName)")} mode="contained-tonal">
                         PRINT
                     </ButtonPaper>
                 </View>

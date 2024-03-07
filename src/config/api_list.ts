@@ -17,6 +17,7 @@ export const ADDRESSES = {
     SALE_REPORT: `${BASE_URL}/api/sale_report`,
     COLLECTION_REPORT: `${BASE_URL}/api/collection_report`,
     ITEM_REPORT: `${BASE_URL}/api/item_report`,
+    STOCK_REPORT: `${BASE_URL}/api/stock_report`,
     GST_STATEMENT: `${BASE_URL}/api/gst_statement`,
     GST_SUMMARY: `${BASE_URL}/api/gst_summary`,
     EDIT_HEADER_FOOTER: `${BASE_URL}/api/edit_header_footer`,
