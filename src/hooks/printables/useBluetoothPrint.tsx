@@ -2,7 +2,7 @@ import { BluetoothEscposPrinter } from "react-native-bluetooth-escpos-printer"
 import { fileStorage, loginStorage } from "../../storage/appStorage"
 import { useContext } from "react"
 import { AppStore } from "../../context/AppContext"
-import { CollectionReport, GstStatement, GstSummary, ItemReport, ItemsData, SaleReport, ShowBillData } from "../../models/api_types"
+import { CollectionReport, GstStatement, GstSummary, ItemReport, ItemsData, SaleReport, ShowBillData, StockReportResponse } from "../../models/api_types"
 import { gstFilterationAndTotals } from "../../utils/gstFilterTotal"
 import { gstFilterationAndTotalForRePrint } from "../../utils/gstFilterTotalForRePrint"
 import { ToastAndroid } from "react-native"
@@ -2839,5 +2839,205 @@ export const useBluetoothPrint = () => {
         }
     }
 
-    return { printReceipt, printReceiptWithoutGst, rePrint, rePrintWithoutGst, printSaleReport, printCollectionReport, printItemReport, printGstStatement, printGstSummary }
+    async function printStockReport(stockReport: StockReportResponse[]) {
+        const loginStore = JSON.parse(loginStorage.getString("login-data"))
+        const fileStore = fileStorage.getString("file-data")
+
+        const shopName: string = loginStore?.company_name?.toString()
+        const address: string = loginStore?.address?.toString()
+        const location: string = loginStore?.branch_name?.toString()
+        const shopMobile: string = loginStore?.phone_no?.toString()
+        const shopEmail: string = loginStore?.email_id?.toString()
+        // const cashier: string = loginStore?.user_name?.toString()
+
+
+        // let totalCGSTP: number = 0
+        // let totalCGST: number = 0
+        // let totalSGST: number = 0
+        // let totalTaxes: number = 0
+        let totalQty: number = 0
+        let totalGrossStock: number = 0
+
+        try {
+
+            let columnWidths = [11, 1, 18]
+            let columnWidthsHeader = [8, 1, 21]
+            // let columnWidthsProductsHeaderAndBody = [5, 4, 8, 6, 4, 4] // 1 in hand
+            // let columnWidthsProductsHeaderAndBody = [5, 5, 5, 8, 8] // 1 in hand
+            // let columnWidthsProductsHeaderAndBody = [8, 7, 7, 8] // 2 in hand
+            let columnWidthsProductsHeaderAndBody = [20, 8] // 2 in hand
+            // let columnWidthsProductsHeaderAndBody = [18, 3, 4, 3, 4]
+            let columnWidthsTotals = [15, 15]
+            let columnWidthIfNameIsBig = [32]
+
+            // let newColumnWidths: number[] = [9, 9, 6, 7]
+
+            if (fileStore?.length > 0) {
+                await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER)
+                const options = {
+                    width: 250, // Assuming 58mm paper width with 8 dots/mm resolution (58mm * 8dots/mm = 384 dots)
+                    left: 50, // No left padding
+                    // align: "CENTER"
+                }
+
+                // Print the image
+                await BluetoothEscposPrinter.printPic(fileStore, options)
+            }
+
+            await BluetoothEscposPrinter.printerAlign(
+                BluetoothEscposPrinter.ALIGN.CENTER,
+            )
+            await BluetoothEscposPrinter.printText(shopName.toUpperCase(), {
+                align: "center",
+                widthtimes: 1.2,
+                heigthtimes: 2,
+            })
+            await BluetoothEscposPrinter.printText("\n", {})
+            // await BluetoothEscposPrinter.printText("hasifughaf", { align: "center" })
+
+            // if (receiptSettings?.on_off_flag1 === "Y") {
+            //     await BluetoothEscposPrinter.printText(receiptSettings?.header1, {})
+            //     await BluetoothEscposPrinter.printText("\n", {})
+            // }
+
+            // if (receiptSettings?.on_off_flag2 === "Y") {
+            //     await BluetoothEscposPrinter.printText(receiptSettings?.header2, {})
+            // }
+            // await BluetoothEscposPrinter.printText("\n", {})
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText("STOCK REPORT", {
+                align: "center",
+            })
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            // await BluetoothEscposPrinter.printText(`From: ${new Date(fromDate).toLocaleDateString("en-GB")}  To: ${new Date(toDate).toLocaleDateString("en-GB")}`, {})
+
+            // await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+            await BluetoothEscposPrinter.printText(address, {
+                align: "center",
+            })
+            await BluetoothEscposPrinter.printText("\n", {})
+            await BluetoothEscposPrinter.printText(location, {
+                align: "center",
+            })
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER)
+            await BluetoothEscposPrinter.printColumn(
+                columnWidthsProductsHeaderAndBody,
+                [
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                    // BluetoothEscposPrinter.ALIGN.RIGHT,
+                ],
+                // ["RCPT", "CGST", "SGST", "TOT_TAX", "TAX_AMT"],
+                ["Product", "Stock"],
+                {},
+            )
+
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            for (const item of stockReport) {
+                totalQty += 1
+                totalGrossStock += item?.stock
+
+                await BluetoothEscposPrinter.printColumn(
+                    columnWidthsProductsHeaderAndBody,
+                    [
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.RIGHT,
+                        // BluetoothEscposPrinter.ALIGN.RIGHT,
+                    ],
+                    [`${totalQty}. ${item?.item_name?.toString()}`, `${item?.stock?.toString()} ${item?.unit_name?.toString() || ""}`],
+                    {},
+                )
+            }
+
+            await BluetoothEscposPrinter.printText("\n", {})
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printColumn(
+                columnWidthsTotals,
+                [
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                ],
+                [`TOTAL QTY: ${totalQty?.toString()}`, `TOTAL GROSS: ${totalGrossStock?.toString()}`],
+                {},
+            )
+            // await BluetoothEscposPrinter.printColumn(
+            //     columnWidthsTotals,
+            //     [
+            //         BluetoothEscposPrinter.ALIGN.LEFT,
+            //         BluetoothEscposPrinter.ALIGN.RIGHT,
+            //     ],
+            //     [``, `Total Tax: ${totalTaxes?.toString()}`],
+            //     {},
+            // )
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(
+                "------------------------",
+                { align: "center" },
+            )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+            // if (receiptSettings?.on_off_flag3 === "Y") {
+            //     await BluetoothEscposPrinter.printText(receiptSettings?.footer1, {})
+            //     await BluetoothEscposPrinter.printText("\n", {})
+            // }
+            // if (receiptSettings?.on_off_flag4 === "Y") {
+            //     await BluetoothEscposPrinter.printText(receiptSettings?.footer2, {})
+            // }
+            // await BluetoothEscposPrinter.printText("\n", {})
+
+
+            // await BluetoothEscposPrinter.printText(
+            //     "THANK YOU, VISIT AGAIN!",
+            //     { align: "center" },
+            // )
+
+            await BluetoothEscposPrinter.printText("\n", {})
+
+            await BluetoothEscposPrinter.printText(
+                "------X------",
+                {},
+            )
+            await BluetoothEscposPrinter.printText("\n\r\n\r\n\r", {})
+        } catch (e) {
+            console.log(e.message || "ERROR")
+        }
+    }
+
+    return { printReceipt, printReceiptWithoutGst, rePrint, rePrintWithoutGst, printSaleReport, printCollectionReport, printItemReport, printGstStatement, printGstSummary, printStockReport }
 }

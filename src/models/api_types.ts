@@ -358,7 +358,8 @@ export type StockReportCredentials = {
 
 export type StockReportResponse = {
     item_id: number
-    item_name: string,
+    item_name: string
+    unit_name: string
     stock: number
     created_by: string
     created_dt: null

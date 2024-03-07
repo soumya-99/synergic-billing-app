@@ -26,6 +26,7 @@ function StockReportScreen() {
 
     const { fetchItems } = useItems()
     const { fetchStockReport } = useStockReport()
+    const { printStockReport } = useBluetoothPrint()
 
     const [search, setSearch] = useState<string>(() => "")
     const [filteredItems, setFilteredItems] = useState<ItemsData[]>(() => [])
@@ -78,9 +79,9 @@ function StockReportScreen() {
         })
     }
 
-    const handlePrint = (itemReport: ItemReport[], itemName: string) => {
-        if (itemReport.length !== 0) {
-            // printItemReport(itemName, itemReport, formattedFromDate, formattedToDate)
+    const handlePrint = (stockReport: StockReportResponse[]) => {
+        if (stockReport.length !== 0) {
+            printStockReport(stockReport)
         } else {
             ToastAndroid.show("No Report Found!", ToastAndroid.SHORT)
             return
@@ -104,7 +105,7 @@ function StockReportScreen() {
                     </HeaderImage>
                 </View>
 
-                <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
+                {/* <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
                     <Searchbar
                         placeholder="Search Products"
                         onChangeText={onChangeSearch}
@@ -113,7 +114,7 @@ function StockReportScreen() {
                         // loading={search ? true : false}
                         autoFocus
                     />
-                </View>
+                </View> */}
 
                 <View style={{ paddingBottom: normalize(10) }}>
                     {search && (
@@ -169,7 +170,7 @@ function StockReportScreen() {
                     </View>
                 </SurfacePaper>
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
-                    <ButtonPaper icon={"cloud-print-outline"} onPress={() => console.log("handlePrint(stockReport, itemName)")} mode="contained-tonal">
+                    <ButtonPaper icon={"cloud-print-outline"} onPress={() => handlePrint(stockReport)} mode="contained-tonal">
                         PRINT
                     </ButtonPaper>
                 </View>
