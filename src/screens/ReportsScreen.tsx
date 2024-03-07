@@ -59,6 +59,16 @@ function ReportsScreen() {
               })
             )}
           />
+          <ReportButton
+            text="Stock Report"
+            color={theme.colors.tertiaryContainer}
+            icon="billboard"
+            onPress={() => navigation.dispatch(
+              CommonActions.navigate({
+                name: navigationRoutes.stockReportScreen,
+              })
+            )}
+          />
           {receiptSettings?.gst_flag === "Y" && (
             <ReportButton
               text="GST Statement"
