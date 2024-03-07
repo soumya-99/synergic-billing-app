@@ -20,10 +20,13 @@ import AddedProductList from "../components/AddedProductList"
 import ScrollableListContainer from "../components/ScrollableListContainer"
 import NetTotalButton from "../components/NetTotalButton"
 import { clearStates } from "../utils/clearStates"
-import { ItemsData } from "../models/api_types"
+import { ItemsData, StockSearchCredentials, StockUpdateCredentials } from "../models/api_types"
 import ButtonPaper from "../components/ButtonPaper"
 import navigationRoutes from "../routes/navigationRoutes"
 import { AppStore } from "../context/AppContext"
+import { loginStorage } from "../storage/appStorage"
+import useStockSearch from "../hooks/api/useStockSearch"
+import useStockUpdate from "../hooks/api/useStockUpdate"
 
 function ProductsScreen() {
   const navigation = useNavigation()
@@ -33,7 +36,11 @@ function ProductsScreen() {
 
   const { receiptSettings, items, handleGetItems } = useContext(AppStore)
 
+  const loginStore = JSON.parse(loginStorage.getString("login-data"))
+
   const searchProductRef = useRef(null)
+
+  const { fetchStock } = useStockSearch()
 
   const [visible, setVisible] = useState(() => false)
   const hideDialog = () => setVisible(() => false)
@@ -45,10 +52,11 @@ function ProductsScreen() {
   )
 
   const [product, setProduct] = useState<ItemsData>()
-
   const [quantity, setQuantity] = useState<number>()
   const [discountState, setDiscountState] = useState<number>(() => 0)
   const [price, setPrice] = useState<number>(() => product?.price)
+  const [stock, setStock] = useState<number>()
+  const [updatedStock, setUpdatedStock] = useState<number>()
 
   const [addedProductsList, setAddedProductsList] = useState<
     ItemsData[]
@@ -69,11 +77,28 @@ function ProductsScreen() {
     if (query === "") setFilteredItems(() => [])
   }
 
+  const handleFetchStock = async (itemId: number) => {
+    let fetchedStockObject: StockSearchCredentials = {
+      comp_id: loginStore?.comp_id,
+      br_id: loginStore?.br_id,
+      user_id: loginStore?.user_id,
+      item_id: itemId
+    }
+
+    await fetchStock(fetchedStockObject).then(res => {
+      console.log("handleFetchStock fetchStock", res)
+      setStock(res?.stock)
+    }).catch(err => {
+      console.log("Something went wrong in handleFetchStock!", err)
+    })
+  }
+
   const productDetails = (item: ItemsData) => {
     setProduct(item)
 
     setDiscountState(item?.discount)
     setPrice(item?.price)
+    handleFetchStock(item?.item_id)
     setVisible(!visible)
   }
 
@@ -97,7 +122,8 @@ function ProductsScreen() {
   const onDialogFailure = () => {
     setEditState(false)
     setSearch(() => "")
-    setQuantity(() => undefined)
+    clearStates([setQuantity, setUpdatedStock], () => undefined)
+
     setVisible(!visible)
   }
 
@@ -123,7 +149,7 @@ function ProductsScreen() {
 
       clearStates([setSearch], () => "")
       setQuantity(() => undefined)
-      clearStates([setPrice, setDiscountState], () => 0)
+      clearStates([setPrice, setDiscountState, setUpdatedStock], () => 0)
       setVisible(!visible)
       setFilteredItems(() => [])
     }
@@ -135,8 +161,13 @@ function ProductsScreen() {
   }
 
   const onDialogSuccessChange = () => {
-    if (quantity <= 0 || typeof quantity === "undefined" || quantity.toString() === "NaN") {
-      ToastAndroid.show("Try adding some items.", ToastAndroid.SHORT)
+    if (
+      quantity <= 0
+      || typeof quantity === "undefined"
+      || Number.isNaN(quantity)
+      || updatedStock <= 0
+    ) {
+      ToastAndroid.show("Try adding valid numbers!", ToastAndroid.SHORT)
       return
     }
 
@@ -178,8 +209,13 @@ function ProductsScreen() {
   }
 
   const onDialogUpdateChange = (product: ItemsData) => {
-    if (quantity <= 0 || typeof quantity === "undefined" || quantity.toString() === "NaN") {
-      ToastAndroid.show("Try adding some items.", ToastAndroid.SHORT)
+    if (
+      quantity <= 0
+      || typeof quantity === "undefined"
+      || Number.isNaN(quantity)
+      || updatedStock <= 0
+    ) {
+      ToastAndroid.show("Try adding valid numbers!", ToastAndroid.SHORT)
       return
     }
 
@@ -215,6 +251,11 @@ function ProductsScreen() {
       addedProductsList,
     )
   }
+
+  useEffect(() => {
+    //@ts-ignore
+    setUpdatedStock(parseInt(stock) - parseInt(quantity))
+  }, [quantity])
 
   return (
     <SafeAreaView
@@ -296,6 +337,21 @@ function ProductsScreen() {
             )}
           </View>
 
+          <View
+            style={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexDirection: "row",
+              // marginHorizontal: SCREEN_WIDTH / 10
+            }}>
+            <View>
+              <Text variant="labelMedium">STOCK AVAILABLE</Text>
+            </View>
+            <View>
+              <Text variant="labelMedium">{updatedStock || stock}</Text>
+            </View>
+          </View>
+
           {/* <View></View> */}
           <View
             style={{
@@ -326,7 +382,7 @@ function ProductsScreen() {
               </View>
             )}
           </View>
-          {editState && <View>
+          {editState && <View style={{ marginBottom: normalize(-20) }}>
             <ButtonPaper mode="text" textColor={theme.colors.purple} icon="trash-can-outline" onPress={() => handleOnDelete(product)}>
               DELETE ITEM
             </ButtonPaper>
@@ -451,7 +507,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     justifyContent: "space-between",
-    minHeight: normalize(190),
+    minHeight: normalize(230),
     height: "auto"
   }
 })

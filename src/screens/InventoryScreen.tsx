@@ -79,7 +79,7 @@ export default function InventoryScreen() {
             br_id: loginStore?.br_id,
             user_id: loginStore?.user_id,
             item_id: itemId,
-            added_stock: addedStock
+            added_stock: addedStock,
         }
 
         await updateStock(updatedStockObject).then(res => {
