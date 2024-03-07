@@ -11,7 +11,7 @@ import { usePaperColorScheme } from "../theme/theme"
 import DialogBox from "../components/DialogBox"
 import InputPaper from "../components/InputPaper"
 import { clearStates } from "../utils/clearStates"
-import { AddItemCredentials, ItemEditRequestCredentials, ItemsData, StockSearchCredentials } from "../models/api_types"
+import { AddItemCredentials, ItemEditRequestCredentials, ItemsData, StockSearchCredentials, StockUpdateCredentials } from "../models/api_types"
 import { loginStorage } from "../storage/appStorage"
 import { useIsFocused } from "@react-navigation/native"
 import useEditItem from "../hooks/api/useEditItem"
@@ -20,6 +20,7 @@ import AnimatedFABPaper from "../components/AnimatedFABPaper"
 import useAddItem from "../hooks/api/useAddItem"
 import MenuPaper from "../components/MenuPaper"
 import useStockSearch from "../hooks/api/useStockSearch"
+import useStockUpdate from "../hooks/api/useStockUpdate"
 
 export default function InventoryScreen() {
     const theme = usePaperColorScheme()
@@ -30,13 +31,20 @@ export default function InventoryScreen() {
     const { items, handleGetItems, units, handleGetUnits, receiptSettings } = useContext(AppStore)
 
     const { fetchStock } = useStockSearch()
+    const { updateStock } = useStockUpdate()
 
     const [product, setProduct] = useState<ItemsData>()
+    const [stock, setStock] = useState<number>()
+    const [addedStock, setAddedStock] = useState<number>()
+    const [updatedStock, setUpdatedStock] = useState<number>()
 
     const [search, setSearch] = useState<string>(() => "")
     const [filteredItems, setFilteredItems] = useState<ItemsData[]>(
         () => [],
     )
+
+    const [visibleAdd, setVisibleAdd] = useState<boolean>(() => false)
+    const hideDialogAdd = () => setVisibleAdd(() => false)
 
     const onChangeSearch = (query: string) => {
         setSearch(query)
@@ -48,19 +56,64 @@ export default function InventoryScreen() {
 
     const handleProductPressed = (item: ItemsData) => {
         setProduct(item)
-        handleFetchStock(item?.item_id)
+        handleFetchStock(item?.item_id).then(() => {
+            setVisibleAdd(!visibleAdd)
+        })
     }
 
     const handleFetchStock = async (itemId: number) => {
         let fetchedStockObject: StockSearchCredentials = {
             comp_id: loginStore?.comp_id,
             br_id: loginStore?.br_id,
+            user_id: loginStore?.user_id,
             item_id: itemId
         }
 
-        let res = await fetchStock(fetchedStockObject)
-        console.log("EEEEEEEEEEEEEEEEEEEEEEE", res)
+        await fetchStock(fetchedStockObject).then(res => {
+            console.log("handleFetchStock fetchStock", res)
+            setStock(res?.stock)
+        }).catch(err => {
+            console.log("Something went wrong in handleFetchStock!", err)
+        })
     }
+
+    const handleUpdateStock = async (itemId: number, addedStock: number) => {
+        let updatedStockObject: StockUpdateCredentials = {
+            comp_id: loginStore?.comp_id,
+            br_id: loginStore?.br_id,
+            user_id: loginStore?.user_id,
+            item_id: itemId,
+            added_stock: addedStock
+        }
+
+        await updateStock(updatedStockObject).then(res => {
+            ToastAndroid.show(res?.data, ToastAndroid.SHORT)
+            setVisibleAdd(!visibleAdd)
+        }).catch(err => {
+            ToastAndroid.show("Something went wrong while updating stock.", ToastAndroid.SHORT)
+        })
+    }
+
+    const onDialogFailureAdd = () => {
+        clearStates([setStock, setAddedStock, setUpdatedStock], () => undefined)
+        setVisibleAdd(!visibleAdd)
+    }
+
+    const onDialogSuccecssAdd = () => {
+        if (addedStock <= 0 || addedStock === undefined || Number.isNaN(updatedStock)) {
+            ToastAndroid.show("Try adding some Stock.", ToastAndroid.SHORT)
+            return
+        }
+        handleUpdateStock(product?.item_id, addedStock).then(() => {
+            clearStates([setStock, setAddedStock, setUpdatedStock], () => undefined)
+            setVisibleAdd(!visibleAdd)
+        })
+    }
+
+    useEffect(() => {
+        //@ts-ignore
+        setUpdatedStock(parseFloat(stock) + parseFloat(addedStock))
+    }, [addedStock])
 
     useEffect(() => {
         handleGetItems()
@@ -106,7 +159,7 @@ export default function InventoryScreen() {
                                 <ProductListSuggestion
                                     key={item.id}
                                     itemName={item.item_name}
-                                    onPress={() => console.log(handleProductPressed(item))}
+                                    onPress={() => handleProductPressed(item)}
                                     unitPrice={item.price}
                                 />
                             ))}
@@ -114,6 +167,87 @@ export default function InventoryScreen() {
                     )}
                 </View>
             </ScrollView>
+            <DialogBox
+                iconSize={40}
+                visible={visibleAdd}
+                hide={hideDialogAdd}
+                titleStyle={styles.title}
+                btnSuccess="SAVE"
+                onFailure={onDialogFailureAdd}
+                onSuccess={onDialogSuccecssAdd}>
+                <View style={{
+                    justifyContent: "space-between",
+                    minHeight: normalize(200),
+                    height: "auto"
+                }}>
+                    <View style={{ alignItems: "center" }}>
+                        <View>
+                            <Text variant="titleLarge">Updating Stock</Text>
+                        </View>
+                    </View>
+
+                    <View style={{ alignItems: "center" }}>
+                        <View>
+                            <Text variant="titleMedium">{product?.item_name}</Text>
+                        </View>
+                    </View>
+
+                    <View
+                        style={{
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            flexDirection: "row",
+                        }}>
+                        <View>
+                            <Text variant="labelMedium">UNIT</Text>
+                        </View>
+                        <View>
+                            <Text variant="labelMedium">{product?.unit_name || ""}</Text>
+                        </View>
+                    </View>
+
+                    <View
+                        style={{
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            flexDirection: "row",
+                        }}>
+                        <View>
+                            <Text variant="labelMedium">STOCK AVAILABLE</Text>
+                        </View>
+                        <View>
+                            <Text variant="labelMedium">{stock}</Text>
+                        </View>
+                    </View>
+
+                    <View style={{ width: "100%" }}>
+                        <InputPaper
+                            autoFocus
+                            label="Add Stock"
+                            onChangeText={(txt: number) => setAddedStock(txt)}
+                            value={addedStock}
+                            keyboardType="numeric"
+                            mode="outlined"
+                            maxLength={6}
+                        />
+                    </View>
+
+                    <View
+                        style={{
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            flexDirection: "row",
+                        }}>
+                        <View>
+                            <Text variant="labelLarge">UPDATED STOCK</Text>
+                        </View>
+                        <View>
+                            <Text variant="bodyMedium" style={{ color: theme.colors.green }}>{updatedStock || stock}</Text>
+                        </View>
+                    </View>
+
+                </View>
+            </DialogBox>
         </SafeAreaView>
     )
 }

@@ -334,10 +334,18 @@ export type AddUnitCredentials = {
 export type StockSearchCredentials = {
     comp_id: number
     br_id: number
-    // created_by: number
     item_id: number
+    user_id: string
 }
 
 export type StockSearchResponse = {
     stock: number
+}
+
+export type StockUpdateCredentials = {
+    comp_id: number
+    br_id: number
+    item_id: number
+    user_id: string
+    added_stock: number
 }
