@@ -249,20 +249,22 @@ function ProductsScreen() {
             </View>
           </View>
 
-          <View
-            style={{
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: "row",
-              // marginHorizontal: SCREEN_WIDTH / 10
-            }}>
-            <View>
-              <Text variant="labelMedium">UNIT:</Text>
+          {receiptSettings?.unit_flag === "Y" && (
+            <View
+              style={{
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexDirection: "row",
+                // marginHorizontal: SCREEN_WIDTH / 10
+              }}>
+              <View>
+                <Text variant="labelMedium">UNIT:</Text>
+              </View>
+              <View>
+                <Text variant="labelMedium">{product?.unit_name || ""}</Text>
+              </View>
             </View>
-            <View>
-              <Text variant="labelMedium">{product?.unit_name || ""}</Text>
-            </View>
-          </View>
+          )}
 
           <View
             style={{
@@ -304,7 +306,7 @@ function ProductsScreen() {
             }}>
             <View style={receiptSettings?.discount_flag === "Y" ? { width: "50%" } : { width: "100%" }}>
               <InputPaper
-                label={`Quantity (${product?.unit_name || ""})`}
+                label={`Quantity (${receiptSettings?.unit_flag === "Y" && product?.unit_name || ""})`}
                 onChangeText={(txt: number) => setQuantity(txt)}
                 value={quantity}
                 keyboardType="numeric"

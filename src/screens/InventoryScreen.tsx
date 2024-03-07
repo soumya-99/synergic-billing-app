@@ -188,19 +188,21 @@ export default function InventoryScreen() {
                         </View>
                     </View>
 
-                    <View
-                        style={{
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            flexDirection: "row",
-                        }}>
-                        <View>
-                            <Text variant="labelMedium">UNIT</Text>
+                    {receiptSettings?.unit_flag === "Y" && (
+                        <View
+                            style={{
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                flexDirection: "row",
+                            }}>
+                            <View>
+                                <Text variant="labelMedium">UNIT</Text>
+                            </View>
+                            <View>
+                                <Text variant="labelMedium">{product?.unit_name || ""}</Text>
+                            </View>
                         </View>
-                        <View>
-                            <Text variant="labelMedium">{product?.unit_name || ""}</Text>
-                        </View>
-                    </View>
+                    )}
 
                     <View
                         style={{
