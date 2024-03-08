@@ -434,10 +434,17 @@ function ProductsScreen() {
               {addedProductsList.map(item => {
                 totalPrice += item?.price * item["quantity"]
 
-                receiptSettings?.discount_type === "A"
-                  //@ts-ignore
-                  ? totalDiscountedAmount += parseFloat(item["discount"])
-                  : totalDiscountedAmount += parseFloat((item?.price * item["quantity"] * item["discount"] / 100).toFixed(2))
+                receiptSettings?.discount_flag === "Y" ? (
+                  receiptSettings?.discount_type === "A" ? (
+                    //@ts-ignore
+                    totalDiscountedAmount += parseFloat(item["discount"])
+                  ) : (
+                    totalDiscountedAmount += parseFloat((item?.price * item["quantity"] * item["discount"] / 100).toFixed(2))
+                  )
+                ) : (
+                  totalDiscountedAmount += 0
+                )
+
                 console.log("totalDiscount", totalDiscountedAmount)
 
                 return (
@@ -446,7 +453,7 @@ function ProductsScreen() {
                     itemName={item?.item_name}
                     quantity={item["quantity"]}
                     unitPrice={item["price"]}
-                    discount={item["discount"]}
+                    discount={receiptSettings?.discount_flag === "Y" ? item["discount"] : 0}
                     unit={item["unit_name"]}
                     onPress={() => productEditAndDelete(item)}
                   />
