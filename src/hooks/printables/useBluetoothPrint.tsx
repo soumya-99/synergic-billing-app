@@ -2865,7 +2865,7 @@ export const useBluetoothPrint = () => {
             // let columnWidthsProductsHeaderAndBody = [5, 4, 8, 6, 4, 4] // 1 in hand
             // let columnWidthsProductsHeaderAndBody = [5, 5, 5, 8, 8] // 1 in hand
             // let columnWidthsProductsHeaderAndBody = [8, 7, 7, 8] // 2 in hand
-            let columnWidthsProductsHeaderAndBody = [20, 8] // 2 in hand
+            let columnWidthsProductsHeaderAndBody = [19, 9] // 2 in hand
             // let columnWidthsProductsHeaderAndBody = [18, 3, 4, 3, 4]
             let columnWidthsTotals = [15, 15]
             let columnWidthIfNameIsBig = [32]
@@ -2973,7 +2973,7 @@ export const useBluetoothPrint = () => {
                         BluetoothEscposPrinter.ALIGN.RIGHT,
                         // BluetoothEscposPrinter.ALIGN.RIGHT,
                     ],
-                    [`${totalQty}. ${item?.item_name?.toString()}`, `${item?.stock?.toString()} ${item?.unit_name?.toString() || ""}`],
+                    [`${totalQty}. ${item?.item_name?.toString()?.slice(0, 14)}`, `${item?.stock?.toString()} ${item?.unit_name?.toString() || ""}`],
                     {},
                 )
             }
