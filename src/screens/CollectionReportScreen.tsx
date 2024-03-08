@@ -10,7 +10,7 @@ import { useState } from "react"
 import normalize from "react-native-normalize"
 import { formattedDate } from "../utils/dateFormatter"
 import { loginStorage } from "../storage/appStorage"
-import { CollectionReport } from "../models/api_types"
+import { CollectionReport, CollectionReportCredentials } from "../models/api_types"
 import SurfacePaper from "../components/SurfacePaper"
 import { useBluetoothPrint } from "../hooks/printables/useBluetoothPrint"
 import useCollectionReport from "../hooks/api/useCollectionReport"
@@ -38,7 +38,14 @@ function CollectionReportScreen() {
             ToastAndroid.show("From date must be lower than To date.", ToastAndroid.SHORT)
             return
         }
-        await fetchCollectionReport(fromDate, toDate, companyId, branchId, userId).then(res => {
+        let collectionReportCredObject: CollectionReportCredentials = {
+            from_date: fromDate,
+            to_date: toDate,
+            comp_id: companyId,
+            br_id: branchId,
+            user_id: userId
+        }
+        await fetchCollectionReport(collectionReportCredObject).then(res => {
             setCollectionReport(res?.data)
             console.log("XXXXXXXXXXXXXXXXX", res?.data)
         }).catch(err => {

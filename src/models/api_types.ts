@@ -243,9 +243,12 @@ export type ItemReport = {
     "branch_name": string
 }
 
-export type CollectionReportData = {
-    "status": number
-    "data": CollectionReport[]
+export type CollectionReportCredentials = {
+    from_date: string
+    to_date: string
+    comp_id: number
+    br_id: number
+    user_id: string
 }
 
 export type CollectionReport = {
@@ -254,6 +257,11 @@ export type CollectionReport = {
     "net_amt": number
     "user_name": string
     "no_of_bills": number
+}
+
+export type CollectionReportResponse = {
+    "status": number
+    "data": CollectionReport[]
 }
 
 export type GstStatementData = {
