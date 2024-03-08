@@ -69,6 +69,16 @@ function ReportsScreen() {
               })
             )}
           />
+          <ReportButton
+            text="Cancelled Bills Report"
+            color={theme.colors.secondaryContainer}
+            icon="billboard"
+            onPress={() => navigation.dispatch(
+              CommonActions.navigate({
+                name: navigationRoutes.cancelledBillsReportScreen,
+              })
+            )}
+          />
           {receiptSettings?.gst_flag === "Y" && (
             <ReportButton
               text="GST Statement"

@@ -367,3 +367,33 @@ export type StockReportResponse = {
     modified_by: string
     modified_dt: string
 }
+
+export type CancelledBillsReportCredentials = {
+    from_date: string
+    to_date: string
+}
+
+export type CancelledBillsReportResponse = {
+    "cancel_rcpt_id": number
+    "receipt_no": number
+    "trn_date": string
+    "price": number
+    "discount_amt": number
+    "cgst_amt": number
+    "sgst_amt": number
+    "amount": number
+    "round_off": number
+    "net_amt": number
+    "pay_mode": "U" | "D" | "C"
+    "received_amt": number
+    "cust_name": string
+    "phone_no": string
+    "gst_flag": "Y" | "N"
+    "discount_type": "P" | "A"
+    "created_by": string
+    "created_dt": string
+    "modified_by": null
+    "modified_dt": null
+    "cancelled_by": string
+    "cancelled_dt": string
+}

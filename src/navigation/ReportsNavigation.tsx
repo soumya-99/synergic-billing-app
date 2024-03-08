@@ -7,6 +7,7 @@ import ItemReportScreen from "../screens/ItemReportScreen"
 import GstStatementReportScreen from "../screens/GstStatementReportScreen"
 import GstSummaryReportScreen from "../screens/GstSummaryReportScreen"
 import StockReportScreen from "../screens/StockReportScreen"
+import CancelledBillsReportScreen from "../screens/CancelledBillsReport"
 
 export default function ReportsNavigation() {
     const Stack = createNativeStackNavigator()
@@ -40,6 +41,10 @@ export default function ReportsNavigation() {
             <Stack.Screen
                 name={navigationRoutes.stockReportScreen}
                 component={StockReportScreen}
+            />
+            <Stack.Screen
+                name={navigationRoutes.cancelledBillsReportScreen}
+                component={CancelledBillsReportScreen}
             />
         </Stack.Navigator>
     )

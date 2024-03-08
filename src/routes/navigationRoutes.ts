@@ -25,6 +25,7 @@ const navigationRoutes = {
   gstStatementReportScreen: "GstStatementReportScreen",
   gstSummaryReportScreen: "GstSummaryReportScreen",
   stockReportScreen: "StockReportScreen",
+  cancelledBillsReportScreen: "CancelledBillsReportScreen",
   headerFooterScreen: "HeaderFooterScreen",
   manageProductsScreen: "ManageProductsScreen",
   manageUnitsScreen: "ManageUnitsScreen",
