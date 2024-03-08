@@ -132,7 +132,28 @@ export default function InventoryScreen() {
                 </View>
 
                 <View style={{ padding: normalize(20) }}>
-                    {loginStore?.user_type === "M" ? (
+                    {loginStore?.user_type === "M"
+                        ? (
+                            receiptSettings?.stock_flag === "Y"
+                                ? <Searchbar
+                                    placeholder="Search Products"
+                                    onChangeText={onChangeSearch}
+                                    value={search}
+                                    elevation={search && 2}
+                                    // loading={search ? true : false}
+                                    autoFocus
+                                />
+                                : <Text variant="displayMedium" style={{ alignSelf: "center", textAlign: "center", color: theme.colors.pink }}>Inventory is off. Allow Inventory to use this feature.</Text>
+                        )
+                        : (
+                            <Text variant="displayMedium" style={{ alignSelf: "center", textAlign: "center", color: theme.colors.error }}>You don't have permissions to edit anything!</Text>
+                        )}
+
+
+                    {/* {loginStore?.user_type !== "M" && (
+                        <Text variant="displayMedium" style={{ alignSelf: "center", textAlign: "center", color: theme.colors.error }}>You don't have permissions to edit anything!</Text>
+                    )}
+                    {receiptSettings?.stock_flag === "Y" && loginStore?.user_type === "M" ? (
                         <Searchbar
                             placeholder="Search Products"
                             onChangeText={onChangeSearch}
@@ -142,8 +163,8 @@ export default function InventoryScreen() {
                             autoFocus
                         />
                     ) : (
-                        <Text variant="displayMedium" style={{ alignSelf: "center", textAlign: "center", color: theme.colors.error }}>You don't have permissions to edit anything!</Text>
-                    )}
+                        <Text variant="displayMedium" style={{ alignSelf: "center", textAlign: "center", color: theme.colors.pink }}>Inventory is off. Turn on to use Inventory.</Text>
+                    )} */}
 
                 </View>
 
