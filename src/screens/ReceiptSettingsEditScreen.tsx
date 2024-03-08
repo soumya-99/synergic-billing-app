@@ -25,6 +25,7 @@ export default function ReceiptSettingsEditScreen() {
     const { editReceiptSettings } = useEditReceiptSettings()
 
     const [rcptType, setRcptType] = useState<"P" | "B" | "S">(() => receiptSettings?.rcpt_type)
+    const [stockFlag, setStockFlag] = useState<"Y" | "N">(() => receiptSettings?.stock_flag)
     const [gstFlag, setGstFlag] = useState<"Y" | "N">(() => receiptSettings?.gst_flag)
     const [customerInfo, setCustomerInfo] = useState<"Y" | "N">(() => receiptSettings?.cust_inf)
     const [payMode, setPayMode] = useState<"Y" | "N">(() => receiptSettings?.pay_mode)
@@ -38,6 +39,11 @@ export default function ReceiptSettingsEditScreen() {
         { icon: "cloud-print-outline", title: "Print", func: () => setRcptType("P") },
         { icon: "android-messages", title: "SMS", func: () => setRcptType("S") },
         { icon: "all-inclusive", title: "Both", func: () => setRcptType("B") },
+    ]
+
+    let stockFlagArr = [
+        { icon: "check-outline", title: "Allow", func: () => setStockFlag("Y") },
+        { icon: "cancel", title: "Deny", func: () => setStockFlag("N") },
     ]
 
     let gstFlagArr = [
@@ -84,6 +90,7 @@ export default function ReceiptSettingsEditScreen() {
         let editedReceiptSettings: ReceiptSettingsEditCredentials = {
             comp_id: loginStore?.comp_id,
             rcpt_type: rcptType,
+            stock_flag: stockFlag,
             gst_flag: gstFlag,
             cust_inf: customerInfo,
             pay_mode: payMode,
@@ -130,6 +137,18 @@ export default function ReceiptSettingsEditScreen() {
                             )
                         }}
                         descriptionStyle={{ color: theme.colors.primary }}
+                    />
+                    <Divider />
+                    <List.Item
+                        title="Inventory"
+                        description={stockFlag === "Y" ? "Allowed" : stockFlag === "N" ? "Denied" : "Error Occurred!"}
+                        left={props => <List.Icon {...props} icon="inbox-full-outline" />}
+                        right={props => {
+                            return (
+                                <MenuPaper menuArrOfObjects={stockFlagArr} />
+                            )
+                        }}
+                        descriptionStyle={{ color: stockFlag === "Y" ? theme.colors.green : theme.colors.error }}
                     />
                     <Divider />
                     <List.Item

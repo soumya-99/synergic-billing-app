@@ -58,6 +58,7 @@ export type ReceiptSettingsData = {
 export type ReceiptSettingsEditCredentials = {
     comp_id: number
     rcpt_type: "P" | "S" | "B"
+    stock_flag: "Y" | "N"
     gst_flag: "Y" | "N"
     unit_flag?: "Y" | "N"
     cust_inf: "Y" | "N"
