@@ -1,7 +1,7 @@
 import { StyleSheet, ScrollView, SafeAreaView, View } from "react-native"
 
 import HeaderImage from "../components/HeaderImage"
-import { blurReport, blurReportDark } from "../resources/images"
+import { textureBill, textureBillDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
 import ReportButton from "../components/ReportButton"
 import ReportButtonsWrapper from "../components/ReportButtonsWrapper"
@@ -21,8 +21,8 @@ function MoreScreen() {
             <ScrollView keyboardShouldPersistTaps="handled">
                 <View style={{ alignItems: "center" }}>
                     <HeaderImage
-                        imgLight={blurReport}
-                        imgDark={blurReportDark}
+                        imgLight={textureBill}
+                        imgDark={textureBillDark}
                         borderRadius={30}
                         blur={10}>
                         Essentials
