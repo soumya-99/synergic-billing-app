@@ -20,6 +20,7 @@ const navigationRoutes = {
   cancelBillScreen: "CancelBillScreen",
   reportsNavigation: "ReportsNavigation",
   reportsScreen: "ReportsScreen",
+  moreScreen: "MoreScreen",
   saleReportScreen: "SaleReportScreen",
   collectionReportScreen: "CollectionReportScreen",
   itemReportScreen: "ItemReportScreen",

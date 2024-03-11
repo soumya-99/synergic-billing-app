@@ -4,6 +4,7 @@ import { usePaperColorScheme } from "../theme/theme"
 import SettingsNavigation from "./SettingsNavigation"
 import HomeNavigation from "./HomeNavigation"
 import ReportsNavigation from "./ReportsNavigation"
+import MoreNavigation from "./MoreNavigation"
 
 const Tab = createMaterialBottomTabNavigator()
 
@@ -33,6 +34,16 @@ function BottomNavigationPaper() {
           tabBarLabel: "Reports",
           tabBarIcon: ({ color, focused }) => (
             !focused ? <MaterialCommunityIcons name="cash" color={color} size={26} /> : <MaterialCommunityIcons name="cash-multiple" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="More"
+        component={MoreNavigation}
+        options={{
+          tabBarLabel: "More",
+          tabBarIcon: ({ color, focused }) => (
+            !focused ? <MaterialCommunityIcons name="dots-vertical-circle-outline" color={color} size={26} /> : <MaterialCommunityIcons name="dots-vertical-circle" color={color} size={26} />
           ),
         }}
       />

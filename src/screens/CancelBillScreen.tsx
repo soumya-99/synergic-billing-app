@@ -6,7 +6,7 @@ import {
     View,
     ToastAndroid,
 } from "react-native"
-import { List } from "react-native-paper"
+import { List, Searchbar } from "react-native-paper"
 import HeaderImage from "../components/HeaderImage"
 import { textureBill, textureBillDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
@@ -36,6 +36,11 @@ function CancelBillScreen() {
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
     const { receiptSettings } = useContext(AppStore)
+
+    const [search, setSearch] = useState<string>(() => "")
+    const onChangeSearch = (query: string) => {
+        setSearch(query)
+    }
 
     const [visible, setVisible] = useState(() => false)
     const hideDialog = () => setVisible(() => false)
@@ -70,6 +75,10 @@ function CancelBillScreen() {
     }
 
     const handleBillListClick = (rcptNo: number) => {
+        if (!search) {
+            ToastAndroid.show("Enter valid receipt number.", ToastAndroid.SHORT)
+            return
+        }
         setVisible(!visible)
         handleGetBill(rcptNo)
         setCurrentReceiptNo(rcptNo)
@@ -123,14 +132,14 @@ function CancelBillScreen() {
         }
     }
 
-    const handleGetBillsByDate = async (fromDate: string, toDate: string) => {
-        let billResponseData = await fetchSearchedBills(fromDate, toDate, loginStore.comp_id, loginStore.br_id, loginStore.user_id)
-        console.log("$$$$$$$$$########", billResponseData)
-        // console.log("$$$$$$$$$######## loginStore.comp_id", loginStore.comp_id)
-        // console.log("$$$$$$$$$######## loginStore.br_id", loginStore.br_id)
-        // console.log("$$$$$$$$$######## loginStore.user_id", loginStore.user_id)
-        setBillsArray(billResponseData?.data)
-    }
+    // const handleGetBillsByDate = async (fromDate: string, toDate: string) => {
+    //     let billResponseData = await fetchSearchedBills(fromDate, toDate, loginStore.comp_id, loginStore.br_id, loginStore.user_id)
+    //     console.log("$$$$$$$$$########", billResponseData)
+    //     // console.log("$$$$$$$$$######## loginStore.comp_id", loginStore.comp_id)
+    //     // console.log("$$$$$$$$$######## loginStore.br_id", loginStore.br_id)
+    //     // console.log("$$$$$$$$$######## loginStore.user_id", loginStore.user_id)
+    //     setBillsArray(billResponseData?.data)
+    // }
 
     const handleCancellingBill = async (rcptNo: number) => {
         let res = await cancelBill(rcptNo, loginStore.user_id)
@@ -169,45 +178,20 @@ function CancelBillScreen() {
                     </HeaderImage>
                 </View>
 
-                {/* <View style={{ padding: 10, flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
-                    <ButtonPaper onPress={() => setOpenFromDate(true)} mode="text">
-                        FROM: {fromDate?.toLocaleDateString("en-GB")}
-                    </ButtonPaper>
-                    <ButtonPaper onPress={() => setOpenToDate(true)} mode="text">
-                        TO: {toDate?.toLocaleDateString("en-GB")}
-                    </ButtonPaper>
-
-                    <DatePicker
-                        modal
-                        mode="date"
-                        // minimumDate={toDate.setMonth(toDate.getMonth() - 1)}
-                        open={openFromDate}
-                        date={fromDate}
-                        onConfirm={(date) => {
-                            setOpenFromDate(false)
-                            setFromDate(date)
-                        }}
-                        onCancel={() => {
-                            setOpenFromDate(false)
-                        }}
-                    />
-                    <DatePicker
-                        modal
-                        mode="date"
-                        open={openToDate}
-                        date={toDate}
-                        onConfirm={(date) => {
-                            setOpenToDate(false)
-                            setToDate(date)
-                        }}
-                        onCancel={() => {
-                            setOpenToDate(false)
-                        }}
-                    />
-                </View> */}
-
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
-                    <ButtonPaper onPress={() => handleGetBillsByDate(formattedFromDate, formattedToDate)} mode="contained-tonal">
+                    <View style={{ paddingBottom: normalize(10) }}>
+                        <Searchbar
+                            placeholder="Search Bills"
+                            onChangeText={onChangeSearch}
+                            value={search}
+                            elevation={search && 2}
+                        // loading={search ? true : false}
+                        />
+                    </View>
+                    {/* <ButtonPaper onPress={() => handleGetBillsByDate(formattedFromDate, formattedToDate)} mode="contained-tonal">
+                        SUBMIT
+                    </ButtonPaper> */}
+                    <ButtonPaper onPress={() => handleBillListClick(parseInt(search))} mode="contained-tonal">
                         SUBMIT
                     </ButtonPaper>
                 </View>

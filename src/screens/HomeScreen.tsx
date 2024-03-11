@@ -73,7 +73,7 @@ function HomeScreen() {
   const showDialogForAppUpdate = () => setVisibleUpdatePortal(true)
   const hideDialogForAppUpdate = () => setVisibleUpdatePortal(false)
 
-  const [segmentedButtonValue, setSegmentedButtonValue] = useState("")
+  // const [segmentedButtonValue, setSegmentedButtonValue] = useState("")
 
   let today = new Date()
   let year = today.getFullYear()
@@ -301,7 +301,7 @@ function HomeScreen() {
             </View>
           </SurfacePaper>
 
-          <View style={{ width: SCREEN_WIDTH / 1.16, alignSelf: "center" }}>
+          {/* <View style={{ width: SCREEN_WIDTH / 1.16, alignSelf: "center" }}>
             <SegmentedButtons
               value={segmentedButtonValue}
               onValueChange={setSegmentedButtonValue}
@@ -330,7 +330,7 @@ function HomeScreen() {
                 },
               ]}
             />
-          </View>
+          </View> */}
 
           <SurfacePaper
             smallWidthEnabled
