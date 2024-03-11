@@ -10,7 +10,7 @@ import {
 } from "react-native"
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import AnimatedFABPaper from "../components/AnimatedFABPaper"
-import { Button, Dialog, List, Portal, Text } from "react-native-paper"
+import { Button, Dialog, List, Portal, SegmentedButtons, Text } from "react-native-paper"
 import { usePaperColorScheme } from "../theme/theme"
 import HeaderImage from "../components/HeaderImage"
 import { flowerHome, flowerHomeDark } from "../resources/images"
@@ -18,7 +18,7 @@ import navigationRoutes from "../routes/navigationRoutes"
 import { CommonActions, useIsFocused, useNavigation } from "@react-navigation/native"
 import SurfacePaper from "../components/SurfacePaper"
 import DialogBox from "../components/DialogBox"
-import normalize from "react-native-normalize"
+import normalize, { SCREEN_WIDTH } from "react-native-normalize"
 import ScrollableListContainer from "../components/ScrollableListContainer"
 import { loginStorage } from "../storage/appStorage"
 import { RecentBillsData, ShowBillData } from "../models/api_types"
@@ -72,6 +72,8 @@ function HomeScreen() {
   const [visibleUpdatePortal, setVisibleUpdatePortal] = useState<boolean>(() => false)
   const showDialogForAppUpdate = () => setVisibleUpdatePortal(true)
   const hideDialogForAppUpdate = () => setVisibleUpdatePortal(false)
+
+  const [segmentedButtonValue, setSegmentedButtonValue] = useState("")
 
   let today = new Date()
   let year = today.getFullYear()
@@ -299,6 +301,37 @@ function HomeScreen() {
             </View>
           </SurfacePaper>
 
+          <View style={{ width: SCREEN_WIDTH / 1.16, alignSelf: "center" }}>
+            <SegmentedButtons
+              value={segmentedButtonValue}
+              onValueChange={setSegmentedButtonValue}
+              buttons={[
+                {
+                  value: "cancel",
+                  label: "Cancel Bill",
+                  icon: "cancel",
+                  checkedColor: theme.colors.primary,
+                  uncheckedColor: theme.colors.primary,
+                  onPress: () => navigation.dispatch(
+                    CommonActions.navigate({
+                      name: navigationRoutes.cancelBillScreen,
+                    })
+                  ),
+                  style: { backgroundColor: theme.colors.primaryContainer, borderRadius: 0 }
+                },
+                {
+                  value: "refund",
+                  label: "Refund",
+                  icon: "cash-refund",
+                  checkedColor: theme.colors.orange,
+                  uncheckedColor: theme.colors.orange,
+                  onPress: () => console.log("REFUND"),
+                  style: { backgroundColor: theme.colors.orangeContainer, borderRadius: 0 }
+                },
+              ]}
+            />
+          </View>
+
           <SurfacePaper
             smallWidthEnabled
             borderRadiusEnabled={false}
@@ -336,7 +369,9 @@ function HomeScreen() {
               </Button>
             </View>
           </SurfacePaper>
+
         </View>
+
       </ScrollView>
 
       <DialogBox

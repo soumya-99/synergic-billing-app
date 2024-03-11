@@ -4,6 +4,7 @@ import ProductsScreen from "../screens/ProductsScreen"
 import HomeScreen from "../screens/HomeScreen"
 import AllBillsScreen from "../screens/AllBillsScreen"
 import CustomerDetailsFillScreen from "../screens/CustomerDetailsFillScreen"
+import CancelBillScreen from "../screens/CancelBillScreen"
 
 export default function HomeNavigation() {
   const Stack = createNativeStackNavigator()
@@ -24,6 +25,11 @@ export default function HomeNavigation() {
       <Stack.Screen
         name={navigationRoutes.customerDetailsFillScreen}
         component={CustomerDetailsFillScreen}
+        options={{ animation: "flip" }}
+      />
+      <Stack.Screen
+        name={navigationRoutes.cancelBillScreen}
+        component={CancelBillScreen}
         options={{ animation: "flip" }}
       />
     </Stack.Navigator>

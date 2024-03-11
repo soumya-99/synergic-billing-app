@@ -17,6 +17,7 @@ const navigationRoutes = {
   itemMasterScreen: "ItemMasterScreen",
   printMain: "PrintMainScreen",
   customerDetailsFillScreen: "CustomerDetailsFillScreen",
+  cancelBillScreen: "CancelBillScreen",
   reportsNavigation: "ReportsNavigation",
   reportsScreen: "ReportsScreen",
   saleReportScreen: "SaleReportScreen",
