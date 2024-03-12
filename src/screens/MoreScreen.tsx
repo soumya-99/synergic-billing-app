@@ -39,16 +39,16 @@ function MoreScreen() {
                             })
                         )}
                     />
-                    {/* <ReportButton
+                    <ReportButton
                         text="Refund Item"
                         color={theme.colors.orangeContainer}
                         icon="billboard"
                         onPress={() => navigation.dispatch(
                             CommonActions.navigate({
-                                name: navigationRoutes.collectionReportScreen,
+                                name: navigationRoutes.refundItemsScreen,
                             })
                         )}
-                    /> */}
+                    />
                 </ReportButtonsWrapper>
             </ScrollView>
         </SafeAreaView>

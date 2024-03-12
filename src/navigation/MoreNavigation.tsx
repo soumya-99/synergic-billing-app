@@ -10,6 +10,8 @@ import StockReportScreen from "../screens/StockReportScreen"
 import CancelledBillsReportScreen from "../screens/CancelledBillsReport"
 import CancelBillScreen from "../screens/CancelBillScreen"
 import MoreScreen from "../screens/MoreScreen"
+import RefundItemsScreen from "../screens/RefundItemsScreen"
+import RefundItemsDataScreen from "../screens/RefunditemsDataScreen"
 
 export default function MoreNavigation() {
     const Stack = createNativeStackNavigator()
@@ -23,6 +25,14 @@ export default function MoreNavigation() {
             <Stack.Screen
                 name={navigationRoutes.cancelBillScreen}
                 component={CancelBillScreen}
+            />
+            <Stack.Screen
+                name={navigationRoutes.refundItemsScreen}
+                component={RefundItemsScreen}
+            />
+            <Stack.Screen
+                name={navigationRoutes.refundItemsDataScreen}
+                component={RefundItemsDataScreen}
             />
         </Stack.Navigator>
     )

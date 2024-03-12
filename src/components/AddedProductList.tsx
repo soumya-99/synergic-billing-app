@@ -4,7 +4,6 @@ import normalize from "react-native-normalize"
 import { Divider, Text } from "react-native-paper"
 import { AppStore } from "../context/AppContext"
 import { ReceiptSettingsData } from "../models/api_types"
-// import { receiptSettingsStorage } from "../storage/appStorage"
 
 type AddedProductListProps = {
   itemName: string
