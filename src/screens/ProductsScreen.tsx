@@ -382,7 +382,7 @@ function ProductsScreen() {
               </View>
             )}
           </View>
-          {editState && <View style={{ marginBottom: normalize(-20) }}>
+          {editState && <View style={{ marginBottom: normalize(-10) }}>
             <ButtonPaper mode="text" textColor={theme.colors.purple} icon="trash-can-outline" onPress={() => handleOnDelete(product)}>
               DELETE ITEM
             </ButtonPaper>
