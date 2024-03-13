@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState, useRef } from "react"
 import {
     StyleSheet,
     ScrollView,
@@ -6,7 +6,7 @@ import {
     View,
     ToastAndroid,
 } from "react-native"
-import { Text } from "react-native-paper"
+import { Searchbar, Text } from "react-native-paper"
 import HeaderImage from "../components/HeaderImage"
 import { textureBill, textureBillDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
@@ -21,6 +21,9 @@ import { AppStore } from "../context/AppContext"
 import InputPaper from "../components/InputPaper"
 import { RefundItemsScreenRouteProp } from "../models/route_types"
 import ScrollableListContainer from "../components/ScrollableListContainer"
+import useCalculations from "../hooks/useCalculations"
+import NetTotalForRePrints from "../components/NetTotalForRePrints"
+import { gstFilterationAndTotalForRePrint } from "../utils/gstFilterTotalForRePrint"
 
 function RefundItemsDataScreen() {
     const theme = usePaperColorScheme()
@@ -31,6 +34,11 @@ function RefundItemsDataScreen() {
 
     const { receiptSettings } = useContext(AppStore)
 
+    const { netTotalCalculate, netTotalWithGSTCalculate, grandTotalWithGSTCalculate } = useCalculations()
+
+
+
+
     const [visible, setVisible] = useState(() => false)
     const hideDialog = () => setVisible(() => false)
 
@@ -38,23 +46,43 @@ function RefundItemsDataScreen() {
     const [quantity, setQuantity] = useState<number>()
     const [position, setPosition] = useState<number>()
 
+    const [filteredItems, setFilteredItems] = useState<ShowBillData[]>(
+        () => [],
+    )
     const [billedSaleData, setBilledSaleData] = useState<ShowBillData[]>(() => params?.billed_sale_data)
+    const [refundedData, setRefundedData] = useState<ShowBillData[]>(() => [])
 
     // const [refundedListData, setRefundedListData] = useState<ShowBillData[]>(() => [])
 
+    const searchProductRef = useRef(null)
+
+
+    const [search, setSearch] = useState<string>(() => "")
+    const onChangeSearch = (query: string) => {
+        setSearch(query)
+
+        const filtered = params?.billed_sale_data?.filter((item: ShowBillData) => item?.item_name?.includes(query))
+        setFilteredItems(filtered)
+        if (query === "") setFilteredItems(() => [])
+    }
+
     const onDialogFailure = () => {
+        setSearch(() => "")
         setVisible(!visible)
     }
 
     const onDialogSuccecss = (item: ShowBillData) => {
         if (quantity <= item?.qty) {
-            // item["qty"] -= quantity
-            item["qty"] = quantity
+            if (refundedData.some(it => it.item_id === item.item_id)) {
+                ToastAndroid.show("Item already added.", ToastAndroid.SHORT)
+                setSearch(() => "")
+                return
+            }
 
             setVisible(!visible)
-
-            billedSaleData.splice(position, 1, item)
-            setBilledSaleData(billedSaleData)
+            refundedData.push({ ...item, qty: quantity, discount_amt: parseFloat(((item?.discount_amt / item?.qty) * quantity).toFixed(2)) })
+            setRefundedData(refundedData)
+            setSearch(() => "")
         } else {
             ToastAndroid.show("Quantity must be less than or equal to previous quantity.", ToastAndroid.SHORT)
             return
@@ -71,6 +99,9 @@ function RefundItemsDataScreen() {
 
     useEffect(() => {
         console.log("##########################", params?.billed_sale_data)
+        // console.log("##########################", netTotal)
+        // console.log("##########@@@@@@@@@@@@@@@@", totalDiscount)
+        // console.log("##########%%%%%%%%%%%%%%%%", totalGst)
     }, [])
 
     const handleRefundedListUpdate = (item: ShowBillData, pos: number) => {
@@ -82,6 +113,7 @@ function RefundItemsDataScreen() {
 
     let netTotal = 0
     let totalDiscount = 0
+    let totalGst = 0
 
     return (
         <SafeAreaView
@@ -94,7 +126,7 @@ function RefundItemsDataScreen() {
                         borderRadius={30}
                         blur={10}
                         isBackEnabled>
-                        Choose Items to Refund
+                        Choose Products to Refund
                     </HeaderImage>
                 </View>
 
@@ -102,11 +134,11 @@ function RefundItemsDataScreen() {
                     paddingHorizontal: normalize(20),
                     paddingBottom: normalize(10),
                 }}>
-                    <ScrollableListContainer
+                    {/* <ScrollableListContainer
                         backgroundColor={theme.colors.surfaceVariant}>
                         {billedSaleData?.map((item, i) => {
-                            netTotal += item.price * item.qty
-                            totalDiscount += (quantity == 0 ? 0 : item.discount_amt)
+                            // netTotal += item.price * item.qty
+                            // totalDiscount += (quantity == 0 ? 0 : item.discount_amt)
 
                             return (
                                 <AddedProductList
@@ -121,8 +153,97 @@ function RefundItemsDataScreen() {
                                 />
                             )
                         })}
-                    </ScrollableListContainer>
+                    </ScrollableListContainer> */}
+                    <View style={{ marginBottom: normalize(10) }}>
+                        <Searchbar
+                            ref={searchProductRef}
+                            autoFocus
+                            placeholder="Search Products"
+                            onChangeText={onChangeSearch}
+                            value={search}
+                            elevation={search && 2}
+                            keyboardType="default"
+                        // loading={search ? true : false}
+                        />
+                    </View>
+
+                    {search && <ScrollableListContainer
+                        backgroundColor={theme.colors.surfaceVariant}>
+                        {filteredItems?.map((item, i) => {
+                            // netTotal += item.price * item.qty
+                            // totalDiscount += (quantity == 0 ? 0 : item.discount_amt)
+
+                            return (
+                                <AddedProductList
+                                    onPress={() => handleRefundedListUpdate(item, i)}
+                                    itemName={item.item_name}
+                                    quantity={item.qty}
+                                    unitPrice={item.price}
+                                    discount={quantity == 0 ? 0 : item.discount_amt}
+                                    discountType={item?.discount_type}
+                                    gstFlag={item?.gst_flag}
+                                    key={i}
+                                />
+                            )
+                        })}
+                    </ScrollableListContainer>}
                 </View>
+
+                {refundedData.length > 0 && <View style={{
+                    paddingHorizontal: normalize(20),
+                    paddingBottom: normalize(10),
+                }}>
+                    <View style={{
+                        width: SCREEN_WIDTH / 3,
+                        height: normalize(50),
+                        backgroundColor: theme.colors.primaryContainer,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        alignSelf: "center",
+                        borderTopLeftRadius: normalize(20),
+                        borderTopRightRadius: normalize(20),
+                        // borderColor: theme.colors.onPrimaryContainer,
+                        // borderStyle: "dashed",
+                        // borderWidth: 1
+                    }}>
+                        <Text variant="headlineMedium">Refund Items</Text>
+                    </View>
+                    <ScrollableListContainer
+                        backgroundColor={theme.colors.primaryContainer}>
+                        {refundedData?.map((item, i) => {
+                            netTotal += item.price * item.qty
+                            totalDiscount += (quantity == 0 || item.discount_amt == 0 ? 0 : item.discount_amt)
+
+                            const { totalGST } = gstFilterationAndTotalForRePrint(refundedData)
+                            totalGst = totalGST
+                            // item?.gst
+
+                            return (
+                                <AddedProductList
+                                    disabled
+                                    // onPress={() => handleRefundedListUpdate(item, i)}
+                                    itemName={item.item_name}
+                                    quantity={item.qty}
+                                    unitPrice={item.price}
+                                    discount={quantity == 0 || item.discount_amt == 0 ? 0 : item.discount_amt}
+                                    discountType={item?.discount_type}
+                                    gstFlag={item?.gst_flag}
+                                    key={i}
+                                />
+                            )
+                        })}
+                    </ScrollableListContainer>
+                    <NetTotalForRePrints
+                        width={300}
+                        backgroundColor={theme.colors.orangeContainer}
+                        addedProductsList={refundedData}
+                        netTotal={netTotal}
+                        textColor={theme.colors.onGreenContainer}
+                        totalDiscount={totalDiscount}
+                        disabled
+                    />
+                </View>
+                }
 
                 <View style={{
                     backgroundColor: theme.colors.tertiaryContainer,
@@ -133,10 +254,11 @@ function RefundItemsDataScreen() {
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                    <Text variant="titleMedium" style={{ textAlign: "center", color: theme.colors.onTertiaryContainer }}>Refund Amount: {netTotal - totalDiscount}</Text>
+                    {/* <Text variant="titleMedium" style={{ textAlign: "center", color: theme.colors.onTertiaryContainer, textTransform: "uppercase" }}>Refund Amount: ₹{netTotalCalculate(netTotal, totalDiscount)}</Text> */}
+                    <Text variant="titleMedium" style={{ textAlign: "center", color: theme.colors.onTertiaryContainer, fontWeight: "800" }}>Refund Amount: ₹{grandTotalWithGSTCalculate(netTotal, totalDiscount, totalGst)} {refundedData[0]?.gst_flag === "Y" ? "(incl. GST)" : ""}</Text>
                 </View>
 
-                <View style={{ paddingHorizontal: normalize(20) }}>
+                <View style={{ paddingHorizontal: normalize(30) }}>
                     <ButtonPaper mode="contained" onPress={() => console.log("REFUNDED")}>
                         REFUND
                     </ButtonPaper>
@@ -146,7 +268,7 @@ function RefundItemsDataScreen() {
                 <View style={{ justifyContent: "center", alignItems: "center" }}>
                     <Text variant="titleMedium" style={{ textAlign: "center" }}>{product?.item_name}</Text>
                 </View>
-                <InputPaper keyboardType="numeric" label="Quantity" value={quantity} onChangeText={(txt: number) => setQuantity(txt)} />
+                <InputPaper autoFocus keyboardType="numeric" label="Quantity" value={quantity} onChangeText={(txt: number) => setQuantity(txt)} />
             </DialogBox>
         </SafeAreaView>
     )

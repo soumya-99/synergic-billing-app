@@ -78,6 +78,16 @@ function RefundItemsScreen() {
     const handleGetBill = async (rcptNo: number) => {
         await fetchBill(rcptNo).then(res => {
             setBilledSaleData(res?.data)
+
+            navigation.dispatch(
+                CommonActions.navigate({
+                    name: navigationRoutes.refundItemsDataScreen,
+                    params: {
+                        // billed_sale_data: billedSaleData
+                        billed_sale_data: res?.data
+                    }
+                })
+            )
         }).catch(err => {
             ToastAndroid.show("Error during fetching bills.", ToastAndroid.SHORT)
         })
@@ -88,47 +98,28 @@ function RefundItemsScreen() {
             ToastAndroid.show("Enter valid receipt number.", ToastAndroid.SHORT)
             return
         }
-        setVisible(!visible)
+        // setVisible(!visible)
         handleGetBill(rcptNo)
-        setCurrentReceiptNo(rcptNo)
-        setGstFlag(billedSaleData[0]?.gst_flag)
+        // setCurrentReceiptNo(rcptNo)
+        // setGstFlag(billedSaleData[0]?.gst_flag)
     }
 
-    const onDialogFailure = () => {
-        setVisible(!visible)
-    }
+    // const onDialogFailure = () => {
+    //     setVisible(!visible)
+    // }
 
-    const onDialogSuccecss = () => {
-        setVisible(!visible)
+    // const onDialogSuccecss = () => {
+    //     setVisible(!visible)
 
-        navigation.dispatch(
-            CommonActions.navigate({
-                name: navigationRoutes.refundItemsDataScreen,
-                params: {
-                    billed_sale_data: billedSaleData
-                }
-            })
-        )
-    }
-
-    const handleCancellingBill = async (rcptNo: number) => {
-        let res = await cancelBill(rcptNo, loginStore.user_id)
-
-        if (res?.status === 1) {
-            ToastAndroid.show(res?.data, ToastAndroid.SHORT)
-            setVisible(!visible)
-        }
-        return
-    }
-
-    const handleCancelBill = (rcptNo: number) => {
-        Alert.alert("Cancelling Bill", `Are you sure you want to cancel this bill?`, [
-            { text: "BACK", onPress: () => ToastAndroid.show("Operation cancelled by user.", ToastAndroid.SHORT) },
-            { text: "CANCEL BILL", onPress: () => handleCancellingBill(rcptNo) },
-        ],
-            { cancelable: false },
-        )
-    }
+    //     navigation.dispatch(
+    //         CommonActions.navigate({
+    //             name: navigationRoutes.refundItemsDataScreen,
+    //             params: {
+    //                 billed_sale_data: billedSaleData
+    //             }
+    //         })
+    //     )
+    // }
 
     const handleRefundedListUpdate = (item: ShowBillData) => {
         setVisible2(!visible2)
@@ -162,13 +153,14 @@ function RefundItemsScreen() {
                         borderRadius={30}
                         blur={10}
                         isBackEnabled>
-                        Refund Items
+                        Refund Products
                     </HeaderImage>
                 </View>
 
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
                     <View style={{ paddingBottom: normalize(10) }}>
                         <Searchbar
+                            autoFocus
                             placeholder="Search Bills"
                             onChangeText={onChangeSearch}
                             value={search}
@@ -200,12 +192,11 @@ function RefundItemsScreen() {
                     ))}
                 </View> */}
             </ScrollView>
-            <DialogBox
+            {/* <DialogBox
                 iconSize={40}
                 visible={visible}
                 hide={hideDialog}
                 titleStyle={styles.title}
-                btnSuccess="REFUND"
                 onFailure={onDialogFailure}
                 onSuccess={onDialogSuccecss}>
                 <ScrollableListContainer
@@ -235,7 +226,7 @@ function RefundItemsScreen() {
                         )
                     })}
                 </ScrollableListContainer>
-                {/* <NetTotalForRePrints
+                <NetTotalForRePrints
                     width={300}
                     backgroundColor={theme.colors.orangeContainer}
                     addedProductsList={billedSaleData}
@@ -243,8 +234,8 @@ function RefundItemsScreen() {
                     textColor={theme.colors.onGreenContainer}
                     totalDiscount={totalDiscount}
                     disabled
-                /> */}
-            </DialogBox>
+                />
+            </DialogBox> */}
         </SafeAreaView>
     )
 }
