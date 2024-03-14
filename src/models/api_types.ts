@@ -405,3 +405,40 @@ export type CancelledBillsReportResponse = {
     "cancelled_by": string
     "cancelled_dt": string
 }
+
+export type RefundItemCredentials = {
+    "user_id": string
+    "receipt_no": number
+    "comp_id": number
+    "br_id": number
+    "item_id": number
+    "price": number
+    "dis_pertg": number
+    "discount_amt": number
+    "cgst_prtg": number
+    "cgst_amt": number
+    "sgst_prtg": number
+    "sgst_amt": number
+    "qty": number
+    "tprice": number
+    "tdiscount_amt": number
+    "tot_refund_amt": number
+    "round_off": number
+    "net_amt": number
+    "pay_mode": string
+    "cust_name": string
+    "phone_no": string
+    "gst_flag": string
+    "discount_type": string
+}
+
+/**
+ * data.data means refund rcpt no
+ */
+export type RefundItemResponse = {
+    "status": number
+    "data": {
+        "status": number
+        "data": number
+    }
+}

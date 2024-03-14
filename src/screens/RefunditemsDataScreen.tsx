@@ -10,13 +10,13 @@ import { Searchbar, Text } from "react-native-paper"
 import HeaderImage from "../components/HeaderImage"
 import { textureBill, textureBillDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { CommonActions, useNavigation, useRoute } from "@react-navigation/native"
 import DialogBox from "../components/DialogBox"
 import AddedProductList from "../components/AddedProductList"
 import ButtonPaper from "../components/ButtonPaper"
 import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from "react-native-normalize"
 import { loginStorage } from "../storage/appStorage"
-import { ShowBillData } from "../models/api_types"
+import { RefundItemCredentials, ShowBillData } from "../models/api_types"
 import { AppStore } from "../context/AppContext"
 import InputPaper from "../components/InputPaper"
 import { RefundItemsScreenRouteProp } from "../models/route_types"
@@ -24,6 +24,9 @@ import ScrollableListContainer from "../components/ScrollableListContainer"
 import useCalculations from "../hooks/useCalculations"
 import NetTotalForRePrints from "../components/NetTotalForRePrints"
 import { gstFilterationAndTotalForRePrint } from "../utils/gstFilterTotalForRePrint"
+import useRefundItems from "../hooks/api/useRefundItems"
+import { mapRefundItemToFilteredItem } from "../utils/mapRefundItemToFilteredItem"
+import navigationRoutes from "../routes/navigationRoutes"
 
 function RefundItemsDataScreen() {
     const theme = usePaperColorScheme()
@@ -36,8 +39,7 @@ function RefundItemsDataScreen() {
 
     const { netTotalCalculate, netTotalWithGSTCalculate, grandTotalWithGSTCalculate } = useCalculations()
 
-
-
+    const { sendRefundItemDetails } = useRefundItems()
 
     const [visible, setVisible] = useState(() => false)
     const hideDialog = () => setVisible(() => false)
@@ -72,7 +74,7 @@ function RefundItemsDataScreen() {
     }
 
     const onDialogSuccecss = (item: ShowBillData) => {
-        if (quantity <= item?.qty) {
+        if (quantity <= item?.qty && quantity > 0) {
             if (refundedData.some(it => it.item_id === item.item_id)) {
                 ToastAndroid.show("Item already added.", ToastAndroid.SHORT)
                 setSearch(() => "")
@@ -81,6 +83,8 @@ function RefundItemsDataScreen() {
 
             setVisible(!visible)
             refundedData.push({ ...item, qty: quantity, discount_amt: parseFloat(((item?.discount_amt / item?.qty) * quantity).toFixed(2)) })
+
+            // dis_pertg: parseFloat(((item?.dis_pertg / item?.qty) * quantity).toFixed(2))
             setRefundedData(refundedData)
             setSearch(() => "")
         } else {
@@ -109,6 +113,31 @@ function RefundItemsDataScreen() {
         setQuantity(item?.qty)
         setVisible(!visible)
         setPosition(pos)
+    }
+
+    const handleRefundItems = async () => {
+
+        const loginStore = JSON.parse(loginStorage.getString("login-data"))
+
+        let filteredData: RefundItemCredentials[]
+
+        const { totalGST } = gstFilterationAndTotalForRePrint(refundedData)
+
+        filteredData = (refundedData).map(item =>
+            // mapRefundItemToFilteredItem(loginStore?.user_id, item, netTotal, totalDiscount, totalGst)
+            mapRefundItemToFilteredItem(loginStore?.user_id, item, netTotal, totalDiscount, totalGST)
+        )
+
+        await sendRefundItemDetails(filteredData).then(res => {
+            ToastAndroid.show(`Items refunded! ~ Added to Stock. ${res?.data?.data}`, ToastAndroid.SHORT)
+            navigation.dispatch(
+                CommonActions.navigate({
+                    name: navigationRoutes.refundItemsScreen,
+                })
+            )
+        }).catch(err => {
+            ToastAndroid.show("Some error while refunding!", ToastAndroid.SHORT)
+        })
     }
 
     let netTotal = 0
@@ -179,7 +208,7 @@ function RefundItemsDataScreen() {
                                     itemName={item.item_name}
                                     quantity={item.qty}
                                     unitPrice={item.price}
-                                    discount={quantity == 0 ? 0 : item.discount_amt}
+                                    discount={item?.discount_type === "P" ? item?.dis_pertg : item?.discount_amt}
                                     discountType={item?.discount_type}
                                     gstFlag={item?.gst_flag}
                                     key={i}
@@ -212,10 +241,13 @@ function RefundItemsDataScreen() {
                         backgroundColor={theme.colors.primaryContainer}>
                         {refundedData?.map((item, i) => {
                             netTotal += item.price * item.qty
-                            totalDiscount += (quantity == 0 || item.discount_amt == 0 ? 0 : item.discount_amt)
 
-                            const { totalGST } = gstFilterationAndTotalForRePrint(refundedData)
-                            totalGst = totalGST
+                            // let dis: number = item?.discount_type === "P" ? (item?.dis_pertg / 100) : item?.discount_amt
+                            totalDiscount += item?.discount_amt
+
+
+                            // const { totalGST } = gstFilterationAndTotalForRePrint(refundedData)
+                            // totalGst = totalGST
                             // item?.gst
 
                             return (
@@ -225,7 +257,7 @@ function RefundItemsDataScreen() {
                                     itemName={item.item_name}
                                     quantity={item.qty}
                                     unitPrice={item.price}
-                                    discount={quantity == 0 || item.discount_amt == 0 ? 0 : item.discount_amt}
+                                    discount={item?.discount_type === "P" ? item?.dis_pertg : item.discount_amt}
                                     discountType={item?.discount_type}
                                     gstFlag={item?.gst_flag}
                                     key={i}
@@ -259,7 +291,7 @@ function RefundItemsDataScreen() {
                 </View>
 
                 <View style={{ paddingHorizontal: normalize(30) }}>
-                    <ButtonPaper mode="contained" onPress={() => console.log("REFUNDED")}>
+                    <ButtonPaper mode="contained" onPress={handleRefundItems}>
                         REFUND
                     </ButtonPaper>
                 </View>
