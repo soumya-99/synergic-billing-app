@@ -35,49 +35,52 @@ function RefundItemsScreen() {
     const theme = usePaperColorScheme()
     const navigation = useNavigation()
 
-    const loginStore = JSON.parse(loginStorage.getString("login-data"))
+    // const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
-    const { receiptSettings } = useContext(AppStore)
+    // const { receiptSettings } = useContext(AppStore)
 
     const [search, setSearch] = useState<string>(() => "")
     const onChangeSearch = (query: string) => {
         setSearch(query)
     }
 
-    const [visible, setVisible] = useState(() => false)
-    const hideDialog = () => setVisible(() => false)
+    // const [visible, setVisible] = useState(() => false)
+    // const hideDialog = () => setVisible(() => false)
 
-    const [visible2, setVisible2] = useState(() => false)
-    const hideDialog2 = () => setVisible2(() => false)
+    // const [visible2, setVisible2] = useState(() => false)
+    // const hideDialog2 = () => setVisible2(() => false)
 
-    const [fromDate, setFromDate] = useState(() => new Date())
-    const [toDate, setToDate] = useState(() => new Date())
-    const [openFromDate, setOpenFromDate] = useState(() => false)
-    const [openToDate, setOpenToDate] = useState(() => false)
-    const [currentReceiptNo, setCurrentReceiptNo] = useState<number | undefined>(() => undefined)
-    const [gstFlag, setGstFlag] = useState<"Y" | "N">()
-    const [discountType, setDiscountType] = useState<"P" | "A">()
-    const [quantity, setQuantity] = useState<number>(() => undefined)
+    // const [fromDate, setFromDate] = useState(() => new Date())
+    // const [toDate, setToDate] = useState(() => new Date())
+    // const [openFromDate, setOpenFromDate] = useState(() => false)
+    // const [openToDate, setOpenToDate] = useState(() => false)
+    // const [currentReceiptNo, setCurrentReceiptNo] = useState<number | undefined>(() => undefined)
+    // const [gstFlag, setGstFlag] = useState<"Y" | "N">()
+    // const [discountType, setDiscountType] = useState<"P" | "A">()
+    // const [quantity, setQuantity] = useState<number>(() => undefined)
 
-    const formattedFromDate = formattedDate(fromDate)
-    const formattedToDate = formattedDate(toDate)
+    // const formattedFromDate = formattedDate(fromDate)
+    // const formattedToDate = formattedDate(toDate)
 
-    const [billsArray, setBillsArray] = useState<SearchedBills[]>(() => [])
-    const [billedSaleData, setBilledSaleData] = useState<ShowBillData[]>(() => [])
+    // const [billsArray, setBillsArray] = useState<SearchedBills[]>(() => [])
+    // const [billedSaleData, setBilledSaleData] = useState<ShowBillData[]>(() => [])
 
-    const [refundedListData, setRefundedListData] = useState<ShowBillData[]>(() => [])
+    // const [refundedListData, setRefundedListData] = useState<ShowBillData[]>(() => [])
 
 
-    const { fetchSearchedBills } = useSearchBills()
+    // const { fetchSearchedBills } = useSearchBills()
+    // const { cancelBill } = useCancelBill()
+    // const { grandTotalCalculate } = useCalculations()
+
     const { fetchBill } = useShowBill()
-    const { cancelBill } = useCancelBill()
-    const { grandTotalCalculate } = useCalculations()
-
-    const { rePrint, rePrintWithoutGst } = useBluetoothPrint()
 
     const handleGetBill = async (rcptNo: number) => {
         await fetchBill(rcptNo).then(res => {
-            setBilledSaleData(res?.data)
+            if (res.status === 0) {
+                ToastAndroid.show("No bills found.", ToastAndroid.SHORT)
+                return
+            }
+            // setBilledSaleData(res?.data)
 
             navigation.dispatch(
                 CommonActions.navigate({
@@ -90,11 +93,12 @@ function RefundItemsScreen() {
             )
         }).catch(err => {
             ToastAndroid.show("Error during fetching bills.", ToastAndroid.SHORT)
+            return
         })
     }
 
     const handleBillListClick = (rcptNo: number) => {
-        if (!search) {
+        if (!search || search.length !== 10) {
             ToastAndroid.show("Enter valid receipt number.", ToastAndroid.SHORT)
             return
         }
@@ -121,26 +125,26 @@ function RefundItemsScreen() {
     //     )
     // }
 
-    const handleRefundedListUpdate = (item: ShowBillData) => {
-        setVisible2(!visible2)
+    // const handleRefundedListUpdate = (item: ShowBillData) => {
+    //     setVisible2(!visible2)
 
-        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@", item)
+    //     console.log("@@@@@@@@@@@@@@@@@@@@@@@@@", item)
 
 
-    }
+    // }
 
-    const handleDialog2Success = (item: ShowBillData) => {
-        setVisible2(!visible2)
+    // const handleDialog2Success = (item: ShowBillData) => {
+    //     setVisible2(!visible2)
 
-        // item["qty"] = quantity
-        // setBilledSaleData([...billedSaleData])
+    //     // item["qty"] = quantity
+    //     // setBilledSaleData([...billedSaleData])
 
-        // refundedListData.push(item)
-        // setRefundedListData([...refundedListData])
-    }
+    //     // refundedListData.push(item)
+    //     // setRefundedListData([...refundedListData])
+    // }
 
-    let netTotal = 0
-    let totalDiscount = 0
+    // let netTotal = 0
+    // let totalDiscount = 0
 
     return (
         <SafeAreaView

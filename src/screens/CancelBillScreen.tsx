@@ -68,21 +68,30 @@ function CancelBillScreen() {
 
     const handleGetBill = async (rcptNo: number) => {
         await fetchBill(rcptNo).then(res => {
+            if (res.status === 0) {
+                ToastAndroid.show("No bills found.", ToastAndroid.SHORT)
+                return
+            }
             setBilledSaleData(res?.data)
+
+            setVisible(!visible)
+            setCurrentReceiptNo(rcptNo)
+            setGstFlag(res.data[0]?.gst_flag)
         }).catch(err => {
             ToastAndroid.show("Error during fetching bills.", ToastAndroid.SHORT)
+            return
         })
     }
 
     const handleBillListClick = (rcptNo: number) => {
-        if (!search) {
+        if (!search || search.length !== 10) {
             ToastAndroid.show("Enter valid receipt number.", ToastAndroid.SHORT)
             return
         }
-        setVisible(!visible)
         handleGetBill(rcptNo)
-        setCurrentReceiptNo(rcptNo)
-        setGstFlag(billedSaleData[0]?.gst_flag)
+        // setVisible(!visible)
+        // setCurrentReceiptNo(rcptNo)
+        // setGstFlag(billedSaleData[0]?.gst_flag)
     }
 
     const onDialogFailure = () => {
@@ -166,7 +175,7 @@ function CancelBillScreen() {
     return (
         <SafeAreaView
             style={[styles.container, { backgroundColor: theme.colors.background }]}>
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps="handled">
                 <View style={{ alignItems: "center" }}>
                     <HeaderImage
                         imgLight={textureBill}
@@ -181,6 +190,8 @@ function CancelBillScreen() {
                 <View style={{ paddingHorizontal: normalize(20), paddingBottom: normalize(10) }}>
                     <View style={{ paddingBottom: normalize(10) }}>
                         <Searchbar
+                            keyboardType="numeric"
+                            autoFocus
                             placeholder="Search Bills"
                             onChangeText={onChangeSearch}
                             value={search}
@@ -219,8 +230,9 @@ function CancelBillScreen() {
                 btnSuccess="REPRINT"
                 onFailure={onDialogFailure}
                 onSuccess={onDialogSuccecss}
-                title="Print Bill"
-                icon="printer-outline">
+            // title="Print Bill"
+            // icon="printer-outline"
+            >
                 <ScrollableListContainer
                     backgroundColor={theme.colors.surfaceVariant}
                     width={300}

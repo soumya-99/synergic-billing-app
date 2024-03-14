@@ -49,7 +49,7 @@ function RefundItemsDataScreen() {
     const [filteredItems, setFilteredItems] = useState<ShowBillData[]>(
         () => [],
     )
-    const [billedSaleData, setBilledSaleData] = useState<ShowBillData[]>(() => params?.billed_sale_data)
+    // const [billedSaleData, setBilledSaleData] = useState<ShowBillData[]>(() => params?.billed_sale_data)
     const [refundedData, setRefundedData] = useState<ShowBillData[]>(() => [])
 
     // const [refundedListData, setRefundedListData] = useState<ShowBillData[]>(() => [])
