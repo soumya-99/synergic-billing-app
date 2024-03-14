@@ -79,6 +79,16 @@ function ReportsScreen() {
               })
             )}
           />
+          {/* <ReportButton
+            text="Refund Items Report"
+            color={theme.colors.orangeContainer}
+            icon="billboard"
+            onPress={() => navigation.dispatch(
+              CommonActions.navigate({
+                name: navigationRoutes.refundItemsReportScreen,
+              })
+            )}
+          /> */}
           {receiptSettings?.gst_flag === "Y" && (
             <ReportButton
               text="GST Statement"
