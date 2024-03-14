@@ -5,6 +5,7 @@ import {
     SafeAreaView,
     View,
     ToastAndroid,
+    Alert,
 } from "react-native"
 import { Searchbar, Text } from "react-native-paper"
 import HeaderImage from "../components/HeaderImage"
@@ -116,7 +117,6 @@ function RefundItemsDataScreen() {
     }
 
     const handleRefundItems = async () => {
-
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
         let filteredData: RefundItemCredentials[]
@@ -138,6 +138,13 @@ function RefundItemsDataScreen() {
         }).catch(err => {
             ToastAndroid.show("Some error while refunding!", ToastAndroid.SHORT)
         })
+    }
+
+    const handleRefundSubmit = () => {
+        Alert.alert("Refund", "Are you sure you want to refund?", [
+            { text: "NO", onPress: () => console.log("Cancelled!") },
+            { text: "YES", onPress: () => handleRefundItems() }
+        ])
     }
 
     let netTotal = 0
@@ -291,7 +298,7 @@ function RefundItemsDataScreen() {
                 </View>
 
                 <View style={{ paddingHorizontal: normalize(30) }}>
-                    <ButtonPaper mode="contained" onPress={handleRefundItems}>
+                    <ButtonPaper mode="contained" onPress={handleRefundSubmit}>
                         REFUND
                     </ButtonPaper>
                 </View>
