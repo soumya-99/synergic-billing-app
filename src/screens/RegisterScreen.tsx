@@ -49,6 +49,10 @@ const RegisterScreen = () => {
     }
 
     const handleRegister = async (mobileNo: string) => {
+        if (mobileNo.length === 0) {
+            ToastAndroid.show("Enter mobile number!", ToastAndroid.SHORT)
+            return
+        }
         try {
             const registerResponse = await register(mobileNo)
             console.log("registeredData", registerResponse)

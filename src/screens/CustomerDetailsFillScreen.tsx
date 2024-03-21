@@ -73,6 +73,8 @@ const CustomerDetailsFillScreen = () => {
             if (res.data.status === 1) {
                 receiptNumber = res?.data?.data
 
+                console.log("=========== receiptNumber = res?.data?.data ============", receiptNumber)
+
                 Alert.alert("Success", "Data Uploaded Successfully.")
                 navigation.dispatch(
                     CommonActions.navigate({
