@@ -301,6 +301,7 @@ export type ItemEditRequestCredentials = {
     modified_by: string
     unit_id?: number
     // unit_name?: string
+    item_name?: string
 }
 
 export type UnitEditCredentials = {

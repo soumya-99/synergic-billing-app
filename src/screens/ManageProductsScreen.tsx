@@ -2,7 +2,7 @@ import { View, ScrollView, StyleSheet, PixelRatio, ToastAndroid } from "react-na
 import React, { useContext, useEffect, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { List, Searchbar, Text } from "react-native-paper"
-import normalize, { SCREEN_HEIGHT } from "react-native-normalize"
+import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from "react-native-normalize"
 import HeaderImage from "../components/HeaderImage"
 import { flowerHome, flowerHomeDark } from "../resources/images"
 import ScrollableListContainer from "../components/ScrollableListContainer"
@@ -50,8 +50,8 @@ export default function ManageProductsScreen() {
     const [CGST, setCGST] = useState<number>(() => product?.cgst || 0)
     const [SGST, setSGST] = useState<number>(() => product?.sgst || 0)
 
-    const [hsnCode, setHsnCode] = useState<string>(() => "")
-    const [productName, setProductName] = useState<string>(() => "")
+    const [hsnCode, setHsnCode] = useState<string>(() => "0")
+    const [productName, setProductName] = useState<string>(() => product?.item_name || "")
 
     const [unitName, setUnitName] = useState<string>(() => "") // not sent to api (adding product)
     const [unitId, setUnitId] = useState<number>(() => undefined)
@@ -93,10 +93,13 @@ export default function ManageProductsScreen() {
             modified_by: loginStore?.user_name,
             unit_id: unitId,
             // unit_name: unitName
+            item_name: productName
         }
 
         await editItem(editedItemObject).then(res => {
             ToastAndroid.show("Product updated successfully.", ToastAndroid.SHORT)
+            handleGetItems()
+            handleGetUnits()
         }).catch(err => {
             ToastAndroid.show("Error while updating product details.", ToastAndroid.SHORT)
         })
@@ -105,7 +108,7 @@ export default function ManageProductsScreen() {
     const onDialogFailure = () => {
         clearStates([setDiscount, setCGST, setSGST], () => 0)
         clearStates([setPrice, setUnitId], () => undefined)
-        clearStates([setSearch, setUnitName], () => "")
+        clearStates([setSearch, setUnitName, setProductName], () => "")
         setVisible(!visible)
     }
 
@@ -115,7 +118,7 @@ export default function ManageProductsScreen() {
             return
         }
         handleUpdateProductDetails().then(() => {
-            clearStates([setSearch, setDiscount, setCGST, setSGST, setUnitName], () => "")
+            clearStates([setSearch, setDiscount, setCGST, setSGST, setUnitName, setProductName], () => "")
             clearStates([setPrice, setUnitId], () => undefined)
             setVisible(!visible)
             setFilteredItems(() => [])
@@ -154,19 +157,27 @@ export default function ManageProductsScreen() {
             cgst: CGST,
             sgst: SGST,
             // unit_name: unitName,
-            unit_id: unitId,
+            unit_id: unitId || 0,
             br_id: loginStore?.br_id
         }
 
-        if (hsnCode.length === 0 || productName.length === 0) {
+        // if (hsnCode.length === 0 || productName.length === 0) {
+        //     ToastAndroid.show("Add Product Name and HSN Code", ToastAndroid.SHORT)
+        //     return
+        // }
+        if (productName.length === 0) {
             ToastAndroid.show("Add Product Name and HSN Code", ToastAndroid.SHORT)
             return
         }
 
         await sendAddedItem(addedProductObject).then(res => {
             ToastAndroid.show("Product has been added.", ToastAndroid.SHORT)
+            handleGetItems()
+            handleGetUnits()
+            // console.log("########################", addedProductObject)
         }).catch(err => {
             ToastAndroid.show("Something went wrong on server", ToastAndroid.SHORT)
+            // console.log("########################", addedProductObject)
         })
     }
 
@@ -177,6 +188,7 @@ export default function ManageProductsScreen() {
         setDiscount(item?.discount)
         setCGST(item?.cgst)
         setSGST(item?.sgst)
+        setProductName(item?.item_name)
         handleSetUnitNameAndId(item?.unit_name, item?.unit_id)
 
         setVisible(!visible)
@@ -241,15 +253,18 @@ export default function ManageProductsScreen() {
                 onFailure={onDialogFailure}
                 onSuccess={onDialogSuccecss}>
                 <View style={{ justifyContent: "space-between", minHeight: SCREEN_HEIGHT / 3.2, height: "auto" }}>
-                    <View style={{ alignItems: "center" }}>
+                    {/* <View style={{ alignItems: "center" }}>
                         <View>
                             <Text variant="titleLarge">Edit Product</Text>
                         </View>
-                    </View>
+                    </View> */}
 
                     <View style={{ alignItems: "center" }}>
                         <View>
-                            <Text variant="titleLarge">{product?.item_name}</Text>
+                            <Text style={{ color: theme.colors.primary }} variant="titleLarge">{product?.item_name}</Text>
+                        </View>
+                        <View style={{ width: "50%" }}>
+                            <Text style={{ textAlign: "center", color: theme.colors.secondary }} variant="labelMedium">Item ID. {product?.item_id}</Text>
                         </View>
                     </View>
 
@@ -260,14 +275,25 @@ export default function ManageProductsScreen() {
                             alignItems: "center",
                             gap: 5,
                         }}>
-                        <View style={{ width: "50%" }}>
+                        {/* <View style={{ width: "50%" }}>
                             <Text variant="labelMedium">Item ID. {product?.item_id}</Text>
+                        </View> */}
+                        <View style={{ width: "70%", alignSelf: "center", justifyContent: "center" }}>
+                            <InputPaper
+                                label="Product Name"
+                                onChangeText={(txt: string) => setProductName(txt)}
+                                value={productName}
+                                keyboardType="default"
+                                mode="outlined"
+                                maxLength={30}
+                            />
                         </View>
-                        <View style={{ width: "50%" }}>
-                            {
+                        <View style={{ width: "30%", alignSelf: "center", justifyContent: "center" }}>
+                            {/* {
                                 receiptSettings?.unit_flag === "Y"
                                 && <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} />
-                            }
+                            } */}
+                            <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} customStyle={{ borderRadius: 4 }} textColor={theme.colors.onPrimary} />
                         </View>
                     </View>
 
@@ -304,29 +330,29 @@ export default function ManageProductsScreen() {
                             alignItems: "center",
                             gap: 5,
                         }}>
-                        {receiptSettings?.gst_flag === "Y" && (
-                            <View style={{ width: "50%" }}>
-                                <InputPaper
-                                    label="CGST (%)"
-                                    onChangeText={(txt: number) => setCGST(txt)}
-                                    value={CGST}
-                                    keyboardType="numeric"
-                                    mode="outlined"
-                                />
-                            </View>
-                        )}
+                        {/* {receiptSettings?.gst_flag === "Y" && ( */}
+                        <View style={{ width: "50%" }}>
+                            <InputPaper
+                                label="CGST (%)"
+                                onChangeText={(txt: number) => setCGST(txt)}
+                                value={CGST}
+                                keyboardType="numeric"
+                                mode="outlined"
+                            />
+                        </View>
+                        {/* )} */}
 
-                        {receiptSettings?.gst_flag === "Y" && (
-                            <View style={{ width: "50%" }}>
-                                <InputPaper
-                                    label="SGST (%)"
-                                    onChangeText={(txt: number) => setSGST(txt)}
-                                    value={SGST}
-                                    keyboardType="numeric"
-                                    mode="outlined"
-                                />
-                            </View>
-                        )}
+                        {/* {receiptSettings?.gst_flag === "Y" && ( */}
+                        <View style={{ width: "50%" }}>
+                            <InputPaper
+                                label="SGST (%)"
+                                onChangeText={(txt: number) => setSGST(txt)}
+                                value={SGST}
+                                keyboardType="numeric"
+                                mode="outlined"
+                            />
+                        </View>
+                        {/* )} */}
                     </View>
                 </View>
             </DialogBox>
@@ -367,9 +393,10 @@ export default function ManageProductsScreen() {
                             <Text variant="labelMedium">Sl No.</Text>
                         </View> */}
                         <View style={
-                            receiptSettings?.unit_flag === "Y"
-                                ? { width: "50%" }
-                                : { width: "100%" }
+                            // receiptSettings?.unit_flag === "Y"
+                            //     ? { width: "50%" }
+                            //     : { width: "100%" }
+                            { width: "50%" }
                         }>
                             <InputPaper
                                 label="HSN Code"
@@ -380,12 +407,15 @@ export default function ManageProductsScreen() {
                                 mode="outlined"
                             />
                         </View>
-                        {
+                        {/* {
                             receiptSettings?.unit_flag === "Y"
                             && <View style={{ width: "50%", alignItems: "center", justifyContent: "center" }}>
                                 {receiptSettings?.unit_flag === "Y" ? <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} /> : <Text variant="labelSmall">Unit Off</Text>}
                             </View>
-                        }
+                        } */}
+                        <View style={{ width: "50%", alignItems: "center", justifyContent: "center" }}>
+                            <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} customStyle={{ borderRadius: 4 }} textColor={theme.colors.onPrimary} />
+                        </View>
                     </View>
 
                     <View
@@ -453,29 +483,29 @@ export default function ManageProductsScreen() {
                             alignItems: "center",
                             gap: 5,
                         }}>
-                        {receiptSettings?.gst_flag === "Y" && (
-                            <View style={{ width: "50%" }}>
-                                <InputPaper
-                                    label="CGST (%)"
-                                    onChangeText={(txt: number) => setCGST(txt)}
-                                    value={CGST}
-                                    keyboardType="numeric"
-                                    mode="outlined"
-                                />
-                            </View>
-                        )}
+                        {/* {receiptSettings?.gst_flag === "Y" && ( */}
+                        <View style={{ width: "50%" }}>
+                            <InputPaper
+                                label="CGST (%)"
+                                onChangeText={(txt: number) => setCGST(txt)}
+                                value={CGST}
+                                keyboardType="numeric"
+                                mode="outlined"
+                            />
+                        </View>
+                        {/* )} */}
 
-                        {receiptSettings?.gst_flag === "Y" && (
-                            <View style={{ width: "50%" }}>
-                                <InputPaper
-                                    label="SGST (%)"
-                                    onChangeText={(txt: number) => setSGST(txt)}
-                                    value={SGST}
-                                    keyboardType="numeric"
-                                    mode="outlined"
-                                />
-                            </View>
-                        )}
+                        {/* {receiptSettings?.gst_flag === "Y" && ( */}
+                        <View style={{ width: "50%" }}>
+                            <InputPaper
+                                label="SGST (%)"
+                                onChangeText={(txt: number) => setSGST(txt)}
+                                value={SGST}
+                                keyboardType="numeric"
+                                mode="outlined"
+                            />
+                        </View>
+                        {/* )} */}
                     </View>
                 </View>
             </DialogBox>
