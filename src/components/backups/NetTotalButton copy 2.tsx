@@ -195,7 +195,7 @@ export default function NetTotalButton({
   height = "auto",
   onPress,
 }: NetTotalButtonProps) {
-  const { receiptSettings } = useContext(AppStore)
+  const { receiptSettings } = useContext(AppStore);
 
   const {
     netTotalCalculate,
@@ -206,11 +206,11 @@ export default function NetTotalButton({
     grandTotalWithGSTCalculate,
   } = useCalculations();
 
-  let gstTotals = gstFilterationAndTotals(addedProductsList)
-  let { totalGST } = gstTotals // Destructure totalGST for separate handling
+  let gstTotals = gstFilterationAndTotals(addedProductsList);
+  let { totalGST } = gstTotals; // Destructure totalGST for separate handling
 
   // Filter keys for CGST and SGST display
-  const gstKeys = Object.keys(gstTotals).filter((key) => key.includes('totalCGST') || key.includes('totalSGST'))
+  const gstKeys = Object.keys(gstTotals).filter((key) => key.includes('totalCGST') || key.includes('totalSGST'));
 
   return (
     <TouchableRipple
@@ -265,5 +265,5 @@ export default function NetTotalButton({
         </View>
       </View>
     </TouchableRipple>
-  )
+  );
 }

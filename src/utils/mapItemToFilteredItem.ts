@@ -38,9 +38,10 @@ export function mapItemToFilteredItem(
         item_id: item_id,
         qty: quantity,
         price: price,
+        // price: price * quantity,
         br_id: parseInt(branchId),
-        tprice: parseFloat(params?.net_total?.toFixed(2)),
-        tdiscount_amt: parseFloat(params?.total_discount?.toFixed(2)),
+        tprice: parseFloat(params?.net_total?.toFixed(2)), // total price of all the items (td_receipt table)
+        tdiscount_amt: parseFloat(params?.total_discount?.toFixed(2)), // total discount of all the items (td_receipt table)
         amount: amount,
         round_off: roundOff,
         net_amt: netAmt,
