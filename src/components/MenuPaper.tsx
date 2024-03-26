@@ -10,9 +10,17 @@ type MenuPaperTypes = {
     textColor?: string
     customStyle?: {}
     menuStyle?: {}
+    mode?: "text" | "outlined" | "contained" | "elevated" | "contained-tonal"
 }
 
-export default function MenuPaper({ menuArrOfObjects, title = "Options", customStyle, textColor, menuStyle }: MenuPaperTypes) {
+export default function MenuPaper({
+    menuArrOfObjects,
+    title = "Options",
+    customStyle,
+    textColor,
+    menuStyle,
+    mode
+}: MenuPaperTypes) {
     const [visible, setVisible] = useState(false)
     const openMenu = () => setVisible(true)
     const closeMenu = () => setVisible(false)
@@ -32,7 +40,7 @@ export default function MenuPaper({ menuArrOfObjects, title = "Options", customS
                     disabled={loginStore?.user_type !== "M"}
                     // textColor={textColor}
                     style={customStyle}
-                // mode='outlined'
+                    mode={mode}
                 >
                     {title}
                 </Button>

@@ -293,7 +293,7 @@ export default function ManageProductsScreen() {
                                 receiptSettings?.unit_flag === "Y"
                                 && <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} />
                             } */}
-                            <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} customStyle={{ borderRadius: 4 }} textColor={theme.colors.onPrimary} />
+                            <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} customStyle={{ borderRadius: 4 }} textColor={theme.colors.onPrimary} mode="outlined" />
                         </View>
                     </View>
 
@@ -414,7 +414,7 @@ export default function ManageProductsScreen() {
                             </View>
                         } */}
                         <View style={{ width: "50%", alignItems: "center", justifyContent: "center" }}>
-                            <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} customStyle={{ borderRadius: 4 }} textColor={theme.colors.onPrimary} />
+                            <MenuPaper title={unitName || "Unit"} menuArrOfObjects={unitMenuArr} customStyle={{ borderRadius: 4 }} textColor={theme.colors.onPrimary} mode="outlined" />
                         </View>
                     </View>
 

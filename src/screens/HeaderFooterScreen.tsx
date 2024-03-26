@@ -13,7 +13,6 @@ import { loginStorage } from "../storage/appStorage"
 import { AppStore } from "../context/AppContext"
 import useEditHeaderFooter from "../hooks/api/useEditHeaderFooter"
 import { useIsFocused } from "@react-navigation/native"
-import useFindRemainingChars from "../hooks/useFindRemainingChars"
 
 const MAX_LENGTH = 25
 
