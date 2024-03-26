@@ -204,6 +204,11 @@ export default function NetTotalButton({
     grandTotalCalculate,
     roundingOffWithGSTCalculate,
     grandTotalWithGSTCalculate,
+
+    totalAmountWithGSTInclCalculate,
+    netTotalWithGSTInclCalculate,
+    roundingOffWithGSTInclCalculate,
+    grandTotalWithGSTInclCalculate
   } = useCalculations();
 
   let gstTotals = gstFilterationAndTotals(addedProductsList)
@@ -233,7 +238,7 @@ export default function NetTotalButton({
         }}>
         <View>
           <Text style={{ color: textColor }}>TOTAL AMOUNT</Text>
-          <Text style={{ color: textColor }}>DISCOUNT</Text>
+          {/* <Text style={{ color: textColor }}>DISCOUNT</Text> */}
           {/* {gstKeys.map((key) => (
             <Text key={key} style={{ color: textColor }}>{key.replace(/total(CGST|SGST)_/, '').replace(/_/g, '.')}%</Text>
           ))} */}
@@ -243,25 +248,55 @@ export default function NetTotalButton({
               {key.replace(/total(CGST|SGST)_/, '').replace('_', '.') + '%'}
             </Text>
           ))}
+
+          <Text style={{ color: textColor }}>DISCOUNT</Text>
           <Text style={{ color: textColor }}>NET TOTAL</Text>
           <Text style={{ color: textColor }}>ROUNDING OFF</Text>
           <Text style={{ color: textColor }}>GRAND TOTAL</Text>
         </View>
         <View>
-          <Text style={{ color: textColor }}>₹{netTotal?.toFixed(2)}</Text>
-          <Text style={{ color: textColor }}>₹{totalDiscount?.toFixed(2)}</Text>
+          {
+            receiptSettings?.gst_type === "E"
+              ? <Text style={{ color: textColor }}>₹{netTotal?.toFixed(2)}</Text>
+              : <Text style={{ color: textColor }}>₹{totalAmountWithGSTInclCalculate(netTotal, totalGST)}</Text>
+          }
+
+          {/* <Text style={{ color: textColor }}>₹{totalDiscount?.toFixed(2)}</Text> */}
           {gstKeys.map((key) => (
             <Text key={key} style={{ color: textColor }}>₹{gstTotals[key].toFixed(2)}</Text>
+            // <Text key={key} style={{ color: textColor }}>₹{Math.ceil(gstTotals[key])}</Text>
           ))}
-          <Text style={{ color: textColor }}>
-            ₹{netTotalWithGSTCalculate(netTotal, totalDiscount, totalGST)}
-          </Text>
-          <Text style={{ color: textColor }}>
-            ₹{roundingOffWithGSTCalculate(netTotal, totalDiscount, totalGST)}
-          </Text>
-          <Text style={{ color: textColor }}>
-            ₹{grandTotalWithGSTCalculate(netTotal, totalDiscount, totalGST)}
-          </Text>
+          <Text style={{ color: textColor }}>₹{totalDiscount?.toFixed(2)}</Text>
+          {
+            receiptSettings?.gst_type === "E"
+              ? <Text style={{ color: textColor }}>
+                ₹{netTotalWithGSTCalculate(netTotal, totalDiscount, totalGST)}
+              </Text>
+              : <Text style={{ color: textColor }}>
+                ₹{netTotalWithGSTInclCalculate(netTotal, totalDiscount)}
+              </Text>
+          }
+
+          {
+            receiptSettings?.gst_type === "E"
+              ? <Text style={{ color: textColor }}>
+                ₹{roundingOffWithGSTCalculate(netTotal, totalDiscount, totalGST)}
+              </Text>
+              : <Text style={{ color: textColor }}>
+                ₹{roundingOffWithGSTInclCalculate(netTotal, totalDiscount)}
+              </Text>
+          }
+
+          {
+            receiptSettings?.gst_type === "E"
+              ? <Text style={{ color: textColor }}>
+                ₹{grandTotalWithGSTCalculate(netTotal, totalDiscount, totalGST)}
+              </Text>
+              : <Text style={{ color: textColor }}>
+                ₹{grandTotalWithGSTInclCalculate(netTotal, totalDiscount)}
+              </Text>
+          }
+
         </View>
       </View>
     </TouchableRipple>

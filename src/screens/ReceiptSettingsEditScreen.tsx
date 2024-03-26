@@ -35,7 +35,7 @@ export default function ReceiptSettingsEditScreen() {
     const [discountFlag, setDiscountFlag] = useState<"Y" | "N">(() => receiptSettings?.discount_flag)
     const [discountType, setDiscountType] = useState<"P" | "A">(() => receiptSettings?.discount_type)
     const [priceType, setPriceType] = useState<"A" | "M">(() => receiptSettings?.price_type)
-    const [refundTime, setRefundTime] = useState<number>(() => 0)
+    const [refundTime, setRefundTime] = useState<number>(() => receiptSettings?.refund_days)
     // const [cancelBillFlag, setCancelBillFlag] = useState<"Y" | "N">(() => "Y")
     const [unitFlag, setUnitFlag] = useState<"Y" | "N">(receiptSettings?.unit_flag)
 
@@ -128,6 +128,7 @@ export default function ReceiptSettingsEditScreen() {
         await editReceiptSettings(editedReceiptSettings)
             .then(res => {
                 ToastAndroid.show("Receipt Settings Updated!", ToastAndroid.SHORT)
+                handleGetReceiptSettings()
                 navigation.goBack()
             })
             .catch(err => {

@@ -182,7 +182,16 @@ export type ShowBillData = {
     "cust_name": string
     "phone_no": string
     "gst_flag"?: "Y" | "N"
+    "gst_type"?: "E" | "I"
     "discount_type"?: "P" | "A"
+    "tprice": number
+    "tdiscount_amt": number
+    "tcgst_amt": number
+    "tsgst_amt": number
+    "tcreated_by": string
+    "tcreated_dt": string
+    "tmodified_by": null
+    "tmodified_dt": null
 }
 
 export type SearchBillsData = {

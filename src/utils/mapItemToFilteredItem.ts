@@ -1,3 +1,4 @@
+import useCalculations from "../hooks/useCalculations"
 import { ItemsData, ReceiptSettingsData } from "../models/api_types"
 import { FilteredItem } from "../models/custom_types"
 
@@ -13,8 +14,10 @@ export function mapItemToFilteredItem(
     createdBy: string,
     totalGST: number,
     gstFlag: "Y" | "N",
+    gstType: "E" | "I",
     discountType: "P" | "A"
 ): FilteredItem {
+    const { netTotalWithGSTInclCalculate, netTotalWithGSTCalculate, grandTotalCalculate } = useCalculations()
     const { cgst, sgst, comp_id, discount, item_id, quantity, price } = item
 
     const cgstAmt = receiptSettings?.gst_flag === "N" ? 0 : (price * quantity * cgst / 100)
@@ -22,9 +25,25 @@ export function mapItemToFilteredItem(
 
     const discountAmt = receiptSettings?.discount_type === "P" ?
         parseFloat((((price * quantity * discount) / 100).toFixed(2))) :
-        parseFloat((discount).toFixed(2))
+        // parseFloat(discount.toFixed(2))
+        //@ts-ignore
+        parseFloat(discount)
 
-    let amount = receiptSettings?.gst_flag !== "N" ? parseFloat((params?.net_total - params?.total_discount + totalGST).toFixed(2)) : parseFloat((params?.net_total - params?.total_discount).toFixed(2))
+    let amount: number = 0
+    if (receiptSettings?.gst_flag !== "N") {
+        if (receiptSettings?.gst_type === "E") {
+            // amount = parseFloat((params?.net_total - params?.total_discount + totalGST).toFixed(2))
+            amount = parseFloat(netTotalWithGSTCalculate(parseFloat(params?.net_total), parseFloat(params?.total_discount), totalGST))
+        } else {
+            // amount = parseFloat((params?.net_total - params?.total_discount).toFixed(2))
+            amount = parseFloat(netTotalWithGSTInclCalculate(parseFloat(params?.net_total), parseFloat(params?.total_discount)))
+        }
+    } else {
+        // amount = parseFloat((params?.net_total - params?.total_discount).toFixed(2))
+        amount = grandTotalCalculate(params?.net_total, params?.total_discount)
+    }
+
+    // let amount = receiptSettings?.gst_flag !== "N" ? parseFloat((params?.net_total - params?.total_discount + totalGST).toFixed(2)) : parseFloat((params?.net_total - params?.total_discount).toFixed(2))
 
     // const amount = parseFloat((params?.net_total - params?.total_discount).toFixed(2))
     const roundOff = parseFloat((Math.round(amount) - amount).toFixed(2))
@@ -55,6 +74,7 @@ export function mapItemToFilteredItem(
         cgst_prtg: receiptSettings?.gst_flag === "Y" ? cgst : 0,
         sgst_prtg: receiptSettings?.gst_flag === "Y" ? sgst : 0,
         gst_flag: gstFlag,
+        gst_type: gstType,
         discount_type: discountType
     }
 }

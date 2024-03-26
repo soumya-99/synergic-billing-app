@@ -21,6 +21,7 @@ export type FilteredItem = {
     dis_pertg: number
     cgst_prtg: number
     sgst_prtg: number
-    gst_flag: "Y" | "N",
-    discount_type: "P" | "A",
+    gst_flag: "Y" | "N"
+    gst_type: "E" | "I"
+    discount_type: "P" | "A"
 }
