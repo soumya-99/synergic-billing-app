@@ -32,7 +32,8 @@ export default function InventoryScreen() {
 
     const [product, setProduct] = useState<ItemsData>()
     const [stock, setStock] = useState<number>()
-    const [addedStock, setAddedStock] = useState<number>()
+    const [addedStock, setAddedStock] = useState<number>(() => 0)
+    const [removedStock, setRemovedStock] = useState<number>(() => 0)
     const [updatedStock, setUpdatedStock] = useState<number>()
 
     const [search, setSearch] = useState<string>(() => "")
@@ -74,43 +75,55 @@ export default function InventoryScreen() {
         })
     }
 
-    const handleUpdateStock = async (itemId: number, addedStock: number) => {
+    const handleUpdateStock = async (itemId: number, addedStock: number, removedStock: number) => {
         let updatedStockObject: StockUpdateCredentials = {
             comp_id: loginStore?.comp_id,
             br_id: loginStore?.br_id,
             user_id: loginStore?.user_id,
             item_id: itemId,
             added_stock: addedStock,
+            removed_stock: removedStock
         }
 
         await updateStock(updatedStockObject).then(res => {
             ToastAndroid.show(res?.data, ToastAndroid.SHORT)
             setVisibleAdd(!visibleAdd)
+            handleGetItems()
         }).catch(err => {
             ToastAndroid.show("Something went wrong while updating stock.", ToastAndroid.SHORT)
         })
     }
 
     const onDialogFailureAdd = () => {
-        clearStates([setStock, setAddedStock, setUpdatedStock], () => undefined)
+        clearStates([setStock, setAddedStock, setRemovedStock, setUpdatedStock], () => undefined)
         setVisibleAdd(!visibleAdd)
     }
 
     const onDialogSuccecssAdd = () => {
-        if (addedStock <= 0 || addedStock === undefined || Number.isNaN(updatedStock)) {
+        if (
+            addedStock < 0 ||
+            addedStock === undefined ||
+            removedStock < 0 ||
+            removedStock === undefined ||
+            Number.isNaN(updatedStock)
+        ) {
             ToastAndroid.show("Try adding some Stock.", ToastAndroid.SHORT)
             return
         }
-        handleUpdateStock(product?.item_id, addedStock).then(() => {
-            clearStates([setStock, setAddedStock, setUpdatedStock], () => undefined)
+        if (updatedStock < 0) {
+            ToastAndroid.show("Add valid stock.", ToastAndroid.SHORT)
+            return
+        }
+        handleUpdateStock(product?.item_id, addedStock, removedStock).then(() => {
+            clearStates([setStock, setAddedStock, setRemovedStock, setUpdatedStock], () => undefined)
             setVisibleAdd(!visibleAdd)
         })
     }
 
     useEffect(() => {
         //@ts-ignore
-        setUpdatedStock(parseFloat(stock) + parseFloat(addedStock))
-    }, [addedStock])
+        setUpdatedStock(parseFloat(stock) + parseFloat(addedStock) - parseFloat(removedStock))
+    }, [addedStock, removedStock])
 
     useEffect(() => {
         handleGetItems()
@@ -260,16 +273,34 @@ export default function InventoryScreen() {
                         </View>
                     </View>
 
-                    <View style={{ width: "100%" }}>
-                        <InputPaper
-                            autoFocus
-                            label="Add Stock"
-                            onChangeText={(txt: number) => setAddedStock(txt)}
-                            value={addedStock}
-                            keyboardType="numeric"
-                            mode="outlined"
-                            maxLength={6}
-                        />
+                    <View
+                        style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            flexDirection: "row",
+                            gap: 5
+                        }}>
+                        <View style={{ width: "50%" }}>
+                            <InputPaper
+                                autoFocus
+                                label="Add"
+                                onChangeText={(txt: number) => setAddedStock(txt)}
+                                value={addedStock}
+                                keyboardType="numeric"
+                                mode="outlined"
+                                maxLength={6}
+                            />
+                        </View>
+                        <View style={{ width: "50%" }}>
+                            <InputPaper
+                                label="Remove"
+                                onChangeText={(txt: number) => setRemovedStock(txt)}
+                                value={removedStock}
+                                keyboardType="numeric"
+                                mode="outlined"
+                                maxLength={6}
+                            />
+                        </View>
                     </View>
 
                     <View

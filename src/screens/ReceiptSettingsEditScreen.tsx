@@ -1,5 +1,5 @@
 import { View, ScrollView, StyleSheet, ToastAndroid } from "react-native"
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Divider, List } from "react-native-paper"
 import normalize, { SCREEN_HEIGHT, SCREEN_WIDTH } from "react-native-normalize"
@@ -34,6 +34,18 @@ export default function ReceiptSettingsEditScreen() {
     const [priceType, setPriceType] = useState<"A" | "M">(() => receiptSettings?.price_type)
     // const [cancelBillFlag, setCancelBillFlag] = useState<"Y" | "N">(() => "Y")
     const [unitFlag, setUnitFlag] = useState<"Y" | "N">(receiptSettings?.unit_flag)
+
+    // const dependencyArray = [
+    //     rcptType,
+    //     stockFlag,
+    //     gstFlag,
+    //     customerInfo,
+    //     payMode,
+    //     discountFlag,
+    //     discountType,
+    //     priceType,
+    //     unitFlag
+    // ]
 
     let receiptTypeArr = [
         { icon: "cloud-print-outline", title: "Print", func: () => setRcptType("P") },
@@ -111,6 +123,10 @@ export default function ReceiptSettingsEditScreen() {
                 ToastAndroid.show("Something went wrong while updating!", ToastAndroid.SHORT)
             })
     }
+
+    // useEffect(() => {
+    //     handleReceiptSettingsUpdate()
+    // }, dependencyArray)
 
     return (
         <SafeAreaView style={[{ backgroundColor: theme.colors.background, height: "100%" }]}>

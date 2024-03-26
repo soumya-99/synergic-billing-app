@@ -360,6 +360,7 @@ export type StockUpdateCredentials = {
     item_id: number
     user_id: string
     added_stock: number
+    removed_stock: number
 }
 
 export type StockReportCredentials = {
