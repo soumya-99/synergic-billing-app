@@ -69,6 +69,7 @@ export default function ManageUnitsScreen() {
 
         await editUnit(editUnitCreds).then(res => {
             ToastAndroid.show("Unit updated successfully.", ToastAndroid.SHORT)
+            handleGetUnits()
         }).catch(err => {
             ToastAndroid.show("Error while updating unit.", ToastAndroid.SHORT)
         })
@@ -125,6 +126,7 @@ export default function ManageUnitsScreen() {
 
         await sendAddedUnit(addedUnitObject).then(res => {
             ToastAndroid.show("Unit has been added.", ToastAndroid.SHORT)
+            handleGetUnits()
         }).catch(err => {
             ToastAndroid.show("Something went wrong on server", ToastAndroid.SHORT)
         })
