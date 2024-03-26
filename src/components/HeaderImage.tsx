@@ -17,6 +17,8 @@ type HeaderImageProps = {
   borderRadius?: number
   blur?: number
   isBackEnabled?: boolean
+  isBackCustom?: boolean
+  backPressed?: () => void
 }
 
 export default function HeaderImage({
@@ -26,6 +28,8 @@ export default function HeaderImage({
   blur,
   children,
   isBackEnabled,
+  isBackCustom = false,
+  backPressed
 }: PropsWithChildren<HeaderImageProps>) {
   const colorScheme = useColorScheme()
   const theme = usePaperColorScheme()
@@ -39,9 +43,9 @@ export default function HeaderImage({
             icon="arrow-left"
             iconColor={theme.colors.onBackground}
             size={20}
-            onPress={() => navigation.dispatch(
+            onPress={!isBackCustom ? () => navigation.dispatch(
               CommonActions.goBack()
-            )}
+            ) : () => backPressed()}
             style={{
               position: "absolute",
               top: SCREEN_HEIGHT / 40,

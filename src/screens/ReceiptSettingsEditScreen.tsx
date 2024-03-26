@@ -1,4 +1,4 @@
-import { View, ScrollView, StyleSheet, ToastAndroid } from "react-native"
+import { View, ScrollView, StyleSheet, ToastAndroid, Alert, BackHandler } from "react-native"
 import React, { useContext, useEffect, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Divider, List } from "react-native-paper"
@@ -7,7 +7,7 @@ import HeaderImage from "../components/HeaderImage"
 import { flowerHome, flowerHomeDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
 import { loginStorage } from "../storage/appStorage"
-import { useIsFocused } from "@react-navigation/native"
+import { useIsFocused, useNavigation } from "@react-navigation/native"
 import { AppStore } from "../context/AppContext"
 import MenuPaper from "../components/MenuPaper"
 import ButtonPaper from "../components/ButtonPaper"
@@ -17,6 +17,7 @@ import { ReceiptSettingsEditCredentials } from "../models/api_types"
 export default function ReceiptSettingsEditScreen() {
     const theme = usePaperColorScheme()
     const isFocused = useIsFocused()
+    const navigation = useNavigation()
 
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
@@ -27,6 +28,7 @@ export default function ReceiptSettingsEditScreen() {
     const [rcptType, setRcptType] = useState<"P" | "B" | "S">(() => receiptSettings?.rcpt_type)
     const [stockFlag, setStockFlag] = useState<"Y" | "N">(() => receiptSettings?.stock_flag)
     const [gstFlag, setGstFlag] = useState<"Y" | "N">(() => receiptSettings?.gst_flag)
+    const [gstType, setGstType] = useState<"I" | "E">(() => receiptSettings?.gst_type)
     const [customerInfo, setCustomerInfo] = useState<"Y" | "N">(() => receiptSettings?.cust_inf)
     const [payMode, setPayMode] = useState<"Y" | "N">(() => receiptSettings?.pay_mode)
     const [discountFlag, setDiscountFlag] = useState<"Y" | "N">(() => receiptSettings?.discount_flag)
@@ -55,27 +57,32 @@ export default function ReceiptSettingsEditScreen() {
 
     let stockFlagArr = [
         { icon: "check-outline", title: "Allow", func: () => setStockFlag("Y") },
-        { icon: "cancel", title: "Deny", func: () => setStockFlag("N") },
+        { icon: "close-outline", title: "Deny", func: () => setStockFlag("N") },
     ]
 
     let gstFlagArr = [
         { icon: "check-outline", title: "Allow", func: () => setGstFlag("Y") },
-        { icon: "cancel", title: "Deny", func: () => setGstFlag("N") },
+        { icon: "close-outline", title: "Deny", func: () => setGstFlag("N") },
+    ]
+
+    let gstTypeArr = [
+        { icon: "tag-text-outline", title: "Exclusive", func: () => setGstType("E") },
+        { icon: "tag-outline", title: "Inclusive", func: () => setGstType("I") },
     ]
 
     let customerInfoArr = [
         { icon: "check-outline", title: "Allow", func: () => setCustomerInfo("Y") },
-        { icon: "cancel", title: "Deny", func: () => setCustomerInfo("N") },
+        { icon: "close-outline", title: "Deny", func: () => setCustomerInfo("N") },
     ]
 
     let payModeArr = [
         { icon: "check-outline", title: "Allow", func: () => setPayMode("Y") },
-        { icon: "cancel", title: "Deny", func: () => setPayMode("N") },
+        { icon: "close-outline", title: "Deny", func: () => setPayMode("N") },
     ]
 
     let discountSwitchArr = [
         { icon: "check-outline", title: "Allow", func: () => setDiscountFlag("Y") },
-        { icon: "cancel", title: "Deny", func: () => setDiscountFlag("N") },
+        { icon: "close-outline", title: "Deny", func: () => setDiscountFlag("N") },
     ]
 
     let discountTypeArr = [
@@ -104,6 +111,7 @@ export default function ReceiptSettingsEditScreen() {
             rcpt_type: rcptType,
             stock_flag: stockFlag,
             gst_flag: gstFlag,
+            gst_type: gstType,
             cust_inf: customerInfo,
             pay_mode: payMode,
             discount_flag: discountFlag,
@@ -117,7 +125,7 @@ export default function ReceiptSettingsEditScreen() {
         await editReceiptSettings(editedReceiptSettings)
             .then(res => {
                 ToastAndroid.show("Receipt Settings Updated!", ToastAndroid.SHORT)
-                handleGetReceiptSettings()
+                navigation.goBack()
             })
             .catch(err => {
                 ToastAndroid.show("Something went wrong while updating!", ToastAndroid.SHORT)
@@ -128,18 +136,64 @@ export default function ReceiptSettingsEditScreen() {
     //     handleReceiptSettingsUpdate()
     // }, dependencyArray)
 
+    useEffect(() => {
+        const backAction = () => {
+            Alert.alert('Hold on!', 'Your changes will be lost! Update changes. Do you want to still go back?', [
+                {
+                    text: 'NO',
+                    onPress: () => null,
+                    style: 'cancel',
+                },
+                { text: 'YES', onPress: () => navigation.goBack() },
+            ])
+            return true
+        }
+
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            backAction,
+        )
+
+        return () => backHandler.remove()
+    }, [])
+
+    const backPressed = () => {
+        Alert.alert('Hold on!', 'Your changes will be lost! Update changes. Do you want to still go back?', [
+            {
+                text: 'NO',
+                onPress: () => null,
+                style: 'cancel',
+            },
+            { text: 'YES', onPress: () => navigation.goBack() },
+        ])
+    }
+
     return (
         <SafeAreaView style={[{ backgroundColor: theme.colors.background, height: "100%" }]}>
             <ScrollView keyboardShouldPersistTaps="handled">
                 <View style={{ alignItems: "center" }}>
                     <HeaderImage
                         isBackEnabled
+                        isBackCustom={true}
+                        backPressed={backPressed}
                         imgLight={flowerHome}
                         imgDark={flowerHomeDark}
                         borderRadius={30}
                         blur={10}>
                         Receipt Settings
                     </HeaderImage>
+                </View>
+
+                <View style={{ paddingHorizontal: normalize(20), paddingVertical: normalize(10) }}>
+                    {loginStore?.user_type === "M" ? (
+                        <ButtonPaper icon="cloud-upload-outline" mode="contained" onPress={handleReceiptSettingsUpdate}>
+                            UPDATE
+                        </ButtonPaper>
+                    ) : (
+                        <ButtonPaper disabled mode="elevated" onPress={() => console.log("UPDATE")}>
+                            YOU CAN'T UPDATE
+                        </ButtonPaper>
+                    )}
                 </View>
 
                 <View style={{ padding: normalize(20) }}>
@@ -179,6 +233,23 @@ export default function ReceiptSettingsEditScreen() {
                         descriptionStyle={{ color: gstFlag === "Y" ? theme.colors.green : theme.colors.error }}
                     />
                     <Divider />
+                    {
+                        gstFlag === "Y" &&
+                        <>
+                            <List.Item
+                                title="GST Type"
+                                description={gstType === "E" ? "Exclusive" : gstType === "I" ? "Inclusive" : "Error Occurred!"}
+                                left={props => <List.Icon {...props} icon="account-cash-outline" />}
+                                right={props => {
+                                    return (
+                                        <MenuPaper menuArrOfObjects={gstTypeArr} />
+                                    )
+                                }}
+                                descriptionStyle={{ color: theme.colors.primary }}
+                            />
+                            <Divider />
+                        </>
+                    }
                     <List.Item
                         title="Unit"
                         description={unitFlag === "Y" ? "Allowed" : unitFlag === "N" ? "Denied" : "Error Occurred!"}
@@ -227,18 +298,23 @@ export default function ReceiptSettingsEditScreen() {
                         descriptionStyle={{ color: discountFlag === "Y" ? theme.colors.green : theme.colors.error }}
                     />
                     <Divider />
-                    <List.Item
-                        title="Discount Type"
-                        description={discountType === "P" ? "Percentage (%)" : discountType === "A" ? "Amount (₹)" : "Error Occurred!"}
-                        left={props => <List.Icon {...props} icon="cash-minus" />}
-                        right={props => {
-                            return (
-                                <MenuPaper menuArrOfObjects={discountTypeArr} />
-                            )
-                        }}
-                        descriptionStyle={{ color: theme.colors.primary }}
-                    />
-                    <Divider />
+                    {
+                        discountFlag === "Y" &&
+                        <>
+                            <List.Item
+                                title="Discount Type"
+                                description={discountType === "P" ? "Percentage (%)" : discountType === "A" ? "Amount (₹)" : "Error Occurred!"}
+                                left={props => <List.Icon {...props} icon="cash-minus" />}
+                                right={props => {
+                                    return (
+                                        <MenuPaper menuArrOfObjects={discountTypeArr} />
+                                    )
+                                }}
+                                descriptionStyle={{ color: theme.colors.primary }}
+                            />
+                            <Divider />
+                        </>
+                    }
                     <List.Item
                         title="Price Type"
                         description={priceType === "A" ? "Automatic" : priceType === "M" ? "Manual Edit" : "Error Occurred!"}
@@ -264,7 +340,7 @@ export default function ReceiptSettingsEditScreen() {
                     />
                     <Divider /> */}
                 </View>
-                <View style={{ paddingHorizontal: normalize(20), paddingVertical: normalize(10) }}>
+                {/* <View style={{ paddingHorizontal: normalize(20), paddingVertical: normalize(10) }}>
                     {loginStore?.user_type === "M" ? (
                         <ButtonPaper icon="cloud-upload-outline" mode="contained" onPress={handleReceiptSettingsUpdate}>
                             UPDATE
@@ -274,7 +350,7 @@ export default function ReceiptSettingsEditScreen() {
                             YOU CAN'T UPDATE
                         </ButtonPaper>
                     )}
-                </View>
+                </View> */}
             </ScrollView>
         </SafeAreaView>
     )
