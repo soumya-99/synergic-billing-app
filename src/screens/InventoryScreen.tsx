@@ -212,6 +212,7 @@ export default function InventoryScreen() {
                                     onPress={() => handleProductPressed(item)}
                                     // unitPrice={item.price}
                                     stock={item.stock}
+                                    unit={item?.unit_name}
                                 />
                             ))}
                         </ScrollableListContainer>

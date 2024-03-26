@@ -8,6 +8,7 @@ type ProductListSuggestionProps = {
   onPress?: () => void
   id?: number | string
   itemDesc?: string
+  unit?: string
 }
 
 export default function ProductListSuggestion({
@@ -16,6 +17,7 @@ export default function ProductListSuggestion({
   itemDesc,
   unitPrice,
   stock,
+  unit,
   onPress,
 }: ProductListSuggestionProps) {
   const theme = usePaperColorScheme()
@@ -45,7 +47,7 @@ export default function ProductListSuggestion({
                 color: theme.colors.onTertiaryContainer,
               }}>
               {/* {unitPrice && `${unitPrice}/-`} */}
-              {stock && `${stock}`}
+              {stock && `${stock}${unit && unit !== "null" ? ` ${unit}` : ""}`}
             </Badge>
           ))
         }
