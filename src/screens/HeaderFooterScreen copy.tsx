@@ -15,8 +15,6 @@ import useEditHeaderFooter from "../hooks/api/useEditHeaderFooter"
 import { useIsFocused } from "@react-navigation/native"
 import useFindRemainingChars from "../hooks/useFindRemainingChars"
 
-const MAX_LENGTH = 25
-
 export default function HeaderFooterScreen() {
     const isFocused = useIsFocused()
     const theme = usePaperColorScheme()
@@ -44,10 +42,13 @@ export default function HeaderFooterScreen() {
     const [isFooter2On, setIsFooter2On] = useState(() => receiptSettings?.on_off_flag4 === "Y" ? true : false)
     const onToggleSwitchF2 = () => setIsFooter2On(!isFooter2On)
 
-    const [header1, setHeader1] = useState<string>(() => receiptSettings?.header1 || "")
-    const [header2, setHeader2] = useState<string>(() => receiptSettings?.header2 || "")
-    const [footer1, setFooter1] = useState<string>(() => receiptSettings?.footer1 || "")
-    const [footer2, setFooter2] = useState<string>(() => receiptSettings?.footer2 || "")
+    const [header1, setHeader1] = useState<string>(() => receiptSettings?.header1)
+    const [header2, setHeader2] = useState<string>(() => receiptSettings?.header2)
+    const [footer1, setFooter1] = useState<string>(() => receiptSettings?.footer1)
+    const [footer2, setFooter2] = useState<string>(() => receiptSettings?.footer2)
+
+    const [remainingChars, setRemainingChars] = useState<number>(() => 0)
+    // const { getRemainingChars } = useFindRemainingChars()
 
     const { editHeaderFooter } = useEditHeaderFooter()
 
@@ -73,8 +74,6 @@ export default function HeaderFooterScreen() {
                 ToastAndroid.show(`Something went wrong while updating... ${err}`, ToastAndroid.SHORT)
             })
     }
-
-    const remainingChars = (maxChars: number, text: string) => maxChars - text.length
 
     return (
         <SafeAreaView style={[{ backgroundColor: theme.colors.background, height: "100%" }]}>
@@ -148,11 +147,14 @@ export default function HeaderFooterScreen() {
                         }}>
                         <View style={{ width: "70%" }}>
                             <InputPaper
-                                label={`Header 1 (${remainingChars(MAX_LENGTH, header1)}/${MAX_LENGTH})`}
-                                onChangeText={(txt: string) => setHeader1(txt)}
+                                label={`Header 1 (${remainingChars}/25)`}
+                                onChangeText={(txt: string) => {
+                                    setHeader1(txt)
+                                    setRemainingChars(24 - header1.length)
+                                }}
                                 value={header1}
                                 keyboardType="default"
-                                maxLength={MAX_LENGTH}
+                                maxLength={25}
                                 autoFocus
                                 mode="outlined"
                             />
@@ -170,11 +172,11 @@ export default function HeaderFooterScreen() {
                         }}>
                         <View style={{ width: "70%" }}>
                             <InputPaper
-                                label={`Header 2 (${remainingChars(MAX_LENGTH, header2)}/${MAX_LENGTH})`}
+                                label="Header 2"
                                 onChangeText={(txt: string) => setHeader2(txt)}
                                 value={header2}
                                 keyboardType="default"
-                                maxLength={MAX_LENGTH}
+                                maxLength={25}
                                 mode="outlined"
                             />
                         </View>
@@ -191,11 +193,11 @@ export default function HeaderFooterScreen() {
                         }}>
                         <View style={{ width: "70%" }}>
                             <InputPaper
-                                label={`Footer 1 (${remainingChars(MAX_LENGTH, footer1)}/${MAX_LENGTH})`}
+                                label="Footer 1"
                                 onChangeText={(txt: string) => setFooter1(txt)}
                                 value={footer1}
                                 keyboardType="default"
-                                maxLength={MAX_LENGTH}
+                                maxLength={25}
                                 mode="outlined"
                             />
                         </View>
@@ -212,11 +214,11 @@ export default function HeaderFooterScreen() {
                         }}>
                         <View style={{ width: "70%" }}>
                             <InputPaper
-                                label={`Footer 2 (${remainingChars(MAX_LENGTH, footer2)}/${MAX_LENGTH})`}
+                                label="Footer 2"
                                 onChangeText={(txt: string) => setFooter2(txt)}
                                 value={footer2}
                                 keyboardType="default"
-                                maxLength={MAX_LENGTH}
+                                maxLength={25}
                                 mode="outlined"
                             />
                         </View>

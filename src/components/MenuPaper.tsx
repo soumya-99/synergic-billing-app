@@ -32,7 +32,7 @@ export default function MenuPaper({ menuArrOfObjects, title = "Options", customS
                     disabled={loginStore?.user_type !== "M"}
                     // textColor={textColor}
                     style={customStyle}
-                    mode='outlined'
+                // mode='outlined'
                 >
                     {title}
                 </Button>
