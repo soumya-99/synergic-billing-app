@@ -99,22 +99,22 @@ function SettingsScreen() {
             onPress={() => console.log("Rprt Pressed!")}
           /> */}
           <ReportButton
-            text="Manage Products"
-            color={theme.colors.tertiaryContainer}
-            icon="circle-edit-outline"
-            onPress={() => navigation.dispatch(
-              CommonActions.navigate({
-                name: navigationRoutes.manageProductsScreen,
-              })
-            )}
-          />
-          <ReportButton
             text="Manage Units"
             color={theme.colors.tealContainer}
             icon="weight-kilogram"
             onPress={() => navigation.dispatch(
               CommonActions.navigate({
                 name: navigationRoutes.manageUnitsScreen,
+              })
+            )}
+          />
+          <ReportButton
+            text="Manage Products"
+            color={theme.colors.tertiaryContainer}
+            icon="circle-edit-outline"
+            onPress={() => navigation.dispatch(
+              CommonActions.navigate({
+                name: navigationRoutes.manageProductsScreen,
               })
             )}
           />
