@@ -95,7 +95,7 @@ export default function InventoryScreen() {
     }
 
     const onDialogFailureAdd = () => {
-        clearStates([setStock, setAddedStock, setRemovedStock, setUpdatedStock], () => undefined)
+        clearStates([setStock, setAddedStock, setRemovedStock, setUpdatedStock], () => 0)
         setVisibleAdd(!visibleAdd)
     }
 
@@ -115,7 +115,7 @@ export default function InventoryScreen() {
             return
         }
         handleUpdateStock(product?.item_id, addedStock, removedStock).then(() => {
-            clearStates([setStock, setAddedStock, setRemovedStock, setUpdatedStock], () => undefined)
+            clearStates([setStock, setAddedStock, setRemovedStock, setUpdatedStock], () => 0)
             setVisibleAdd(!visibleAdd)
         })
     }
@@ -294,7 +294,7 @@ export default function InventoryScreen() {
                         </View>
                         <View style={{ width: "50%" }}>
                             <InputPaper
-                                label="Remove"
+                                label="Less"
                                 onChangeText={(txt: number) => setRemovedStock(txt)}
                                 value={removedStock}
                                 keyboardType="numeric"
