@@ -17,6 +17,7 @@ import { useIsFocused } from "@react-navigation/native"
 import { AppStore } from "../context/AppContext"
 import useStockSearch from "../hooks/api/useStockSearch"
 import useStockUpdate from "../hooks/api/useStockUpdate"
+import SurfacePaper from "../components/SurfacePaper"
 
 export default function InventoryScreen() {
     const theme = usePaperColorScheme()
@@ -143,10 +144,29 @@ export default function InventoryScreen() {
                                     // loading={search ? true : false}
                                     autoFocus
                                 />
-                                : <Text variant="displayMedium" style={{ alignSelf: "center", textAlign: "center", color: theme.colors.pink }}>Inventory is off. Allow Inventory to use this feature.</Text>
+                                // : <Text variant="displayMedium" style={{ alignSelf: "center", textAlign: "center", color: theme.colors.pink }}>Inventory is off. Allow Inventory to use this feature.</Text>
+                                :
+                                <SurfacePaper
+                                    backgroundColor={theme.colors.pinkContainer}
+                                    elevation={2}
+                                    paddingEnabled
+                                    smallWidthEnabled
+                                    style={{ padding: 15 }}
+                                >
+                                    <Text variant="titleLarge" style={{ alignSelf: "center", textAlign: "center", color: theme.colors.onPinkContainer }}>Inventory is off. Allow Inventory from Settings to use this feature.</Text>
+                                </SurfacePaper>
                         )
                         : (
-                            <Text variant="displayMedium" style={{ alignSelf: "center", textAlign: "center", color: theme.colors.error }}>You don't have permissions to edit anything!</Text>
+                            // <Text variant="displayMedium" style={{ alignSelf: "center", textAlign: "center", color: theme.colors.error }}>You don't have permissions to edit anything!</Text>
+                            <SurfacePaper
+                                backgroundColor={theme.colors.pinkContainer}
+                                elevation={2}
+                                paddingEnabled
+                                smallWidthEnabled
+                                style={{ padding: 15 }}
+                            >
+                                <Text variant="titleLarge" style={{ alignSelf: "center", textAlign: "center", color: theme.colors.onPinkContainer }}>You don't have permissions to edit anything!</Text>
+                            </SurfacePaper>
                         )}
 
 
