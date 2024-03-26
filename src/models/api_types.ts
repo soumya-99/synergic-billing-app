@@ -89,6 +89,7 @@ export type ItemsData = {
     unit_id?: number
     unit_name?: string
     quantity?: number
+    stock?: number
 }
 
 export type UnitData = {

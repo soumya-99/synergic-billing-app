@@ -4,6 +4,7 @@ import { usePaperColorScheme } from "../theme/theme"
 type ProductListSuggestionProps = {
   itemName: string
   unitPrice?: number
+  stock?: number
   onPress?: () => void
   id?: number | string
   itemDesc?: string
@@ -14,6 +15,7 @@ export default function ProductListSuggestion({
   itemName,
   itemDesc,
   unitPrice,
+  stock,
   onPress,
 }: ProductListSuggestionProps) {
   const theme = usePaperColorScheme()
@@ -24,16 +26,29 @@ export default function ProductListSuggestion({
         description={itemDesc}
         onPress={onPress}
         left={props => <List.Icon {...props} icon="basket" />}
-        right={unitPrice && (props => (
+        right={unitPrice ? (props => (
           <Badge
             {...props}
             style={{
               backgroundColor: theme.colors.tertiaryContainer,
               color: theme.colors.onTertiaryContainer,
             }}>
-            {`${unitPrice}/-`}
+            {unitPrice && `${unitPrice}/-`}
+            {/* {stock && `${stock}/-`} */}
           </Badge>
-        ))}
+        ))
+          : (props => (
+            <Badge
+              {...props}
+              style={{
+                backgroundColor: theme.colors.tertiaryContainer,
+                color: theme.colors.onTertiaryContainer,
+              }}>
+              {/* {unitPrice && `${unitPrice}/-`} */}
+              {stock && `${stock}`}
+            </Badge>
+          ))
+        }
       />
       <Divider />
     </>

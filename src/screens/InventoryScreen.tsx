@@ -197,7 +197,8 @@ export default function InventoryScreen() {
                                     key={item.id}
                                     itemName={item.item_name}
                                     onPress={() => handleProductPressed(item)}
-                                    unitPrice={item.price}
+                                    // unitPrice={item.price}
+                                    stock={item.stock}
                                 />
                             ))}
                         </ScrollableListContainer>
