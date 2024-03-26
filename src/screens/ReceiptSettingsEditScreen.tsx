@@ -13,6 +13,7 @@ import MenuPaper from "../components/MenuPaper"
 import ButtonPaper from "../components/ButtonPaper"
 import useEditReceiptSettings from "../hooks/api/useEditReceiptSettings"
 import { ReceiptSettingsEditCredentials } from "../models/api_types"
+import InputPaper from "../components/InputPaper"
 
 export default function ReceiptSettingsEditScreen() {
     const theme = usePaperColorScheme()
@@ -34,6 +35,7 @@ export default function ReceiptSettingsEditScreen() {
     const [discountFlag, setDiscountFlag] = useState<"Y" | "N">(() => receiptSettings?.discount_flag)
     const [discountType, setDiscountType] = useState<"P" | "A">(() => receiptSettings?.discount_type)
     const [priceType, setPriceType] = useState<"A" | "M">(() => receiptSettings?.price_type)
+    const [refundTime, setRefundTime] = useState<number>(() => 0)
     // const [cancelBillFlag, setCancelBillFlag] = useState<"Y" | "N">(() => "Y")
     const [unitFlag, setUnitFlag] = useState<"Y" | "N">(receiptSettings?.unit_flag)
 
@@ -119,7 +121,8 @@ export default function ReceiptSettingsEditScreen() {
             price_type: priceType,
             created_by: loginStore?.user_name,
             modified_by: loginStore?.user_name,
-            unit_flag: unitFlag
+            unit_flag: unitFlag,
+            refund_days: refundTime
         }
 
         await editReceiptSettings(editedReceiptSettings)
@@ -138,7 +141,7 @@ export default function ReceiptSettingsEditScreen() {
 
     useEffect(() => {
         const backAction = () => {
-            Alert.alert('Hold on!', 'Your changes will be lost! Update changes. Do you want to still go back?', [
+            Alert.alert('Updated the data?', 'Please press UPDATE Button to update. Do you want to still go back?', [
                 {
                     text: 'NO',
                     onPress: () => null,
@@ -158,7 +161,7 @@ export default function ReceiptSettingsEditScreen() {
     }, [])
 
     const backPressed = () => {
-        Alert.alert('Hold on!', 'Your changes will be lost! Update changes. Do you want to still go back?', [
+        Alert.alert('Updated the data?', 'Please press UPDATE Button to update. Do you want to still go back?', [
             {
                 text: 'NO',
                 onPress: () => null,
@@ -322,6 +325,26 @@ export default function ReceiptSettingsEditScreen() {
                         right={props => {
                             return (
                                 <MenuPaper menuArrOfObjects={priceAutoManualArr} />
+                            )
+                        }}
+                        descriptionStyle={{ color: priceType === "A" ? theme.colors.primary : theme.colors.orange }}
+                    />
+                    <Divider />
+                    <List.Item
+                        title="Refund Time (In Days)"
+                        description={refundTime == 1 ? `${refundTime} day` : `${refundTime} days`}
+                        left={props => <List.Icon {...props} icon="cash-refund" />}
+                        right={props => {
+                            return (
+                                <InputPaper
+                                    keyboardType="numeric"
+                                    label="Days"
+                                    mode="outlined"
+                                    value={refundTime}
+                                    onChangeText={(txt: number) => setRefundTime(txt)}
+                                    customStyle={{ height: normalize(35) }}
+                                    maxLength={3}
+                                />
                             )
                         }}
                         descriptionStyle={{ color: priceType === "A" ? theme.colors.primary : theme.colors.orange }}

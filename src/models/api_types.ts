@@ -42,6 +42,9 @@ export type ReceiptSettingsData = {
     pay_mode: "Y" | "N"
     discount_flag: "Y" | "N"
     discount_type: "P" | "A"
+    stock_flag: "Y" | "N"
+    price_type: "A" | "M"
+    refund_days: number
     created_by: string
     created_at: string
     modified_by: string
@@ -68,6 +71,7 @@ export type ReceiptSettingsEditCredentials = {
     discount_flag: "Y" | "N"
     discount_type: "P" | "A"
     price_type: "A" | "M"
+    refund_days: number
     created_by: string
     modified_by: string
 }
