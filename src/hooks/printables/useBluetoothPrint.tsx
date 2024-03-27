@@ -259,32 +259,87 @@ export const useBluetoothPrint = () => {
                         [item?.item_name],
                         {},
                     )
-                    await BluetoothEscposPrinter.printColumn(
-                        columnWidthsProductsHeaderAndBody,
-                        [
-                            BluetoothEscposPrinter.ALIGN.LEFT,
-                            BluetoothEscposPrinter.ALIGN.LEFT,
-                            BluetoothEscposPrinter.ALIGN.CENTER,
-                            BluetoothEscposPrinter.ALIGN.RIGHT,
-                            BluetoothEscposPrinter.ALIGN.RIGHT,
-                        ],
-                        ["", item?.quantity.toString(), item?.price.toString(), (((item?.price * item?.quantity * item?.discount) / 100).toFixed(2)).toString(), `${((item?.price * item?.quantity) - ((item?.price * item?.quantity * item?.discount) / 100)).toFixed(2).toString()}`],
-                        {},
-                    )
+
+                    receiptSettings?.discount_type === "P"
+                        ? await BluetoothEscposPrinter.printColumn(
+                            columnWidthsProductsHeaderAndBody,
+                            [
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.CENTER,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                            ],
+                            ["", item?.quantity.toString(), item?.price.toString(), (((item?.price * item?.quantity * item?.discount) / 100).toFixed(2)).toString(), `${((item?.price * item?.quantity) - ((item?.price * item?.quantity * item?.discount) / 100)).toFixed(2).toString()}`],
+                            {},
+                        )
+                        : await BluetoothEscposPrinter.printColumn(
+                            columnWidthsProductsHeaderAndBody,
+                            [
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.CENTER,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                            ],
+                            ["", item?.quantity.toString(), item?.price.toString(), ((item?.discount).toFixed(2)).toString(), `${((item?.price * item?.quantity) - ((item?.price * item?.quantity * item?.discount) / 100)).toFixed(2).toString()}`],
+                            {},
+                        )
+
+                    // await BluetoothEscposPrinter.printColumn(
+                    //     columnWidthsProductsHeaderAndBody,
+                    //     [
+                    //         BluetoothEscposPrinter.ALIGN.LEFT,
+                    //         BluetoothEscposPrinter.ALIGN.LEFT,
+                    //         BluetoothEscposPrinter.ALIGN.CENTER,
+                    //         BluetoothEscposPrinter.ALIGN.RIGHT,
+                    //         BluetoothEscposPrinter.ALIGN.RIGHT,
+                    //     ],
+                    //     ["", item?.quantity.toString(), item?.price.toString(), (((item?.price * item?.quantity * item?.discount) / 100).toFixed(2)).toString(), `${((item?.price * item?.quantity) - ((item?.price * item?.quantity * item?.discount) / 100)).toFixed(2).toString()}`],
+                    //     {},
+                    // )
                 } else {
-                    await BluetoothEscposPrinter.printColumn(
-                        columnWidthsProductsHeaderAndBody,
-                        [
-                            BluetoothEscposPrinter.ALIGN.LEFT,
-                            BluetoothEscposPrinter.ALIGN.LEFT,
-                            BluetoothEscposPrinter.ALIGN.CENTER,
-                            BluetoothEscposPrinter.ALIGN.RIGHT,
-                            BluetoothEscposPrinter.ALIGN.RIGHT,
-                        ],
-                        [item?.item_name, item?.quantity.toString(), item?.price.toString(), (((item?.price * item?.quantity * item?.discount) / 100).toFixed(2)).toString(), `${(item?.price * item?.quantity).toString()}`],
-                        {},
-                    );
-                    await BluetoothEscposPrinter.printText("\n", {});
+
+                    receiptSettings?.discount_type === "P"
+                        ? await BluetoothEscposPrinter.printColumn(
+                            columnWidthsProductsHeaderAndBody,
+                            [
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.CENTER,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                            ],
+                            [item?.item_name, item?.quantity.toString(), item?.price.toString(), (((item?.price * item?.quantity * item?.discount) / 100).toFixed(2)).toString(), `${(item?.price * item?.quantity).toString()}`],
+                            {},
+                        )
+                        : await BluetoothEscposPrinter.printColumn(
+                            columnWidthsProductsHeaderAndBody,
+                            [
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.CENTER,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                            ],
+                            [item?.item_name, item?.quantity.toString(), item?.price.toString(), ((item?.discount).toFixed(2)).toString(), `${(item?.price * item?.quantity).toString()}`],
+                            {},
+                        )
+
+
+                    // await BluetoothEscposPrinter.printColumn(
+                    //     columnWidthsProductsHeaderAndBody,
+                    //     [
+                    //         BluetoothEscposPrinter.ALIGN.LEFT,
+                    //         BluetoothEscposPrinter.ALIGN.LEFT,
+                    //         BluetoothEscposPrinter.ALIGN.CENTER,
+                    //         BluetoothEscposPrinter.ALIGN.RIGHT,
+                    //         BluetoothEscposPrinter.ALIGN.RIGHT,
+                    //     ],
+                    //     [item?.item_name, item?.quantity.toString(), item?.price.toString(), (((item?.price * item?.quantity * item?.discount) / 100).toFixed(2)).toString(), `${(item?.price * item?.quantity).toString()}`],
+                    //     {},
+                    // )
+                    await BluetoothEscposPrinter.printText("\n", {})
                 }
             }
 
@@ -331,18 +386,19 @@ export const useBluetoothPrint = () => {
                     {},
                 )
 
-            gstKeys.map(async (key) => (
-                await BluetoothEscposPrinter.printColumn(
-                    columnWidths,
-                    [
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.CENTER,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                    ],
-                    [`${key.includes('CGST') ? 'CGST' : 'SGST'} @${key.replace(/total(CGST|SGST)_/, '').replace('_', '.')}%`, ":", gstTotals[key].toFixed(2)],
-                    {},
-                )
-            ))
+            receiptSettings?.gst_flag === "Y"
+                && gstKeys.map(async (key) => (
+                    await BluetoothEscposPrinter.printColumn(
+                        columnWidths,
+                        [
+                            BluetoothEscposPrinter.ALIGN.LEFT,
+                            BluetoothEscposPrinter.ALIGN.CENTER,
+                            BluetoothEscposPrinter.ALIGN.RIGHT,
+                        ],
+                        [`${key.includes('CGST') ? 'CGST' : 'SGST'} @${key.replace(/total(CGST|SGST)_/, '').replace('_', '.')}%`, ":", gstTotals[key].toFixed(2)],
+                        {},
+                    )
+                ))
 
             await BluetoothEscposPrinter.printColumn(
                 columnWidths,
@@ -355,16 +411,17 @@ export const useBluetoothPrint = () => {
                 {},
             )
 
-            await BluetoothEscposPrinter.printColumn(
-                columnWidths,
-                [
-                    BluetoothEscposPrinter.ALIGN.LEFT,
-                    BluetoothEscposPrinter.ALIGN.CENTER,
-                    BluetoothEscposPrinter.ALIGN.RIGHT,
-                ],
-                ["TOTAL GST", ":", (totalGST).toFixed(2).toString()],
-                {},
-            )
+            receiptSettings?.gst_flag === "Y"
+                && await BluetoothEscposPrinter.printColumn(
+                    columnWidths,
+                    [
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.CENTER,
+                        BluetoothEscposPrinter.ALIGN.RIGHT,
+                    ],
+                    ["TOTAL GST", ":", (totalGST).toFixed(2).toString()],
+                    {},
+                )
 
             receiptSettings?.gst_type === "E"
                 ? await BluetoothEscposPrinter.printColumn(
@@ -1502,31 +1559,85 @@ export const useBluetoothPrint = () => {
                         [item?.item_name],
                         {},
                     )
-                    await BluetoothEscposPrinter.printColumn(
-                        columnWidthsProductsHeaderAndBody,
-                        [
-                            BluetoothEscposPrinter.ALIGN.LEFT,
-                            BluetoothEscposPrinter.ALIGN.LEFT,
-                            BluetoothEscposPrinter.ALIGN.CENTER,
-                            BluetoothEscposPrinter.ALIGN.RIGHT,
-                            BluetoothEscposPrinter.ALIGN.RIGHT,
-                        ],
-                        ["", item?.qty.toString(), item?.price.toString(), (((item?.price * item?.qty * item?.dis_pertg) / 100).toFixed(2)).toString(), `${((item?.price * item?.qty) - ((item?.price * item?.qty * item?.dis_pertg) / 100)).toFixed(2).toString()}`],
-                        {},
-                    )
+
+                    discountType === "P"
+                        ? await BluetoothEscposPrinter.printColumn(
+                            columnWidthsProductsHeaderAndBody,
+                            [
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.CENTER,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                            ],
+                            ["", item?.qty.toString(), item?.price.toString(), (((item?.price * item?.qty * item?.dis_pertg) / 100).toFixed(2)).toString(), `${((item?.price * item?.qty) - ((item?.price * item?.qty * item?.dis_pertg) / 100)).toFixed(2).toString()}`],
+                            {},
+                        )
+                        : await BluetoothEscposPrinter.printColumn(
+                            columnWidthsProductsHeaderAndBody,
+                            [
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.CENTER,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                            ],
+                            ["", item?.qty.toString(), item?.price.toString(), ((item?.discount_amt).toFixed(2)).toString(), `${((item?.price * item?.qty) - (item?.discount_amt)).toFixed(2).toString()}`],
+                            {},
+                        )
+
+                    // await BluetoothEscposPrinter.printColumn(
+                    //     columnWidthsProductsHeaderAndBody,
+                    //     [
+                    //         BluetoothEscposPrinter.ALIGN.LEFT,
+                    //         BluetoothEscposPrinter.ALIGN.LEFT,
+                    //         BluetoothEscposPrinter.ALIGN.CENTER,
+                    //         BluetoothEscposPrinter.ALIGN.RIGHT,
+                    //         BluetoothEscposPrinter.ALIGN.RIGHT,
+                    //     ],
+                    //     ["", item?.qty.toString(), item?.price.toString(), (((item?.price * item?.qty * item?.dis_pertg) / 100).toFixed(2)).toString(), `${((item?.price * item?.qty) - ((item?.price * item?.qty * item?.dis_pertg) / 100)).toFixed(2).toString()}`],
+                    //     {},
+                    // )
                 } else {
-                    await BluetoothEscposPrinter.printColumn(
-                        columnWidthsProductsHeaderAndBody,
-                        [
-                            BluetoothEscposPrinter.ALIGN.LEFT,
-                            BluetoothEscposPrinter.ALIGN.LEFT,
-                            BluetoothEscposPrinter.ALIGN.CENTER,
-                            BluetoothEscposPrinter.ALIGN.RIGHT,
-                            BluetoothEscposPrinter.ALIGN.RIGHT,
-                        ],
-                        [item?.item_name, item?.qty.toString(), item?.price.toString(), (((item?.price * item?.qty * item?.dis_pertg) / 100).toFixed(2)).toString(), `${(item?.price * item?.qty).toString()}`],
-                        {},
-                    );
+
+                    discountType === "P"
+                        ? await BluetoothEscposPrinter.printColumn(
+                            columnWidthsProductsHeaderAndBody,
+                            [
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.CENTER,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                            ],
+                            [item?.item_name, item?.qty.toString(), item?.price.toString(), (((item?.price * item?.qty * item?.dis_pertg) / 100).toFixed(2)).toString(), `${(item?.price * item?.qty).toString()}`],
+                            {},
+                        )
+                        : await BluetoothEscposPrinter.printColumn(
+                            columnWidthsProductsHeaderAndBody,
+                            [
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.LEFT,
+                                BluetoothEscposPrinter.ALIGN.CENTER,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                                BluetoothEscposPrinter.ALIGN.RIGHT,
+                            ],
+                            [item?.item_name, item?.qty.toString(), item?.price.toString(), ((item?.discount_amt).toFixed(2)).toString(), `${(item?.price * item?.qty).toString()}`],
+                            {},
+                        )
+
+                    // await BluetoothEscposPrinter.printColumn(
+                    //     columnWidthsProductsHeaderAndBody,
+                    //     [
+                    //         BluetoothEscposPrinter.ALIGN.LEFT,
+                    //         BluetoothEscposPrinter.ALIGN.LEFT,
+                    //         BluetoothEscposPrinter.ALIGN.CENTER,
+                    //         BluetoothEscposPrinter.ALIGN.RIGHT,
+                    //         BluetoothEscposPrinter.ALIGN.RIGHT,
+                    //     ],
+                    //     [item?.item_name, item?.qty.toString(), item?.price.toString(), (((item?.price * item?.qty * item?.dis_pertg) / 100).toFixed(2)).toString(), `${(item?.price * item?.qty).toString()}`],
+                    //     {},
+                    // )
                     await BluetoothEscposPrinter.printText("\n", {});
                 }
             }
@@ -1574,19 +1685,20 @@ export const useBluetoothPrint = () => {
                     {},
                 )
 
-            gstKeys.map(async (key) => (
-                await BluetoothEscposPrinter.printColumn(
-                    columnWidths,
-                    [
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.CENTER,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                    ],
-                    [`${key.includes('CGST') ? 'CGST' : 'SGST'} @${key.replace(/total(CGST|SGST)_/, '').replace('_', '.')}%`, ":", gstTotals[key].toFixed(2).toString()],
-                    {},
-                )
+            addedProducts[0]?.gst_flag === "Y"
+                && gstKeys.map(async (key) => (
+                    await BluetoothEscposPrinter.printColumn(
+                        columnWidths,
+                        [
+                            BluetoothEscposPrinter.ALIGN.LEFT,
+                            BluetoothEscposPrinter.ALIGN.CENTER,
+                            BluetoothEscposPrinter.ALIGN.RIGHT,
+                        ],
+                        [`${key.includes('CGST') ? 'CGST' : 'SGST'} @${key.replace(/total(CGST|SGST)_/, '').replace('_', '.')}%`, ":", gstTotals[key].toFixed(2).toString()],
+                        {},
+                    )
 
-            ))
+                ))
 
             await BluetoothEscposPrinter.printColumn(
                 columnWidths,
@@ -1599,16 +1711,17 @@ export const useBluetoothPrint = () => {
                 {},
             )
 
-            await BluetoothEscposPrinter.printColumn(
-                columnWidths,
-                [
-                    BluetoothEscposPrinter.ALIGN.LEFT,
-                    BluetoothEscposPrinter.ALIGN.CENTER,
-                    BluetoothEscposPrinter.ALIGN.RIGHT,
-                ],
-                ["TOTAL GST", ":", (totalGST).toFixed(2).toString()],
-                {},
-            )
+            addedProducts[0]?.gst_flag === "Y"
+                && await BluetoothEscposPrinter.printColumn(
+                    columnWidths,
+                    [
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.CENTER,
+                        BluetoothEscposPrinter.ALIGN.RIGHT,
+                    ],
+                    ["TOTAL GST", ":", (totalGST).toFixed(2).toString()],
+                    {},
+                )
 
             addedProducts[0]?.gst_type === "E"
                 ? await BluetoothEscposPrinter.printColumn(

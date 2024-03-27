@@ -12,6 +12,7 @@ import CancelBillScreen from "../screens/CancelBillScreen"
 import MoreScreen from "../screens/MoreScreen"
 import RefundItemsScreen from "../screens/RefundItemsScreen"
 import RefundItemsDataScreen from "../screens/RefunditemsDataScreen"
+import ReceiptsAgainstMobileScreen from "../screens/ReceiptsAgainstMobileScreen"
 
 export default function MoreNavigation() {
     const Stack = createNativeStackNavigator()
@@ -29,6 +30,10 @@ export default function MoreNavigation() {
             <Stack.Screen
                 name={navigationRoutes.refundItemsScreen}
                 component={RefundItemsScreen}
+            />
+            <Stack.Screen
+                name={navigationRoutes.receiptsAgainstMobileScreen}
+                component={ReceiptsAgainstMobileScreen}
             />
             <Stack.Screen
                 name={navigationRoutes.refundItemsDataScreen}

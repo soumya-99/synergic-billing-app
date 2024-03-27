@@ -11,22 +11,33 @@ import HeaderImage from "../components/HeaderImage"
 import { textureBill, textureBillDark } from "../resources/images"
 import { usePaperColorScheme } from "../theme/theme"
 import { CommonActions, useNavigation } from "@react-navigation/native"
+import DialogBox from "../components/DialogBox"
+import AddedProductList from "../components/AddedProductList"
+import ScrollableListContainer from "../components/ScrollableListContainer"
 import ButtonPaper from "../components/ButtonPaper"
+import DatePicker from "react-native-date-picker"
 import normalize from "react-native-normalize"
-import useShowBill from "../hooks/api/useShowBill"
-import navigationRoutes from "../routes/navigationRoutes"
-import useRefundList from "../hooks/api/useRefundList"
-import { RefundListCredentials } from "../models/api_types"
+import useSearchBills from "../hooks/api/useSearchBills"
 import { loginStorage } from "../storage/appStorage"
+import { SearchedBills, ShowBillData } from "../models/api_types"
+import { formattedDate } from "../utils/dateFormatter"
+import useShowBill from "../hooks/api/useShowBill"
+import { useBluetoothPrint } from "../hooks/printables/useBluetoothPrint"
 import { AppStore } from "../context/AppContext"
+import NetTotalForRePrints from "../components/NetTotalForRePrints"
+import { Alert } from "react-native"
+import useCancelBill from "../hooks/api/useCancelBill"
+import useCalculations from "../hooks/useCalculations"
+import InputPaper from "../components/InputPaper"
+import navigationRoutes from "../routes/navigationRoutes"
 
 function RefundItemsScreen() {
     const theme = usePaperColorScheme()
     const navigation = useNavigation()
 
-    const loginStore = JSON.parse(loginStorage.getString("login-data"))
+    // const loginStore = JSON.parse(loginStorage.getString("login-data"))
 
-    const { receiptSettings } = useContext(AppStore)
+    // const { receiptSettings } = useContext(AppStore)
 
     const [search, setSearch] = useState<string>(() => "")
     const onChangeSearch = (query: string) => {
@@ -61,44 +72,22 @@ function RefundItemsScreen() {
     // const { cancelBill } = useCancelBill()
     // const { grandTotalCalculate } = useCalculations()
 
-    const { fetchRefundList } = useRefundList()
+    const { fetchBill } = useShowBill()
 
-    const handleGetBills = async (mobile: string) => {
-        // await fetchBill(rcptNo).then(res => {
-        //     if (res.status === 0) {
-        //         ToastAndroid.show("No bills found.", ToastAndroid.SHORT)
-        //         return
-        //     }
-        // setBilledSaleData(res?.data)
-
-        // navigation.dispatch(
-        //     CommonActions.navigate({
-        //         name: navigationRoutes.refundItemsDataScreen,
-        //         params: {
-        //             // billed_sale_data: billedSaleData
-        //             billed_sale_data: res?.data
-        //         }
-        //     })
-        // )
-        const reqCreds: RefundListCredentials = {
-            comp_id: loginStore?.comp_id,
-            br_id: loginStore?.br_id,
-            phone_no: mobile,
-            ref_days: receiptSettings?.refund_days
-        }
-
-        await fetchRefundList(reqCreds).then(res => {
-            if (res?.length === 0) {
+    const handleGetBill = async (rcptNo: number) => {
+        await fetchBill(rcptNo).then(res => {
+            if (res.status === 0) {
                 ToastAndroid.show("No bills found.", ToastAndroid.SHORT)
                 return
             }
+            // setBilledSaleData(res?.data)
 
             navigation.dispatch(
                 CommonActions.navigate({
-                    name: navigationRoutes.receiptsAgainstMobileScreen,
+                    name: navigationRoutes.refundItemsDataScreen,
                     params: {
-                        customer_phone_number: search,
-                        bills_data: res
+                        // billed_sale_data: billedSaleData
+                        billed_sale_data: res?.data
                     }
                 })
             )
@@ -106,21 +95,15 @@ function RefundItemsScreen() {
             ToastAndroid.show("Error during fetching bills.", ToastAndroid.SHORT)
             return
         })
-
-
-        // }).catch(err => {
-        //     ToastAndroid.show("Error during fetching bills.", ToastAndroid.SHORT)
-        //     return
-        // })
     }
 
-    const handleBillListClick = (mobile: string) => {
+    const handleBillListClick = (rcptNo: number) => {
         if (!search || search.length !== 10) {
-            ToastAndroid.show("Enter valid phone number.", ToastAndroid.SHORT)
+            ToastAndroid.show("Enter valid receipt number.", ToastAndroid.SHORT)
             return
         }
         // setVisible(!visible)
-        handleGetBills(mobile)
+        handleGetBill(rcptNo)
         // setCurrentReceiptNo(rcptNo)
         // setGstFlag(billedSaleData[0]?.gst_flag)
     }
@@ -182,8 +165,7 @@ function RefundItemsScreen() {
                     <View style={{ paddingBottom: normalize(10) }}>
                         <Searchbar
                             autoFocus
-                            // placeholder="Search Bills"
-                            placeholder="Mobile Number"
+                            placeholder="Search Bills"
                             onChangeText={onChangeSearch}
                             value={search}
                             elevation={search && 2}
@@ -194,7 +176,7 @@ function RefundItemsScreen() {
                     {/* <ButtonPaper onPress={() => handleGetBillsByDate(formattedFromDate, formattedToDate)} mode="contained-tonal">
                         SUBMIT
                     </ButtonPaper> */}
-                    <ButtonPaper onPress={() => handleBillListClick(search)} mode="contained-tonal">
+                    <ButtonPaper onPress={() => handleBillListClick(parseInt(search))} mode="contained-tonal">
                         SUBMIT
                     </ButtonPaper>
                 </View>

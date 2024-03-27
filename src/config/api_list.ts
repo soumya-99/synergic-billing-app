@@ -31,5 +31,6 @@ export const ADDRESSES = {
     EDIT_RECEIPT_SETTINGS: `${BASE_URL}/api/edit_rcp_settings`,
     APP_VERSION: `${BASE_URL}/api/app_version`,
     CANCEL_BILL: `${BASE_URL}/api/cancel_bill`,
+    REFUND_LIST: `${BASE_URL}/api/refund_list`,
     REFUND_ITEMS: `${BASE_URL}/api/refund_item`,
 }

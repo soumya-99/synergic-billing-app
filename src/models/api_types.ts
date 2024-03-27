@@ -460,3 +460,17 @@ export type RefundItemResponse = {
         "data": number
     }
 }
+
+export type RefundListCredentials = {
+    "comp_id": number
+    "br_id": number
+    "phone_no": string
+    "ref_days": number
+}
+
+export type RefundListResponse = {
+    "receipt_no": number
+    "trn_date": string
+    "net_amt": number
+    "phone_no": string
+}

@@ -19,6 +19,7 @@ const navigationRoutes = {
   customerDetailsFillScreen: "CustomerDetailsFillScreen",
   cancelBillScreen: "CancelBillScreen",
   refundItemsScreen: "RefundItemsScreen",
+  receiptsAgainstMobileScreen: "ReceiptsAgainstMobileScreen",
   refundItemsDataScreen: "RefundItemsDataScreen",
   reportsNavigation: "ReportsNavigation",
   reportsScreen: "ReportsScreen",

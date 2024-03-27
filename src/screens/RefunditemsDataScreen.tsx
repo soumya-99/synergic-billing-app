@@ -20,7 +20,7 @@ import { loginStorage } from "../storage/appStorage"
 import { RefundItemCredentials, ShowBillData } from "../models/api_types"
 import { AppStore } from "../context/AppContext"
 import InputPaper from "../components/InputPaper"
-import { RefundItemsScreenRouteProp } from "../models/route_types"
+import { ReceiptsAgainstMobileScreenRouteProp, RefundItemsScreenRouteProp } from "../models/route_types"
 import ScrollableListContainer from "../components/ScrollableListContainer"
 import useCalculations from "../hooks/useCalculations"
 import NetTotalForRePrints from "../components/NetTotalForRePrints"
@@ -32,7 +32,7 @@ import navigationRoutes from "../routes/navigationRoutes"
 function RefundItemsDataScreen() {
     const theme = usePaperColorScheme()
     const navigation = useNavigation()
-    const { params } = useRoute<RefundItemsScreenRouteProp>()
+    const { params } = useRoute<ReceiptsAgainstMobileScreenRouteProp>()
 
     const loginStore = JSON.parse(loginStorage.getString("login-data"))
 

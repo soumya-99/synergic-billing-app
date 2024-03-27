@@ -43,8 +43,11 @@ function BottomNavigationPaper() {
         options={{
           tabBarLabel: "More",
           tabBarIcon: ({ color, focused }) => (
-            !focused ? <MaterialCommunityIcons name="dots-vertical-circle-outline" color={color} size={26} /> : <MaterialCommunityIcons name="dots-vertical-circle" color={color} size={26} />
+            !focused ? <MaterialCommunityIcons name="menu" color={color} size={26} /> : <MaterialCommunityIcons name="menu-open" color={color} size={26} />
           ),
+          // tabBarIcon: ({ color, focused }) => (
+          //   !focused ? <MaterialCommunityIcons name="dots-vertical-circle-outline" color={color} size={26} /> : <MaterialCommunityIcons name="dots-vertical-circle" color={color} size={26} />
+          // ),
         }}
       />
       <Tab.Screen
