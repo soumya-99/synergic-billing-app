@@ -69,7 +69,7 @@ function ReportsScreen() {
               })
             )}
           />
-          <ReportButton
+          {/* <ReportButton
             text="Cancelled Bills Report"
             color={theme.colors.secondaryContainer}
             icon="billboard"
@@ -78,7 +78,7 @@ function ReportsScreen() {
                 name: navigationRoutes.cancelledBillsReportScreen,
               })
             )}
-          />
+          /> */}
           {/* <ReportButton
             text="Refund Items Report"
             color={theme.colors.orangeContainer}

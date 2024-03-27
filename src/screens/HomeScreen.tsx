@@ -419,11 +419,11 @@ function HomeScreen() {
           totalDiscount={totalDiscount}
           disabled
         />
-        <View style={{ paddingTop: normalize(10) }}>
+        {/* <View style={{ paddingTop: normalize(10) }}>
           <ButtonPaper icon="cancel" mode="contained-tonal" onPress={() => handleCancelBill(currentReceiptNo)} buttonColor={theme.colors.error} textColor={theme.colors.onError}>
             CANCEL BILL
           </ButtonPaper>
-        </View>
+        </View> */}
       </DialogBox>
       <AnimatedFABPaper
         icon="plus"

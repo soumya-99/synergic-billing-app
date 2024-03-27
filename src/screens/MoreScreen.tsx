@@ -29,7 +29,7 @@ function MoreScreen() {
                     </HeaderImage>
                 </View>
                 <ReportButtonsWrapper>
-                    <ReportButton
+                    {/* <ReportButton
                         text="Cancel Bill"
                         color={theme.colors.errorContainer}
                         icon="cancel"
@@ -38,7 +38,7 @@ function MoreScreen() {
                                 name: navigationRoutes.cancelBillScreen,
                             })
                         )}
-                    />
+                    /> */}
                     <ReportButton
                         text="Refund Item"
                         color={theme.colors.orangeContainer}

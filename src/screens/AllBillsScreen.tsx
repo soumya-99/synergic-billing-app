@@ -263,11 +263,11 @@ function AllBillsScreen() {
             )
           })}
         </ScrollableListContainer>
-        <View style={{ paddingTop: normalize(10) }}>
+        {/* <View style={{ paddingTop: normalize(10) }}>
           <ButtonPaper icon="cancel" mode="contained-tonal" onPress={() => handleCancelBill(currentReceiptNo)} buttonColor={theme.colors.error} textColor={theme.colors.onError}>
             CANCEL BILL
           </ButtonPaper>
-        </View>
+        </View> */}
         <NetTotalForRePrints
           width={300}
           backgroundColor={theme.colors.orangeContainer}
