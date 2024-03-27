@@ -20,6 +20,7 @@ import navigationRoutes from '../routes/navigationRoutes'
 import { ProductsScreenRouteProp } from '../models/route_types'
 import { mapItemToFilteredItem } from '../utils/mapItemToFilteredItem'
 import { gstFilterationAndTotals } from '../utils/gstFilterTotal'
+import useCalculations from '../hooks/useCalculations'
 
 const CustomerDetailsFillScreen = () => {
     const navigation = useNavigation()
@@ -31,6 +32,7 @@ const CustomerDetailsFillScreen = () => {
 
     const theme = usePaperColorScheme()
     const { printReceipt, printReceiptWithoutGst } = useBluetoothPrint()
+    const { grandTotalCalculate, grandTotalWithGSTCalculate, grandTotalWithGSTInclCalculate } = useCalculations()
     const { sendSaleDetails } = useSaleInsert()
 
     const [customerName, setCustomerName] = useState<string>(() => "")
@@ -45,9 +47,12 @@ const CustomerDetailsFillScreen = () => {
 
     useEffect(() => {
         if (receiptSettings?.gst_flag === "Y") {
-            setFinalCashAmount(() => (cashAmount !== undefined ? cashAmount - Math.round(parseFloat((params?.net_total - params?.total_discount + totalGST).toFixed(2))) : 0))
+            receiptSettings?.gst_type === "E"
+                ? setFinalCashAmount(() => (cashAmount !== undefined ? cashAmount - parseFloat(grandTotalWithGSTCalculate(params?.net_total, params?.total_discount, totalGST)) : 0))
+
+                : setFinalCashAmount(() => (cashAmount !== undefined ? cashAmount - parseFloat(grandTotalWithGSTInclCalculate(params?.net_total, params?.total_discount)) : 0))
         } else {
-            setFinalCashAmount(() => (cashAmount !== undefined ? cashAmount - Math.round(parseFloat((params?.net_total - params?.total_discount).toFixed(2))) : 0))
+            setFinalCashAmount(() => (cashAmount !== undefined ? cashAmount - grandTotalCalculate(params?.net_total, params?.total_discount) : 0))
         }
     }, [cashAmount])
 

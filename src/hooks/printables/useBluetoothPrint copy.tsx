@@ -9,19 +9,7 @@ import useCalculations from "../useCalculations"
 
 export const useBluetoothPrint = () => {
     const { receiptSettings } = useContext(AppStore)
-    const {
-        netTotalWithGSTCalculate,
-        roundingOffWithGSTCalculate,
-        grandTotalWithGSTCalculate,
-        roundingOffCalculate,
-        grandTotalCalculate,
-        netTotalCalculate,
-
-        totalAmountWithGSTInclCalculate,
-        netTotalWithGSTInclCalculate,
-        roundingOffWithGSTInclCalculate,
-        grandTotalWithGSTInclCalculate
-    } = useCalculations()
+    const { netTotalWithGSTCalculate, roundingOffWithGSTCalculate, grandTotalWithGSTCalculate, roundingOffCalculate, grandTotalCalculate, netTotalCalculate } = useCalculations()
 
     async function printReceipt(addedProducts: ItemsData[], netTotal: number, totalDiscountAmount: number, cashAmount?: number, returnedAmt?: number, customerName?: string, customerPhone?: string, rcptNo?: number, paymentMode?: string) {
         const loginStore = JSON.parse(loginStorage.getString("login-data"))
@@ -307,6 +295,150 @@ export const useBluetoothPrint = () => {
             )
             await BluetoothEscposPrinter.printText("\n", {})
 
+            await BluetoothEscposPrinter.printColumn(
+                columnWidths,
+                [
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.CENTER,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                ],
+                ["DISCOUNT", ":", totalDiscountAmount.toFixed(2).toString()],
+                {},
+            )
+
+            // {
+            gstKeys.map(async (key) => (
+                // <Text key={key} style={{ color: textColor }}>
+                // { key.includes('CGST') ? 'CGST' : 'SGST' } @
+                // { key.replace(/total(CGST|SGST)_/, '').replace('_', '.') + '%' }
+                // </Text>
+
+                await BluetoothEscposPrinter.printColumn(
+                    columnWidths,
+                    [
+                        BluetoothEscposPrinter.ALIGN.LEFT,
+                        BluetoothEscposPrinter.ALIGN.CENTER,
+                        BluetoothEscposPrinter.ALIGN.RIGHT,
+                    ],
+                    [`${key.includes('CGST') ? 'CGST' : 'SGST'} @${key.replace(/total(CGST|SGST)_/, '').replace('_', '.')}%`, ":", gstTotals[key].toFixed(2)],
+                    {},
+                )
+            ))
+            // }
+
+
+            // totalCGST_5 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["CGST @5%", ":", totalCGST_5.toFixed(2).toString()],
+            //         {},
+            //     )
+            // totalSGST_5 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["SGST @5%", ":", totalSGST_5.toFixed(2).toString()],
+            //         {},
+            //     )
+            // totalCGST_12 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["CGST @12%", ":", totalCGST_12.toFixed(2).toString()],
+            //         {},
+            //     )
+            // totalSGST_12 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["SGST @12%", ":", totalSGST_12.toFixed(2).toString()],
+            //         {},
+            //     )
+            // totalCGST_18 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["CGST @18%", ":", totalCGST_18.toFixed(2).toString()],
+            //         {},
+            //     )
+            // totalSGST_18 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["SGST @18%", ":", totalSGST_18.toFixed(2).toString()],
+            //         {},
+            //     )
+            // totalCGST_28 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["CGST @28%", ":", totalCGST_28.toFixed(2).toString()],
+            //         {},
+            //     )
+            // totalSGST_28 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["SGST @28%", ":", totalSGST_28.toFixed(2).toString()],
+            //         {},
+            //     )
+
+            await BluetoothEscposPrinter.printColumn(
+                columnWidths,
+                [
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.CENTER,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                ],
+                ["TOTAL GST", ":", (totalGST).toFixed(2).toString()],
+                {},
+            )
+
+            // await BluetoothEscposPrinter.printColumn(
+            //     columnWidths,
+            //     [
+            //         BluetoothEscposPrinter.ALIGN.LEFT,
+            //         BluetoothEscposPrinter.ALIGN.CENTER,
+            //         BluetoothEscposPrinter.ALIGN.RIGHT,
+            //     ],
+            //     // ["TOTAL", ":", `${(netTotal - totalDiscountAmount + totalGST).toFixed(2)}`],
+            //     ["TOTAL", ":", `${netTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
+            //     {},
+            // )
+
             receiptSettings?.gst_type === "E"
                 ? await BluetoothEscposPrinter.printColumn(
                     columnWidths,
@@ -327,22 +459,12 @@ export const useBluetoothPrint = () => {
                         BluetoothEscposPrinter.ALIGN.RIGHT,
                     ],
                     // ["TOTAL", ":", `${(netTotal - totalDiscountAmount + totalGST).toFixed(2)}`],
-                    ["TOTAL", ":", `${totalAmountWithGSTInclCalculate(netTotal, totalGST)}`],
+                    ["TOTAL", ":", `${netTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
                     {},
                 )
 
-            gstKeys.map(async (key) => (
-                await BluetoothEscposPrinter.printColumn(
-                    columnWidths,
-                    [
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.CENTER,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                    ],
-                    [`${key.includes('CGST') ? 'CGST' : 'SGST'} @${key.replace(/total(CGST|SGST)_/, '').replace('_', '.')}%`, ":", gstTotals[key].toFixed(2)],
-                    {},
-                )
-            ))
+
+
 
             await BluetoothEscposPrinter.printColumn(
                 columnWidths,
@@ -351,10 +473,10 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["DISCOUNT", ":", totalDiscountAmount.toFixed(2).toString()],
+                // ["ROUND OFF", ":", `${(Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))) - parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))).toFixed(2)}`],
+                ["ROUND OFF", ":", `${roundingOffWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
                 {},
             )
-
             await BluetoothEscposPrinter.printColumn(
                 columnWidths,
                 [
@@ -362,69 +484,10 @@ export const useBluetoothPrint = () => {
                     BluetoothEscposPrinter.ALIGN.CENTER,
                     BluetoothEscposPrinter.ALIGN.RIGHT,
                 ],
-                ["TOTAL GST", ":", (totalGST).toFixed(2).toString()],
+                // ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2)))}`],
+                ["NET AMT", ":", `${grandTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
                 {},
             )
-
-            receiptSettings?.gst_type === "E"
-                ? await BluetoothEscposPrinter.printColumn(
-                    columnWidths,
-                    [
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.CENTER,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                    ],
-                    // ["ROUND OFF", ":", `${(Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))) - parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))).toFixed(2)}`],
-                    ["ROUND OFF", ":", `${roundingOffWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
-                    {},
-                )
-                : await BluetoothEscposPrinter.printColumn(
-                    columnWidths,
-                    [
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.CENTER,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                    ],
-                    // ["ROUND OFF", ":", `${(Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))) - parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))).toFixed(2)}`],
-                    ["ROUND OFF", ":", `${roundingOffWithGSTInclCalculate(netTotal, totalDiscountAmount)}`],
-                    {},
-                )
-
-            // await BluetoothEscposPrinter.printColumn(
-            //     columnWidths,
-            //     [
-            //         BluetoothEscposPrinter.ALIGN.LEFT,
-            //         BluetoothEscposPrinter.ALIGN.CENTER,
-            //         BluetoothEscposPrinter.ALIGN.RIGHT,
-            //     ],
-            //     // ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2)))}`],
-            //     ["NET AMT", ":", `${grandTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
-            //     {},
-            // )
-
-            receiptSettings?.gst_type === "E"
-                ? await BluetoothEscposPrinter.printColumn(
-                    columnWidths,
-                    [
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.CENTER,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                    ],
-                    // ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2)))}`],
-                    ["NET AMT", ":", `${grandTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
-                    {},
-                )
-                : await BluetoothEscposPrinter.printColumn(
-                    columnWidths,
-                    [
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.CENTER,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                    ],
-                    // ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2)))}`],
-                    ["NET AMT", ":", `${grandTotalWithGSTInclCalculate(netTotal, totalDiscountAmount)}`],
-                    {},
-                )
 
             await BluetoothEscposPrinter.printText("\n", {})
             await BluetoothEscposPrinter.printText(
@@ -1550,44 +1613,6 @@ export const useBluetoothPrint = () => {
             )
             await BluetoothEscposPrinter.printText("\n", {})
 
-            addedProducts[0]?.gst_type === "E"
-                ? await BluetoothEscposPrinter.printColumn(
-                    columnWidths,
-                    [
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.CENTER,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                    ],
-                    // ["TOTAL", ":", `${(netTotal - totalDiscountAmount + totalGST).toFixed(2)}`],
-                    ["TOTAL", ":", `${netTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
-                    {},
-                )
-                : await BluetoothEscposPrinter.printColumn(
-                    columnWidths,
-                    [
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.CENTER,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                    ],
-                    // ["TOTAL", ":", `${(netTotal - totalDiscountAmount + totalGST).toFixed(2)}`],
-                    ["TOTAL", ":", `${totalAmountWithGSTInclCalculate(netTotal, totalGST)}`],
-                    {},
-                )
-
-            gstKeys.map(async (key) => (
-                await BluetoothEscposPrinter.printColumn(
-                    columnWidths,
-                    [
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.CENTER,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                    ],
-                    [`${key.includes('CGST') ? 'CGST' : 'SGST'} @${key.replace(/total(CGST|SGST)_/, '').replace('_', '.')}%`, ":", gstTotals[key].toFixed(2).toString()],
-                    {},
-                )
-
-            ))
-
             await BluetoothEscposPrinter.printColumn(
                 columnWidths,
                 [
@@ -1598,6 +1623,118 @@ export const useBluetoothPrint = () => {
                 ["DISCOUNT", ":", totalDiscountAmount.toFixed(2).toString()],
                 {},
             )
+
+
+            {
+                gstKeys.map(async (key) => (
+                    // <Text key={key} style={{ color: textColor }}>
+                    // { key.includes('CGST') ? 'CGST' : 'SGST' } @
+                    // { key.replace(/total(CGST|SGST)_/, '').replace('_', '.') + '%' }
+                    // </Text>
+
+                    await BluetoothEscposPrinter.printColumn(
+                        columnWidths,
+                        [
+                            BluetoothEscposPrinter.ALIGN.LEFT,
+                            BluetoothEscposPrinter.ALIGN.CENTER,
+                            BluetoothEscposPrinter.ALIGN.RIGHT,
+                        ],
+                        [`${key.includes('CGST') ? 'CGST' : 'SGST'} @${key.replace(/total(CGST|SGST)_/, '').replace('_', '.')}%`, ":", gstTotals[key].toFixed(2).toString()],
+                        {},
+                    )
+
+                ))
+            }
+
+
+            // totalCGST_5 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["CGST @5%", ":", totalCGST_5.toFixed(2).toString()],
+            //         {},
+            //     )
+            // totalSGST_5 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["SGST @5%", ":", totalSGST_5.toFixed(2).toString()],
+            //         {},
+            //     )
+            // totalCGST_12 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["CGST @12%", ":", totalCGST_12.toFixed(2).toString()],
+            //         {},
+            //     )
+            // totalSGST_12 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["SGST @12%", ":", totalSGST_12.toFixed(2).toString()],
+            //         {},
+            //     )
+            // totalCGST_18 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["CGST @18%", ":", totalCGST_18.toFixed(2).toString()],
+            //         {},
+            //     )
+            // totalSGST_18 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["SGST @18%", ":", totalSGST_18.toFixed(2).toString()],
+            //         {},
+            //     )
+            // totalCGST_28 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["CGST @28%", ":", totalCGST_28.toFixed(2).toString()],
+            //         {},
+            //     )
+            // totalSGST_28 > 0 &&
+            //     await BluetoothEscposPrinter.printColumn(
+            //         columnWidths,
+            //         [
+            //             BluetoothEscposPrinter.ALIGN.LEFT,
+            //             BluetoothEscposPrinter.ALIGN.CENTER,
+            //             BluetoothEscposPrinter.ALIGN.RIGHT,
+            //         ],
+            //         ["SGST @28%", ":", totalSGST_28.toFixed(2).toString()],
+            //         {},
+            //     )
 
             await BluetoothEscposPrinter.printColumn(
                 columnWidths,
@@ -1610,66 +1747,39 @@ export const useBluetoothPrint = () => {
                 {},
             )
 
-            addedProducts[0]?.gst_type === "E"
-                ? await BluetoothEscposPrinter.printColumn(
-                    columnWidths,
-                    [
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.CENTER,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                    ],
-                    // ["ROUND OFF", ":", `${(Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))) - parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))).toFixed(2)}`],
-                    ["ROUND OFF", ":", `${roundingOffWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
-                    {},
-                )
-                : await BluetoothEscposPrinter.printColumn(
-                    columnWidths,
-                    [
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.CENTER,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                    ],
-                    // ["ROUND OFF", ":", `${(Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))) - parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))).toFixed(2)}`],
-                    ["ROUND OFF", ":", `${roundingOffWithGSTInclCalculate(netTotal, totalDiscountAmount)}`],
-                    {},
-                )
-
-
-            // await BluetoothEscposPrinter.printColumn(
-            //     columnWidths,
-            //     [
-            //         BluetoothEscposPrinter.ALIGN.LEFT,
-            //         BluetoothEscposPrinter.ALIGN.CENTER,
-            //         BluetoothEscposPrinter.ALIGN.RIGHT,
-            //     ],
-            //     // ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2)))}`],
-            //     ["NET AMT", ":", `${grandTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
-            //     {},
-            // )
-
-            addedProducts[0]?.gst_type === "E"
-                ? await BluetoothEscposPrinter.printColumn(
-                    columnWidths,
-                    [
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.CENTER,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                    ],
-                    // ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2)))}`],
-                    ["NET AMT", ":", `${grandTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
-                    {},
-                )
-                : await BluetoothEscposPrinter.printColumn(
-                    columnWidths,
-                    [
-                        BluetoothEscposPrinter.ALIGN.LEFT,
-                        BluetoothEscposPrinter.ALIGN.CENTER,
-                        BluetoothEscposPrinter.ALIGN.RIGHT,
-                    ],
-                    // ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2)))}`],
-                    ["NET AMT", ":", `${grandTotalWithGSTInclCalculate(netTotal, totalDiscountAmount)}`],
-                    {},
-                )
+            await BluetoothEscposPrinter.printColumn(
+                columnWidths,
+                [
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.CENTER,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                ],
+                // ["TOTAL", ":", `${(netTotal - totalDiscountAmount + totalGST).toFixed(2)}`],
+                ["TOTAL", ":", `${netTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
+                {},
+            )
+            await BluetoothEscposPrinter.printColumn(
+                columnWidths,
+                [
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.CENTER,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                ],
+                // ["ROUND OFF", ":", `${(Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))) - parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2))).toFixed(2)}`],
+                ["ROUND OFF", ":", `${roundingOffWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
+                {},
+            )
+            await BluetoothEscposPrinter.printColumn(
+                columnWidths,
+                [
+                    BluetoothEscposPrinter.ALIGN.LEFT,
+                    BluetoothEscposPrinter.ALIGN.CENTER,
+                    BluetoothEscposPrinter.ALIGN.RIGHT,
+                ],
+                // ["NET AMT", ":", `${Math.round(parseFloat((netTotal - totalDiscountAmount + totalGST).toFixed(2)))}`],
+                ["NET AMT", ":", `${grandTotalWithGSTCalculate(netTotal, totalDiscountAmount, totalGST)}`],
+                {},
+            )
 
             await BluetoothEscposPrinter.printText("\n", {})
             await BluetoothEscposPrinter.printText(
