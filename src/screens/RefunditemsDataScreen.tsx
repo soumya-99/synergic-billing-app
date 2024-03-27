@@ -102,6 +102,15 @@ function RefundItemsDataScreen() {
         onDialogSuccecss(item)
     }
 
+    const removeRefundProduct = (item: ShowBillData) => {
+        // refundedData.filter()
+        Alert.alert("Remove", `Remove ${item?.item_name}?`, [
+            { text: "NO", onPress: () => null },
+            { text: "YES", onPress: () => setRefundedData(refundedData.filter(i => i?.item_id !== item?.item_id)) }
+        ])
+
+    }
+
     useEffect(() => {
         console.log("##########################", params?.billed_sale_data)
         // console.log("##########################", netTotal)
@@ -259,8 +268,8 @@ function RefundItemsDataScreen() {
 
                             return (
                                 <AddedProductList
-                                    disabled
-                                    // onPress={() => handleRefundedListUpdate(item, i)}
+                                    // disabled
+                                    onPress={() => removeRefundProduct(item)}
                                     itemName={item.item_name}
                                     quantity={item.qty}
                                     unitPrice={item.price}
