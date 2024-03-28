@@ -243,7 +243,14 @@ function AllBillsScreen() {
           height={200}>
           {billedSaleData.map((item, i) => {
             netTotal += item.price * item.qty
-            totalDiscount += parseFloat(item?.discount_amt?.toFixed(2))
+            // totalDiscount += parseFloat(item?.discount_amt?.toFixed(2))
+
+
+            item?.discount_type === "P"
+              ? totalDiscount += item?.discount_amt
+              : totalDiscount += item?.discount_amt * item?.qty
+            //@ts-ignore
+            // totalDiscount += (parseFloat(item?.discount_amt?.toFixed(2)) * parseFloat(item?.qty?.toFixed(2)))
 
             // setDiscountType(item?.discount_type)
             // setGstFlag(item?.gst_flag)

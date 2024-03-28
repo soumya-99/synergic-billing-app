@@ -64,6 +64,7 @@ function ProductsScreen() {
 
   let totalPrice = 0
   let totalDiscountedAmount = 0
+  let discountWithQtyMultiplier = 0
 
   useEffect(() => {
     handleGetItems()
@@ -437,7 +438,7 @@ function ProductsScreen() {
                 receiptSettings?.discount_flag === "Y" ? (
                   receiptSettings?.discount_type === "A" ? (
                     //@ts-ignore
-                    totalDiscountedAmount += parseFloat(item["discount"])
+                    totalDiscountedAmount += parseFloat(item["discount"] * item["quantity"])
                   ) : (
                     totalDiscountedAmount += parseFloat((item?.price * item["quantity"] * item["discount"] / 100).toFixed(2))
                   )

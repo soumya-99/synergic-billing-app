@@ -394,7 +394,12 @@ function HomeScreen() {
             // console.log("billedSaleData - item.qty", item.qty)
             // console.log("billedSaleData - item.price", item.price)
             netTotal += item.price * item.qty
-            totalDiscount += parseFloat(item?.discount_amt?.toFixed(2))
+
+            item?.discount_type === "P"
+              ? totalDiscount += item?.discount_amt
+              : totalDiscount += item?.discount_amt * item?.qty
+            //@ts-ignore
+            // totalDiscount += item?.discount_amt
             return (
               <AddedProductList
                 disabled
@@ -402,7 +407,7 @@ function HomeScreen() {
                 quantity={item.qty}
                 // unit={item.unit}
                 unitPrice={item.price}
-                discount={receiptSettings?.discount_type === "P" ? item?.dis_pertg : item?.discount_amt}
+                discount={item?.discount_type === "P" ? item?.dis_pertg : item?.discount_amt}
                 discountType={item?.discount_type}
                 gstFlag={item?.gst_flag}
                 key={i}

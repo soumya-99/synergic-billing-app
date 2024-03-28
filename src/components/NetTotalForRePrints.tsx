@@ -141,6 +141,10 @@ export default function NetTotalForRePrints({
                             </Text>
                         ))}
 
+                        {
+                            gstType === "I" && <Text style={{ color: textColor }}>TOTAL (INCL GST)</Text>
+                        }
+
                         <Text style={{ color: textColor }}>DISCOUNT</Text>
 
                         <Text style={{ color: textColor }}>NET TOTAL</Text>
@@ -160,6 +164,10 @@ export default function NetTotalForRePrints({
                         {gstKeys.map((key) => (
                             <Text key={key} style={{ color: textColor }}>₹{gstTotals[key].toFixed(2)}</Text>
                         ))}
+
+                        {
+                            gstType === "I" && <Text style={{ color: textColor }}>₹{netTotal?.toFixed(2)}</Text>
+                        }
 
                         <Text style={{ color: textColor }}>₹{totalDiscount?.toFixed(2)}</Text>
 

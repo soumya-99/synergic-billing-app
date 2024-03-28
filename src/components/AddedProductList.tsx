@@ -32,6 +32,7 @@ export default function AddedProductList({
 
   const gstFlag = propGstFlag || receiptSettings?.gst_flag
   const discountType = propDiscountType || receiptSettings?.discount_type
+  let discountForAmt: number = (quantity * discount)
 
   return (
     // receiptSettings?.gst_flag === "N" ? (
@@ -79,7 +80,7 @@ export default function AddedProductList({
           )}
           {discountType === "A" ? (
             <View>
-              <Text>₹{discount}</Text>
+              <Text>₹{discountForAmt?.toFixed(2)}</Text>
             </View>
           ) : (
             <View>
@@ -97,15 +98,15 @@ export default function AddedProductList({
               QTY: {quantity} {unit}
             </Text>
           </View>
-          {discountType === "A" ? (
+          {/* {discountType === "A" ? (
             <View>
-              <Text>TOTAL: ₹{(unitPrice * quantity - discount).toFixed(2)}</Text>
+              <Text>TOTAL: ₹{(unitPrice * quantity - discountForAmt).toFixed(2)}</Text>
             </View>
           ) : (
             <View>
               <Text>TOTAL: ₹{((unitPrice * quantity) - ((unitPrice * quantity * discount) / 100)).toFixed(2)}</Text>
             </View>
-          )}
+          )} */}
         </View>
       </TouchableOpacity>
       <Divider />
